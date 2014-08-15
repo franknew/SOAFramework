@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>..\Bin\Athena.Unitop.Sure.Lib.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;D:\Software\VS2010\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;D:\Software\VS2010\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Athena.Unitop.Sure.Lib.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;D:\Software\VS2010\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;D:\Software\VS2010\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EF5C7793-C3D5-4FA6-8766-19A0665EEC58}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Athena.Unitop.Sure.Lib</RootNamespace>
+    <AssemblyName>Athena.Unitop.Sure.Lib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\Bin\Athena.Unitop.Sure.Lib.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NPOI">
+      <HintPath>Reference\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>Reference\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>Reference\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Barcode\BarcodeDraw.cs" />
+    <Compile Include="Barcode\BarcodeDrawFactory.cs" />
+    <Compile Include="Barcode\BarcodeHelper.cs" />
+    <Compile Include="Barcode\BarGlyph.cs" />
+    <Compile Include="Barcode\BinaryPitchBarcodeDraw.cs" />
+    <Compile Include="Barcode\BinaryPitchGlyph.cs" />
+    <Compile Include="Barcode\BinaryPitchVaryLengthBarcodeDraw.cs" />
+    <Compile Include="Barcode\BinaryPitchVaryLengthGlyph.cs" />
+    <Compile Include="Barcode\Checksum.cs" />
+    <Compile Include="Barcode\Code11.cs" />
+    <Compile Include="Barcode\Code128.cs" />
+    <Compile Include="Barcode\Code25.cs" />
+    <Compile Include="Barcode\Code39.cs" />
+    <Compile Include="Barcode\Code93.cs" />
+    <Compile Include="Barcode\CodeEan13.cs" />
+    <Compile Include="Barcode\CodeEan8.cs" />
+    <Compile Include="Barcode\CodePdf417.cs" />
+    <Compile Include="Barcode\CodeQr.cs" />
+    <Compile Include="Barcode\CompositeGlyph.cs" />
+    <Compile Include="Barcode\Glyph.cs" />
+    <Compile Include="Barcode\GlyphFactory.cs" />
+    <Compile Include="Barcode\IBarGlyph.cs" />
+    <Compile Include="Barcode\IBinaryPitchGlyph.cs" />
+    <Compile Include="Barcode\IGlyph.cs" />
+    <Compile Include="Barcode\IVaryLengthGlyph.cs" />
+    <Compile Include="Barcode\MultisetGlyph.cs" />
+    <Compile Include="Barcode\VaryLengthGlyph.cs" />
+    <Compile Include="Bill\BillHelper.cs" />
+    <Compile Include="ElectricWeight\ElecWeightTool.cs" />
+    <Compile Include="ElectricWeight\EleScaleParams.cs" />
+    <Compile Include="ElectricWeight\GroundWeight.cs" />
+    <Compile Include="Extension\DateExtension.cs" />
+    <Compile Include="Extension\EnumExtension.cs" />
+    <Compile Include="Extension\ExtensionLib.cs" />
+    <Compile Include="Extension\ListExtention.cs" />
+    <Compile Include="Extension\ObjectExtension.cs" />
+    <Compile Include="Helper\AboutProduction.cs" />
+    <Compile Include="Helper\AppLog.cs" />
+    <Compile Include="Helper\CpuInfo.cs" />
+    <Compile Include="Helper\EnumHelper.cs" />
+    <Compile Include="Extension\Numeric.cs" />
+    <Compile Include="Helper\ExcelVersion.cs" />
+    <Compile Include="Helper\GetSystemIcon.cs" />
+    <Compile Include="Helper\IconHelper.cs" />
+    <Compile Include="Helper\SystemInfo.cs" />
+    <Compile Include="Helper\TxtHelper.cs" />
+    <Compile Include="Extension\StringExtension.cs" />
+    <Compile Include="PDA\BarScanParams.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RazorEngine\AttributeValue.cs" />
+    <Compile Include="RazorEngine\CodeGenerators\SetModelTypeCodeGenerator.cs" />
+    <Compile Include="RazorEngine\Common\GlobalSuppressions.cs" />
+    <Compile Include="RazorEngine\Common\HashCodeCombiner.cs" />
+    <Compile Include="RazorEngine\Compilation\CompilerServiceBase.cs" />
+    <Compile Include="RazorEngine\Compilation\CompilerServiceBuilder.cs" />
+    <Compile Include="RazorEngine\Compilation\CompilerServicesUtility.cs" />
+    <Compile Include="RazorEngine\Compilation\CSharp\CSharpCodeParser.cs" />
+    <Compile Include="RazorEngine\Compilation\CSharp\CSharpDirectCompilerService.cs" />
+    <Compile Include="RazorEngine\Compilation\CSharp\CSharpRazorCodeGenerator.cs" />
+    <Compile Include="RazorEngine\Compilation\CSharp\CSharpRazorCodeLanguage.cs" />
+    <Compile Include="RazorEngine\Compilation\DefaultCompilerServiceFactory.cs" />
+    <Compile Include="RazorEngine\Compilation\DirectCompilerServiceBase.cs" />
+    <Compile Include="RazorEngine\Compilation\HasDynamicModelAttribute.cs" />
+    <Compile Include="RazorEngine\Compilation\ICompilerService.cs" />
+    <Compile Include="RazorEngine\Compilation\ICompilerServiceFactory.cs" />
+    <Compile Include="RazorEngine\Compilation\Inspectors\ICodeInspector.cs" />
+    <Compile Include="RazorEngine\Compilation\RazorDynamicObject.cs" />
+    <Compile Include="RazorEngine\Compilation\RazorEngineHost.cs" />
+    <Compile Include="RazorEngine\Compilation\TypeContext.cs" />
+    <Compile Include="RazorEngine\Compilation\VisualBasic\VBCodeParser.cs" />
+    <Compile Include="RazorEngine\Compilation\VisualBasic\VBDirectCompilerService.cs" />
+    <Compile Include="RazorEngine\Compilation\VisualBasic\VBRazorCodeGenerator.cs" />
+    <Compile Include="RazorEngine\Compilation\VisualBasic\VBRazorCodeLanguage.cs" />
+    <Compile Include="RazorEngine\Configuration\Fluent\FluentConfigurationBuilder.cs" />
+    <Compile Include="RazorEngine\Configuration\Fluent\FluentTemplateServiceConfiguration.cs" />
+    <Compile Include="RazorEngine\Configuration\Fluent\IConfigurationBuilder.cs" />
+    <Compile Include="RazorEngine\Configuration\ITemplateServiceConfiguration.cs" />
+    <Compile Include="RazorEngine\Configuration\RazorEngineConfigurationSection.cs" />
+    <Compile Include="RazorEngine\Configuration\TemplateServiceConfiguration.cs" />
+    <Compile Include="RazorEngine\Configuration\Xml\NamespaceConfigurationElement.cs" />
+    <Compile Include="RazorEngine\Configuration\Xml\NamespaceConfigurationElementCollection.cs" />
+    <Compile Include="RazorEngine\Configuration\Xml\TemplateServiceConfigurationElement.cs" />
+    <Compile Include="RazorEngine\Configuration\Xml\TemplateServiceConfigurationElementCollection.cs" />
+    <Compile Include="RazorEngine\Configuration\Xml\XmlTemplateServiceConfiguration.cs" />
+    <Compile Include="RazorEngine\Encoding.cs" />
+    <Compile Include="RazorEngine\Language.cs" />
+    <Compile Include="RazorEngine\PositionTagged.cs" />
+    <Compile Include="RazorEngine\Razor.cs" />
+    <Compile Include="RazorEngine\Templating\CachedTemplateItem.cs" />
+    <Compile Include="RazorEngine\Templating\DefaultActivator.cs" />
+    <Compile Include="RazorEngine\Templating\DefaultAppDomainFactory.cs" />
+    <Compile Include="RazorEngine\Templating\DelegateActivator.cs" />
+    <Compile Include="RazorEngine\Templating\DelegateAppDomainFactory.cs" />
+    <Compile Include="RazorEngine\Templating\DelegateTemplateResolver.cs" />
+    <Compile Include="RazorEngine\Templating\DynamicViewBag.cs" />
+    <Compile Include="RazorEngine\Templating\ExecuteContext.cs" />
+    <Compile Include="RazorEngine\Templating\HtmlTemplateBaseOfT.cs" />
+    <Compile Include="RazorEngine\Templating\IActivator.cs" />
+    <Compile Include="RazorEngine\Templating\IAppDomainFactory.cs" />
+    <Compile Include="RazorEngine\Templating\InstanceContext.cs" />
+    <Compile Include="RazorEngine\Templating\IsolatedTemplateService.cs" />
+    <Compile Include="RazorEngine\Templating\ITemplate.cs" />
+    <Compile Include="RazorEngine\Templating\ITemplateOfT.cs" />
+    <Compile Include="RazorEngine\Templating\ITemplateResolver.cs" />
+    <Compile Include="RazorEngine\Templating\ITemplateService.cs" />
+    <Compile Include="RazorEngine\Templating\Parallel\DefaultParallelQueryPlan.cs" />
+    <Compile Include="RazorEngine\Templating\Parallel\IParallelQueryPlan.cs" />
+    <Compile Include="RazorEngine\Templating\RequireNamespacesAttribute.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateBase.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateBaseOfT.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateCompilationException.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateParsingException.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateService.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateServiceFactory.cs" />
+    <Compile Include="RazorEngine\Templating\TemplateWriter.cs" />
+    <Compile Include="RazorEngine\Templating\TypeLoader.cs" />
+    <Compile Include="RazorEngine\Text\HtmlEncodedString.cs" />
+    <Compile Include="RazorEngine\Text\HtmlEncodedStringFactory.cs" />
+    <Compile Include="RazorEngine\Text\IEncodedString.cs" />
+    <Compile Include="RazorEngine\Text\IEncodedStringFactory.cs" />
+    <Compile Include="RazorEngine\Text\RawString.cs" />
+    <Compile Include="RazorEngine\Text\RawStringFactory.cs" />
+    <Compile Include="System\SystemTime.cs" />
+    <Compile Include="System\WinAPI.cs" />
+    <Compile Include="Validator\Validation.cs" />
+    <Compile Include="Helper\ExcelHelper.cs" />
+    <Compile Include="Helper\MachineHelper.cs" />
+    <Compile Include="Helper\ValueHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validator\EmptyValidator.cs" />
+    <Compile Include="Validator\FunctionHandlerValidator.cs" />
+    <Compile Include="Validator\IValidatorBase.cs" />
+    <Compile Include="Validator\LengthValidator.cs" />
+    <Compile Include="Validator\RegexValidator.cs" />
+    <Compile Include="Validator\RegularExpressions.cs" />
+    <Compile Include="Validator\ValiationType.cs" />
+    <Compile Include="Validator\ValidateResult.cs" />
+    <Compile Include="Validator\ValidatorGroup.cs" />
+    <Compile Include="Validator\ValidatorManager.cs" />
+    <Compile Include="Helper\ZipHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RazorEngine\ClassDiagram.cd" />
+    <None Include="RazorEngine\packages.config" />
+    <None Include="RazorEngine\RazorEngine.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RazorEngine\RazorEngine.Core.csproj" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

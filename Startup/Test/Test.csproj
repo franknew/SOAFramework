@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{07760BFF-1828-4681-8583-76929FB8A2ED}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Test</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Test.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Controller\Controller.csproj">
+      <Project>{C9437F89-A710-4097-9AC6-1A0B4DAF2B2B}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\AOP\AOP.csproj">
+      <Project>{61444396-8afd-4041-b9a0-6d3b36440024}</Project>
+      <Name>AOP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Extension\Extension.csproj">
+      <Project>{94f414d4-4c82-46fe-96fc-b0f1c1faab5a}</Project>
+      <Name>Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Http\Http.csproj">
+      <Project>{b5168c1f-6145-4453-9e20-d2f69883b49b}</Project>
+      <Name>Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Newtonsoft.Json\Json.csproj">
+      <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
+      <Name>Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Zip\Zip.csproj">
+      <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
+      <Name>Zip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Models\Model.csproj">
+      <Project>{47026c03-6f4d-4155-bd42-78ec73044c73}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ORM\Model\ORMDriver.csproj">
+      <Project>{7F09D4A5-7B1C-4B9A-BC8C-81BB60C1CA81}</Project>
+      <Name>ORMDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\WebServiceCore\WebServiceCore.csproj">
+      <Project>{F70B162C-FB02-4A83-9967-151FBD240D16}</Project>
+      <Name>WebServiceCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Service.Interface\Service.Interface.csproj">
+      <Project>{201fa1c8-cc8d-43d6-80bc-354b9ff301d4}</Project>
+      <Name>Service.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Service.Model\Service.Model.csproj">
+      <Project>{085477e1-3e7d-49ac-8ba6-9d3f876d6a4e}</Project>
+      <Name>Service.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Service\Service.Server.csproj">
+      <Project>{3f2cf245-0a6e-41ae-9db9-1cc7c7ad4fd4}</Project>
+      <Name>Service.Server</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
