@@ -16,5 +16,29 @@ namespace SOAFramework.Service.Server
         }
     }
 
+    public class FilterTest : IFilter
+    {
+        public bool OnActionExecuting(ActionContext context)
+        {
+            object[] attr = context.MethodInfo.GetCustomAttributes(typeof(AuthAttr), true);
+            if (attr == null || attr.Length == 0)
+            {
+                this.Message = "验证失败！";
+                return false;
+            }
+            return true;
+        }
 
+        public bool OnActionExecuted(ActionContext context)
+        {
+            return true;
+        }
+
+        public string Message { get; set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class AuthAttr : Attribute
+    {
+    }
 }

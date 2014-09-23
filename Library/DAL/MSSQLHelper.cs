@@ -731,7 +731,7 @@ namespace Frank.Common.DAL
             objCommand.Connection = objConnection;
             if (objParams != null && objParams.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));
             }
             try
             {

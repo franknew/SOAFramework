@@ -23,12 +23,15 @@ namespace SOAFramework.Service.Server
     public class SOAService : IService
     {
         private static string _filePath = "";
+
+        private static List<IFilter> _filterList = new List<IFilter>();
         static SOAService()
         {
             try
             {
                 //把DLL中的所有方法加载到缓存中
                 ServiceUtility.InitBusinessCache();
+                _filterList = ServiceUtility.InitFilterList();
             }
             catch (Exception ex)
             {
@@ -50,10 +53,31 @@ namespace SOAFramework.Service.Server
             string json = "";
             try
             {
-                //执行方法
-                object result = ServiceUtility.ExecuteMethod(typeName, functionName, args);
-                response.Data = result;
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
+                string methodFullName = typeName + "." + functionName;
+                MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(methodFullName);
+                bool valid = true;
+                IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, args);
+                if (failedFilter != null)
+                {
+                    valid = false;
+                    response.IsError = true;
+                    response.ErrorMessage = failedFilter.Message;
+                    response.StackTrace = Environment.StackTrace;
+                }
+                if (valid)
+                {
+                    //执行方法
+                    object result = ServiceUtility.ExecuteMethod(typeName, functionName, args);
+                    response.Data = result;
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
+                }
+                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, args);
+                if (failedFilter != null)
+                {
+                    response.IsError = true;
+                    response.ErrorMessage = failedFilter.Message;
+                    response.StackTrace = Environment.StackTrace;
+                }
             }
             catch (Exception ex)
             {
@@ -61,7 +85,14 @@ namespace SOAFramework.Service.Server
                 response.ErrorMessage = ex.Message;
                 response.StackTrace = ex.StackTrace;
             }
-            json = JsonHelper.Serialize(response);
+            if (response.IsError)
+            {
+                json = JsonHelper.Serialize(response);
+            }
+            else
+            {
+                json = JsonHelper.Serialize(response.Data);
+            }
             string zippedJson = ZipHelper.Zip(json);
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
         }
@@ -127,6 +158,7 @@ namespace SOAFramework.Service.Server
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
         }
 
+        #region test
         public TestClass Test(string a, TestClass b)
         {
             TestClass c = new TestClass();
@@ -144,5 +176,6 @@ namespace SOAFramework.Service.Server
             Console.WriteLine("get test invoked");
             return "test successful";
         }
+        #endregion
     }
 }

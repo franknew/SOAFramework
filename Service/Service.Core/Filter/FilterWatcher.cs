@@ -21,11 +21,11 @@ namespace SOAFramework.Service.Core.Filter
             _list.Remove(filter);
         }
 
-        public bool ExecuteFilter(Dictionary<string, object> args)
+        public bool OnActionExecuting(ActionContext context)
         {
             foreach (IFilter filter in _list)
             {
-                if (!filter.Execute(args))
+                if (!filter.OnActionExecuting(context))
                 {
                     return false;
                 }

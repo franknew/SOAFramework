@@ -84,10 +84,6 @@
       <Project>{47026c03-6f4d-4155-bd42-78ec73044c73}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ORM\Model\ORMDriver.csproj">
-      <Project>{7F09D4A5-7B1C-4B9A-BC8C-81BB60C1CA81}</Project>
-      <Name>ORMDriver</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\WebServiceCore\WebServiceCore.csproj">
       <Project>{F70B162C-FB02-4A83-9967-151FBD240D16}</Project>
       <Name>WebServiceCore</Name>

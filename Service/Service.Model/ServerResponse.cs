@@ -11,7 +11,7 @@ namespace SOAFramework.Service.Model
     public class ServerResponse
     {
         [DataMember(EmitDefaultValue = false)]
-        public bool? IsError { get; set; }
+        public bool IsError { get; set; }
 
         [DataMember(EmitDefaultValue = false)]
         public string ErrorMessage { get; set; }

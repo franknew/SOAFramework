@@ -52,7 +52,7 @@ namespace Athena.Unitop.Sure.Lib
             Type type = data.GetType();
             foreach (DataColumn column in row.Table.Columns)
             {
-                PropertyInfo property = type.GetProperty(column.ColumnName);
+                PropertyInfo property = type.GetProperty(column.ColumnName, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
                 if (property != null)
                 {
                     Type t = Nullable.GetUnderlyingType(property.PropertyType)
@@ -105,21 +105,22 @@ namespace Athena.Unitop.Sure.Lib
             foreach (DataRow row in table.Rows)
             {
                 T t = Activator.CreateInstance<T>();
-                foreach (DataColumn column in table.Columns)
-                {
-                    try
-                    {
-                        PropertyInfo property = typeT.GetProperty(column.ColumnName);
-                        if (property != null && row[column] != DBNull.Value && row[column] != null)
-                        {
-                            object value = row[column].ChangeTypeTo(property.PropertyType);
-                            property.SetValue(t, value, null);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
+                row.CopyToObject<T>(t);
+                //foreach (DataColumn column in table.Columns)
+                //{
+                //    try
+                //    {
+                //        PropertyInfo property = typeT.GetProperty(column.ColumnName);
+                //        if (property != null && row[column] != DBNull.Value && row[column] != null)
+                //        {
+                //            object value = row[column].ChangeTypeTo(property.PropertyType);
+                //            property.SetValue(t, value, null);
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //    }
+                //}
                 listResult.Add(t);
             }
             return listResult;

@@ -59,8 +59,8 @@
       <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
       <Name>XML</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ORM\Model\ORMDriver.csproj">
-      <Project>{7F09D4A5-7B1C-4B9A-BC8C-81BB60C1CA81}</Project>
+    <ProjectReference Include="..\ORM\ORMDriver\ORMDriver.csproj">
+      <Project>{7f09d4a5-7b1c-4b9a-bc8c-81bb60c1ca81}</Project>
       <Name>ORMDriver</Name>
     </ProjectReference>
   </ItemGroup>

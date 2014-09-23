@@ -12,17 +12,12 @@ namespace SOAFramework.Library.Zip
 
         public static byte[] ZipToByte(string value)
         {
-            byte[] byteArray = new byte[value.Length];
+            byte[] byteArray = Encoding.UTF8.GetBytes(value);
             int indexBA = 0;
-            foreach (char item in value.ToCharArray())
-            {
-                byteArray[indexBA++] = (byte)item;
-            }
 
             //Prepare for compress
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             System.IO.Compression.GZipStream sw = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionMode.Compress);
-
             //Compress
             sw.Write(byteArray, 0, byteArray.Length);
             //Close, DO NOT FLUSH cause bytes will go missing...
@@ -74,13 +69,12 @@ namespace SOAFramework.Library.Zip
                 int data = sr.ReadByte();
                 while (data != -1)
                 {
-                    sB.Append((char)data);
-                    //byteList.Add((byte)data);
+                    //sB.Append((char)data);
+                    byteList.Add((byte)data);
                     data = sr.ReadByte();
                 }
                 //Decompress
-                //int rByte = sr.Read(byteArray, 0, byteArray.Length);
-                int rByte = byteList.Count;
+                sB.Append(Encoding.UTF8.GetString(byteList.ToArray()));
                 //Transform byte[] unzip data to string
                 //Read the number of bytes GZipStream red and do not a for each bytes in
                 sr.Close();

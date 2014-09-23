@@ -76,6 +76,7 @@ namespace SOAFramework.Service.Server
             return list;
         }
 
+        #region big data test
         public List<ServiceModel> BigDataTest()
         {
             List<ServiceModel> list = new List<ServiceModel>();
@@ -90,5 +91,6 @@ namespace SOAFramework.Service.Server
             }
             return list;
         }
+        #endregion
     }
 }

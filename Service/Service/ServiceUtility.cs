@@ -10,17 +10,16 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SOAFramework.Service.Server
 {
     public class ServiceUtility
     {
         const string bussinessConfig = "soaConfigGroup/businessFileConfig";
-        const string beforeExecuteFilterConfig = "soaConfigGroup/beforeExecuteFilterConfig";
-        const string afterExecuteFilterConfig = "soaConfigGroup/afterExecuteFilterConfig";
+        const string filterConfig = "soaConfigGroup/filterConfig";
         const string businessLayer = null;
-        const string beforeExecuteLayer = null;
-        const string afterExecuteLayer = null;
+        const string filterLayer = null;
 
         /// <summary>
         /// 通过反射执行缓存中的方法
@@ -90,10 +89,9 @@ namespace SOAFramework.Service.Server
                 throw new Exception("配置错误，没有配置业务层dll！");
             }
             List<Assembly> assmList = new List<Assembly>();
-            foreach (var value in config.Values)
+            foreach (string value in config.Values)
             {
-                string path = string.Format(value.ToString(), Directory.GetCurrentDirectory());
-                Assembly ass = Assembly.LoadFrom(path);
+                Assembly ass = Assembly.Load(value);
                 if (ass == null)
                 {
                     throw new Exception("业务层配置错误，无法加载相应的DLL：" + value);
@@ -101,6 +99,104 @@ namespace SOAFramework.Service.Server
                 assmList.Add(ass);
             }
 
+            AddAssInCache(assmList);
+        }
+
+        public static List<IFilter> InitFilterList()
+        {
+            IDictionary config = ConfigurationManager.GetSection(filterConfig) as IDictionary; 
+            List<Assembly> assmList = new List<Assembly>();
+            foreach (string value in config.Values)
+            {
+                Assembly ass = Assembly.Load(value);
+                if (ass == null)
+                {
+                    continue;
+                }
+                assmList.Add(ass);
+            }
+            
+            List<IFilter> list = new List<IFilter>();
+            foreach (var ass in assmList)
+            {
+                Type[] types = ass.GetTypes();
+                foreach (var type in types)
+                {
+
+                    if (type.GetInterface("IFilter") != null)
+                    {
+                        object instance = Activator.CreateInstance(type);
+                        IFilter filter = instance as IFilter;
+                        list.Add(filter);
+                    }
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filterList"></param>
+        /// <returns>运行失败的filter</returns>
+        public static IFilter FilterExecuting(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
+            Dictionary<string, object> parameters)
+        {
+            if (filterList != null)
+            {
+                foreach (IFilter filter in filterList)
+                {
+                    ActionContext context = new ActionContext
+                    {
+                        Context = HttpContext.Current,
+                        Router = new RouterData
+                        {
+                            Action = funcName,
+                            TypeName = typeName,
+                        },
+                        MethodInfo = method,
+                        Parameters = parameters,
+                    };
+                    if (!filter.OnActionExecuting(context))
+                    {
+                        return filter;
+                    }
+                }
+                
+            }
+            return null;
+        }
+
+        public static IFilter FilterExecuted(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
+            Dictionary<string, object> parameters)
+        {
+            if (filterList != null)
+            {
+                foreach (IFilter filter in filterList)
+                {
+                    ActionContext context = new ActionContext
+                    {
+                        Context = HttpContext.Current,
+                        Router = new RouterData
+                        {
+                            Action = funcName,
+                            TypeName = typeName,
+                        },
+                        MethodInfo = method,
+                        Parameters = parameters,
+                    };
+                    if (!filter.OnActionExecuted(context))
+                    {
+                        return filter;
+                    }
+                }
+
+            }
+            return null;
+        }
+
+        private static void AddAssInCache(List<Assembly> assmList)
+        {
             foreach (var ass in assmList)
             {
                 Type[] types = ass.GetTypes();
@@ -141,11 +237,6 @@ namespace SOAFramework.Service.Server
                 string key = defaultService.FullName + "." + method.Name;
                 ServicePoolManager.AddItem(key, method);
             }
-        }
-
-        public static void InitExecuteLayerCache()
-        {
-
         }
 
     }

@@ -138,7 +138,7 @@ namespace Test
             data = Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
             testresult = ZipHelper.UnZip(testresult);
-
+            dynamic d = JsonHelper.Deserialize<dynamic>(testresult);
             strData = JsonHelper.Serialize(argslist);
             data = Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/BigDataTest", data);

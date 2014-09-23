@@ -10,7 +10,8 @@ namespace Athena.Unitop.Sure.Lib.Barcode
 	using System.Drawing;
 	using System.IO;
 	using System.Text;
-    using Athena.Unitop.Sure.Lib.Properties;
+    using Athena.Unitop.Sure.Lib;
+    using Lib.Properties;
 
 	/// <summary>
 	/// <c>CodeQrBarcodeDraw</c> extends <see cref="BarcodeDraw"/> to support
