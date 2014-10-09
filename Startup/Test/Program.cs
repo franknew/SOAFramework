@@ -133,30 +133,45 @@ namespace Test
             data = Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/Test", data);
 
+            watch.Start();
             List<PostArgItem> argslist = new List<PostArgItem>();
             strData = JsonHelper.Serialize(argslist);
             data = Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
             testresult = ZipHelper.UnZip(testresult);
+            watch.Stop();
+            Console.WriteLine("发现服务测试耗时{0}", watch.ElapsedMilliseconds);
+
+            watch.Start();
             dynamic d = JsonHelper.Deserialize<dynamic>(testresult);
             strData = JsonHelper.Serialize(argslist);
             data = Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/BigDataTest", data);
+            watch.Stop();
+            Console.WriteLine("大数据测试耗时{0}", watch.ElapsedMilliseconds);
+
+            watch.Start();
             //download test
             string filename = "预付款类型批量导入.xls";
             testresult = HttpHelper.Get(@"http://localhost/Service/Download/" + filename);
             //testresult = ZipHelper.UnZip(testresult);
             testresult.ToFile("D:\\" + filename);
+            watch.Stop();
+            Console.WriteLine("下载测试耗时{0}", watch.ElapsedMilliseconds);
 
+            watch.Start();
             //uploadtest
             string uploadFileName = "D:\\预付款类型批量导入.xls";
             FileInfo file = new FileInfo(uploadFileName);
             string fileString = file.FileToString();
             data = Encoding.UTF8.GetBytes(fileString);
             testresult = HttpHelper.Post(@"http://localhost/Service/Upload/" + file.Name, data);
+            watch.Stop();
+            Console.WriteLine("上传测试耗时{0}", watch.ElapsedMilliseconds);
 
             watch.Start();
-            for (int i = 0; i < 10000; i++)
+            int count = 10000;
+            for (int i = 0; i < count; i++)
             {
                 List<PostArgItem> list = new List<PostArgItem>();
                 list.Add(new PostArgItem { Key = "str", Value = "a1" });
@@ -168,7 +183,7 @@ namespace Test
                 //SOAFramework.Service.Model.ServerResponse response = JsonHelper.Deserialize<SOAFramework.Service.Model.ServerResponse>(testresult);
             }
             watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds);
+            Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
             #endregion
 
             Console.ReadLine();
