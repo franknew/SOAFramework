@@ -6,6 +6,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Diagnostics;
 using System.Reflection.Emit;
 using System.Reflection;
 using System.Configuration;
@@ -50,9 +51,11 @@ namespace SOAFramework.Service.Server
         public Stream Execute(string typeName, string functionName, Dictionary<string, object> args)
         {
             ServerResponse response = new ServerResponse();
+            Stopwatch watch = new Stopwatch();
             string json = "";
             try
             {
+                #region 执行前置filter
                 string methodFullName = typeName + "." + functionName;
                 MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(methodFullName);
                 bool valid = true;
@@ -62,22 +65,29 @@ namespace SOAFramework.Service.Server
                     valid = false;
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
-                    response.StackTrace = Environment.StackTrace;
                 }
+                #endregion
+
+                #region 执行方法
                 if (valid)
                 {
+                    watch.Start();
                     //执行方法
                     object result = ServiceUtility.ExecuteMethod(typeName, functionName, args);
+                    watch.Stop();
                     response.Data = result;
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
                 }
-                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, args);
+                #endregion
+
+                #region 执行后置filter
+                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, args, watch.ElapsedMilliseconds);
                 if (failedFilter != null)
                 {
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
-                    response.StackTrace = Environment.StackTrace;
                 }
+                #endregion
             }
             catch (Exception ex)
             {
@@ -85,6 +95,8 @@ namespace SOAFramework.Service.Server
                 response.ErrorMessage = ex.Message;
                 response.StackTrace = ex.StackTrace;
             }
+            #region 处理结果
+            //序列化对象成json
             if (response.IsError)
             {
                 json = JsonHelper.Serialize(response);
@@ -93,8 +105,10 @@ namespace SOAFramework.Service.Server
             {
                 json = JsonHelper.Serialize(response.Data);
             }
+            //压缩json
             string zippedJson = ZipHelper.Zip(json);
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
+            #endregion
         }
 
         /// <summary>
@@ -106,7 +120,7 @@ namespace SOAFramework.Service.Server
         {
             if (string.IsNullOrEmpty(_filePath))
             {
-                _filePath = Directory.GetCurrentDirectory();
+                _filePath = AppDomain.CurrentDomain.BaseDirectory;
             }
             if (!_filePath.EndsWith("\\"))
             {
@@ -137,7 +151,7 @@ namespace SOAFramework.Service.Server
             {
                 if (string.IsNullOrEmpty(_filePath))
                 {
-                    _filePath = Directory.GetCurrentDirectory();
+                    _filePath = AppDomain.CurrentDomain.BaseDirectory;
                 }
                 if (!_filePath.EndsWith("\\"))
                 {

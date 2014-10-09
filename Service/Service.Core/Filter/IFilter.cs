@@ -14,4 +14,19 @@ namespace SOAFramework.Service.Core
 
         string Message { get; set; }
     }
+
+    public class BaseFilter : IFilter
+    {
+        public virtual bool OnActionExecuting(ActionContext context)
+        {
+            return true;
+        }
+
+        public virtual bool OnActionExecuted(ActionContext context)
+        {
+            return true;
+        }
+
+        public string Message { get; set; }
+    }
 }

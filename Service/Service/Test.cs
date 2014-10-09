@@ -10,18 +10,19 @@ namespace SOAFramework.Service.Server
     public class Test
     {
         [ServiceInvoker]
+        [NoAuthAttr]
         public string TestMethod(string str, string str1)
         {
             return "hell world! " + str;
         }
     }
 
-    public class FilterTest : IFilter
+    public class FilterTest : BaseFilter
     {
-        public bool OnActionExecuting(ActionContext context)
+        public override bool OnActionExecuting(ActionContext context)
         {
-            object[] attr = context.MethodInfo.GetCustomAttributes(typeof(AuthAttr), true);
-            if (attr == null || attr.Length == 0)
+            object[] attr = context.MethodInfo.GetCustomAttributes(typeof(NoAuthAttr), true);
+            if (attr != null && attr.Length > 0)
             {
                 this.Message = "验证失败！";
                 return false;
@@ -29,16 +30,14 @@ namespace SOAFramework.Service.Server
             return true;
         }
 
-        public bool OnActionExecuted(ActionContext context)
+        public override bool OnActionExecuted(ActionContext context)
         {
             return true;
         }
-
-        public string Message { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class AuthAttr : Attribute
+    public class NoAuthAttr : Attribute
     {
     }
 }

@@ -17,5 +17,7 @@ namespace SOAFramework.Service.Core
         public HttpContext Context { get; set; }
 
         public MethodInfo MethodInfo { get; set; }
+
+        public PerformanceContext PerformanceContext { get; set; }
     }
 }

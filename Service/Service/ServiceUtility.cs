@@ -106,14 +106,21 @@ namespace SOAFramework.Service.Server
         {
             IDictionary config = ConfigurationManager.GetSection(filterConfig) as IDictionary; 
             List<Assembly> assmList = new List<Assembly>();
-            foreach (string value in config.Values)
+            assmList.AddRange(AppDomain.CurrentDomain.GetAssemblies());
+            if (config != null)
             {
-                Assembly ass = Assembly.Load(value);
-                if (ass == null)
+                foreach (string value in config.Values)
                 {
-                    continue;
+                    Assembly ass = Assembly.Load(value);
+                    if (ass == null)
+                    {
+                        continue;
+                    }
+                    if (!assmList.Contains(ass))
+                    {
+                        assmList.Add(ass);
+                    }
                 }
-                assmList.Add(ass);
             }
             
             List<IFilter> list = new List<IFilter>();
@@ -122,7 +129,6 @@ namespace SOAFramework.Service.Server
                 Type[] types = ass.GetTypes();
                 foreach (var type in types)
                 {
-
                     if (type.GetInterface("IFilter") != null)
                     {
                         object instance = Activator.CreateInstance(type);
@@ -162,13 +168,12 @@ namespace SOAFramework.Service.Server
                         return filter;
                     }
                 }
-                
             }
             return null;
         }
 
         public static IFilter FilterExecuted(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
-            Dictionary<string, object> parameters)
+            Dictionary<string, object> parameters, long ElapsedMilliseconds)
         {
             if (filterList != null)
             {
@@ -184,6 +189,9 @@ namespace SOAFramework.Service.Server
                         },
                         MethodInfo = method,
                         Parameters = parameters,
+                        PerformanceContext = new PerformanceContext {
+                            ElapsedMilliseconds = ElapsedMilliseconds,
+                        },
                     };
                     if (!filter.OnActionExecuted(context))
                     {
@@ -238,6 +246,5 @@ namespace SOAFramework.Service.Server
                 ServicePoolManager.AddItem(key, method);
             }
         }
-
     }
 }
