@@ -19,6 +19,8 @@ using SOAFramework.Library.AOP;
 using SOAFramework.Service.Server;
 using SOAFramework.Service.Model;
 using SOAFramework.Library.Zip;
+using System.ServiceModel;
+using SOAFramework.Client.SDK.Core;
 
 namespace Test
 {
@@ -55,11 +57,44 @@ namespace Test
             //List<TestClass> list1 = JsonHelper.Deserialize<List<TestClass>>(strjson);
             //watch.Stop();
             //Console.WriteLine("反序列化：{0}", watch.ElapsedMilliseconds);
+            //TestResponse re = JsonHelper.Deserialize<TestResponse>("{\"IsError\":false,\"Data\":[{\"InterfaceName\":\"SOAFramework.Service.Server.DefaultService.DiscoverService\"}]}");
+            #endregion
+
+            #region custom wcf binding
+            //string baseAddress = "Http://localhost/Service";
+            //ServiceHost host = new WebServiceHost(typeof(SOAService), new Uri(baseAddress));
+            //host.AddServiceEndpoint(typeof(IService), new BasicHttpBinding(), "soap");
+            //WebHttpBinding webBinding = new WebHttpBinding();
+            //webBinding.ContentTypeMapper = new MyRawMapper();
+            //host.AddServiceEndpoint(typeof(IService), webBinding, "json").Behaviors.Add(new NewtonsoftJsonBehavior());
+            //Console.WriteLine("Opening the host");
+            //host.Open();
+
+            //ChannelFactory<IService> factory = new ChannelFactory<IService>(new BasicHttpBinding(), new EndpointAddress(baseAddress + "/soap"));
+            //IService proxy = factory.CreateChannel();
+            //byte[] newdata;
+            //TestClass c1 = new TestClass();
+            //c1.a = "a";
+            //List<TestClass> list1 = new List<TestClass>();
+            //list1.Add(c1);
+            //string strnewdata = JsonHelper.Serialize(list1);
+            //newdata = Encoding.UTF8.GetBytes(strnewdata);
+            //string newtestresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/DiscoverService", newdata);
+
+            //Console.WriteLine("Now using the client formatter");
+            //ChannelFactory<IService> newFactory = new ChannelFactory<IService>(webBinding, new EndpointAddress(baseAddress + "/json"));
+            //newFactory.Endpoint.Behaviors.Add(new NewtonsoftJsonBehavior());
+            //IService newProxy = newFactory.CreateChannel();
+
+            //Console.WriteLine("Press ENTER to close");
+            //Console.ReadLine();
+            //host.Close();
+            //Console.WriteLine("Host closed");
             #endregion
 
             #region wcf host
-            //WebServiceHost host = new WebServiceHost(typeof(SOAService));
-            //host.Open();
+            WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
+            newhost.Open();
             #endregion
 
             #region zip tester
@@ -68,6 +103,7 @@ namespace Test
             zip = ZipHelper.UnZip(zipped);
             #endregion
 
+            #region orm
             //string abc = Model.Users.Mapping.ColumnsMapping["PK_UserID"].ToString();
             //a c = new a();
             //c.b = "haha ";
@@ -118,6 +154,12 @@ namespace Test
 
             //Model.Users u = new Model.Users();
             //Model.Customer_AutoIncrease t = new Model.Customer_AutoIncrease();
+            #endregion
+
+            #region sdk testing
+            TestRequest request = new TestRequest();
+            TestResponse reseponse = ClientFactory.Client.Execute(request);
+            #endregion
 
             #region soa tester
             string strData = "";
@@ -134,7 +176,10 @@ namespace Test
             testresult = HttpHelper.Post(@"http://localhost/Service/Test", data);
 
             watch.Start();
+            List<TestClass> listc = new List<TestClass>();
+            listc.Add(c);
             List<PostArgItem> argslist = new List<PostArgItem>();
+
             strData = JsonHelper.Serialize(argslist);
             data = Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
@@ -293,6 +338,19 @@ namespace Test
         public List<TestClass> test { get; set; }
 
         public Dictionary<string, string> dic { get; set; }
+    }
+
+    public class TestRequest : IRequest<TestResponse>
+    {
+        public string GetApi()
+        {
+            return "SOAFramework.Service.Server.DefaultService.DiscoverService";
+        }
+    }
+
+    public class TestResponse : BaseResponse
+    {
+        public List<Dictionary<string, object>> Data { get; set; }
     }
 
 }

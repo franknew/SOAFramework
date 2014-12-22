@@ -78,7 +78,17 @@ namespace Newtonsoft.Json
             _reader = reader;
             _lineNumber = 1;
             //_chars = new char[4097];
+            json += '\0';
             _chars = json.ToCharArray();
+        }
+        public JsonTextReader(TextReader reader)
+        {
+            if (reader == null)
+                throw new ArgumentNullException("reader");
+
+            _reader = reader;
+            _lineNumber = 1;
+            _chars = new char[4097];
         }
 
         internal void SetCharBuffer(char[] chars)
@@ -104,6 +114,19 @@ namespace Newtonsoft.Json
         {
             _lineNumber++;
             _lineStartPos = pos - 1;
+        }
+
+        public override int Count
+        {
+            get { return _chars.Length; }
+        }
+
+        public override int Position
+        {
+            get
+            {
+                return _charPos;
+            }
         }
 
         private void ParseString(char quote)

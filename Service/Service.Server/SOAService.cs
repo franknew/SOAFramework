@@ -58,18 +58,16 @@ namespace SOAFramework.Service.Server
                 #region 执行前置filter
                 string methodFullName = typeName + "." + functionName;
                 MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(methodFullName);
-                bool valid = true;
                 IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, args);
                 if (failedFilter != null)
                 {
-                    valid = false;
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
                 }
                 #endregion
 
                 #region 执行方法
-                if (valid)
+                if (!response.IsError)
                 {
                     watch.Start();
                     //执行方法

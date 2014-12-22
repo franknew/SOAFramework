@@ -377,6 +377,11 @@ namespace Newtonsoft.Json
             return Deserialize(reader, null);
         }
 
+        public object Deserialize(TextReader reader, Type objectType)
+        {
+            return Deserialize(new JsonTextReader(reader), objectType);
+        }
+
         /// <summary>
         /// Deserializes the Json structure contained by the specified <see cref="StringReader"/>
         /// into an instance of the specified type.

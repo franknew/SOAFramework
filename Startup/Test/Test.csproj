@@ -56,6 +56,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Client\Client.SDK.Core\Client.SDK.Core.csproj">
+      <Project>{c389f2f0-20ab-4b4d-84ec-0b794b222cea}</Project>
+      <Name>Client.SDK.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Controller\Controller.csproj">
       <Project>{C9437F89-A710-4097-9AC6-1A0B4DAF2B2B}</Project>
       <Name>Controller</Name>

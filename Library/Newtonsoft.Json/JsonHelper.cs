@@ -29,5 +29,10 @@ namespace SOAFramework.Library
         {
             return JsonConvert.DeserializeObject<T>(JSON);
         }
+
+        public static object Deserialize(string JSON, Type t)
+        {
+            return JsonConvert.DeserializeObject(JSON, t);
+        }
     }
 }
