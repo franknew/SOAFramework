@@ -106,7 +106,8 @@ namespace SOAFramework.Service.Server
         {
             IDictionary config = ConfigurationManager.GetSection(filterConfig) as IDictionary; 
             List<Assembly> assmList = new List<Assembly>();
-            assmList.AddRange(AppDomain.CurrentDomain.GetAssemblies());
+            assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
             if (config != null)
             {
                 foreach (string value in config.Values)
@@ -189,7 +190,8 @@ namespace SOAFramework.Service.Server
                         },
                         MethodInfo = method,
                         Parameters = parameters,
-                        PerformanceContext = new PerformanceContext {
+                        PerformanceContext = new PerformanceContext
+                        {
                             ElapsedMilliseconds = ElapsedMilliseconds,
                         },
                     };

@@ -96,7 +96,7 @@
       <Project>{085477e1-3e7d-49ac-8ba6-9d3f876d6a4e}</Project>
       <Name>Service.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Service\Service\Service.Server.csproj">
+    <ProjectReference Include="..\..\Service\Service.Server\Service.Server.csproj">
       <Project>{3f2cf245-0a6e-41ae-9db9-1cc7c7ad4fd4}</Project>
       <Name>Service.Server</Name>
     </ProjectReference>

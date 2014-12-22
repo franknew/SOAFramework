@@ -58,8 +58,8 @@ namespace Test
             #endregion
 
             #region wcf host
-            WebServiceHost host = new WebServiceHost(typeof(SOAService));
-            host.Open();
+            //WebServiceHost host = new WebServiceHost(typeof(SOAService));
+            //host.Open();
             #endregion
 
             #region zip tester

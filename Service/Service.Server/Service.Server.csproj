@@ -59,9 +59,6 @@
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Library\CacheManager\ServicePoolManager.csproj">
       <Project>{d6312221-f728-4a36-8811-e958a530c113}</Project>
       <Name>ServicePoolManager</Name>
@@ -90,9 +87,6 @@
       <Project>{085477e1-3e7d-49ac-8ba6-9d3f876d6a4e}</Project>
       <Name>Service.Model</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
