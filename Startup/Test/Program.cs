@@ -93,8 +93,8 @@ namespace Test
             #endregion
 
             #region wcf host
-            WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
-            newhost.Open();
+            //WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
+            //newhost.Open();
             #endregion
 
             #region zip tester
@@ -230,6 +230,7 @@ namespace Test
             watch.Stop();
             Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
             #endregion
+
 
             Console.ReadLine();
         }

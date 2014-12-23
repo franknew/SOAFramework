@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 * LayoutKind.Explicit：对每个域按照FieldOffset属性对类型成员排序
 * LayoutKind.Sequential：对出现在受管辖类型定义地方的不受管辖内存中的类型成员进行排序。
 */
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
 
     /**/

@@ -8,8 +8,8 @@
     <ProjectGuid>{323CA08D-7749-484C-B7A3-EE709D1AF0FA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DAL</RootNamespace>
-    <AssemblyName>DAL</AssemblyName>
+    <RootNamespace>SOAFramework.Library.DAL</RootNamespace>
+    <AssemblyName>SOAFramework.Library.DAL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

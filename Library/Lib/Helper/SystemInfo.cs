@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Management;
 using System.Text;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
    
     /// <summary>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 [assembly: CLSCompliant(true)]
-namespace Athena.Unitop.Sure.Lib.Validator
+namespace SOAFramework.Library.Validator
 {
     [Serializable]
     public class ValidatorGroup

@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.ComponentModel;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     /// <summary>
     /// 枚举值帮助类

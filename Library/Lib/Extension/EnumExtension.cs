@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Athena.Unitop.Sure.Lib.Extension
+namespace SOAFramework.Library.Extension
 {
     public static class EnumExtension
     {

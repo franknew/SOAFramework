@@ -8,8 +8,8 @@
     <ProjectGuid>{E21BA0D2-9CF5-478F-9E50-5AFE78712B97}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>SOAFramework.Library.Common</RootNamespace>
+    <AssemblyName>SOAFramework.Library.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

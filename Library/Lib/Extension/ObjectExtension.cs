@@ -5,7 +5,7 @@ using System.Text;
 using System.Data;
 using System.Reflection;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public static class ObjectExtension
     {

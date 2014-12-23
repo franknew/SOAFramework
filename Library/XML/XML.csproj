@@ -8,8 +8,8 @@
     <ProjectGuid>{D596095F-F060-4496-96B6-2BD03B068E16}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XML</RootNamespace>
-    <AssemblyName>XML</AssemblyName>
+    <RootNamespace>SOAFramework.Library.XML</RootNamespace>
+    <AssemblyName>SOAFramework.Library.XML</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

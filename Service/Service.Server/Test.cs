@@ -10,7 +10,7 @@ namespace SOAFramework.Service.Server
     public class Test
     {
         [ServiceInvoker]
-        [NoAuthAttr]
+        //[NoAuthAttr]
         public string TestMethod(string str, string str1)
         {
             return "hell world! " + str;

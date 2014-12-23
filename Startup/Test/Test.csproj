@@ -56,10 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Client\Client.SDK.Core\Client.SDK.Core.csproj">
-      <Project>{c389f2f0-20ab-4b4d-84ec-0b794b222cea}</Project>
-      <Name>Client.SDK.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Controller\Controller.csproj">
       <Project>{C9437F89-A710-4097-9AC6-1A0B4DAF2B2B}</Project>
       <Name>Controller</Name>
@@ -100,6 +96,10 @@
       <Project>{085477e1-3e7d-49ac-8ba6-9d3f876d6a4e}</Project>
       <Name>Service.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Service\Service.SDK.Core\Service.SDK.Core.csproj">
+      <Project>{c389f2f0-20ab-4b4d-84ec-0b794b222cea}</Project>
+      <Name>Service.SDK.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Service\Service.Server\Service.Server.csproj">
       <Project>{3f2cf245-0a6e-41ae-9db9-1cc7c7ad4fd4}</Project>
       <Name>Service.Server</Name>
@@ -109,6 +109,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Generator1.tt" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

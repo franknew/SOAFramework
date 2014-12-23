@@ -7,7 +7,7 @@ using Microsoft.Win32;
 using System.Drawing;
 using System.IO;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
  public   class GetSystemIcon
     {

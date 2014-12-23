@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     /// <summary>
     /// 用于系统记录日志

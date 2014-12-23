@@ -8,8 +8,8 @@
     <ProjectGuid>{7F09D4A5-7B1C-4B9A-BC8C-81BB60C1CA81}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ORMDriver</RootNamespace>
-    <AssemblyName>ORMDriver</AssemblyName>
+    <RootNamespace>SOAFramework.ORMDriver</RootNamespace>
+    <AssemblyName>SOAFramework.ORMDriver</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

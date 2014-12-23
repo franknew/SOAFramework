@@ -7,7 +7,7 @@ using System.Collections;
 using Frank.Common.DAL;
 using SOAFramework.ORM.Mapping;
 using SOAFramework.ORM.Common;
-using Athena.Unitop.Sure.Lib;
+using SOAFramework.Library;
 
 namespace SOAFramework.ORM.ORMDriver
 {

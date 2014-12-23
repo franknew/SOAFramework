@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Athena.Unitop.Sure.Lib.Validator
+namespace SOAFramework.Library.Validator
 {
     public interface IValidatorBase
     {

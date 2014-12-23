@@ -8,8 +8,8 @@
     <ProjectGuid>{09576270-B770-442D-9C90-9F82B2C8F8CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebService</RootNamespace>
-    <AssemblyName>WebService</AssemblyName>
+    <RootNamespace>SOAFramework.Library.WebService</RootNamespace>
+    <AssemblyName>SOAFramework.Library.WebService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

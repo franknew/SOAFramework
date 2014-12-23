@@ -7,8 +7,8 @@
     <ProjectGuid>{94F414D4-4C82-46FE-96FC-B0F1C1FAAB5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Extension</RootNamespace>
-    <AssemblyName>Extension</AssemblyName>
+    <RootNamespace>SOAFramework.Library.Extension</RootNamespace>
+    <AssemblyName>SOAFramework.Library.Extension</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

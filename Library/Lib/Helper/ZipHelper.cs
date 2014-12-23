@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
    public class ZipHelper
     {

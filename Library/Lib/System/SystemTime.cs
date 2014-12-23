@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     [StructLayout(LayoutKind.Sequential)]
     public class SystemTime

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Athena.Unitop.Sure.Lib.Validator;
+using SOAFramework.Library.Validator;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public class BillHelper
     {

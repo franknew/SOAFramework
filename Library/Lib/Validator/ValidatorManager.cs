@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Athena.Unitop.Sure.Lib.Validator
+namespace SOAFramework.Library.Validator
 {
     [Serializable]
     public class ValidatorManager

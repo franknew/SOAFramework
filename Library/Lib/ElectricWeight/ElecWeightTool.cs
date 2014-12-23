@@ -5,7 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Windows.Forms;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public class ElecWeightTool
     {

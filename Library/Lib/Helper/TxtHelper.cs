@@ -8,7 +8,7 @@ using System.Security.AccessControl;
 using System.Reflection;
 using System.Collections;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public class TxtHelper
     {

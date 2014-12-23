@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace Athena.Unitop.Sure.Lib.Helper
+namespace SOAFramework.Library.Helper
 {
    public class AboutProduction
     {

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Security.Cryptography;
 
-namespace Athena.Unitop.Sure.Lib.Extension
+namespace SOAFramework.Library.Extension
 {
     /// <summary>
     /// Summary for the Numbers class

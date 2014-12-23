@@ -37,8 +37,8 @@ namespace SOAFramework.Server.UI
             // 
             // txbMessage
             // 
-            this.txbMessage.Location = new System.Drawing.Point(0, 51);
-            this.txbMessage.Size = new System.Drawing.Size(633, 312);
+            this.txbMessage.Location = new System.Drawing.Point(0, 36);
+            this.txbMessage.Size = new System.Drawing.Size(633, 327);
             // 
             // timer1
             // 
@@ -55,6 +55,7 @@ namespace SOAFramework.Server.UI
             this.PerformLayout();
 
         }
+
 
         #endregion
     }

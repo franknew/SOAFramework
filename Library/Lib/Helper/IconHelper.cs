@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public class IconHelper
     {

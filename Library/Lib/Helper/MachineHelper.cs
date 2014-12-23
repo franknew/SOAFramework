@@ -5,7 +5,7 @@ using System.Text;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public class MachineHelper
     {

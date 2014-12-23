@@ -12,7 +12,7 @@ using System.IO;
 using NPOI.HSSF.Util;
 using System.Data.OleDb;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public class ExecelHelper3
     {
@@ -422,30 +422,30 @@ namespace Athena.Unitop.Sure.Lib
         /// <param name="model">输入模型，替换方式采用RazorEngine引擎解析，如“@(Model.A==1?"是":"否")”</param>
         /// <param name="rowsCount">行替换范围，默认遇到Null时停止</param>
         /// <param name="columnsCount">列替换范围，默认遇到Null时停止</param>
-        public static void ToExcelTemplate<T>(string excelTemplate, string outPath, T model, int rowsCount = -1, int columnsCount = -1)
-        {
-            ExcelParse(excelTemplate, outPath, (x) =>
-            {
-                string razorTemplaete = "@" + x.Substring(1);
-                try
-                {
-                    string rel = Athena.Unitop.Sure.Lib.RazorEngine.Razor.Parse<T>(razorTemplaete, model);
-                    return rel;
+        //public static void ToExcelTemplate<T>(string excelTemplate, string outPath, T model, int rowsCount = -1, int columnsCount = -1)
+        //{
+        //    ExcelParse(excelTemplate, outPath, (x) =>
+        //    {
+        //        string razorTemplaete = "@" + x.Substring(1);
+        //        try
+        //        {
+        //            string rel = SOAFramework.Library.RazorEngine.Razor.Parse<T>(razorTemplaete, model);
+        //            return rel;
 
-                }
-                catch (Athena.Unitop.Sure.Lib.RazorEngine.Templating.TemplateCompilationException ex)
-                {
+        //        }
+        //        catch (SOAFramework.Library.RazorEngine.Templating.TemplateCompilationException ex)
+        //        {
 
-                    foreach (var item in ex.Errors)
-                        System.Diagnostics.Debug.Print("===> " + ex.Message);
-                    return "";
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }, rowsCount, columnsCount);
-        }
+        //            foreach (var item in ex.Errors)
+        //                System.Diagnostics.Debug.Print("===> " + ex.Message);
+        //            return "";
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw;
+        //        }
+        //    }, rowsCount, columnsCount);
+        //}
 
         /// <summary>
         /// 以字典作为数据源创建模版

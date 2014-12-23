@@ -7,8 +7,8 @@
     <ProjectGuid>{74F3B6DE-FE00-433C-A658-9169FF0B3456}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_7Zip</RootNamespace>
-    <AssemblyName>7Zip</AssemblyName>
+    <RootNamespace>SOAFramework.Library._7Zip</RootNamespace>
+    <AssemblyName>SOAFramework.Library.7Zip</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

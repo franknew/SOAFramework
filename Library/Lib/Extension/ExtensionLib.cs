@@ -8,7 +8,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Athena.Unitop.Sure.Lib
+namespace SOAFramework.Library
 {
     public static class ExtensionLib
     {

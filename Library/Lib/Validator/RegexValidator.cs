@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Athena.Unitop.Sure.Lib.Validator
+namespace SOAFramework.Library.Validator
 {
     /// <summary>
     /// 规则验证器
