@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 
-namespace Athena.Unitop.Monitor.Lib
+namespace SOAFramework.Library
 {
     public class FTPClient : IFTPClient
     {

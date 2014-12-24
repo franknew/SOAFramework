@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 
-namespace SOAFramework.Library
+namespace SOAFramework.Library.Lib
 {
    public class ZipHelper
     {

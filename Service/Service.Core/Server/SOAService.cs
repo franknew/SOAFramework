@@ -12,11 +12,12 @@ using System.Reflection;
 using System.Configuration;
 using System.Collections;
 using SOAFramework.Service.Interface;
-using SOAFramework.Service.Model;
+using SOAFramework.Service.Core;
 using System.IO;
 using System.ServiceModel.Web;
 using SOAFramework.Service.Core;
-using SOAFramework.Library.Zip;
+using SOAFramework.Library;
+using SOAFramework.Service.Model;
 
 namespace SOAFramework.Service.Server
 {

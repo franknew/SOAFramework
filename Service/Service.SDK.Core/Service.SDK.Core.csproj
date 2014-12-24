@@ -16,10 +16,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Bin\</OutputPath>
+    <OutputPath>..\..\Bin\Modules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Bin\Modules\Service.SDK.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,9 +60,9 @@
       <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
       <Name>Zip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Service\Service.Model\Service.Model.csproj">
-      <Project>{085477e1-3e7d-49ac-8ba6-9d3f876d6a4e}</Project>
-      <Name>Service.Model</Name>
+    <ProjectReference Include="..\Service.Core\Service.Core.csproj">
+      <Project>{08af2d5b-b605-44c2-850c-67cfdd22cf35}</Project>
+      <Name>Service.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

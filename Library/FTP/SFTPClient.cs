@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using Tamir.SharpSsh.jsch;
 
-namespace Athena.Unitop.Monitor.Lib
+namespace SOAFramework.Library
 {
     public class SFTPClient : IFTPClient
     {

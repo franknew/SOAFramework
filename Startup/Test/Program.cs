@@ -18,9 +18,11 @@ using System.ServiceModel.Web;
 using SOAFramework.Library.AOP;
 using SOAFramework.Service.Server;
 using SOAFramework.Service.Model;
-using SOAFramework.Library.Zip;
+using SOAFramework.Library;
 using System.ServiceModel;
 using SOAFramework.Client.SDK.Core;
+using SOAFramework.Library.RazorEngine;
+using CodeSmith.Engine;
 
 namespace Test
 {
@@ -30,6 +32,24 @@ namespace Test
         static void Main(string[] args)
         {
             Stopwatch watch = new Stopwatch();
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"Templates\Smiple.cst";
+            DefaultEngineHost host = new DefaultEngineHost(System.IO.Path.GetDirectoryName(path));
+            TemplateEngine engine = new TemplateEngine(System.IO.Path.GetDirectoryName(path));
+            CompileTemplateResult result = engine.Compile(path);
+            if (!result.Errors.HasErrors)
+            {
+                CodeTemplate template = result.CreateTemplateInstance();
+                template.SetProperty("SampleStringProperty", "hello world!");
+                template.SetProperty("SampleBooleanProperty", true);
+                string render = template.RenderToString();
+            }
+            #region razor
+            string strr = File.ReadAllText("Temp.txt");
+            Dictionary<string, object> dicargs = new Dictionary<string, object>();
+            dicargs["a"] = "22222";
+            string r = Razor.Parse(strr, dicargs);
+            #endregion
+
             #region json tester
             //List<TestClass> list = new List<TestClass>();
             //for (int i = 0; i < 10; i++)
@@ -172,7 +192,7 @@ namespace Test
             c.a = "111";
             strData = JsonHelper.Serialize(c);
             //strData = "\"" + strData + "\"";
-            data = Encoding.UTF8.GetBytes(strData);
+            data = System.Text.Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/Test", data);
 
             watch.Start();
@@ -181,7 +201,7 @@ namespace Test
             List<PostArgItem> argslist = new List<PostArgItem>();
 
             strData = JsonHelper.Serialize(argslist);
-            data = Encoding.UTF8.GetBytes(strData);
+            data = System.Text.Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
             testresult = ZipHelper.UnZip(testresult);
             watch.Stop();
@@ -190,7 +210,7 @@ namespace Test
             watch.Start();
             dynamic d = JsonHelper.Deserialize<dynamic>(testresult);
             strData = JsonHelper.Serialize(argslist);
-            data = Encoding.UTF8.GetBytes(strData);
+            data = System.Text.Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/BigDataTest", data);
             watch.Stop();
             Console.WriteLine("大数据测试耗时{0}", watch.ElapsedMilliseconds);
@@ -209,7 +229,7 @@ namespace Test
             string uploadFileName = "D:\\预付款类型批量导入.xls";
             FileInfo file = new FileInfo(uploadFileName);
             string fileString = file.FileToString();
-            data = Encoding.UTF8.GetBytes(fileString);
+            data = System.Text.Encoding.UTF8.GetBytes(fileString);
             testresult = HttpHelper.Post(@"http://localhost/Service/Upload/" + file.Name, data);
             watch.Stop();
             Console.WriteLine("上传测试耗时{0}", watch.ElapsedMilliseconds);
@@ -222,7 +242,7 @@ namespace Test
                 list.Add(new PostArgItem { Key = "str", Value = "a1" });
                 list.Add(new PostArgItem { Key = "str1", Value = "a2" });
                 strData = JsonHelper.Serialize(list);
-                data = Encoding.UTF8.GetBytes(strData);
+                data = System.Text.Encoding.UTF8.GetBytes(strData);
                 testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.Test/TestMethod", data);
                 testresult = ZipHelper.UnZip(testresult);
                 //SOAFramework.Service.Model.ServerResponse response = JsonHelper.Deserialize<SOAFramework.Service.Model.ServerResponse>(testresult);

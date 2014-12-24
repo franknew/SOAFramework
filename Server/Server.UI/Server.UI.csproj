@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SOAFramework.Library.Cache">
+      <HintPath>..\..\Bin\Modules\SOAFramework.Library.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="SOAFramework.Service.Server">
+      <HintPath>..\..\Bin\Modules\SOAFramework.Service.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="SOAFramework.Service.UI">
+      <HintPath>..\..\Bin\Modules\SOAFramework.Service.UI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -81,20 +90,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Library\Cache\Cache.csproj">
-      <Project>{3dd01adf-6859-4d75-aae0-473c7dfe944b}</Project>
-      <Name>Cache</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Service\Service.Server\Service.Server.csproj">
-      <Project>{3f2cf245-0a6e-41ae-9db9-1cc7c7ad4fd4}</Project>
-      <Name>Service.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Service\Service.UI\Service.UI.csproj">
-      <Project>{c52b2b40-a1dd-4e10-b3b7-1d23883abf32}</Project>
-      <Name>Service.UI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

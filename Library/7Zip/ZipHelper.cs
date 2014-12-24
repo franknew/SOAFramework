@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOAFramework.Zip
+namespace SOAFramework.Library
 {
-    public class ZipHelper
+    public class _7ZipHelper
     {
         private const string zipMark = "*zip*";
         public static string Zip(string value)
@@ -121,7 +121,7 @@ namespace SOAFramework.Zip
             byte[] buffer = new byte[len];
             stream2.Read(buffer, 0, (int)len);
             stream2.Close();
-            string str = ZipHelper.ZipByte(buffer);
+            string str = _7ZipHelper.ZipByte(buffer);
             return str;
         }
 

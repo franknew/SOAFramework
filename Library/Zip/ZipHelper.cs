@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOAFramework.Library.Zip
+namespace SOAFramework.Library
 {
     public class ZipHelper
     {

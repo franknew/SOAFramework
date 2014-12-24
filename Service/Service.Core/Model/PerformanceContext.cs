@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOAFramework.Service.Core
+namespace SOAFramework.Service.Model
 {
     public class PerformanceContext
     {

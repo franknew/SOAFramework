@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Athena.Unitop.Monitor.Lib
+namespace SOAFramework.Library
 {
     public class FTPHelper
     {
