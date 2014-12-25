@@ -127,4 +127,21 @@ namespace SOAFramework.Library
             return dic;
         }
     }
+
+    public static class TxtExtesion
+    {
+        public static void ToTxtFile(this DataTable table, string fullFileName, bool showColumnName = false)
+        {
+            TxtHelper.DataTableToTxt(fullFileName, table, showColumnName);
+        }
+        public static void ToTxtFile(this Object[] list, string fullFileName, bool showColumnName = false)
+        {
+            TxtHelper.ObjectListToTxt(fullFileName, list.ToList(), showColumnName);
+        }
+
+        public static void ToTxtFile(this IList list, string fullFileName, bool showColumnName = false)
+        {
+            TxtHelper.ObjectListToTxt(fullFileName, list, showColumnName);
+        }
+    }
 }

@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Modules\Models.dll</HintPath>
+    </Reference>
+    <Reference Include="SOAFramework.ORMDriver, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Modules\SOAFramework.ORMDriver.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,14 +56,6 @@
     <ProjectReference Include="..\Library\DAL\DAL.csproj">
       <Project>{323ca08d-7749-484c-b7a3-ee709d1af0fa}</Project>
       <Name>DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Models\Model.csproj">
-      <Project>{47026c03-6f4d-4155-bd42-78ec73044c73}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ORM\ORMDriver\ORMDriver.csproj">
-      <Project>{7f09d4a5-7b1c-4b9a-bc8c-81bb60c1ca81}</Project>
-      <Name>ORMDriver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

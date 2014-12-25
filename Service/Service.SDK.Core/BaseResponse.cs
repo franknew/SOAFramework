@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOAFramework.Client.SDK.Core
+namespace SOAFramework.Service.SDK.Core
 {
     public abstract class BaseResponse
     {

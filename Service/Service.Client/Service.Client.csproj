@@ -54,10 +54,6 @@
       <Project>{08af2d5b-b605-44c2-850c-67cfdd22cf35}</Project>
       <Name>Service.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service.Interface\Service.Interface.csproj">
-      <Project>{201fa1c8-cc8d-43d6-80bc-354b9ff301d4}</Project>
-      <Name>Service.Interface</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

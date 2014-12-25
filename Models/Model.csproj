@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Models</RootNamespace>
     <AssemblyName>Models</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,8 +31,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SOAFramework.ORMDriver, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Modules\SOAFramework.ORMDriver.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,10 +54,6 @@
     <Compile Include="ZWHS\上货扫描记录.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Library\AOP\AOP.csproj">
-      <Project>{61444396-8afd-4041-b9a0-6d3b36440024}</Project>
-      <Name>AOP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Library\DAL\DAL.csproj">
       <Project>{323ca08d-7749-484c-b7a3-ee709d1af0fa}</Project>
       <Name>DAL</Name>
@@ -58,10 +61,6 @@
     <ProjectReference Include="..\Library\XML\XML.csproj">
       <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
       <Name>XML</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ORM\ORMDriver\ORMDriver.csproj">
-      <Project>{7f09d4a5-7b1c-4b9a-bc8c-81bb60c1ca81}</Project>
-      <Name>ORMDriver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

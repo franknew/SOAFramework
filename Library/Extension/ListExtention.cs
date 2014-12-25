@@ -21,15 +21,7 @@ namespace SOAFramework.Library
             copyList.AddRange(array);
             return copyList;
         }
-        public static void ToTxtFile(this Object[] list, string fullFileName, bool showColumnName = false)
-        {
-            TxtHelper.ObjectListToTxt(fullFileName, list.ToList(), showColumnName);
-        }
-
-        public static void ToTxtFile(this IList list, string fullFileName, bool showColumnName = false)
-        {
-            TxtHelper.ObjectListToTxt(fullFileName, list, showColumnName);
-        }
+        
       
         /// <summary>
         /// 转换成DataTable

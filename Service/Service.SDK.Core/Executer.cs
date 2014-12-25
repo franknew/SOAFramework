@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOAFramework.Client.SDK.Core
+namespace SOAFramework.Service.SDK.Core
 {
     public class Executer
     {

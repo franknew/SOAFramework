@@ -23,6 +23,7 @@ using System.ServiceModel;
 using SOAFramework.Client.SDK.Core;
 using SOAFramework.Library.RazorEngine;
 using CodeSmith.Engine;
+using System.Reflection;
 
 namespace Test
 {
@@ -31,7 +32,10 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Stopwatch watch = new Stopwatch();
+
+            #region codesmith testing
             string path = AppDomain.CurrentDomain.BaseDirectory + @"Templates\Smiple.cst";
             DefaultEngineHost host = new DefaultEngineHost(System.IO.Path.GetDirectoryName(path));
             TemplateEngine engine = new TemplateEngine(System.IO.Path.GetDirectoryName(path));
@@ -43,11 +47,13 @@ namespace Test
                 template.SetProperty("SampleBooleanProperty", true);
                 string render = template.RenderToString();
             }
+            #endregion
+
             #region razor
-            string strr = File.ReadAllText("Temp.txt");
-            Dictionary<string, object> dicargs = new Dictionary<string, object>();
-            dicargs["a"] = "22222";
-            string r = Razor.Parse(strr, dicargs);
+            //string strr = File.ReadAllText("Temp.txt");
+            //Dictionary<string, object> dicargs = new Dictionary<string, object>();
+            //dicargs["a"] = "22222";
+            //string r = Razor.Parse(strr, dicargs);
             #endregion
 
             #region json tester
@@ -113,8 +119,8 @@ namespace Test
             #endregion
 
             #region wcf host
-            //WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
-            //newhost.Open();
+            WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
+            newhost.Open();
             #endregion
 
             #region zip tester
@@ -250,9 +256,32 @@ namespace Test
             watch.Stop();
             Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
             #endregion
-
-
+            
             Console.ReadLine();
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            string fileName = new AssemblyName(args.Name).Name;
+            string folderPath = AppDomain.CurrentDomain.BaseDirectory;
+            string assemblyPath = Path.Combine(folderPath, fileName + ".dll");
+            FileInfo file = new FileInfo(assemblyPath);
+            Assembly ass = null;
+            if (!file.Exists)
+            {
+                string newFileName = file.Directory + "\\Modules\\" + file.Name;
+                if (File.Exists(newFileName))
+                {
+                    ass = Assembly.LoadFile(newFileName);
+                    return ass;
+                }
+            }
+            else
+            {
+                ass = Assembly.LoadFile(file.FullName);
+                return ass;
+            }
+            return ass;
         }
 
         private void WriteFile(byte[] Stream, string FullFileName)

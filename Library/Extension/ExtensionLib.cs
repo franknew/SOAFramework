@@ -13,35 +13,6 @@ namespace SOAFramework.Library
     public static class ExtensionLib
     {
         /// <summary>
-        /// DataSet转换成Excel文件(2007及以上)
-        /// </summary>
-        /// <param name="ds"></param>
-        /// <param name="filePath"></param>
-        public static string ToExcelFile(this DataSet ds, string filePath, string fileName, ref int processIndex, string title = null,
-            List<string> computeColumns = null)
-        {
-            return ExcelHelper.ToExcelFile(ds, filePath, fileName, ref processIndex, title, computeColumns);
-        }
-
-        /// <summary>
-        /// DataTable转换成Excel文件(2007及以上)
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="filePath"></param>
-        public static string ToExcelFile(this DataTable table, string filePath, string fileName, ref int processIndex, string title = null,
-             List<string> computeColumns = null)
-        {
-            return ExcelHelper.ToExcelFile(table, filePath, fileName, ref processIndex, title, computeColumns);
-        }
-
-        public static void ToTxtFile(this DataTable table, string fullFileName, bool showColumnName = false)
-        {
-            TxtHelper.DataTableToTxt(fullFileName, table, showColumnName);
-        }
-
-
-
-        /// <summary>
         /// 将datarow中的值复制到对象中去
         /// </summary>
         /// <param name="row"></param>

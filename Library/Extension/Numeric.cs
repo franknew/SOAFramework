@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Security.Cryptography;
 
-namespace SOAFramework.Library.Extension
+namespace SOAFramework.Library
 {
     /// <summary>
     /// Summary for the Numbers class

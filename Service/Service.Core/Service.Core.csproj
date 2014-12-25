@@ -84,10 +84,6 @@
       <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
       <Name>Zip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service.Interface\Service.Interface.csproj">
-      <Project>{201fa1c8-cc8d-43d6-80bc-354b9ff301d4}</Project>
-      <Name>Service.Interface</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

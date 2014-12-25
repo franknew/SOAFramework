@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SOAFramework.ORM;
+using SOAFramework.ORM.ORMDriver;
 using SOAFramework.ORM.Common;
 
 namespace UnitTest
