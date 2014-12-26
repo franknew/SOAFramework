@@ -49,17 +49,23 @@ namespace SOAFramework.Service.Server
         /// <param name="args"></param>
         /// <returns>return stream for pure json</returns>
         [ServiceInvoker(IsHiddenDiscovery = true)]
-        public Stream Execute(string typeName, string functionName, Dictionary<string, object> args)
+        public Stream Execute(string typeName, string functionName, Dictionary<string, string> args)
         {
             ServerResponse response = new ServerResponse();
             Stopwatch watch = new Stopwatch();
             string json = "";
             try
             {
+
                 #region 执行前置filter
                 string methodFullName = typeName + "." + functionName;
                 MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(methodFullName);
-                IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, args);
+                if (method == null)
+                {
+                    throw new Exception("方法" + methodFullName + "不存在");
+                }
+                List<object> parameters = ServiceUtility.ConvertParameters(method, args);
+                IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, parameters);
                 if (failedFilter != null)
                 {
                     response.IsError = true;
@@ -72,7 +78,7 @@ namespace SOAFramework.Service.Server
                 {
                     watch.Start();
                     //执行方法
-                    object result = ServiceUtility.ExecuteMethod(typeName, functionName, args);
+                    object result = ServiceUtility.ExecuteMethod(typeName, functionName, parameters);
                     watch.Stop();
                     response.Data = result;
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
@@ -80,7 +86,7 @@ namespace SOAFramework.Service.Server
                 #endregion
 
                 #region 执行后置filter
-                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, args, watch.ElapsedMilliseconds);
+                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, parameters, watch.ElapsedMilliseconds);
                 if (failedFilter != null)
                 {
                     response.IsError = true;

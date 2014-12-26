@@ -10,7 +10,7 @@ namespace SOAFramework.Service.Model
 {
     public class ActionContext
     {
-        public Dictionary<string, object> Parameters { get; set; }
+        public List<object> Parameters { get; set; }
 
         public RouterData Router { get; set; }
 

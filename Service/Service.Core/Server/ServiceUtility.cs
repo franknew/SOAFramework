@@ -31,7 +31,7 @@ namespace SOAFramework.Service.Server
         /// <param name="args"></param>
         /// <returns></returns>
         public static object ExecuteMethod(string typeName, string functionName
-            , Dictionary<string, object> args)
+            , List<object> args)
         {
             if (string.IsNullOrEmpty(typeName))
             {
@@ -51,27 +51,12 @@ namespace SOAFramework.Service.Server
                 throw new Exception("方法不存在，错误的接口名或者方法！");
             }
             var instance = Activator.CreateInstance(method.DeclaringType);
-            List<ParameterInfo> parameters = new List<ParameterInfo>();
-            parameters.AddRange(method.GetParameters());
-            parameters.Sort((l, r) => l.Position - r.Position);
-            List<object> listParameters = null;
-            if (parameters != null && parameters.Count > 0)
+            object[] parameters = null;
+            if (args != null)
             {
-                listParameters = new List<object>();
-                foreach (var parameter in parameters)
-                {
-                    if (args.Keys.Contains(parameter.Name))
-                    {
-                        listParameters.Add(args[parameter.Name]);
-                    }
-                }
+                parameters = args.ToArray();
             }
-            object[] paramArray = null;
-            if (listParameters != null)
-            {
-                paramArray = listParameters.ToArray();
-            }
-            result = method.Invoke(instance, paramArray);
+            result = method.Invoke(instance, parameters);
             return result;
         }
 
@@ -148,7 +133,7 @@ namespace SOAFramework.Service.Server
         /// <param name="filterList"></param>
         /// <returns>运行失败的filter</returns>
         public static IFilter FilterExecuting(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
-            Dictionary<string, object> parameters)
+            List<object> parameters)
         {
             if (filterList != null)
             {
@@ -175,7 +160,7 @@ namespace SOAFramework.Service.Server
         }
 
         public static IFilter FilterExecuted(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
-            Dictionary<string, object> parameters, long ElapsedMilliseconds)
+            List<object> parameters, long ElapsedMilliseconds)
         {
             if (filterList != null)
             {
@@ -248,6 +233,28 @@ namespace SOAFramework.Service.Server
                 string key = defaultService.FullName + "." + method.Name;
                 ServicePoolManager.AddItem(key, method);
             }
+        }
+
+        public static List<object> ConvertParameters(MethodInfo method, Dictionary<string, string> args)
+        {
+            List<ParameterInfo> list = new List<ParameterInfo>();
+            var instance = Activator.CreateInstance(method.DeclaringType);
+            List<ParameterInfo> parameters = new List<ParameterInfo>();
+            parameters.AddRange(method.GetParameters());
+            parameters.Sort((l, r) => l.Position - r.Position);
+            List<object> listParameters = null;
+            if (parameters != null && parameters.Count > 0)
+            {
+                listParameters = new List<object>();
+                foreach (var parameter in parameters)
+                {
+                    if (args.Keys.Contains(parameter.Name))
+                    {
+                        listParameters.Add(JsonHelper.Deserialize(args[parameter.Name], parameter.ParameterType));
+                    }
+                }
+            }
+            return listParameters;
         }
     }
 }

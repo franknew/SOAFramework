@@ -16,7 +16,7 @@ namespace SOAFramework.Service.Server
     {
         [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "{typeName}/{functionName}", Method = "POST")]
         [OperationContract]
-        Stream Execute(string typeName, string functionName, Dictionary<string, object> args);
+        Stream Execute(string typeName, string functionName, Dictionary<string, string> args);
 
         [WebInvoke(UriTemplate = "Download/{fileName}", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
         Stream Download(string fileName);

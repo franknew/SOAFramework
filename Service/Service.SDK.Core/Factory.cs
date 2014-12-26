@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SOAFramework.Service.SDK.Core
 {
-    public class ClientFactory
+    public class SDKFactory
     {
         public static readonly Executer Client = new Executer();
     }

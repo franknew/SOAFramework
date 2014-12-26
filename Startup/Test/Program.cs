@@ -18,12 +18,11 @@ using System.ServiceModel.Web;
 using SOAFramework.Library.AOP;
 using SOAFramework.Service.Server;
 using SOAFramework.Service.Model;
-using SOAFramework.Library;
 using System.ServiceModel;
-using SOAFramework.Client.SDK.Core;
 using SOAFramework.Library.RazorEngine;
 using CodeSmith.Engine;
 using System.Reflection;
+using SOAFramework.Service.SDK.Core;
 
 namespace Test
 {
@@ -36,17 +35,17 @@ namespace Test
             Stopwatch watch = new Stopwatch();
 
             #region codesmith testing
-            string path = AppDomain.CurrentDomain.BaseDirectory + @"Templates\Smiple.cst";
-            DefaultEngineHost host = new DefaultEngineHost(System.IO.Path.GetDirectoryName(path));
-            TemplateEngine engine = new TemplateEngine(System.IO.Path.GetDirectoryName(path));
-            CompileTemplateResult result = engine.Compile(path);
-            if (!result.Errors.HasErrors)
-            {
-                CodeTemplate template = result.CreateTemplateInstance();
-                template.SetProperty("SampleStringProperty", "hello world!");
-                template.SetProperty("SampleBooleanProperty", true);
-                string render = template.RenderToString();
-            }
+            //string path = AppDomain.CurrentDomain.BaseDirectory + @"Templates\Smiple.cst";
+            //DefaultEngineHost host = new DefaultEngineHost(System.IO.Path.GetDirectoryName(path));
+            //TemplateEngine engine = new TemplateEngine(System.IO.Path.GetDirectoryName(path));
+            //CompileTemplateResult result = engine.Compile(path);
+            //if (!result.Errors.HasErrors)
+            //{
+            //    CodeTemplate template = result.CreateTemplateInstance();
+            //    template.SetProperty("SampleStringProperty", "hello world!");
+            //    template.SetProperty("SampleBooleanProperty", true);
+            //    string render = template.RenderToString();
+            //}
             #endregion
 
             #region razor
@@ -184,7 +183,10 @@ namespace Test
 
             #region sdk testing
             TestRequest request = new TestRequest();
-            TestResponse reseponse = ClientFactory.Client.Execute(request);
+            request.a = "hello";
+            request.b = new TestClass();
+            request.b.a = "a";
+            TestResponse reseponse = SDKFactory.Client.Execute(request);
             #endregion
 
             #region soa tester
@@ -256,7 +258,7 @@ namespace Test
             watch.Stop();
             Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
             #endregion
-            
+
             Console.ReadLine();
         }
 
@@ -392,15 +394,18 @@ namespace Test
 
     public class TestRequest : IRequest<TestResponse>
     {
+        public string a { get; set; }
+        public TestClass b { get; set; }
+
         public string GetApi()
         {
-            return "SOAFramework.Service.Server.DefaultService.DiscoverService";
+            return "SOAFramework.Service.Server.SOAService.Test";
         }
     }
 
     public class TestResponse : BaseResponse
     {
-        public List<Dictionary<string, object>> Data { get; set; }
+        public TestClass Data { get; set; }
     }
 
 }
