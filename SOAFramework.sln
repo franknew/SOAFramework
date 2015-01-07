@@ -67,8 +67,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.UI", "Service\Servi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultFilter", "Service\DefaultFilter\DefaultFilter.csproj", "{41379561-95A9-4210-8A8F-69659A48D764}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{AF270633-5B0C-4643-86B7-D0A25078E0F2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.SDK.Core", "Service\Service.SDK.Core\Service.SDK.Core.csproj", "{C389F2F0-20AB-4B4D-84EC-0B794B222CEA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorEngine", "Library\RazorEngine\RazorEngine.csproj", "{79AA28F5-06DF-4F2A-BFF7-A4680F6FD010}"

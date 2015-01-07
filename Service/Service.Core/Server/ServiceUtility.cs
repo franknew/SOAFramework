@@ -12,9 +12,11 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Xml.Linq;
 
 namespace SOAFramework.Service.Server
 {
+    [ServiceLayer(Enabled = false)]
     public class ServiceUtility
     {
         const string bussinessConfig = "soaConfigGroup/businessFileConfig";
@@ -90,6 +92,8 @@ namespace SOAFramework.Service.Server
                 throw new Exception("配置错误，没有配置业务层dll！");
             }
             List<Assembly> assmList = new List<Assembly>();
+            assmList.Add(Assembly.GetCallingAssembly());
+            assmList.Add(Assembly.GetExecutingAssembly());
             foreach (string value in config.Values)
             {
                 Assembly ass = Assembly.Load(value);
@@ -105,7 +109,7 @@ namespace SOAFramework.Service.Server
 
         public static List<IFilter> InitFilterList()
         {
-            IDictionary config = ConfigurationManager.GetSection(filterConfig) as IDictionary; 
+            IDictionary config = ConfigurationManager.GetSection(filterConfig) as IDictionary;
             List<Assembly> assmList = new List<Assembly>();
             assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
             assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
@@ -124,7 +128,7 @@ namespace SOAFramework.Service.Server
                     }
                 }
             }
-            
+
             List<IFilter> list = new List<IFilter>();
             foreach (var ass in assmList)
             {
@@ -211,42 +215,86 @@ namespace SOAFramework.Service.Server
             foreach (var ass in assmList)
             {
                 Type[] types = ass.GetTypes();
+                FileInfo file = new FileInfo(ass.Location.Remove(ass.Location.LastIndexOf(".")) + ".xml");
+                List<XElement> elementList = null;
+                if (file.Exists)
+                {
+                    elementList = XElement.Load(file.FullName).Descendants("member").ToList();
+                }
+
                 foreach (var type in types)
                 {
                     ServiceLayer layer = type.GetCustomAttribute<ServiceLayer>();
                     MethodInfo[] methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                    List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_") && !t.Name.StartsWith("set_"));
                     if (layer != null && !layer.Enabled)
                     {
                         continue;
                     }
-                    foreach (var method in methods)
+                    foreach (var method in list)
                     {
                         string key = type.FullName + "." + method.Name;
-                        if (layer == null)
+                        ServiceInfo info = null;
+                        ServiceInvoker attribute = method.GetCustomAttribute<ServiceInvoker>(true);
+                        if (attribute != null)
                         {
-                            ServiceInvoker attribute = method.GetCustomAttribute<ServiceInvoker>(true);
-                            if (attribute != null)
+                            if (!attribute.Enabled)
                             {
-                                if (!attribute.Enabled)
-                                {
-                                    continue;
-                                }
-                                if (!string.IsNullOrEmpty(attribute.InterfaceName))
-                                {
-                                    key = attribute.InterfaceName;
-                                }
+                                continue;
+                            }
+                            if (!string.IsNullOrEmpty(attribute.InterfaceName))
+                            {
+                                key = attribute.InterfaceName;
                             }
                         }
+                        //如果类上设置了隐藏发现，就不能通过这个方法显示出来
+                        if ((layer == null || !layer.IsHiddenDiscovery) || (attribute == null || !attribute.IsHiddenDiscovery))
+                        {
+                            string description = "";
+                            string returnDesc = "";
+                            List<ServiceParameter> parameters = null;
+                            XElement methodElement = elementList.Find(t => t.Attribute("name").Value.StartsWith("M:" + key));
+                            if (methodElement != null)
+                            {
+                                description = methodElement.Element("summary").Value.Trim('\n', ' ');
+                                returnDesc = methodElement.Element("returns").Value.Trim('\n', ' ');
+                            }
+                            ParameterInfo[] param = method.GetParameters();
+                            if (param.Length > 0)
+                            {
+                                parameters = new List<ServiceParameter>();
+                                foreach (ParameterInfo p in param)
+                                {
+                                    ServiceParameter sp = new ServiceParameter
+                                    {
+                                        Index = p.Position,
+                                        Name = p.Name,
+                                        TypeName = p.ParameterType.FullName,
+                                    };
+                                    XElement paramElement = methodElement.Descendants("param").FirstOrDefault(t => t.Attribute("name").Equals(p.Name));
+                                    if (paramElement != null && !string.IsNullOrEmpty(paramElement.Value))
+                                    {
+                                        sp.Description = paramElement.Value;
+                                    }
+                                    parameters.Add(sp);
+                                }
+                            }
+                            info = new ServiceInfo { InterfaceName = key, Parameters = parameters };
+                            if (!string.IsNullOrEmpty(description))
+                            {
+                                info.Description = description;
+                            }
+                            if (!string.IsNullOrEmpty(returnDesc))
+                            {
+                                info.ReturnDesc = returnDesc;
+                            }
+                        }
+
+                        
+                        ServiceModel model = new ServiceModel { MethodInfo = method };
                         ServicePoolManager.AddItem(key, method);
                     }
                 }
-            }
-            Type defaultService = typeof(DefaultService);
-            MethodInfo[] allMethods = defaultService.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-            foreach (var method in allMethods)
-            {
-                string key = defaultService.FullName + "." + method.Name;
-                ServicePoolManager.AddItem(key, method);
             }
         }
     }

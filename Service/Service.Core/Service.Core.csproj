@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
     <Compile Include="Filter\FilterHandler.cs" />
     <Compile Include="Filter\FilterWatcher.cs" />
     <Compile Include="Filter\IFilter.cs" />
@@ -58,6 +57,7 @@
     <Compile Include="Model\PerformanceContext.cs" />
     <Compile Include="Model\Router.cs" />
     <Compile Include="Model\ServerResponse.cs" />
+    <Compile Include="Model\ServiceInfo.cs" />
     <Compile Include="Model\ServiceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Attribute\ServiceInvoker.cs" />

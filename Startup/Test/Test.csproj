@@ -69,10 +69,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\Models.dll</HintPath>
     </Reference>
-    <Reference Include="Service.SDK.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Bin\Modules\Service.SDK.Core.dll</HintPath>
-    </Reference>
     <Reference Include="SOAFramework.Library.7Zip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.7Zip.dll</HintPath>
@@ -147,6 +143,10 @@
     <Reference Include="SOAFramework.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Service.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SOAFramework.Service.SDK.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Modules\SOAFramework.Service.SDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

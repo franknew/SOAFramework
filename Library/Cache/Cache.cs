@@ -10,27 +10,52 @@ namespace SOAFramework.Library
     {
         private static readonly MonitorCache Instance = new MonitorCache();
 
-        private List<CacheMessage> messages = new List<CacheMessage>();
+        private Dictionary<string, List<CacheMessage>> messages = new Dictionary<string, List<CacheMessage>>();
 
         public static MonitorCache GetInstance()
         {
             return Instance;
         }
 
-        public void PushMessage(CacheMessage message)
+        public void PushMessage(CacheMessage message, CacheEnum cache)
         {
-            messages.Add(message);
+            List<CacheMessage> list = new List<CacheMessage>();
+            if (messages.ContainsKey(cache.ToString()))
+            {
+                list = messages[cache.ToString()];
+            }
+            else
+            {
+                messages[cache.ToString()] = list;
+            }
+            list.Add(message);
         }
 
-        public List<CacheMessage> PopMessages()
+        public List<CacheMessage> PopMessages(CacheEnum cache)
         {
-            return messages;
+            List<CacheMessage> list = new List<CacheMessage>();
+            if (messages.ContainsKey(cache.ToString()))
+            {
+                list = messages[cache.ToString()];
+            }
+            return list;
         }
 
-        public void Clear()
+        public void Clear(CacheEnum cache)
         {
-            messages.Clear();
+            List<CacheMessage> list = new List<CacheMessage>();
+            if (messages.ContainsKey(cache.ToString()))
+            {
+                list = messages[cache.ToString()];
+            }
+            list.Clear();
         }
     }
 
+    public enum CacheEnum
+    {
+        FormMonitor,
+        LogMonitor,
+        DataBaseMonitor,
+    }
 }

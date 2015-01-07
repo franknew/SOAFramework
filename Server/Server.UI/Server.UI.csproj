@@ -35,8 +35,9 @@
     <Reference Include="SOAFramework.Library.Cache">
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.Cache.dll</HintPath>
     </Reference>
-    <Reference Include="SOAFramework.Service.Server">
-      <HintPath>..\..\Bin\Modules\SOAFramework.Service.Server.dll</HintPath>
+    <Reference Include="SOAFramework.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Modules\SOAFramework.Service.Core.dll</HintPath>
     </Reference>
     <Reference Include="SOAFramework.Service.UI">
       <HintPath>..\..\Bin\Modules\SOAFramework.Service.UI.dll</HintPath>

@@ -9,8 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel.Web;
 using System.Windows.Forms;
-using SOAFramework.Service.Server;
 using SOAFramework.Library;
+using SOAFramework.Service.Server;
 
 namespace SOAFramework.Server.UI
 {
@@ -39,7 +39,7 @@ namespace SOAFramework.Server.UI
                 hostTask.Start();
                 tbStart.Enabled = false;
                 tbStop.Enabled = true;
-                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已启动" });
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已启动" }, CacheEnum.FormMonitor);
             }
         }
 
@@ -50,7 +50,7 @@ namespace SOAFramework.Server.UI
                 host.Close(); 
                 tbStart.Enabled = true;
                 tbStop.Enabled = false;
-                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已停止" });
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已停止" }, CacheEnum.FormMonitor);
             }
         }
     }

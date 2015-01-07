@@ -161,7 +161,7 @@
         public System.Windows.Forms.ToolStripButton tbStop;
         public System.Windows.Forms.ToolStripButton tbClear;
         protected System.Windows.Forms.NotifyIcon niIcon;
-        private System.Windows.Forms.TextBox txbMessage;
+        protected System.Windows.Forms.TextBox txbMessage;
     }
 }
 
