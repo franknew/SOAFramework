@@ -24,7 +24,7 @@ namespace SOAFramework.Service.Core
 
     }
 
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class ServiceLayer : Attribute
     {
         public bool IsHiddenDiscovery { get; set; }

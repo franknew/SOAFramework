@@ -7,7 +7,7 @@
     <ProjectGuid>{41379561-95A9-4210-8A8F-69659A48D764}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SOAFramework.Service</RootNamespace>
+    <RootNamespace>SOAFramework.Service.Filter</RootNamespace>
     <AssemblyName>SOAFramework.Service.DefaultFilter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,7 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultFitler.cs" />
+    <Compile Include="FormMessageNoticer.cs" />
+    <Compile Include="IMessageNoticer.cs" />
+    <Compile Include="LogMessageNoticer.cs" />
+    <Compile Include="MessageWatcher.cs" />
+    <Compile Include="MonitorFitler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

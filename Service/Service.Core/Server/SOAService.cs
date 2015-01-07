@@ -15,13 +15,14 @@ using SOAFramework.Service.Interface;
 using SOAFramework.Service.Core;
 using System.IO;
 using System.ServiceModel.Web;
-using SOAFramework.Service.Core;
-using SOAFramework.Library;
 using SOAFramework.Service.Model;
 
 namespace SOAFramework.Service.Server
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
+    /// <summary>
+    /// 
+    /// </summary>
     public class SOAService : IService
     {
         private static string _filePath = "";
@@ -59,8 +60,9 @@ namespace SOAFramework.Service.Server
 
                 #region 执行前置filter
                 string methodFullName = typeName + "." + functionName;
-                MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(methodFullName);
-                if (method == null)
+                ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                MethodInfo method = service.MethodInfo;
+                if (service == null)
                 {
                     throw new Exception("方法" + methodFullName + "不存在");
                 }

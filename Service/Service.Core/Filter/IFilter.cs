@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SOAFramework.Service.Core
 {
+    [ServiceLayer(Enabled = false)]
     public interface IFilter
     {
         bool OnActionExecuting(ActionContext context);
@@ -16,6 +17,7 @@ namespace SOAFramework.Service.Core
         string Message { get; set; }
     }
 
+    [ServiceLayer(Enabled = false)]
     public class BaseFilter : IFilter
     {
         public virtual bool OnActionExecuting(ActionContext context)

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SOAFramework.Service.Model
 {
+    /// <summary>
+    /// 带分页的服务器回应实体
+    /// </summary>
     public class PagingServerResponse : ServerResponse
     {
         /// <summary>

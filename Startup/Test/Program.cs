@@ -23,6 +23,7 @@ using SOAFramework.Library.RazorEngine;
 using CodeSmith.Engine;
 using System.Reflection;
 using SOAFramework.Service.SDK.Core;
+using System.Threading;
 
 namespace Test
 {
@@ -33,6 +34,27 @@ namespace Test
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Stopwatch watch = new Stopwatch();
+
+            #region unload domain
+            //Console.WriteLine("Creating new AppDomain.");
+            //AppDomain domain = AppDomain.CreateDomain("MyDomain", null);
+
+            //Console.WriteLine("Host domain: " + AppDomain.CurrentDomain.FriendlyName);
+            //Console.WriteLine("child domain: " + domain.FriendlyName);
+            //AppDomain.Unload(domain);
+            //try
+            //{
+            //    Console.WriteLine();
+            //    Console.WriteLine("Host domain: " + AppDomain.CurrentDomain.FriendlyName);
+            //    // The following statement creates an exception because the domain no longer exists.
+            //    Console.WriteLine("child domain: " + domain.FriendlyName);
+            //}
+            //catch (AppDomainUnloadedException e)
+            //{
+            //    Console.WriteLine(e.GetType().FullName);
+            //    Console.WriteLine("The appdomain MyDomain does not exist.");
+            //}
+            #endregion 
 
             #region codesmith testing
             //string path = AppDomain.CurrentDomain.BaseDirectory + @"Templates\Smiple.cst";
@@ -181,13 +203,6 @@ namespace Test
             //Model.Customer_AutoIncrease t = new Model.Customer_AutoIncrease();
             #endregion
 
-            #region sdk testing
-            TestRequest request = new TestRequest();
-            request.a = "hello";
-            request.b = new TestClass();
-            request.b.a = "a";
-            TestResponse reseponse = SDKFactory.Client.Execute(request);
-            #endregion
 
             #region soa tester
             string strData = "";
@@ -247,16 +262,24 @@ namespace Test
             for (int i = 0; i < count; i++)
             {
                 List<PostArgItem> list = new List<PostArgItem>();
-                list.Add(new PostArgItem { Key = "str", Value = "a1" });
-                list.Add(new PostArgItem { Key = "str1", Value = "a2" });
+                list.Add(new PostArgItem { Key = "str", Value = JsonHelper.Serialize("a1") });
+                list.Add(new PostArgItem { Key = "str1", Value = JsonHelper.Serialize("a2") });
                 strData = JsonHelper.Serialize(list);
                 data = System.Text.Encoding.UTF8.GetBytes(strData);
                 testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.Test/TestMethod", data);
                 testresult = ZipHelper.UnZip(testresult);
-                //SOAFramework.Service.Model.ServerResponse response = JsonHelper.Deserialize<SOAFramework.Service.Model.ServerResponse>(testresult);
+                //Thread.Sleep(100);
             }
             watch.Stop();
             Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
+            #endregion
+
+            #region sdk testing
+            TestRequest request = new TestRequest();
+            request.a = "hello";
+            request.b = new TestClass();
+            request.b.a = "a";
+            TestResponse reseponse = SDKFactory.Client.Execute(request);
             #endregion
 
             Console.ReadLine();
