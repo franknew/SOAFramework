@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace SOAFramework.Service.Core.Filter
 {
+    [ServiceLayer(Enabled = false)]
     public class FilterWatcher
     {
         private List<IFilter> _list = new List<IFilter>();

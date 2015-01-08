@@ -6,21 +6,37 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace SOAFramework.Server.UI
 {
     static class Program
     {
+        private static string moduleDir = "Modules";
+        private static string dllCacheDir = "DllCache";
+        private static AppDomain domain;
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
         static void Main()
         {
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ModuleDir"]))
+            {
+                moduleDir = ConfigurationManager.AppSettings["ModuleDir"];
+            }
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DllCacheDir"]))
+            {
+                dllCacheDir = ConfigurationManager.AppSettings["DllCacheDir"];
+            }
+            AppDomain.CurrentDomain.SetShadowCopyFiles();
+            AppDomain.CurrentDomain.SetShadowCopyPath(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\" + dllCacheDir);
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ServerUI());
+            ServerUI server = new ServerUI();
+            domain = server.domain;
+            Application.Run(server);
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -32,18 +48,17 @@ namespace SOAFramework.Server.UI
             Assembly ass = null;
             if (!file.Exists)
             {
-                string newFileName = file.Directory + "\\Modules\\" + file.Name;
+                string newFileName = file.Directory + "\\" + moduleDir + "\\" + file.Name;
                 if (File.Exists(newFileName))
                 {
                     ass = Assembly.LoadFile(newFileName);
-                    return ass;
                 }
             }
             else
             {
                 ass = Assembly.LoadFile(file.FullName);
-                return ass;
             }
+            //domain.Load(file.FullName);
             return ass;
         }
     }

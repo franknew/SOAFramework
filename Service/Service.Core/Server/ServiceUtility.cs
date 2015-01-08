@@ -47,7 +47,12 @@ namespace SOAFramework.Service.Server
 
             string key = typeName + "." + functionName;
 
-            MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(key);
+            ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(key);
+            MethodInfo method = null;
+            if (service != null)
+            {
+                method = service.MethodInfo;
+            }
             if (method == null)
             {
                 throw new Exception("方法不存在，错误的接口名或者方法！");
@@ -226,7 +231,9 @@ namespace SOAFramework.Service.Server
                 {
                     ServiceLayer layer = type.GetCustomAttribute<ServiceLayer>();
                     MethodInfo[] methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-                    List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_") && !t.Name.StartsWith("set_"));
+                    List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_") 
+                        && !t.Name.StartsWith("set_")
+                        && t.DeclaringType.Name.IndexOf("<>c__DisplayClass") == -1);
                     if (layer != null && !layer.Enabled)
                     {
                         continue;
@@ -253,7 +260,11 @@ namespace SOAFramework.Service.Server
                             string description = "";
                             string returnDesc = "";
                             List<ServiceParameter> parameters = null;
-                            XElement methodElement = elementList.Find(t => t.Attribute("name").Value.StartsWith("M:" + key));
+                            XElement methodElement = null;
+                            if (elementList != null)
+                            {
+                                methodElement = elementList.Find(t => t.Attribute("name").Value.StartsWith("M:" + key));
+                            }
                             if (methodElement != null)
                             {
                                 description = methodElement.Element("summary").Value.Trim('\n', ' ');
@@ -271,7 +282,11 @@ namespace SOAFramework.Service.Server
                                         Name = p.Name,
                                         TypeName = p.ParameterType.FullName,
                                     };
-                                    XElement paramElement = methodElement.Descendants("param").FirstOrDefault(t => t.Attribute("name").Equals(p.Name));
+                                    XElement paramElement = null;
+                                    if (methodElement != null)
+                                    {
+                                        paramElement = methodElement.Descendants("param").FirstOrDefault(t => t.Attribute("name").Equals(p.Name));
+                                    }
                                     if (paramElement != null && !string.IsNullOrEmpty(paramElement.Value))
                                     {
                                         sp.Description = paramElement.Value;
@@ -290,9 +305,9 @@ namespace SOAFramework.Service.Server
                             }
                         }
 
-                        
-                        ServiceModel model = new ServiceModel { MethodInfo = method };
-                        ServicePoolManager.AddItem(key, method);
+
+                        ServiceModel model = new ServiceModel { MethodInfo = method, ServiceInfo = info };
+                        ServicePoolManager.AddItem(key, model);
                     }
                 }
             }

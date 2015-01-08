@@ -16,6 +16,7 @@ namespace SOAFramework.Server.UI
 {
     public partial class ServerUI : BaseUI
     {
+        internal AppDomain domain;
         public ServerUI()
         {
             InitializeComponent();
@@ -29,6 +30,10 @@ namespace SOAFramework.Server.UI
 
         private void tbStart_Click(object sender, EventArgs e)
         {
+            if (domain == null)
+            {
+                domain = AppDomain.CreateDomain("SOAServiceDomain");
+            }
             host = new WebServiceHost(typeof(SOAService));
             if (host != null)
             {
@@ -51,6 +56,10 @@ namespace SOAFramework.Server.UI
                 tbStart.Enabled = true;
                 tbStop.Enabled = false;
                 MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已停止" }, CacheEnum.FormMonitor);
+            }
+            if (domain != null)
+            {
+                AppDomain.Unload(domain);
             }
         }
     }

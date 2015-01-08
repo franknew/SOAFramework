@@ -58,7 +58,12 @@ namespace SOAFramework.Service.Server
             {
                 #region 执行前置filter
                 string methodFullName = typeName + "." + functionName;
-                MethodInfo method = ServicePoolManager.GetItem<MethodInfo>(methodFullName);
+                ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                MethodInfo method = null;
+                if (service != null)
+                {
+                    method = service.MethodInfo;
+                }
                 IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, args);
                 if (failedFilter != null)
                 {
