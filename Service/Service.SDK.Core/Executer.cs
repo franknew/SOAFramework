@@ -34,7 +34,7 @@ namespace SOAFramework.Service.SDK.Core
             List<PostArgItem> args = new List<PostArgItem>();
             foreach (PropertyInfo pro in properties)
             {
-                args.Add(new PostArgItem { Key = pro.Name, Value = pro.GetValue(request) });
+                args.Add(new PostArgItem { Key = pro.Name, Value = JsonHelper.Serialize(pro.GetValue(request)) });
             }
             string json = JsonHelper.Serialize(args);
             byte[] data = Encoding.UTF8.GetBytes(json);
@@ -43,7 +43,10 @@ namespace SOAFramework.Service.SDK.Core
             BaseResponseShadow shadow = null;
             try
             {
-                shadow = JsonHelper.Deserialize<BaseResponseShadow>(response);
+                if (response.Contains("\"IsError\""))
+                {
+                    shadow = JsonHelper.Deserialize<BaseResponseShadow>(response);
+                }
             }
             catch
             {

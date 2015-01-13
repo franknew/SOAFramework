@@ -119,8 +119,8 @@ namespace Test
             #endregion
 
             #region wcf host
-            //WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
-            //newhost.Open();
+            WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
+            newhost.Open();
             #endregion
 
             #region zip tester
@@ -195,7 +195,7 @@ namespace Test
             strData = JsonHelper.Serialize(c);
             //strData = "\"" + strData + "\"";
             data = System.Text.Encoding.UTF8.GetBytes(strData);
-            testresult = HttpHelper.Post(@"http://localhost/Service/Test", data);
+            //testresult = HttpHelper.Post(@"http://localhost/Service/Test", data);
 
             watch.Start();
             List<TestClass> listc = new List<TestClass>();
@@ -209,7 +209,7 @@ namespace Test
             watch.Stop();
             Console.WriteLine("发现服务测试耗时{0}", watch.ElapsedMilliseconds);
 
-            watch.Start();
+            watch.Restart();
             dynamic d = JsonHelper.Deserialize<dynamic>(testresult);
             strData = JsonHelper.Serialize(argslist);
             data = System.Text.Encoding.UTF8.GetBytes(strData);
@@ -217,7 +217,7 @@ namespace Test
             watch.Stop();
             Console.WriteLine("大数据测试耗时{0}", watch.ElapsedMilliseconds);
 
-            watch.Start();
+            watch.Restart();
             //download test
             string filename = "预付款类型批量导入.xls";
             testresult = HttpHelper.Get(@"http://localhost/Service/Download/" + filename);
@@ -226,7 +226,7 @@ namespace Test
             watch.Stop();
             Console.WriteLine("下载测试耗时{0}", watch.ElapsedMilliseconds);
 
-            watch.Start();
+            watch.Restart();
             //uploadtest
             string uploadFileName = "D:\\预付款类型批量导入.xls";
             FileInfo file = new FileInfo(uploadFileName);
@@ -236,17 +236,24 @@ namespace Test
             watch.Stop();
             Console.WriteLine("上传测试耗时{0}", watch.ElapsedMilliseconds);
 
-            watch.Start();
+            watch.Restart();
             int count = 10000;
             for (int i = 0; i < count; i++)
             {
-                //List<PostArgItem> list = new List<PostArgItem>();
-                //list.Add(new PostArgItem { Key = "str", Value = "a1" });
-                //list.Add(new PostArgItem { Key = "str1", Value = "a2" });
-                //strData = JsonHelper.Serialize(list);
-                //data = System.Text.Encoding.UTF8.GetBytes(strData);
-                //testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.Test/TestMethod", data);
-                //testresult = ZipHelper.UnZip(testresult);
+                List<PostArgItem> list = new List<PostArgItem>();
+                list.Add(new PostArgItem { Key = "a", Value = JsonHelper.Serialize("hello world") });
+                list.Add(new PostArgItem { Key = "b", Value = JsonHelper.Serialize(new TestClass { a = "a", b = "b" }) });
+                //list.Add(new PostArgItem { Key = "a", Value = "hello world" });
+                //list.Add(new PostArgItem { Key = "b", Value = new TestClass { a = "a", b = "b" } });
+                strData = JsonHelper.Serialize(list);
+                data = System.Text.Encoding.UTF8.GetBytes(strData);
+                //testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.SOAService/Test", data);
+                testresult = ZipHelper.UnZip(testresult);
+
+                PerformanceRequest prequest = new PerformanceRequest();
+                prequest.a = "hello world";
+                prequest.b = new TestClass { a = "a", b = "b" };
+                PerformanceResponse presponse = SDKFactory.Client.Execute(prequest);
             }
             watch.Stop();
             Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
@@ -256,7 +263,7 @@ namespace Test
             TestRequest request = new TestRequest();
             TestResponse reseponse = SDKFactory.Client.Execute(request);
             #endregion
-            
+
             Console.ReadLine();
         }
 
@@ -401,6 +408,23 @@ namespace Test
     public class TestResponse : BaseResponse
     {
         public List<Dictionary<string, object>> Data { get; set; }
+    }
+
+    public class PerformanceRequest : IRequest<PerformanceResponse>
+    {
+        public string GetApi()
+        {
+            return "SOAFramework.Service.Server.SOAService.Test";
+        }
+
+        public string a { get; set; }
+
+        public TestClass b { get; set; }
+    }
+
+    public class PerformanceResponse : BaseResponse
+    {
+        public TestClass Data { get; set; }
     }
 
 }

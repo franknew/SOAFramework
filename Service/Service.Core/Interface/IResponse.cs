@@ -14,8 +14,6 @@ namespace SOAFramework.Service.Interface
         bool IsError { get; set; }
         string ErrorMessage { get; set; }
         string StackTrace { get; set; }
-
-
         string Body { get; set; }
 
     }

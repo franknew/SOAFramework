@@ -101,7 +101,15 @@ namespace SOAFramework.Service.Server
             assmList.Add(Assembly.GetExecutingAssembly());
             foreach (string value in config.Values)
             {
-                Assembly ass = Assembly.Load(value);
+                Assembly ass = null;
+                if (value.ToLower().EndsWith(".dll"))
+                {
+                    ass = Assembly.LoadFile(value);
+                }
+                else
+                {
+                    ass = Assembly.Load(value);
+                }
                 if (ass == null)
                 {
                     throw new Exception("业务层配置错误，无法加载相应的DLL：" + value);
@@ -231,7 +239,7 @@ namespace SOAFramework.Service.Server
                 {
                     ServiceLayer layer = type.GetCustomAttribute<ServiceLayer>();
                     MethodInfo[] methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-                    List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_") 
+                    List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_")
                         && !t.Name.StartsWith("set_")
                         && t.DeclaringType.Name.IndexOf("<>c__DisplayClass") == -1);
                     if (layer != null && !layer.Enabled)

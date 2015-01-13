@@ -17,6 +17,7 @@ namespace SOAFramework.Library
             WebRequest request = WebRequest.CreateHttp(url);
             request.ContentType = "application/json"; 
             request.Method = "POST";
+            request.Timeout = 60 * 1000 * 10;
             request.Credentials = CredentialCache.DefaultCredentials;
             request.ContentLength = data.Length;
             Stream requestStream = request.GetRequestStream();

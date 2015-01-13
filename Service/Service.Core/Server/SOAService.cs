@@ -26,6 +26,8 @@ namespace SOAFramework.Service.Server
     {
         private static string _filePath = "";
 
+        private static bool enableConsoleMonitor = false;
+
         private static List<IFilter> _filterList = new List<IFilter>();
         static SOAService()
         {
@@ -34,6 +36,13 @@ namespace SOAFramework.Service.Server
                 //把DLL中的所有方法加载到缓存中
                 ServiceUtility.InitBusinessCache();
                 _filterList = ServiceUtility.InitFilterList();
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
+                {
+                    if (ConfigurationManager.AppSettings["EnableConsoleMonitor"] == "1")
+                    {
+                        enableConsoleMonitor = true;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -49,14 +58,16 @@ namespace SOAFramework.Service.Server
         /// <param name="args"></param>
         /// <returns>return stream for pure json</returns>
         [ServiceInvoker(IsHiddenDiscovery = true)]
-        public Stream Execute(string typeName, string functionName, Dictionary<string, object> args)
+        public Stream Execute(string typeName, string functionName, Dictionary<string, string> args)
         {
             ServerResponse response = new ServerResponse();
             Stopwatch watch = new Stopwatch();
+            Stopwatch allWatch = new Stopwatch();
+            allWatch.Start();
             string json = "";
             try
             {
-                #region 执行前置filter
+                #region 准备工作
                 string methodFullName = typeName + "." + functionName;
                 ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
                 MethodInfo method = null;
@@ -64,7 +75,22 @@ namespace SOAFramework.Service.Server
                 {
                     method = service.MethodInfo;
                 }
-                IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, args);
+                Dictionary<string, object> parsedArgs = new Dictionary<string, object>();
+                ParameterInfo[] parameters = method.GetParameters();
+                if (parameters != null)
+                {
+                    foreach (var p in parameters)
+                    {
+                        if (args.ContainsKey(p.Name))
+                        {
+                            parsedArgs[p.Name] = JsonHelper.Deserialize(args[p.Name], p.ParameterType);
+                        }
+                    }
+                }
+                #endregion
+
+                #region 执行前置filter
+                IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, parsedArgs);
                 if (failedFilter != null)
                 {
                     response.IsError = true;
@@ -77,7 +103,7 @@ namespace SOAFramework.Service.Server
                 {
                     watch.Start();
                     //执行方法
-                    object result = ServiceUtility.ExecuteMethod(typeName, functionName, args);
+                    object result = ServiceUtility.ExecuteMethod(typeName, functionName, parsedArgs);
                     watch.Stop();
                     response.Data = result;
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
@@ -85,7 +111,7 @@ namespace SOAFramework.Service.Server
                 #endregion
 
                 #region 执行后置filter
-                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, args, watch.ElapsedMilliseconds);
+                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, parsedArgs, watch.ElapsedMilliseconds);
                 if (failedFilter != null)
                 {
                     response.IsError = true;
@@ -111,6 +137,11 @@ namespace SOAFramework.Service.Server
             }
             //压缩json
             string zippedJson = ZipHelper.Zip(json);
+            allWatch.Stop();
+            if (enableConsoleMonitor)
+            {
+                Console.WriteLine("{0}.{1} -- 耗时：{2}", typeName, functionName, allWatch.ElapsedMilliseconds);
+            }
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
             #endregion
         }
@@ -181,7 +212,7 @@ namespace SOAFramework.Service.Server
         {
             TestClass c = new TestClass();
             c.a = a;
-            c.c1 = new TestClass1();
+            c.c1 = new TestClass();
             c.c1.aaa = "hello";
             string result = JsonHelper.Serialize(b);
             result = WebUtility.HtmlEncode(result);
@@ -193,6 +224,15 @@ namespace SOAFramework.Service.Server
         {
             Console.WriteLine("get test invoked");
             return "test successful";
+        }
+
+        public class TestClass
+        {
+            public string a { get; set; }
+
+            public string aaa { get; set; }
+
+            public TestClass c1 { get; set; }
         }
         #endregion
     }
