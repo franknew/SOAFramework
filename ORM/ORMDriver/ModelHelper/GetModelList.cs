@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using Frank.Common.DAL;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.ORMDriver
 {
@@ -12,7 +12,7 @@ namespace SOAFramework.ORM.ORMDriver
         public List<T> GetModelList(int PageIndex = -1, int PageSize = -1, string IDColumnName = null, string DBEx = null)
         {
             List<T> lstReturn = null;
-            DBHelper objHelper = DBFactory.CreateDBHelper();
+            IDBHelper objHelper = DBFactory.CreateDBHelper();
             Parameter[] objParameters = null;
             DataTable dtModels = null;
             int intStartIndex = -1;

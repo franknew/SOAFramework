@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Data;
+using SOAFramework.Library.DAL;
 
-using Frank.Common.DAL;
 
 namespace SOAFramework.Controller
 {
@@ -48,7 +48,7 @@ namespace SOAFramework.Controller
 
         public DataTable RunSQLWithTable(string sql)
         {
-            DBHelper helper = DBFactory.CreateDBHelper();
+            IDBHelper helper = DBFactory.CreateDBHelper();
             DataTable table = helper.GetTableWithSQL(sql);
             return table;
         }

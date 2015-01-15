@@ -399,9 +399,9 @@ namespace Test
 
     public class TestRequest : IRequest<TestResponse>
     {
-        public string GetApi()
+        public string Api
         {
-            return "SOAFramework.Service.Server.DefaultService.DiscoverService";
+            get { return "SOAFramework.Service.Server.DefaultService.DiscoverService"; }
         }
     }
 
@@ -412,9 +412,9 @@ namespace Test
 
     public class PerformanceRequest : IRequest<PerformanceResponse>
     {
-        public string GetApi()
+        public string Api
         {
-            return "SOAFramework.Service.Server.SOAService.Test";
+            get { return "SOAFramework.Service.Server.SOAService.Test"; }
         }
 
         public string a { get; set; }

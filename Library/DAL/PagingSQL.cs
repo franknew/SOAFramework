@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Frank.Common.DAL
+namespace SOAFramework.Library.DAL
 {
-    public class PagingSQL
+    public class MSSQLPagingSQL : IPagingSQL
     {
         /// <summary>
         /// 根据SQL生成分页的SQL
@@ -14,7 +14,7 @@ namespace Frank.Common.DAL
         /// <param name="StartIndex">开始索引</param>
         /// <param name="EndIndex">结束索引</param>
         /// <returns></returns>
-        public static string GetPagingSQL(string SQL, string OrderBy, int StartIndex, int EndIndex)
+        public string GetPagingSQL(string SQL, string OrderBy, int StartIndex, int EndIndex)
         {
             StringBuilder sbSQL = new StringBuilder();
             sbSQL.Append("SELECT * FROM (SELECT *, ROW_NUMBER() OVER(ORDER BY " + OrderBy + ") AS RowNumber FROM (" + SQL + ") Temp1 ) Temp");
@@ -26,7 +26,7 @@ namespace Frank.Common.DAL
         /// </summary>
         /// <param name="SQL"></param>
         /// <returns></returns>
-        public static string GetCountSQL(string SQL)
+        public string GetCountSQL(string SQL)
         {
             StringBuilder sbSQL = new StringBuilder();
             sbSQL.Append(" SELECT COUNT(*) FROM (" + SQL + ") Temp ");

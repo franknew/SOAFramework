@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using Frank.Common.DAL;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.ORMDriver
 {
@@ -16,7 +16,7 @@ namespace SOAFramework.ORM.ORMDriver
         /// <returns></returns>
         public object GetMax(string ColumnName = null, string DBEx = null)
         {
-            DBHelper objHelper = DBFactory.CreateDBHelper();
+            IDBHelper objHelper = DBFactory.CreateDBHelper();
             object objReturn = null;
             if (!string.IsNullOrEmpty(ColumnName))
             {

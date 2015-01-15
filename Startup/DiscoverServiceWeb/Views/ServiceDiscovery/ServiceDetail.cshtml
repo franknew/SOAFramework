@@ -1,0 +1,35 @@
+﻿<h3>@(ViewBag.Data.InterfaceName)</h3>
+<div>
+    <div>
+        <label class="col-sm-2 control-label">接口描述：</label>
+        <label>@(ViewBag.Data.Description)</label>
+    </div>
+    <div>
+        <label class="col-sm-2 control-label">回参描述：</label>
+        <label>@(ViewBag.Data.ReturnDesc)</label>
+    </div>
+    <div class="panel-heading">参数信息</div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td width="10%">顺序</td>
+                    <td width="20%">名称</td>
+                    <td width="30%">类型</td>
+                    <td width="40%">描述</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Data.Parameters)
+                {
+                    <tr>
+                        <td>@(item.Index)</td>
+                        <td>@(item.Name)</td>
+                        <td>@(item.TypeName)</td>
+                        <td>@(item.Description)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

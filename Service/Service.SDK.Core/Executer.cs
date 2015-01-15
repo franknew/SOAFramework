@@ -17,7 +17,7 @@ namespace SOAFramework.Service.SDK.Core
         public T Execute<T>(IRequest<T> request, string url = null) where T : BaseResponse
         {
             T t = default(T);
-            string api = request.GetApi();
+            string api = request.Api;
             if (string.IsNullOrEmpty(url))
             {
                 url = _url;
@@ -34,7 +34,13 @@ namespace SOAFramework.Service.SDK.Core
             List<PostArgItem> args = new List<PostArgItem>();
             foreach (PropertyInfo pro in properties)
             {
-                args.Add(new PostArgItem { Key = pro.Name, Value = JsonHelper.Serialize(pro.GetValue(request)) });
+                ArgMapping mapping = pro.GetCustomAttribute<ArgMapping>();
+                string name = pro.Name;
+                if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping))
+                {
+                    name = mapping.Mapping;
+                }
+                args.Add(new PostArgItem { Key = name, Value = JsonHelper.Serialize(pro.GetValue(request)) });
             }
             string json = JsonHelper.Serialize(args);
             byte[] data = Encoding.UTF8.GetBytes(json);

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using Frank.Common.DAL;
 using SOAFramework.ORM.Common;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.ORMDriver
 {
@@ -12,7 +12,7 @@ namespace SOAFramework.ORM.ORMDriver
         #region IsExits
         public bool IsExists(string Where = null, ORMParameter[] Parameters = null, string DBEx = null)
         {
-            DBHelper objHelper = DBFactory.CreateDBHelper();
+            IDBHelper objHelper = DBFactory.CreateDBHelper();
             StringBuilder sbSQL = new StringBuilder();
             List<Parameter> lstDALParameters = new List<Parameter>();
             bool blHasValue = false;

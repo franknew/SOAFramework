@@ -22,9 +22,11 @@ namespace SOAFramework.Service.Core
             set { enabled = value; }
         }
 
+        public string Module { get; set; }
+
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Property)]
     public class ServiceLayer : Attribute
     {
         public bool IsHiddenDiscovery { get; set; }
@@ -35,5 +37,7 @@ namespace SOAFramework.Service.Core
             get { return enabled; }
             set { enabled = value; }
         }
+
+        public string Module { get; set; }
     }
 }

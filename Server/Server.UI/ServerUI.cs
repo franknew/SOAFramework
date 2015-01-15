@@ -30,21 +30,28 @@ namespace SOAFramework.Server.UI
 
         private void tbStart_Click(object sender, EventArgs e)
         {
-            if (domain == null)
-            {
-                domain = AppDomain.CreateDomain("SOAServiceDomain");
-            }
+            //if (domain == null)
+            //{
+            //    domain = AppDomain.CreateDomain("SOAServiceDomain");
+            //}
             host = new WebServiceHost(typeof(SOAService));
             if (host != null)
             {
                 hostTask = new Task(() =>
                 {
-                    host.Open();
+                    try
+                    {
+                        host.Open();
+                        tbStart.Enabled = false;
+                        tbStop.Enabled = true;
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已启动" }, CacheEnum.FormMonitor);
+                    }
+                    catch (Exception ex)
+                    {
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = ex.Message }, CacheEnum.FormMonitor);
+                    }
                 });
                 hostTask.Start();
-                tbStart.Enabled = false;
-                tbStop.Enabled = true;
-                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已启动" }, CacheEnum.FormMonitor);
             }
         }
 
@@ -57,10 +64,10 @@ namespace SOAFramework.Server.UI
                 tbStop.Enabled = false;
                 MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已停止" }, CacheEnum.FormMonitor);
             }
-            if (domain != null)
-            {
-                AppDomain.Unload(domain);
-            }
+            //if (domain != null)
+            //{
+            //    AppDomain.Unload(domain);
+            //}
         }
     }
 }

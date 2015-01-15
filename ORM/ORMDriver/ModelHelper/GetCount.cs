@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using Frank.Common.DAL;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.ORMDriver
 {
@@ -11,7 +11,7 @@ namespace SOAFramework.ORM.ORMDriver
         #region GetCount
         public int GetCount(string DBEx = null)
         {
-            DBHelper objHelper = DBFactory.CreateDBHelper();
+            IDBHelper objHelper = DBFactory.CreateDBHelper();
             int intCount = 0;
             Parameter[] objParameters = null;
             string strSQL = GetSQL(DBEx, "getcount", "", out objParameters);

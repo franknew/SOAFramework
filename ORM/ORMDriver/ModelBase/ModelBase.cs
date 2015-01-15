@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Reflection;
-using Frank.Common.DAL;
 using SOAFramework.ORM.Common;
 using SOAFramework.ORM.Mapping;
 

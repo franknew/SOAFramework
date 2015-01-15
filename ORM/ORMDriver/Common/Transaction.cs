@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Frank.Common.DAL;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.Common
 {
     public class Transaction
     {
         #region attribute
-        private DBHelper _iHelper = null;
+        private IDBHelper _iHelper = null;
         #endregion
 
         #region property
-        public DBHelper DBHelper
+        public IDBHelper DBHelper
         {
             get { return _iHelper; }
         }

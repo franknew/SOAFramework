@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using Frank.Common.DAL;
 
 using SOAFramework.ORM.Common;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.ORMDriver
 {
@@ -13,7 +13,7 @@ namespace SOAFramework.ORM.ORMDriver
         public bool Delete(Transaction Transaction = null)
         {
             bool blResult = false;
-            DBHelper objHelper = null;
+            IDBHelper objHelper = null;
             DataTable dtPropertiesAndValue = Reflection.GetClassValues(this, _dt_ClassDef);
             List<Parameter> lstDALParams = new List<Parameter>();
             if (null != Transaction && null != Transaction.DBHelper)

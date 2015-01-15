@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Collections;
-using Frank.Common.DAL;
 using SOAFramework.ORM.Mapping;
 
 namespace SOAFramework.ORM.ORMDriver

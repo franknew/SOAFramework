@@ -242,9 +242,16 @@ namespace SOAFramework.Service.Server
                     List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_")
                         && !t.Name.StartsWith("set_")
                         && t.DeclaringType.Name.IndexOf("<>c__DisplayClass") == -1);
+                    string module = "";
+                    //如果类上设置不可用，该类中所有的方法不进入服务池
                     if (layer != null && !layer.Enabled)
                     {
                         continue;
+                    }
+                    //获得模块名
+                    else if (layer != null && !string.IsNullOrEmpty(layer.Module))
+                    {
+                        module = layer.Module;
                     }
                     foreach (var method in list)
                     {
@@ -253,17 +260,24 @@ namespace SOAFramework.Service.Server
                         ServiceInvoker attribute = method.GetCustomAttribute<ServiceInvoker>(true);
                         if (attribute != null)
                         {
+                            //如果方法上设置了不可用，那么该方法就不进入服务池
                             if (!attribute.Enabled)
                             {
                                 continue;
                             }
+                            //获得设置的接口名称
                             if (!string.IsNullOrEmpty(attribute.InterfaceName))
                             {
                                 key = attribute.InterfaceName;
                             }
+                            //获得模块名称
+                            if (!string.IsNullOrEmpty(attribute.Module))
+                            {
+                                module = attribute.Module;
+                            }
                         }
-                        //如果类上设置了隐藏发现，就不能通过这个方法显示出来
-                        if ((layer == null || !layer.IsHiddenDiscovery) || (attribute == null || !attribute.IsHiddenDiscovery))
+                        //如果方法或者类上设置了隐藏发现，就不能通过这个方法显示出来
+                        if ((layer == null || !layer.IsHiddenDiscovery) && (attribute == null || !attribute.IsHiddenDiscovery))
                         {
                             string description = "";
                             string returnDesc = "";
@@ -293,7 +307,7 @@ namespace SOAFramework.Service.Server
                                     XElement paramElement = null;
                                     if (methodElement != null)
                                     {
-                                        paramElement = methodElement.Descendants("param").FirstOrDefault(t => t.Attribute("name").Equals(p.Name));
+                                        paramElement = methodElement.Descendants("param").FirstOrDefault(t => t.Attribute("name").Value.Equals(p.Name));
                                     }
                                     if (paramElement != null && !string.IsNullOrEmpty(paramElement.Value))
                                     {
@@ -302,7 +316,7 @@ namespace SOAFramework.Service.Server
                                     parameters.Add(sp);
                                 }
                             }
-                            info = new ServiceInfo { InterfaceName = key, Parameters = parameters };
+                            info = new ServiceInfo { InterfaceName = key, Parameters = parameters, Module = module };
                             if (!string.IsNullOrEmpty(description))
                             {
                                 info.Description = description;
@@ -312,7 +326,6 @@ namespace SOAFramework.Service.Server
                                 info.ReturnDesc = returnDesc;
                             }
                         }
-
 
                         ServiceModel model = new ServiceModel { MethodInfo = method, ServiceInfo = info };
                         ServicePoolManager.AddItem(key, model);

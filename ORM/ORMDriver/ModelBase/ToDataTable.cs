@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using Frank.Common.DAL;
 using SOAFramework.ORM.Common;
 
 namespace SOAFramework.ORM.ORMDriver

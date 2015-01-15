@@ -21,6 +21,9 @@ namespace SOAFramework.Service.Model
 
         [DataMember(EmitDefaultValue = false)]
         public string ReturnDesc { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string Module { get; set; }
     }
 
     [DataContract]

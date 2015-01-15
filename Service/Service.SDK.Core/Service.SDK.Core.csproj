@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgMapping.cs" />
     <Compile Include="BaseResponse.cs" />
     <Compile Include="Executer.cs" />
     <Compile Include="Factory.cs" />

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
-using Frank.Common.DAL;
 using SOAFramework.ORM.Common;
+using SOAFramework.Library.DAL;
 
 namespace SOAFramework.ORM.ORMDriver
 {
@@ -20,7 +20,7 @@ namespace SOAFramework.ORM.ORMDriver
             StringBuilder sbSQL = new StringBuilder();
             StringBuilder sbSQL_Value = new StringBuilder();
             StringBuilder sbSQL_Columns = new StringBuilder();
-            DBHelper objHelper = null;
+            IDBHelper objHelper = null;
             if (null != Transaction && null != Transaction.DBHelper)
             {
                 objHelper = Transaction.DBHelper;

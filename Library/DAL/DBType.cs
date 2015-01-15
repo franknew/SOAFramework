@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Frank.Common.DAL
+namespace SOAFramework.Library.DAL
 {
     public enum DBType
     {
@@ -11,6 +11,7 @@ namespace Frank.Common.DAL
         Oracle = 2,
         MySQL = 3,
         MSSQL2005P = 0,
+        SQLite = 5,
     }
 
 }

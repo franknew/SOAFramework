@@ -4,8 +4,8 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
+using SOAFramework.Library.DAL;
 
-using Frank.Common.DAL;
 
 namespace SOAFramework.ORM.Common
 {

@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
 
-namespace Frank.Common.DAL
+namespace SOAFramework.Library.DAL
 {
     public class Parameter
     {
@@ -63,28 +63,17 @@ namespace Frank.Common.DAL
         #endregion
 
         #region method
-        public static SqlParameter[] ChangeToSqlParameters(Parameter[] objParams)
+        public static IDbDataParameter[] ChangeToParameters<T>(Parameter[] objParams) where T : IDbDataParameter
         {
-            SqlParameter[] objSqlParams = null;
+            IDbDataParameter[] objSqlParams = null;
             if (objParams != null)
             {
-                objSqlParams = new SqlParameter[objParams.Length];
+                objSqlParams = new IDbDataParameter[objParams.Length];
                 for (int i = 0; i < objParams.Length; i++)
                 {
-                    objSqlParams[i] = new SqlParameter(objParams[i].Name, Convert.ChangeType(objParams[i].Value, objParams[i].Type));
-                }
-            }
-            return objSqlParams;
-        }
-        public static OleDbParameter[] ChangeToOleParameters(Parameter[] objParams)
-        {
-            OleDbParameter[] objSqlParams = null;
-            if (objParams != null)
-            {
-                objSqlParams = new OleDbParameter[objParams.Length];
-                for (int i = 0; i < objParams.Length; i++)
-                {
-                    objSqlParams[i] = new OleDbParameter(objParams[i].Name, Convert.ChangeType(objParams[i].Value, objParams[i].Type));
+                    objSqlParams[i] = Activator.CreateInstance<T>();
+                    objSqlParams[i].ParameterName = objParams[i].Name;
+                    objSqlParams[i].Value = Convert.ChangeType(objParams[i].Value, objParams[i].Type);
                 }
             }
             return objSqlParams;

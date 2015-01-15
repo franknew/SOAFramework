@@ -1,58 +1,78 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
-using System.Configuration;
+using System.Linq;
+using System.Text;
 
-namespace Frank.Common.DAL
+namespace SOAFramework.Library.DAL
 {
-    public class MSSQLHelper2005 : DBHelper
+    public abstract class BaseHelper<Con, Com, Adp, Param> : IDBHelper
+        where Con : IDbConnection
+        where Com : IDbCommand
+        where Adp : IDbDataAdapter
+        where Param : IDbDataParameter
     {
-
         #region variables
         private string mStr_ConnectionString = "";
-        private SqlCommand mObj_Command = null;
-        private SqlConnection mObj_Connection = null;
+        private IDbCommand mObj_Command = null;
+        private IDbConnection mObj_Connection = null;
         private bool mBl_IsTransaction = false;
+        private IPagingSQL paging = new MSSQLPagingSQL();
         #endregion
 
-        #region constructor
-        public MSSQLHelper2005(string ConnectionString)
+        #region properties
+        public string ConnectionString
         {
-            if (!string.IsNullOrEmpty(ConnectionString))
-            {
-                mStr_ConnectionString = ConnectionString;
-            }
-            else if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ConnectionString"]))
-            {
-                mStr_ConnectionString = ConfigurationSettings.AppSettings["ConnectionString"];
-            }
+            set { mStr_ConnectionString = value; }
+            get { return mStr_ConnectionString; }
         }
 
-        public MSSQLHelper2005()
+        public DBType DBType
         {
-            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ConnectionString"]))
+            get { return DBType.MSSQL2005P; }
+        }
+
+        public DBSuit CreateDBSuit<Con, Com, Adp>(IDbConnection connection, IDbCommand command)
+            where Con : IDbConnection
+            where Com : IDbCommand
+            where Adp : IDbDataAdapter
+        {
+            DBSuit suit = new DBSuit();
+            suit.Adapter = Activator.CreateInstance<Adp>();
+            if (connection == null)
             {
-                mStr_ConnectionString = ConfigurationSettings.AppSettings["ConnectionString"];
+                suit.Conection = Activator.CreateInstance<Con>();
             }
+            else
+            {
+                suit.Conection = connection;
+            }
+            if (command == null)
+            {
+                suit.Command = Activator.CreateInstance<Com>();
+            }
+            else
+            {
+                suit.Command = command;
+            }
+            return suit;
         }
         #endregion
 
         #region BeginTransaction
-        public void BeginTransaction(string ConnectionString)
+        public void BeginTransaction(string ConnectionString = null)
         {
+            if (string.IsNullOrEmpty(ConnectionString))
+            {
+                ConnectionString = mStr_ConnectionString;
+            }
             mObj_Command = new SqlCommand();
             mObj_Connection = new SqlConnection(ConnectionString);
             mObj_Connection.Open();
             mObj_Connection.BeginTransaction();
             mBl_IsTransaction = true;
-        }
-
-        public void BeginTransaction()
-        {
-            BeginTransaction(mStr_ConnectionString);
         }
         #endregion
 
@@ -92,30 +112,31 @@ namespace Frank.Common.DAL
         {
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
+            DataTable dtData = new DataTable();
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
             strSQL.Append(strCommandString);
             if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty)
             {
-                strSQL.Append(PagingSQL.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
+                strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
             }
-            DataTable dtData = new DataTable();
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
-
+            objConnection.ConnectionString = strConnectionString;
             objCommand.CommandText = strSQL.ToString();
             objCommand.CommandType = CommandType.Text;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
             objAdp.SelectCommand = objCommand;
 
@@ -125,7 +146,12 @@ namespace Frank.Common.DAL
                 {
                     objConnection.Open();
                 }
-                objAdp.Fill(dtData);
+                DataSet set = new DataSet();
+                objAdp.Fill(set);
+                if (set != null && set.Tables.Count > 0)
+                {
+                    dtData = set.Tables[0];
+                }
                 return dtData;
             }
             catch (Exception ex)
@@ -205,24 +231,26 @@ namespace Frank.Common.DAL
         public DataTable GetTableWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             DataTable dtData = new DataTable();
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
+            objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
             objAdp.SelectCommand = objCommand;
 
@@ -232,7 +260,12 @@ namespace Frank.Common.DAL
                 {
                     objConnection.Open();
                 }
-                objAdp.Fill(dtData);
+                DataSet set = new DataSet();
+                objAdp.Fill(set);
+                if (set != null && set.Tables.Count > 0)
+                {
+                    dtData = set.Tables[0];
+                }
                 return dtData;
             }
             catch (Exception ex)
@@ -292,30 +325,31 @@ namespace Frank.Common.DAL
         {
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
             strSQL.Append(strCommandString);
             if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty)
             {
-                strSQL.Append(PagingSQL.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
+                strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
             }
             DataSet dsData = new DataSet();
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                objConnection.ConnectionString = strConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
 
             objCommand.CommandText = strSQL.ToString();
             objCommand.CommandType = CommandType.Text;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
             objAdp.SelectCommand = objCommand;
 
@@ -406,24 +440,26 @@ namespace Frank.Common.DAL
         public DataSet GetDataSetWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             DataSet dsData = new DataSet();
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
+            objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
             objAdp.SelectCommand = objCommand;
 
@@ -493,24 +529,26 @@ namespace Frank.Common.DAL
         public object GetScalarWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
         {
             object objData = null;
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
+            objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strCommandString;
             objCommand.CommandType = CommandType.Text;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
 
             try
@@ -579,24 +617,26 @@ namespace Frank.Common.DAL
         public object GetScalarWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             object objData = null;
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
+            objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
 
             try
@@ -657,24 +697,26 @@ namespace Frank.Common.DAL
         #region ExecNoneQueryWithSQL
         public int ExecNoneQueryWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
         {
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
+            objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strCommandString;
             objCommand.CommandType = CommandType.Text;
             objCommand.Connection = objConnection;
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
             try
             {
@@ -720,25 +762,26 @@ namespace Frank.Common.DAL
         #region ExecNoneQueryWithSP
         public int ExecNoneQueryWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
-            SqlConnection objConnection = new SqlConnection(strConnectionString);
-            if (mObj_Connection != null)
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            IDbConnection objConnection = suite.Conection;
+            IDbCommand objCommand = suite.Command;
+            IDbDataAdapter objAdp = suite.Adapter;
+            if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection = mObj_Connection;
+                strConnectionString = mStr_ConnectionString;
             }
-            SqlCommand objCommand = new SqlCommand();
-            if (mObj_Command != null)
-            {
-                objCommand = mObj_Command;
-            }
-            SqlDataAdapter objAdp = new SqlDataAdapter();
+            objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
             objCommand.Connection = objConnection;
-            objCommand.Parameters.AddRange(objParams);
-            if (objParams != null && objParams.Length > 0)
+            IDbDataParameter[] parameters = Parameter.ChangeToParameters<Param>(objParams);
+            if (parameters != null && parameters.Length > 0)
             {
-                objCommand.Parameters.AddRange(Parameter.ChangeToSqlParameters(objParams));;
+                foreach (var p in parameters)
+                {
+                    objCommand.Parameters.Add(p);
+                }
             }
 
             try
@@ -773,18 +816,6 @@ namespace Frank.Common.DAL
         public int ExecNoneQueryWithSP(string strSPName)
         {
             return ExecNoneQueryWithSP(strSPName, null, mStr_ConnectionString);
-        }
-        #endregion
-
-        #region attributes
-        public string ConnectionString
-        {
-            get { return mStr_ConnectionString; }
-        }
-
-        public DBType DBType
-        {
-            get { return DBType.MSSQL2005P; }
         }
         #endregion
 

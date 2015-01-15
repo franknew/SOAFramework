@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Configuration;
 
-namespace Frank.Common.DAL
+namespace SOAFramework.Library.DAL
 {
     public class DBFactory
     {
-        public static DBHelper CreateDBHelper()
+        public static IDBHelper CreateDBHelper()
         {
-            string strConn = System.Configuration.ConfigurationSettings.AppSettings["ConnectionString"];
+            string strConn = ConfigurationManager.AppSettings["ConnectionString"];
             string strDBType = DBType.MSSQL.ToString();
-            if (System.Configuration.ConfigurationSettings.AppSettings["DBType"] != null && System.Configuration.ConfigurationSettings.AppSettings["DBType"] != string.Empty)
+            if (ConfigurationManager.AppSettings["DBType"] != null && ConfigurationManager.AppSettings["DBType"] != string.Empty)
             {
-                strDBType = System.Configuration.ConfigurationSettings.AppSettings["DBType"];
+                strDBType = ConfigurationManager.AppSettings["DBType"];
             }
             return CreateDBHelper(strConn, strDBType);
         }
 
-        public static DBHelper CreateDBHelper(string strConnectionString, string strDBType)
+        public static IDBHelper CreateDBHelper(string strConnectionString, string strDBType)
         {
             switch (strDBType.ToLower())
             {
@@ -31,45 +32,52 @@ namespace Frank.Common.DAL
                     return CreateDBHelper(strConnectionString, DBType.Access);
                 case "mysql":
                     return CreateDBHelper(strConnectionString, DBType.MySQL);
+                case "sqlite":
+                    return CreateDBHelper(strConnectionString, DBType.SQLite);
                 default:
                     return CreateDBHelper(strConnectionString, DBType.MSSQL);
             }
         }
 
-        public static DBHelper CreateDBHelper(DBType objType)
+        public static IDBHelper CreateDBHelper(DBType objType)
         {
-            string strConn = System.Configuration.ConfigurationSettings.AppSettings["ConnectionString"];
+            string strConn = ConfigurationManager.AppSettings["ConnectionString"];
             return CreateDBHelper(strConn, objType);
         }
 
-        public static DBHelper CreateDBHelper(string strConn)
+        public static IDBHelper CreateDBHelper(string strConn)
         {
             return CreateDBHelper(strConn, DBType.MSSQL);
         }
 
-        public static DBHelper CreateDBHelper(string strConnectionString, DBType objType)
+        public static IDBHelper CreateDBHelper(string strConnectionString, DBType objType)
         {
+            IDBHelper helper = null;
             switch (objType)
             {
                 case DBType.MSSQL:
-                    MSSQLHelper objSQLCon = new MSSQLHelper(strConnectionString);
-                    return (DBHelper)objSQLCon;
+                    helper = new MSSQLHelper(strConnectionString);
+                    break;
                 case DBType.MSSQL2005P:
-                    MSSQLHelper2005 objSQLCon2005P = new MSSQLHelper2005(strConnectionString);
-                    return objSQLCon2005P;
+                    helper = new MSSQLHelper(strConnectionString);
+                    break;
                 case DBType.Oracle:
-                    OracleHelper objOracle = new OracleHelper(strConnectionString);
-                    return (DBHelper)objOracle;
+                    helper = new OracleHelper(strConnectionString);
+                    break;
                 //case DBType.MySQL:
                 //    MySQLHelper objMySQL = new MySQLHelper(strConnectionString);
                 //    return (DBHelper)objMySQL;
                 case DBType.Access:
-                    AccessHelper objAccess = new AccessHelper(strConnectionString);
-                    return (DBHelper)objAccess;
+                    //helper = new AccessHelper(strConnectionString);
+                    break;
+                case DBType.SQLite:
+                    helper = new SQLiteHelper(strConnectionString);
+                    break;
                 default:
-                    MSSQLHelper2005 objSQLConTemp = new MSSQLHelper2005(strConnectionString);
-                    return (DBHelper)objSQLConTemp;
+                    helper = new MSSQLHelper(strConnectionString);
+                    break;
             }
+            return helper;
         }
     }
 

@@ -4,9 +4,9 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Frank.Common.DAL
+namespace SOAFramework.Library.DAL
 {
-    public interface DBHelper
+    public interface IDBHelper
     {
         #region Attributes
         string ConnectionString { get; }
@@ -15,9 +15,7 @@ namespace Frank.Common.DAL
         #endregion
 
         #region BeginTransaction
-        void BeginTransaction(string ConnectionString);
-
-        void BeginTransaction();
+        void BeginTransaction(string ConnectionString = null);
         #endregion
 
         #region Commit
@@ -123,5 +121,14 @@ namespace Frank.Common.DAL
 
         int ExecNoneQueryWithSP(string strSPName, Parameter[] objParams, string strConnectionString);
         #endregion
+    }
+
+    public class DBSuit
+    {
+        public IDbCommand Command { get; set; }
+
+        public IDbConnection Conection { get; set; }
+
+        public IDbDataAdapter Adapter { get; set; }
     }
 }

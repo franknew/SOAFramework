@@ -77,9 +77,9 @@ namespace UnitTest
 
     public class TestRequest : IRequest<TestResponse>
     {
-        public string GetApi()
+        public string Api
         {
-            return "SOAFramework.Service.Server.DefaultService.DiscoverService";
+            get { return "SOAFramework.Service.Server.DefaultService.DiscoverService"; }
         }
     }
 

@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
 
-using Frank.Common.DAL;
 using SOAFramework.ORM.Common;
 
 namespace SOAFramework.ORM.ORMDriver
