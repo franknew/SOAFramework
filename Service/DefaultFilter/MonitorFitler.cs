@@ -18,10 +18,10 @@ namespace SOAFramework.Service.Filter
             watcher.AddNoticer(new LogNoticer());
             watcher.AddNoticer(new FormNoticer());
         }
-
-        public override bool OnActionExecuting(ActionContext context)
+        
+        public override bool OnActionExecuted(ActionContext context)
         {
-            watcher.AddMesssage(new CacheMessage { Message = "请求方法：" + context.Router.TypeName + "." + context.Router.Action });
+            watcher.AddMesssage(new CacheMessage { Message = "请求方法：" + context.Router.TypeName + "." + context.Router.Action + " 耗时：" + context.PerformanceContext.ElapsedMilliseconds.ToString() });
             return true;
         }
     }

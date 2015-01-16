@@ -48,15 +48,11 @@
   <ItemGroup>
     <Compile Include="Filter\FilterHandler.cs" />
     <Compile Include="Filter\FilterWatcher.cs" />
-    <Compile Include="Filter\IFilter.cs" />
     <Compile Include="Interface\IRequest.cs" />
     <Compile Include="Interface\IResponse.cs" />
-    <Compile Include="Model\ActionContext.cs" />
     <Compile Include="Model\ArgDictionary.cs" />
     <Compile Include="Model\BusinessFileConfig.cs" />
     <Compile Include="Model\PagingServerResponse.cs" />
-    <Compile Include="Model\PerformanceContext.cs" />
-    <Compile Include="Model\Router.cs" />
     <Compile Include="Model\ServerResponse.cs" />
     <Compile Include="Model\ServiceInfo.cs" />
     <Compile Include="Model\ServiceModel.cs" />
@@ -86,9 +82,9 @@
       <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
       <Name>Zip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service.Core.Attributes\Service.Core.Attributes.csproj">
-      <Project>{260f5261-d71e-4799-9d9b-cf83142670c9}</Project>
-      <Name>Service.Core.Attributes</Name>
+    <ProjectReference Include="..\Service.Core.Model\Service.Core.Model.csproj">
+      <Project>{1a1b845c-37f7-47a9-9f98-fd634a93040f}</Project>
+      <Name>Service.Core.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
