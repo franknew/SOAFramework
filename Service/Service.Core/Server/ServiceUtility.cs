@@ -1,5 +1,6 @@
 ﻿using SOAFramework.Library;
 using SOAFramework.Service.Core;
+using SOAFramework.Service.Core.Model;
 using SOAFramework.Service.Model;
 using System;
 using System.Collections;
@@ -23,6 +24,8 @@ namespace SOAFramework.Service.Server
         const string filterConfig = "soaConfigGroup/filterConfig";
         const string businessLayer = null;
         const string filterLayer = null;
+
+        public static Dictionary<string, DateTime> dicWatcher = new Dictionary<string, DateTime>();
 
         /// <summary>
         /// 通过反射执行缓存中的方法
@@ -90,6 +93,16 @@ namespace SOAFramework.Service.Server
         /// <returns></returns>
         public static void InitBusinessCache()
         {
+            List<Assembly> assmList = GetBussinessConfigAss();
+            assmList.Add(Assembly.GetCallingAssembly());
+            assmList.Add(Assembly.GetExecutingAssembly());
+
+            AddAssInCache(assmList);
+        }
+
+        public static List<Assembly> GetBussinessConfigAss()
+        {
+            ConfigurationManager.RefreshSection(bussinessConfig);
             IDictionary config = ConfigurationManager.GetSection(bussinessConfig) as IDictionary;
             //设置业务层缓存
             if (config == null)
@@ -97,8 +110,6 @@ namespace SOAFramework.Service.Server
                 throw new Exception("配置错误，没有配置业务层dll！");
             }
             List<Assembly> assmList = new List<Assembly>();
-            assmList.Add(Assembly.GetCallingAssembly());
-            assmList.Add(Assembly.GetExecutingAssembly());
             foreach (string value in config.Values)
             {
                 Assembly ass = null;
@@ -116,8 +127,7 @@ namespace SOAFramework.Service.Server
                 }
                 assmList.Add(ass);
             }
-
-            AddAssInCache(assmList);
+            return assmList;
         }
 
         public static List<IFilter> InitFilterList()
@@ -192,7 +202,7 @@ namespace SOAFramework.Service.Server
         }
 
         public static IFilter FilterExecuted(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
-            Dictionary<string, object> parameters, long ElapsedMilliseconds)
+            Dictionary<string, object> parameters, long ElapsedMilliseconds, ServerResponse response)
         {
             if (filterList != null)
             {
@@ -212,6 +222,7 @@ namespace SOAFramework.Service.Server
                         {
                             ElapsedMilliseconds = ElapsedMilliseconds,
                         },
+                        Response = response,
                     };
                     if (!filter.OnActionExecuted(context))
                     {
@@ -243,10 +254,29 @@ namespace SOAFramework.Service.Server
             return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
         }
 
-        private static void AddAssInCache(List<Assembly> assmList)
+        public static void AddAssInCache(List<Assembly> assmList)
         {
             foreach (var ass in assmList)
             {
+                #region 判断监视缓存
+                FileInfo assFile = new FileInfo(ass.Location);
+                if (dicWatcher.ContainsKey(ass.FullName))
+                {
+                    if (assFile.LastWriteTime <= dicWatcher[ass.FullName])
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        dicWatcher[ass.FullName] = assFile.LastWriteTime;
+                    }
+                }
+                else
+                {
+                    dicWatcher[ass.FullName] = assFile.LastWriteTime;
+                }
+                #endregion
+
                 Type[] types = ass.GetTypes();
                 FileInfo file = new FileInfo(ass.Location.Remove(ass.Location.LastIndexOf(".")) + ".xml");
                 List<XElement> elementList = null;

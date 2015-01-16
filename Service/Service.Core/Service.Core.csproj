@@ -51,9 +51,9 @@
     <Compile Include="Interface\IRequest.cs" />
     <Compile Include="Interface\IResponse.cs" />
     <Compile Include="Model\ArgDictionary.cs" />
+    <Compile Include="Model\AssemblyWatcherInfo.cs" />
     <Compile Include="Model\BusinessFileConfig.cs" />
     <Compile Include="Model\PagingServerResponse.cs" />
-    <Compile Include="Model\ServerResponse.cs" />
     <Compile Include="Model\ServiceInfo.cs" />
     <Compile Include="Model\ServiceModel.cs" />
     <Compile Include="Model\PropertyDescription.cs" />

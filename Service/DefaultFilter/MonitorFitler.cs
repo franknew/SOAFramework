@@ -21,7 +21,14 @@ namespace SOAFramework.Service.Filter
         
         public override bool OnActionExecuted(ActionContext context)
         {
-            watcher.AddMesssage(new CacheMessage { Message = "请求方法：" + context.Router.TypeName + "." + context.Router.Action + " 耗时：" + context.PerformanceContext.ElapsedMilliseconds.ToString() });
+            if (context.Response.IsError)
+            {
+                watcher.AddMesssage(new CacheMessage { Message = "方法：" + context.Router.TypeName + "." + context.Router.Action + "发生错误,错误原因：" + context.Response.ErrorMessage + " 耗时：" + context.PerformanceContext.ElapsedMilliseconds.ToString() });
+            }
+            else
+            {
+                watcher.AddMesssage(new CacheMessage { Message = "请求方法：" + context.Router.TypeName + "." + context.Router.Action + " 耗时：" + context.PerformanceContext.ElapsedMilliseconds.ToString() });
+            }
             return true;
         }
     }

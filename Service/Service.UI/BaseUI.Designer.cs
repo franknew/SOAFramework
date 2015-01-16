@@ -40,7 +40,12 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.niIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.txbMessage = new System.Windows.Forms.TextBox();
+            this.tabContainer = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tlButtons.SuspendLayout();
+            this.tabContainer.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlButtons
@@ -122,20 +127,52 @@
             // 
             this.txbMessage.BackColor = System.Drawing.SystemColors.Control;
             this.txbMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txbMessage.Location = new System.Drawing.Point(0, 93);
+            this.txbMessage.Location = new System.Drawing.Point(3, 3);
             this.txbMessage.MaxLength = 2000;
             this.txbMessage.Multiline = true;
             this.txbMessage.Name = "txbMessage";
             this.txbMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbMessage.Size = new System.Drawing.Size(633, 270);
+            this.txbMessage.Size = new System.Drawing.Size(619, 238);
             this.txbMessage.TabIndex = 3;
+            // 
+            // tabContainer
+            // 
+            this.tabContainer.Controls.Add(this.tabPage1);
+            this.tabContainer.Controls.Add(this.tabPage2);
+            this.tabContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabContainer.Location = new System.Drawing.Point(0, 93);
+            this.tabContainer.Name = "tabContainer";
+            this.tabContainer.SelectedIndex = 0;
+            this.tabContainer.Size = new System.Drawing.Size(633, 270);
+            this.tabContainer.TabIndex = 4;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.txbMessage);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(625, 244);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "接口调用即时显示";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(192, 74);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "即时性能监控";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // BaseUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(633, 385);
-            this.Controls.Add(this.txbMessage);
+            this.Controls.Add(this.tabContainer);
             this.Controls.Add(this.gpbCondition);
             this.Controls.Add(this.ssBar);
             this.Controls.Add(this.tlButtons);
@@ -145,6 +182,9 @@
             this.Load += new System.EventHandler(this.BaseUI_Load);
             this.tlButtons.ResumeLayout(false);
             this.tlButtons.PerformLayout();
+            this.tabContainer.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,6 +202,9 @@
         public System.Windows.Forms.ToolStripButton tbClear;
         protected System.Windows.Forms.NotifyIcon niIcon;
         protected System.Windows.Forms.TextBox txbMessage;
+        private System.Windows.Forms.TabControl tabContainer;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 

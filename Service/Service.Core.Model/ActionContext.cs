@@ -37,5 +37,7 @@ namespace SOAFramework.Service.Model
             get { return performanceContext; }
             set { performanceContext = value; }
         }
+
+        public ServerResponse Response { get; set; }
     }
 }

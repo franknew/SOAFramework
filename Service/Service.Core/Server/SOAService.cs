@@ -75,6 +75,21 @@ namespace SOAFramework.Service.Server
                 {
                     method = service.MethodInfo;
                 }
+                //如果找不到方法重新加载配置的DLL
+                else
+                {
+                    ServiceUtility.InitBusinessCache();
+                    service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                    if (service != null)
+                    {
+                        method = service.MethodInfo;
+                    }
+                }
+                //如果再找不到方法，说明没有配置
+                if (method == null)
+                {
+                    throw new Exception("未能找到接口：" + methodFullName + "！");
+                }
                 Dictionary<string, object> parsedArgs = new Dictionary<string, object>();
                 ParameterInfo[] parameters = method.GetParameters();
                 if (parameters != null)
@@ -101,18 +116,27 @@ namespace SOAFramework.Service.Server
                 #region 执行方法
                 if (!response.IsError)
                 {
-                    watch.Start();
-                    //执行方法
-                    object result = ServiceUtility.ExecuteMethod(typeName, functionName, parsedArgs);
-                    watch.Stop();
-                    response.Data = result;
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
+                    try
+                    {
+                        watch.Start();
+                        //执行方法
+                        object result = ServiceUtility.ExecuteMethod(typeName, functionName, parsedArgs);
+                        watch.Stop();
+                        response.Data = result;
+                        WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
+                    }
+                    catch (Exception ex)
+                    {
+                        response.IsError = true;
+                        response.ErrorMessage = ex.Message;
+                        response.StackTrace = ex.StackTrace;
+                    }
                 }
                 #endregion
 
                 #region 执行后置filter
-                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, parsedArgs, watch.ElapsedMilliseconds);
-                if (failedFilter != null)
+                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, parsedArgs, watch.ElapsedMilliseconds, response);
+                if (failedFilter != null && !response.IsError)
                 {
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
@@ -125,6 +149,7 @@ namespace SOAFramework.Service.Server
                 response.ErrorMessage = ex.Message;
                 response.StackTrace = ex.StackTrace;
             }
+
             #region 处理结果
             //序列化对象成json
             if (response.IsError)
@@ -208,7 +233,7 @@ namespace SOAFramework.Service.Server
         }
 
         #region test
-        [ServiceInvoker(Module="Test")]
+        [ServiceInvoker(Module = "Test")]
         public TestClass Test(string a, TestClass b)
         {
             TestClass c = new TestClass();
