@@ -24,6 +24,9 @@ namespace SOAFramework.Service.Model
 
         [DataMember(EmitDefaultValue = false)]
         public string Module { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public TypeInfo ReturnTypeInfo { get; set; }
     }
 
     [DataContract]
@@ -33,12 +36,29 @@ namespace SOAFramework.Service.Model
         public string Name { get; set; }
 
         [DataMember(EmitDefaultValue = false)]
-        public string TypeName { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
         public int Index { get; set; }
 
         [DataMember(EmitDefaultValue = false)]
         public string Description { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public TypeInfo TypeInfo { get; set; }
+    }
+
+    [DataContract]
+    public class TypeInfo
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public string TypeName { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string FullTypeName { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool IsClass { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string NameSpace { get; set; }
+        public string ElementFullTypeName { get; set; }
     }
 }

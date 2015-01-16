@@ -32,6 +32,8 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            List<string> listT = new List<string>();
+            Type[] ts = listT.GetType().GetGenericArguments();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Stopwatch watch = new Stopwatch();
 

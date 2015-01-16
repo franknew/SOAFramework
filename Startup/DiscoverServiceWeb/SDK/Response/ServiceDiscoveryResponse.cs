@@ -9,6 +9,6 @@ namespace DiscoverServiceWeb.SDK.Response
 {
     public class ServiceDiscoveryResponse : BaseResponse
     {
-        public List<ServiceDiscovery> Items { get; set; }
+        public List<ServiceInfo> Items { get; set; }
     }
 }

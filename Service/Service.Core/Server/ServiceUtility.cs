@@ -223,6 +223,26 @@ namespace SOAFramework.Service.Server
             return null;
         }
 
+        public static string GetTypeName(Type t)
+        {
+            string typeName = t.Name;
+            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                Type TType = t.GetGenericArguments()[0];
+                typeName = "List<" + TType.Name + ">";
+            }
+            else if (t.IsArray)
+            {
+                typeName = t.GetElementType().Name + "[]";
+            }
+            return typeName;
+        }
+
+        public static bool IsClassType(Type t)
+        {
+            return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
+        }
+
         private static void AddAssInCache(List<Assembly> assmList)
         {
             foreach (var ass in assmList)
@@ -302,7 +322,13 @@ namespace SOAFramework.Service.Server
                                     {
                                         Index = p.Position,
                                         Name = p.Name,
-                                        TypeName = p.ParameterType.FullName,
+                                        TypeInfo = new Model.TypeInfo
+                                        {
+                                            FullTypeName = p.ParameterType.FullName,
+                                            TypeName = GetTypeName(p.ParameterType),
+                                            IsClass = IsClassType(p.ParameterType),
+                                            NameSpace = p.ParameterType.Namespace,
+                                        },
                                     };
                                     XElement paramElement = null;
                                     if (methodElement != null)
@@ -316,7 +342,19 @@ namespace SOAFramework.Service.Server
                                     parameters.Add(sp);
                                 }
                             }
-                            info = new ServiceInfo { InterfaceName = key, Parameters = parameters, Module = module };
+                            info = new ServiceInfo
+                            {
+                                InterfaceName = key,
+                                Parameters = parameters,
+                                Module = module,
+                                ReturnTypeInfo = new Model.TypeInfo
+                                {
+                                    FullTypeName = method.ReturnType.FullName,
+                                    TypeName = GetTypeName(method.ReturnType),
+                                    IsClass = IsClassType(method.ReturnType),
+                                    NameSpace = method.ReturnType.Namespace,
+                                },
+                            };
                             if (!string.IsNullOrEmpty(description))
                             {
                                 info.Description = description;

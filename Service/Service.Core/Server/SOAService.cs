@@ -208,6 +208,7 @@ namespace SOAFramework.Service.Server
         }
 
         #region test
+        [ServiceInvoker(Module="Test")]
         public TestClass Test(string a, TestClass b)
         {
             TestClass c = new TestClass();
@@ -220,6 +221,7 @@ namespace SOAFramework.Service.Server
             return c;
         }
 
+        [ServiceInvoker(Module = "Test")]
         public string GetTest()
         {
             Console.WriteLine("get test invoked");

@@ -60,12 +60,14 @@
     <Compile Include="Model\ServerResponse.cs" />
     <Compile Include="Model\ServiceInfo.cs" />
     <Compile Include="Model\ServiceModel.cs" />
+    <Compile Include="Model\PropertyDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\DefaultService.cs" />
     <Compile Include="Server\IService.cs" />
     <Compile Include="Server\ServiceUtility.cs" />
     <Compile Include="Server\SOAService.cs" />
     <Compile Include="Server\Test.cs" />
+    <Compile Include="Model\TypeDescription.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\CacheManager\ServicePoolManager.csproj">

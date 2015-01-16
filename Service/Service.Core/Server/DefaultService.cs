@@ -1,6 +1,7 @@
 ﻿using SOAFramework.Library;
 using SOAFramework.Service.Core;
 using SOAFramework.Service.Core;
+using SOAFramework.Service.Core.Model;
 using SOAFramework.Service.Model;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace SOAFramework.Service.Server
 {
     [ServiceKnownType(typeof(DefaultService))]
-    [ServiceLayer]
+    [ServiceLayer(Module="System")]
     public class DefaultService
     {
         /// <summary>
@@ -52,15 +53,94 @@ namespace SOAFramework.Service.Server
         public List<ServiceInfo> DiscoverServiceByModule(string moduleName)
         {
             List<ServiceInfo> list = new List<ServiceInfo>();
+            string module = moduleName;
+            if (moduleName == "Default")
+            {
+                module = "";
+            }
             List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();
             var query = from s in methodList
-                        where s.ServiceInfo != null && s.ServiceInfo.Module.Equals(moduleName)
+                        where s.ServiceInfo != null && s.ServiceInfo.Module == module
                         select s.ServiceInfo;
             list = query.ToList();
             return list;
         }
 
+        /// <summary>
+        /// 获得服务池内所有的模块名称
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetServiceModuleNames()
+        {
+            List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();
+            List<string> list = (from s in methodList
+                                 where s.ServiceInfo != null && !string.IsNullOrEmpty(s.ServiceInfo.Module)
+                                 select s.ServiceInfo.Module).Distinct().ToList();
+            if (!list.Contains("Default"))
+            {
+                list.Insert(0, "Default");
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 根据类型全名获得类型的结构
+        /// </summary>
+        /// <param name="fullTypeName">类型全名</param>
+        /// <returns>类型描述对象</returns>
+        public TypeDescription GetTypeDescription(string fullTypeName)
+        {
+            Type type = Type.GetType(fullTypeName);
+            TypeDescription t = null;
+            if (type != null)
+            {
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+                {
+                    type = type.GetGenericArguments()[0];
+                }
+                else if (type.IsArray)
+                {
+                    type = type.GetElementType();
+                }
+                t = new TypeDescription();
+                t.TypeInfo = new Model.TypeInfo
+                {
+                    FullTypeName = type.FullName,
+                    NameSpace = type.Namespace,
+                    TypeName = ServiceUtility.GetTypeName(type),
+                    IsClass = ServiceUtility.IsClassType(type),
+                };
+                PropertyInfo[] properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                if (properties != null)
+                {
+                    t.Properties = new List<PropertyDescription>();
+                    foreach (PropertyInfo p in properties)
+                    {
+                        PropertyDescription pd = new PropertyDescription
+                        {
+                            PropertyName = p.Name,
+                            PropertyTypeInfo = new Model.TypeInfo
+                            {
+                                FullTypeName = p.PropertyType.FullName,
+                                NameSpace = p.PropertyType.Namespace,
+                                IsClass = ServiceUtility.IsClassType(p.PropertyType),
+                                TypeName = ServiceUtility.GetTypeName(p.PropertyType),
+                            },
+                        };
+                        Type element = type.GetElementType();
+                        if (element != null)
+                        {
+                            pd.PropertyTypeInfo.ElementFullTypeName = element.FullName;
+                        }
+                        t.Properties.Add(pd);
+                    }
+                }
+            }
+            return t;
+        }
+
         #region big data test
+        [ServiceInvoker(Module="Test")]
         public List<ServiceInfo> BigDataTest()
         {
             List<ServiceInfo> list = new List<ServiceInfo>();
