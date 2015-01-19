@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace SOAFramework.Service.Server
 {
     [ServiceKnownType(typeof(DefaultService))]
-    [ServiceLayer(Module="System")]
+    [ServiceLayer(Module = "System")]
     public class DefaultService
     {
         /// <summary>
@@ -140,7 +140,11 @@ namespace SOAFramework.Service.Server
         }
 
         #region big data test
-        [ServiceInvoker(Module="Test")]
+        /// <summary>
+        /// 大数据测试，构造10万个对象返回
+        /// </summary>
+        /// <returns></returns>
+        [ServiceInvoker(Module = "Test")]
         public List<ServiceInfo> BigDataTest()
         {
             List<ServiceInfo> list = new List<ServiceInfo>();

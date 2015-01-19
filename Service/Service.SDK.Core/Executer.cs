@@ -17,7 +17,7 @@ namespace SOAFramework.Service.SDK.Core
         public T Execute<T>(IRequest<T> request, string url = null) where T : BaseResponse
         {
             T t = default(T);
-            string api = request.Api;
+            string api = request.GetApi();
             if (string.IsNullOrEmpty(url))
             {
                 url = _url;
@@ -28,7 +28,7 @@ namespace SOAFramework.Service.SDK.Core
             }
             string typeName = api.Remove(api.LastIndexOf("."));
             string actionName = api.Substring(api.LastIndexOf(".") + 1);
-            string fullUrl = url.TrimEnd('/') + "/" + typeName + "/" + actionName;
+            string fullUrl = url.TrimEnd('/') + "/Execute/" + typeName + "/" + actionName;
             Type requestType = request.GetType();
             PropertyInfo[] properties = requestType.GetProperties();
             List<PostArgItem> args = new List<PostArgItem>();

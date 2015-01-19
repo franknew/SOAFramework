@@ -16,7 +16,7 @@ namespace SOAFramework.Service.Server
     [ServiceContract(Namespace = "http://www.cnblogs.com/WindBlog/")]
     public interface IService
     {
-        [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "{typeName}/{functionName}", Method = "POST")]
+        [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Execute/{typeName}/{functionName}", Method = "POST")]
         [OperationContract]
         Stream Execute(string typeName, string functionName, Dictionary<string, string> args);
 
@@ -26,10 +26,14 @@ namespace SOAFramework.Service.Server
         [WebInvoke(UriTemplate = "Upload/{fileName}", Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Stream Upload(string fileName, string fileContent);
 
+        [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json
+            , UriTemplate = "RegisterDispatcher/{usage}", Method = "POST")]
+        void RegisterDispatcher(string usage, string url);
 
         [WebInvoke(UriTemplate = "get", Method = "POST")]
         string GetTest();
+
+        [WebInvoke(UriTemplate = "Ping", Method = "GET")]
+        void Ping();
     }
-
-
 }

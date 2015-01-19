@@ -18,13 +18,19 @@ using System.ServiceModel.Web;
 using SOAFramework.Service.Core;
 using SOAFramework.Library;
 using SOAFramework.Service.Model;
+using System.Threading.Tasks;
 
 namespace SOAFramework.Service.Server
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class SOAService : IService
     {
+        private static IDispatcher _dispatcher = null;
+
         private static string _filePath = "";
+
+        private static string _dispatcherServerUrl = "";
 
         private static bool enableConsoleMonitor = false;
 
@@ -36,6 +42,7 @@ namespace SOAFramework.Service.Server
                 //把DLL中的所有方法加载到缓存中
                 ServiceUtility.InitBusinessCache();
                 _filterList = ServiceUtility.InitFilterList();
+
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
                 {
                     if (ConfigurationManager.AppSettings["EnableConsoleMonitor"] == "1")
@@ -43,11 +50,33 @@ namespace SOAFramework.Service.Server
                         enableConsoleMonitor = true;
                     }
                 }
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DispatcherServerUrl"]))
+                {
+                    _dispatcherServerUrl = ConfigurationManager.AppSettings["DispatcherServerUrl"];
+                }
+                if (string.IsNullOrEmpty(_dispatcherServerUrl))
+                {
+                    _dispatcher = new DispatcherServer();
+                }
+                else
+                {
+                    _dispatcher = new DispatcherClient();
+                }
+
+                Task task = new Task(() =>
+                {
+                    _dispatcher.StartRegisterTask(_dispatcherServerUrl);
+                });
+                task.Start();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public SOAService()
+        {
         }
 
         /// <summary>
@@ -60,115 +89,16 @@ namespace SOAFramework.Service.Server
         [ServiceInvoker(IsHiddenDiscovery = true)]
         public Stream Execute(string typeName, string functionName, Dictionary<string, string> args)
         {
-            ServerResponse response = new ServerResponse();
-            Stopwatch watch = new Stopwatch();
-            Stopwatch allWatch = new Stopwatch();
-            allWatch.Start();
-            string json = "";
-            try
-            {
-                #region 准备工作
-                string methodFullName = typeName + "." + functionName;
-                ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
-                MethodInfo method = null;
-                if (service != null)
-                {
-                    method = service.MethodInfo;
-                }
-                //如果找不到方法重新加载配置的DLL
-                else
-                {
-                    ServiceUtility.InitBusinessCache();
-                    service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
-                    if (service != null)
-                    {
-                        method = service.MethodInfo;
-                    }
-                }
-                //如果再找不到方法，说明没有配置
-                if (method == null)
-                {
-                    throw new Exception("未能找到接口：" + methodFullName + "！");
-                }
-                Dictionary<string, object> parsedArgs = new Dictionary<string, object>();
-                ParameterInfo[] parameters = method.GetParameters();
-                if (parameters != null)
-                {
-                    foreach (var p in parameters)
-                    {
-                        if (args.ContainsKey(p.Name))
-                        {
-                            parsedArgs[p.Name] = JsonHelper.Deserialize(args[p.Name], p.ParameterType);
-                        }
-                    }
-                }
-                #endregion
+            return _dispatcher.Execute(typeName, functionName, args, _filterList, enableConsoleMonitor);
+        }
 
-                #region 执行前置filter
-                IFilter failedFilter = ServiceUtility.FilterExecuting(_filterList, typeName, functionName, method, parsedArgs);
-                if (failedFilter != null)
-                {
-                    response.IsError = true;
-                    response.ErrorMessage = failedFilter.Message;
-                }
-                #endregion
-
-                #region 执行方法
-                if (!response.IsError)
-                {
-                    try
-                    {
-                        watch.Start();
-                        //执行方法
-                        object result = ServiceUtility.ExecuteMethod(typeName, functionName, parsedArgs);
-                        watch.Stop();
-                        response.Data = result;
-                        WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
-                    }
-                    catch (Exception ex)
-                    {
-                        response.IsError = true;
-                        response.ErrorMessage = ex.Message;
-                        response.StackTrace = ex.StackTrace;
-                    }
-                }
-                #endregion
-
-                #region 执行后置filter
-                failedFilter = ServiceUtility.FilterExecuted(_filterList, typeName, functionName, method, parsedArgs, watch.ElapsedMilliseconds, response);
-                if (failedFilter != null && !response.IsError)
-                {
-                    response.IsError = true;
-                    response.ErrorMessage = failedFilter.Message;
-                }
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                response.IsError = true;
-                response.ErrorMessage = ex.Message;
-                response.StackTrace = ex.StackTrace;
-            }
-
-            #region 处理结果
-            //序列化对象成json
-            if (response.IsError)
-            {
-                json = JsonHelper.Serialize(response);
-            }
-            else
-            {
-                json = JsonHelper.Serialize(response.Data);
-            }
-            //压缩json
-            string zippedJson = ZipHelper.Zip(json);
-            allWatch.Stop();
-            if (enableConsoleMonitor)
-            {
-                Console.WriteLine("{0}.{1} -- 耗时：{2}", typeName, functionName, allWatch.ElapsedMilliseconds);
-            }
-            return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
-            #endregion
+        [ServiceInvoker(IsHiddenDiscovery = true)]
+        public void RegisterDispatcher(string usage, string url)
+        {
+            float rate = 0;
+            float.TryParse(usage, out rate);
+            string strUrl = url;
+            ServiceUtility.RegisterDispatcher(strUrl, rate);
         }
 
         /// <summary>
@@ -231,6 +161,9 @@ namespace SOAFramework.Service.Server
             string zippedJson = ZipHelper.Zip(json);
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
         }
+
+        public void Ping()
+        { }
 
         #region test
         [ServiceInvoker(Module = "Test")]

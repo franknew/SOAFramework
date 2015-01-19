@@ -9,9 +9,9 @@ namespace DiscoverServiceWeb.SDK.Request
 {
     public class ServiceDiscoveryRequest : IRequest<ServiceDiscoveryResponse>
     {
-        public string Api
+        public string GetApi()
         {
-            get { return "SOAFramework.Service.Server.DefaultService.DiscoverService"; }
+            return "SOAFramework.Service.Server.DefaultService.DiscoverService"; 
         }
     }
 }

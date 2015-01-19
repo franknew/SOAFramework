@@ -30,7 +30,7 @@ namespace SOAFramework.Service.UI
 
         private void tbClear_Click(object sender, EventArgs e)
         {
-            txbMessage.Clear();
+            lbMessage.Items.Clear();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -39,15 +39,15 @@ namespace SOAFramework.Service.UI
             List<CacheMessage> list = MonitorCache.GetInstance().PopMessages(CacheEnum.FormMonitor);
             while (list.Count > 0)
             {
-                if (txbMessage.Text.Length > 1024 * 1024)
+                if (lbMessage.Items.Count > 100000)
                 {
-                    txbMessage.Clear();
+                    lbMessage.Items.Clear();
                 }
                 else
                 {
                     CacheMessage message = list[0];
                     string text = string.Format("{0} -- {1}\r\n", message.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss"), message.Message);
-                    txbMessage.AppendText(text);
+                    lbMessage.Items.Insert(0, text);
                     list.Remove(message);
                 }
             }

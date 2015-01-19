@@ -39,10 +39,10 @@
             this.gpbCondition = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.niIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.txbMessage = new System.Windows.Forms.TextBox();
             this.tabContainer = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lbMessage = new System.Windows.Forms.ListBox();
             this.tlButtons.SuspendLayout();
             this.tabContainer.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -123,18 +123,6 @@
             this.niIcon.Visible = true;
             this.niIcon.DoubleClick += new System.EventHandler(this.niIcon_DoubleClick);
             // 
-            // txbMessage
-            // 
-            this.txbMessage.BackColor = System.Drawing.SystemColors.Control;
-            this.txbMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txbMessage.Location = new System.Drawing.Point(3, 3);
-            this.txbMessage.MaxLength = 2000;
-            this.txbMessage.Multiline = true;
-            this.txbMessage.Name = "txbMessage";
-            this.txbMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbMessage.Size = new System.Drawing.Size(619, 238);
-            this.txbMessage.TabIndex = 3;
-            // 
             // tabContainer
             // 
             this.tabContainer.Controls.Add(this.tabPage1);
@@ -148,7 +136,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.txbMessage);
+            this.tabPage1.Controls.Add(this.lbMessage);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -162,10 +150,23 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(192, 74);
+            this.tabPage2.Size = new System.Drawing.Size(625, 244);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "即时性能监控";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // lbMessage
+            // 
+            this.lbMessage.BackColor = System.Drawing.SystemColors.Control;
+            this.lbMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbMessage.FormattingEnabled = true;
+            this.lbMessage.HorizontalScrollbar = true;
+            this.lbMessage.ItemHeight = 12;
+            this.lbMessage.Location = new System.Drawing.Point(3, 3);
+            this.lbMessage.Name = "lbMessage";
+            this.lbMessage.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbMessage.Size = new System.Drawing.Size(619, 238);
+            this.lbMessage.TabIndex = 0;
             // 
             // BaseUI
             // 
@@ -184,7 +185,6 @@
             this.tlButtons.PerformLayout();
             this.tabContainer.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,10 +201,10 @@
         public System.Windows.Forms.ToolStripButton tbStop;
         public System.Windows.Forms.ToolStripButton tbClear;
         protected System.Windows.Forms.NotifyIcon niIcon;
-        protected System.Windows.Forms.TextBox txbMessage;
         private System.Windows.Forms.TabControl tabContainer;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        protected System.Windows.Forms.ListBox lbMessage;
     }
 }
 

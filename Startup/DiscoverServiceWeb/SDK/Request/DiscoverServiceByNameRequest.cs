@@ -9,9 +9,9 @@ namespace DiscoverServiceWeb.SDK.Request
 {
     public class DiscoverServiceByNameRequest : IRequest<DiscoverServiceByNameResponse>
     {
-        public string Api
+        public string GetApi()
         {
-            get { return "SOAFramework.Service.Server.DefaultService.DiscoverServiceByName"; }
+            return "SOAFramework.Service.Server.DefaultService.DiscoverServiceByName"; 
         }
 
         [ArgMapping("name")]

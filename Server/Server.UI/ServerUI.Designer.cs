@@ -49,7 +49,6 @@ namespace SOAFramework.Server.UI
             // 
             // txbMessage
             // 
-            this.txbMessage.Size = new System.Drawing.Size(619, 295);
             // 
             // chart1
             // 

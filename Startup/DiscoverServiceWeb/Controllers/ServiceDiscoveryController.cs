@@ -107,6 +107,28 @@ namespace DiscoverServiceWeb.Controllers
             return File(bytCode, "application/octet-stream", fullTypeName + ".cs");
         }
 
+        public FileResult GenerateRequest(string id)
+        {
+            string interfaceName = id.Replace("-", ".");
+            string methodName = interfaceName.Substring(interfaceName.LastIndexOf(".") + 1);
+            string nameSpace = interfaceName.Remove(interfaceName.LastIndexOf("."));
+            DiscoverServiceByNameRequest request = new DiscoverServiceByNameRequest();
+            request.Name = interfaceName;
+            DiscoverServiceByNameResponse response = SDKFactory.Client.Execute(request);
+            byte[] data = null;
+            if (!response.IsError && response.ServiceInfo != null)
+            {
+                StringBuilder builder = new StringBuilder();
+                builder.Append("using System;\r\n");
+                builder.Append("using System.Text;\r\n");
+                builder.Append("using System.Linq;\r\n");
+                builder.Append("using System.Collections.Generic;\r\n");
+                builder.Append("namespace ").Append(nameSpace).Append("\r\n{\r\n");
+                builder.Append("\tpublic class ").Append(methodName).Append("\r\n\t{\r\n");
+            }
+            return File("", "");
+        }
+
         public void GenerateType(string fullTypeName, StringBuilder builder, List<string> emittedType)
         {
             if (emittedType.Contains(fullTypeName))

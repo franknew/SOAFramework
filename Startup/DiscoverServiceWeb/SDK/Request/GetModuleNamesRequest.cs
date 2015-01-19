@@ -9,9 +9,9 @@ namespace DiscoverServiceWeb.SDK.Request
 {
     public class GetModuleNamesRequest : IRequest<GetModuleNamesResponse>
     {
-        public string Api
+        public string GetApi()
         {
-            get { return "SOAFramework.Service.Server.DefaultService.GetServiceModuleNames"; }
+            return "SOAFramework.Service.Server.DefaultService.GetServiceModuleNames"; 
         }
     }
 }

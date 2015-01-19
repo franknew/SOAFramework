@@ -83,6 +83,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscoverServiceWeb", "Start
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Core.Model", "Service\Service.Core.Model\Service.Core.Model.csproj", "{1A1B845C-37F7-47A9-9F98-FD634A93040F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine", "Library\Machine\Machine.csproj", "{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -416,6 +418,16 @@ Global
 		{1A1B845C-37F7-47A9-9F98-FD634A93040F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1A1B845C-37F7-47A9-9F98-FD634A93040F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1A1B845C-37F7-47A9-9F98-FD634A93040F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -453,6 +465,7 @@ Global
 		{4CF7D6DF-4D60-490E-A1B3-757CAEE580A6} = {7AA3BEBE-B65C-42FD-94CC-8363F427B02B}
 		{AF291BB9-5036-4386-8AF3-935607E1C00D} = {6211479C-E633-44D3-BAE9-E18E1CDB4B72}
 		{1A1B845C-37F7-47A9-9F98-FD634A93040F} = {6E1C9072-68AD-4A60-8552-0D013449AB13}
+		{4EDEBDB1-7D65-40CC-844E-8AA01873B6D6} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SOAFramework.vsmdi

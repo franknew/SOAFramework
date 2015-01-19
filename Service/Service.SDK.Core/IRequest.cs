@@ -8,6 +8,6 @@ namespace SOAFramework.Service.SDK.Core
 {
     public interface IRequest<T> where T : BaseResponse
     {
-        string Api { get; }
+        string GetApi();
     }
 }

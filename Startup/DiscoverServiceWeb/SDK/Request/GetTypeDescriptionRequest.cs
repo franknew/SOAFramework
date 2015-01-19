@@ -11,9 +11,9 @@ namespace DiscoverServiceWeb.SDK.Request
     {
         [ArgMapping("fullTypeName")]
         public string FullTypeName { get; set; }
-        public string Api
+        public string GetApi()
         {
-            get { return "SOAFramework.Service.Server.DefaultService.GetTypeDescription"; }
+            return "SOAFramework.Service.Server.DefaultService.GetTypeDescription"; 
         }
     }
 }

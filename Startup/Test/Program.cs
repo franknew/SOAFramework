@@ -24,6 +24,7 @@ using SOAFramework.Library.RazorEngine;
 using CodeSmith.Engine;
 using System.Reflection;
 using SOAFramework.Service.SDK.Core;
+using SOAFramework.Service.Core;
 
 namespace Test
 {
@@ -123,6 +124,7 @@ namespace Test
             #region wcf host
             WebServiceHost newhost = new WebServiceHost(typeof(SOAService));
             newhost.Open();
+            newhost.Ping();
             #endregion
 
             #region zip tester
@@ -184,7 +186,6 @@ namespace Test
             //Model.Customer_AutoIncrease t = new Model.Customer_AutoIncrease();
             #endregion
 
-
             #region soa tester
             string strData = "";
             byte[] data = null;
@@ -192,30 +193,31 @@ namespace Test
 
             //testresult = HttpUtility.Get("http://localhost/Service/GetTest");
 
-            TestClass c = new TestClass();
-            c.a = "111";
-            strData = JsonHelper.Serialize(c);
+            List<PostArgItem> argslist = new List<PostArgItem>();
+            argslist.Add(new PostArgItem { Key = "url", Value = "http://localhost/" });
+            //argslist.Add(new PostArgItem { Key = "usage", Value = "1.00" });
+            strData = JsonHelper.Serialize("http://localhost/");
             //strData = "\"" + strData + "\"";
             data = System.Text.Encoding.UTF8.GetBytes(strData);
-            //testresult = HttpHelper.Post(@"http://localhost/Service/Test", data);
+            testresult = HttpHelper.Post(@"http://localhost:8082/Service/RegisterDispatcher/1", data);
 
             watch.Start();
             List<TestClass> listc = new List<TestClass>();
-            listc.Add(c);
-            List<PostArgItem> argslist = new List<PostArgItem>();
-
+            //listc.Add(c);
+            argslist.Clear();
             strData = JsonHelper.Serialize(argslist);
             data = System.Text.Encoding.UTF8.GetBytes(strData);
-            testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
+            testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
             testresult = ZipHelper.UnZip(testresult);
             watch.Stop();
             Console.WriteLine("发现服务测试耗时{0}", watch.ElapsedMilliseconds);
 
+
             watch.Restart();
-            dynamic d = JsonHelper.Deserialize<dynamic>(testresult);
+            argslist.Clear();
             strData = JsonHelper.Serialize(argslist);
             data = System.Text.Encoding.UTF8.GetBytes(strData);
-            testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.DefaultService/BigDataTest", data);
+            testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.DefaultService/BigDataTest", data);
             watch.Stop();
             Console.WriteLine("大数据测试耗时{0}", watch.ElapsedMilliseconds);
 
@@ -249,7 +251,7 @@ namespace Test
                 //list.Add(new PostArgItem { Key = "b", Value = new TestClass { a = "a", b = "b" } });
                 strData = JsonHelper.Serialize(list);
                 data = System.Text.Encoding.UTF8.GetBytes(strData);
-                //testresult = HttpHelper.Post(@"http://localhost/Service/SOAFramework.Service.Server.SOAService/Test", data);
+                //testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.SOAService/Test", data);
                 testresult = ZipHelper.UnZip(testresult);
 
                 PerformanceRequest prequest = new PerformanceRequest();
@@ -401,9 +403,9 @@ namespace Test
 
     public class TestRequest : IRequest<TestResponse>
     {
-        public string Api
+        public string GetApi()
         {
-            get { return "SOAFramework.Service.Server.DefaultService.DiscoverService"; }
+            return "SOAFramework.Service.Server.DefaultService.DiscoverService"; 
         }
     }
 
@@ -414,9 +416,9 @@ namespace Test
 
     public class PerformanceRequest : IRequest<PerformanceResponse>
     {
-        public string Api
+        public string GetApi()
         {
-            get { return "SOAFramework.Service.Server.SOAService.Test"; }
+            return "SOAFramework.Service.Server.SOAService.Test"; 
         }
 
         public string a { get; set; }

@@ -6,11 +6,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.ServiceModel;
+using System.ServiceModel.Configuration;
+using System.ServiceModel.Web;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
@@ -25,7 +30,8 @@ namespace SOAFramework.Service.Server
         const string businessLayer = null;
         const string filterLayer = null;
 
-        public static Dictionary<string, DateTime> dicWatcher = new Dictionary<string, DateTime>();
+        private static readonly Dictionary<string, DateTime> dicWatcher = new Dictionary<string, DateTime>();
+        private static readonly List<MachinePerformance> listPerformance = new List<MachinePerformance>();
 
         /// <summary>
         /// 通过反射执行缓存中的方法
@@ -400,6 +406,179 @@ namespace SOAFramework.Service.Server
                     }
                 }
             }
+        }
+
+        public static void RegisterDispatcher(string url, float cpu)
+        {
+            MachinePerformance m = listPerformance.Find(t => t.Url == url);
+            if (m == null)
+            {
+                m = new MachinePerformance
+                {
+                    Url = url,
+                    CpuRate = cpu,
+                };
+                listPerformance.Add(m);
+            }
+            else
+            {
+                m.CpuRate = cpu;
+            }
+        }
+
+        public static string GetMinCpuDispatcher()
+        {
+            MachinePerformance performance = null;
+            foreach (var m in listPerformance)
+            {
+                if (performance == null || performance.CpuRate > m.CpuRate)
+                {
+                    performance = m;
+                }
+            }
+            string url = "";
+            if (performance != null)
+            {
+                url = performance.Url;
+            }
+            return url;
+        }
+
+        public static float GetCpuRate()
+        {
+            Performance p = new Performance();
+            p.GetCurrentCpuUsage();
+            Thread.Sleep(100);
+            return p.GetCurrentCpuUsage();
+        }
+
+        public static string GetCurrentEndPoint()
+        {
+            ServiceModelSectionGroup group = ServiceModelSectionGroup.GetSectionGroup(ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None));
+            if (group != null)
+            {
+                return group.Services.Services[0].Endpoints[0].Address.AbsoluteUri;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static Stream Execute(string typeName, string functionName, Dictionary<string, string> args, List<IFilter> filterList,
+            bool enableConsoleMonitor)
+        {
+
+            //执行方法
+            ServerResponse response = new ServerResponse();
+            Stopwatch watch = new Stopwatch();
+            Stopwatch allWatch = new Stopwatch();
+            allWatch.Start();
+            string json = "";
+            try
+            {
+                #region 准备工作
+                string methodFullName = typeName + "." + functionName;
+                ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                MethodInfo method = null;
+                if (service != null)
+                {
+                    method = service.MethodInfo;
+                }
+                //如果找不到方法重新加载配置的DLL
+                else
+                {
+                    ServiceUtility.InitBusinessCache();
+                    service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                    if (service != null)
+                    {
+                        method = service.MethodInfo;
+                    }
+                }
+                //如果再找不到方法，说明没有配置
+                if (method == null)
+                {
+                    throw new Exception("未能找到接口：" + methodFullName + "！");
+                }
+                Dictionary<string, object> parsedArgs = new Dictionary<string, object>();
+                ParameterInfo[] parameters = method.GetParameters();
+                if (parameters != null)
+                {
+                    foreach (var p in parameters)
+                    {
+                        if (args.ContainsKey(p.Name))
+                        {
+                            parsedArgs[p.Name] = JsonHelper.Deserialize(args[p.Name], p.ParameterType);
+                        }
+                    }
+                }
+                #endregion
+
+                #region 执行前置filter
+                IFilter failedFilter = ServiceUtility.FilterExecuting(filterList, typeName, functionName, method, parsedArgs);
+                if (failedFilter != null)
+                {
+                    response.IsError = true;
+                    response.ErrorMessage = failedFilter.Message;
+                }
+                #endregion
+
+                #region 执行方法
+                if (!response.IsError)
+                {
+                    try
+                    {
+                        watch.Start();
+                        //执行方法
+                        object result = ServiceUtility.ExecuteMethod(typeName, functionName, parsedArgs);
+                        watch.Stop();
+                        response.Data = result;
+                        WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
+                    }
+                    catch (Exception ex)
+                    {
+                        response.IsError = true;
+                        response.ErrorMessage = ex.Message;
+                        response.StackTrace = ex.StackTrace;
+                    }
+                }
+                #endregion
+
+                #region 执行后置filter
+                failedFilter = ServiceUtility.FilterExecuted(filterList, typeName, functionName, method, parsedArgs, watch.ElapsedMilliseconds, response);
+                if (failedFilter != null && !response.IsError)
+                {
+                    response.IsError = true;
+                    response.ErrorMessage = failedFilter.Message;
+                }
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                response.IsError = true;
+                response.ErrorMessage = ex.Message;
+                response.StackTrace = ex.StackTrace;
+            }
+
+            #region 处理结果
+            //序列化对象成json
+            if (response.IsError)
+            {
+                json = JsonHelper.Serialize(response);
+            }
+            else
+            {
+                json = JsonHelper.Serialize(response.Data);
+            }
+            //压缩json
+            string zippedJson = ZipHelper.Zip(json);
+            allWatch.Stop();
+            if (enableConsoleMonitor)
+            {
+                Console.WriteLine("{0}.{1} -- 耗时：{2}", typeName, functionName, allWatch.ElapsedMilliseconds);
+            }
+            #endregion
+            return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
         }
     }
 }
