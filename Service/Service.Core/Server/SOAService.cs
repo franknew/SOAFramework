@@ -15,10 +15,8 @@ using SOAFramework.Service.Interface;
 using SOAFramework.Service.Core;
 using System.IO;
 using System.ServiceModel.Web;
-using SOAFramework.Service.Core;
-using SOAFramework.Library;
-using SOAFramework.Service.Model;
 using System.Threading.Tasks;
+using SOAFramework.Service.Core.Model;
 
 namespace SOAFramework.Service.Server
 {

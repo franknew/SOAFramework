@@ -1,7 +1,6 @@
 ﻿using SOAFramework.Library;
 using SOAFramework.Service.Core;
 using SOAFramework.Service.Core.Model;
-using SOAFramework.Service.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -358,7 +357,7 @@ namespace SOAFramework.Service.Server
                                     {
                                         Index = p.Position,
                                         Name = p.Name,
-                                        TypeInfo = new Model.TypeInfo
+                                        TypeInfo = new SOAFramework.Service.Core.Model.TypeInfo
                                         {
                                             FullTypeName = p.ParameterType.FullName,
                                             TypeName = GetTypeName(p.ParameterType),
@@ -383,7 +382,7 @@ namespace SOAFramework.Service.Server
                                 InterfaceName = key,
                                 Parameters = parameters,
                                 Module = module,
-                                ReturnTypeInfo = new Model.TypeInfo
+                                ReturnTypeInfo = new SOAFramework.Service.Core.Model.TypeInfo
                                 {
                                     FullTypeName = method.ReturnType.FullName,
                                     TypeName = GetTypeName(method.ReturnType),

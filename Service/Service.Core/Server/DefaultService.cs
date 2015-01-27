@@ -1,8 +1,6 @@
 ﻿using SOAFramework.Library;
 using SOAFramework.Service.Core;
-using SOAFramework.Service.Core;
 using SOAFramework.Service.Core.Model;
-using SOAFramework.Service.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +90,18 @@ namespace SOAFramework.Service.Server
         {
             Type type = Type.GetType(fullTypeName);
             TypeDescription t = null;
+            if (type == null)
+            {
+                List<Assembly> list = AppDomain.CurrentDomain.GetAssemblies().ToList().FindAll(p => !p.FullName.StartsWith("System"));
+                foreach (var a in list)
+                {
+                    type = a.GetType(fullTypeName);
+                    if (type != null)
+                    {
+                        break;
+                    }
+                }
+            }
             if (type != null)
             {
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
@@ -103,7 +113,7 @@ namespace SOAFramework.Service.Server
                     type = type.GetElementType();
                 }
                 t = new TypeDescription();
-                t.TypeInfo = new Model.TypeInfo
+                t.TypeInfo = new SOAFramework.Service.Core.Model.TypeInfo
                 {
                     FullTypeName = type.FullName,
                     NameSpace = type.Namespace,
@@ -119,7 +129,7 @@ namespace SOAFramework.Service.Server
                         PropertyDescription pd = new PropertyDescription
                         {
                             PropertyName = p.Name,
-                            PropertyTypeInfo = new Model.TypeInfo
+                            PropertyTypeInfo = new SOAFramework.Service.Core.Model.TypeInfo
                             {
                                 FullTypeName = p.PropertyType.FullName,
                                 NameSpace = p.PropertyType.Namespace,

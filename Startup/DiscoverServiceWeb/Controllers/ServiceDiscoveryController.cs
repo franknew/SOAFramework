@@ -1,9 +1,12 @@
 ﻿using DiscoverServiceWeb.Models;
 using DiscoverServiceWeb.SDK.Request;
 using DiscoverServiceWeb.SDK.Response;
+using SOAFramework.Library;
+using SOAFramework.Library.RazorEngine;
 using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -95,6 +98,7 @@ namespace DiscoverServiceWeb.Controllers
         public FileResult GenerateCodeFile(string id)
         {
             string fullTypeName = id.Replace("-", ".");
+            string methodName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
             StringBuilder builder = new StringBuilder();
             List<string> emittedType = new List<string>();
             builder.Append("using System;\r\n");
@@ -103,30 +107,60 @@ namespace DiscoverServiceWeb.Controllers
             builder.Append("using System.Collections.Generic;\r\n");
             GenerateType(fullTypeName, builder, emittedType);
             string code = builder.ToString();
-            byte[] bytCode = Encoding.UTF8.GetBytes(code);
-            return File(bytCode, "application/octet-stream", fullTypeName + ".cs");
+            byte[] bytCode = System.Text.Encoding.UTF8.GetBytes(code);
+            return File(bytCode, "application/octet-stream", methodName + ".cs");
         }
 
         public FileResult GenerateRequest(string id)
         {
             string interfaceName = id.Replace("-", ".");
+            string sdknamespace = HttpContext.Request.QueryString["SDKNameSpace"];
             string methodName = interfaceName.Substring(interfaceName.LastIndexOf(".") + 1);
-            string nameSpace = interfaceName.Remove(interfaceName.LastIndexOf("."));
             DiscoverServiceByNameRequest request = new DiscoverServiceByNameRequest();
             request.Name = interfaceName;
             DiscoverServiceByNameResponse response = SDKFactory.Client.Execute(request);
+            string templatePath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\Templates\\SDKRequest.txt";
             byte[] data = null;
             if (!response.IsError && response.ServiceInfo != null)
             {
-                StringBuilder builder = new StringBuilder();
-                builder.Append("using System;\r\n");
-                builder.Append("using System.Text;\r\n");
-                builder.Append("using System.Linq;\r\n");
-                builder.Append("using System.Collections.Generic;\r\n");
-                builder.Append("namespace ").Append(nameSpace).Append("\r\n{\r\n");
-                builder.Append("\tpublic class ").Append(methodName).Append("\r\n\t{\r\n");
+                var Model = new
+                {
+                    ActionName = methodName,
+                    ServiceInfo = response.ServiceInfo,
+                    RequestNameSpace = sdknamespace,
+                };
+                string templateText = System.IO.File.ReadAllText(templatePath);
+                string code = Razor.Parse(templateText, Model);
+                data = System.Text.Encoding.UTF8.GetBytes(code);
             }
-            return File("", "");
+            return File(data, "application/octet-stream", methodName + "Request.cs");
+        }
+
+        public FileResult GenerateResponse(string id)
+        {
+            string interfaceName = id.Replace("-", ".");
+            string sdknamespace = HttpContext.Request.QueryString["SDKNameSpace"];
+            string methodName = interfaceName.Substring(interfaceName.LastIndexOf(".") + 1);
+            DiscoverServiceByNameRequest request = new DiscoverServiceByNameRequest();
+            request.Name = interfaceName;
+            DiscoverServiceByNameResponse response = SDKFactory.Client.Execute(request);
+
+            string templatePath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\Templates\\SDKResponse.cts";
+
+            byte[] data = null;
+            if (!response.IsError && response.ServiceInfo != null)
+            {
+                var Model = new
+                {
+                    ActionName = methodName,
+                    ServiceInfo = response.ServiceInfo,
+                    RequestNameSpace = sdknamespace,
+                };
+                string templateText = System.IO.File.ReadAllText(templatePath);
+                string code = Razor.Parse(templateText, Model);
+                //data = Encoding.UTF8.GetBytes(code);
+            }
+            return File(data, "application/octet-stream", methodName + "Response.cs");
         }
 
         public void GenerateType(string fullTypeName, StringBuilder builder, List<string> emittedType)

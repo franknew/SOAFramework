@@ -17,7 +17,7 @@ namespace DiscoverServiceWeb
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "ServiceDiscovery", action = "Index", id = UrlParameter.Optional }
-            );
+            ); 
         }
     }
 }

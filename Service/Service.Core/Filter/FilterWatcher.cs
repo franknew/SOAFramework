@@ -1,5 +1,5 @@
-﻿using SOAFramework.Service.Interface;
-using SOAFramework.Service.Model;
+﻿using SOAFramework.Service.Core.Model;
+using SOAFramework.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;

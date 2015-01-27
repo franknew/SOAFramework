@@ -17,14 +17,17 @@ using System.Runtime.Serialization.Json;
 using System.ServiceModel.Web;
 using SOAFramework.Library.AOP;
 using SOAFramework.Service.Server;
-using SOAFramework.Service.Model;
-using SOAFramework.Library;
 using System.ServiceModel;
 using SOAFramework.Library.RazorEngine;
-using CodeSmith.Engine;
 using System.Reflection;
 using SOAFramework.Service.SDK.Core;
 using SOAFramework.Service.Core;
+using SOAFramework.Service.Core.Model;
+using System.Linq.Expressions;
+using System.Data.Linq;
+using SOAFramework.Library.DAL;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 
 namespace Test
 {
@@ -33,23 +36,54 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            TestClass cc = new TestClass();
+            Update<TestClass>.Set(t => t.a, "");
+            List<TestClass> lists = new List<TestClass>();
+            lists.Add(new TestClass { a = "a" });
+            var c = (from a in lists
+                     select a);
+            var g = Select(new { a = "a", b = "b" });
+            var d = new { a = "", b = "" };
+            IEnumerable<TestClass> query = (from a in lists
+                                            where a.a == "a"
+                                            select a);
+            var q = query.TestSelect(t => new { a = t.a });
+            query.Select(t => t.test);
+            //TestLinq<TestClass>(a => return new { a = "a" });
+            DoAction<TestClass>(t => t.a = "b");
+            string strData = "";
+            byte[] data = null;
+            string testresult = "";
+            List<SOAFramework.Service.SDK.Core.PostArgItem> argslist = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
+
             List<string> listT = new List<string>();
             Type[] ts = listT.GetType().GetGenericArguments();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Stopwatch watch = new Stopwatch();
 
             #region codesmith testing
-            //string path = AppDomain.CurrentDomain.BaseDirectory + @"Templates\Smiple.cst";
-            //DefaultEngineHost host = new DefaultEngineHost(System.IO.Path.GetDirectoryName(path));
-            //TemplateEngine engine = new TemplateEngine(System.IO.Path.GetDirectoryName(path));
-            //CompileTemplateResult result = engine.Compile(path);
-            //if (!result.Errors.HasErrors)
-            //{
-            //    CodeTemplate template = result.CreateTemplateInstance();
-            //    template.SetProperty("SampleStringProperty", "hello world!");
-            //    template.SetProperty("SampleBooleanProperty", true);
-            //    string render = template.RenderToString();
-            //}
+
+            strData = JsonHelper.Serialize(argslist);
+            data = System.Text.Encoding.UTF8.GetBytes(strData);
+            testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.DefaultService/DiscoverService", data);
+            testresult = ZipHelper.UnZip(testresult);
+            List<ServiceInfo> serviceList = JsonHelper.Deserialize<List<ServiceInfo>>(testresult);
+            string path = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\SDKRequest.cst";
+            Dictionary<string, object> argsCodeSmith = new Dictionary<string, object>();
+            argsCodeSmith["RequestNameSpace"] = "a.b.c";
+            argsCodeSmith["ServiceInfo"] = serviceList[0];
+            string render = CodeSmithHelper.GenerateString(path, argsCodeSmith);
+
+            string fileName = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\SOAFramework.Library.CodeSmithConsole.exe ";
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.FileName = fileName;
+            p.StartInfo.Arguments = " " + path.Replace(@"\\", @"\" + " ") + " " + JsonHelper.Serialize(argsCodeSmith).Replace("\"", "\\\"") + " ";
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.Start();
+            p.WaitForExit();
+            return;
             #endregion
 
             #region razor
@@ -187,14 +221,10 @@ namespace Test
             #endregion
 
             #region soa tester
-            string strData = "";
-            byte[] data = null;
-            string testresult = "";
 
             //testresult = HttpUtility.Get("http://localhost/Service/GetTest");
 
-            List<PostArgItem> argslist = new List<PostArgItem>();
-            argslist.Add(new PostArgItem { Key = "url", Value = "http://localhost/" });
+            argslist.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "url", Value = "http://localhost/" });
             //argslist.Add(new PostArgItem { Key = "usage", Value = "1.00" });
             strData = JsonHelper.Serialize("http://localhost/");
             //strData = "\"" + strData + "\"";
@@ -244,9 +274,9 @@ namespace Test
             int count = 10000;
             for (int i = 0; i < count; i++)
             {
-                List<PostArgItem> list = new List<PostArgItem>();
-                list.Add(new PostArgItem { Key = "a", Value = JsonHelper.Serialize("hello world") });
-                list.Add(new PostArgItem { Key = "b", Value = JsonHelper.Serialize(new TestClass { a = "a", b = "b" }) });
+                List<SOAFramework.Service.SDK.Core.PostArgItem> list = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
+                list.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "a", Value = JsonHelper.Serialize("hello world") });
+                list.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "b", Value = JsonHelper.Serialize(new TestClass { a = "a", b = "b" }) });
                 //list.Add(new PostArgItem { Key = "a", Value = "hello world" });
                 //list.Add(new PostArgItem { Key = "b", Value = new TestClass { a = "a", b = "b" } });
                 strData = JsonHelper.Serialize(list);
@@ -361,6 +391,27 @@ namespace Test
             //将初始比较值右边的数组进行一次排序
             FastSort(SortInt, intRightStartIndex, intRightEndIndex);
         }
+
+        public static void DoAction<T>(Action<T> action) where T : new()
+        {
+            T t = new T();
+            action.Invoke(t);
+        }
+
+        public static R TestLinq<T, R>(Expression<Func<T, R>> ex)
+            where T : new()
+            where R : new()
+        {
+            T t = new T();
+            ex.Compile().Invoke(t);
+            R r = new R();
+            return r;
+        }
+
+        public static T Select<T>(T t)
+        {
+            return t;
+        }
     }
 
     [AOPClass(AttributeArea = AOPAttributeArea.Class)]
@@ -405,7 +456,7 @@ namespace Test
     {
         public string GetApi()
         {
-            return "SOAFramework.Service.Server.DefaultService.DiscoverService"; 
+            return "SOAFramework.Service.Server.DefaultService.DiscoverService";
         }
     }
 
@@ -418,7 +469,7 @@ namespace Test
     {
         public string GetApi()
         {
-            return "SOAFramework.Service.Server.SOAService.Test"; 
+            return "SOAFramework.Service.Server.SOAService.Test";
         }
 
         public string a { get; set; }
@@ -429,6 +480,22 @@ namespace Test
     public class PerformanceResponse : BaseResponse
     {
         public TestClass Data { get; set; }
+    }
+
+    public static class TestExtension
+    {
+        public static R TestSelect<T, R>(this IEnumerable<T> enu, Expression<Func<T, R>> ex)
+            where T : new()
+        {
+            T t = new T();
+            foreach (var a in enu)
+            {
+
+            }
+            R r = Activator.CreateInstance<R>();
+            
+            return r;
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@Scripts.Render("/Scripts/Index.js");
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -9,6 +9,7 @@
                 <span class="icon-bar"></span>
             </button>
             <h4 style="color:white;">接口：@(ViewBag.Data.InterfaceName)</h4>
+            <input id="hidInterfaceName" type="hidden" value="@(ViewBag.Data.InterfaceName.Replace(".","-"))" />
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <!--<ul class="nav navbar-nav navbar-right">
@@ -34,29 +35,34 @@
         <span class="text-info">@(ViewBag.Data.ReturnDesc)</span>
     </div>
     <div class="panel-body">
-        <span class="text-danger">回参类型信息：</span>
-        <span class="text-info">
+        <form action="/ServiceDiscovery/GenerateCodeFile/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" method="get">
+            <span class="text-danger">回参类型信息：</span>
             @if (ViewBag.Data.ReturnTypeInfo.IsClass)
             {
-                <a href="/ServiceDiscovery/TypeDescription/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" target="_blank">
-                    @(ViewBag.Data.ReturnTypeInfo.TypeName)
-                </a>
+                <span class="text-info">
+                    <a href="/ServiceDiscovery/TypeDescription/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" target="_blank">
+                        @(ViewBag.Data.ReturnTypeInfo.TypeName)
+                    </a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="submit" value="生成类代码" />
+                </span>
             }
             else
             {
-                <span>@(ViewBag.Data.ReturnTypeInfo.TypeName)</span>
+                <span class="text-info">@(ViewBag.Data.ReturnTypeInfo.TypeName)</span>
             }
-        </span>
+        </form>
     </div>
     <div class="panel-body"><span class="text-danger">参数信息</span></div>
     <div class="panel-body">
         <table class="table table-hover table-bordered table-striped">
             <thead>
                 <tr>
-                    <td width="10%">顺序</td>
+                    <td width="4%">顺序</td>
                     <td width="20%">名称</td>
                     <td width="30%">类型</td>
-                    <td width="40%">描述</td>
+                    <td width="30%">描述</td>
+                    <td width="15%">操作</td>
                 </tr>
             </thead>
             <tbody>
@@ -76,14 +82,21 @@
                             }
                         </td>
                         <td>@(item.Description)</td>
+                        <td></td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
     <div class="panel-body">
-        <form action="" method="get">
-            <input type="submit" value="生成Request" />
+        <form id="formGenerate" method="get">
+            <div><text>命名空间：</text><input class="input-sm" type="text" name="SDKNameSpace" style="width:450px;" /></div>
+            <br />
+            <div>
+                <input id="btnRequest" type="button" value="生成Request" />
+                &nbsp;&nbsp;
+                <input id="btnResponse" type="button" value="生成Response" />
+            </div>
         </form>
     </div>
 </div>

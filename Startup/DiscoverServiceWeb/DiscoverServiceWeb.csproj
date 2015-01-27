@@ -39,12 +39,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeSmith.Core">
+      <HintPath>..\..\Bin\Modules\CodeSmith.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CodeSmith.Engine">
+      <HintPath>..\..\Bin\Modules\CodeSmith.Engine.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SOAFramework.Library.CodeSmith">
+      <HintPath>..\..\Bin\Modules\SOAFramework.Library.CodeSmith.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.Http">
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.Http.dll</HintPath>
     </Reference>
     <Reference Include="SOAFramework.Library.Json">
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SOAFramework.Library.RazorEngine">
+      <HintPath>..\..\Bin\Modules\SOAFramework.Library.RazorEngine.dll</HintPath>
     </Reference>
     <Reference Include="SOAFramework.Service.SDK.Core">
       <HintPath>..\..\Bin\Modules\SOAFramework.Service.SDK.Core.dll</HintPath>

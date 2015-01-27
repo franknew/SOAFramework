@@ -73,12 +73,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CodeSmith.Core">
-      <HintPath>..\..\Bin\Modules\CodeSmith.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="CodeSmith.Engine">
-      <HintPath>..\..\Bin\Modules\CodeSmith.Engine.dll</HintPath>
-    </Reference>
     <Reference Include="Controller, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\Controller.dll</HintPath>
@@ -86,6 +80,14 @@
     <Reference Include="Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\Models.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.7.0.4714, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Modules\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.7.0.4714, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Modules\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="SOAFramework.Library.7Zip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -102,6 +104,9 @@
     <Reference Include="SOAFramework.Library.Cache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="SOAFramework.Library.CodeSmith">
+      <HintPath>..\..\Bin\Modules\SOAFramework.Library.CodeSmith.dll</HintPath>
     </Reference>
     <Reference Include="SOAFramework.Library.Common">
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.Common.dll</HintPath>
@@ -162,12 +167,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Service.Core.dll</HintPath>
     </Reference>
+    <Reference Include="SOAFramework.Service.Core.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Modules\SOAFramework.Service.Core.Model.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Service.SDK.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Service.SDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />

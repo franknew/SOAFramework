@@ -1,10 +1,24 @@
 ﻿var typeCache = new Array();
 
+$(document).ready(function () {
+    $("#btnRequest").click(function () {
+        var action = "/ServiceDiscovery/GenerateRequest/" + $("#hidInterfaceName").val();
+        $("#formGenerate").attr("action", action);
+        $("#formGenerate").submit();
+    });
+    $("#btnResponse").click(function () {
+        var action = "/ServiceDiscovery/GenerateResponse/" + $("#hidInterfaceName").val();
+        $("#formGenerate").attr("action", action);
+        $("#formGenerate").submit();
+    });
+});
+
 function OpenInterfaceDetail(interfaceName) {
     var url = "/ServiceDiscovery/ServiceDetail/" + interfaceName;
     window.open(url, "_Blank");
 }
 
+//点击图片事件，做成树控件效果
 function ClickImg(img) {
     var fullTypeName = $(img).next().val();
     var isExpand = true;
@@ -46,6 +60,7 @@ function ClickImg(img) {
     }
 }
 
+//数节点加载数据
 function AppendType(type, li) {
     var html = "";
     if (type.Properties != null && type.Properties.length > 0) {

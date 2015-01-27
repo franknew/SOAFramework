@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgDictionary.cs" />
     <Compile Include="ArgMapping.cs" />
     <Compile Include="BaseResponse.cs" />
     <Compile Include="Executer.cs" />
@@ -60,10 +62,6 @@
     <ProjectReference Include="..\..\Library\Zip\Zip.csproj">
       <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
       <Name>Zip</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Service.Core\Service.Core.csproj">
-      <Project>{08af2d5b-b605-44c2-850c-67cfdd22cf35}</Project>
-      <Name>Service.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

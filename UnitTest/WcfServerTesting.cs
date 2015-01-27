@@ -3,11 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ServiceModel.Web;
 using SOAFramework.Service.Server;
 using SOAFramework.Library;
-using SOAFramework.Service.Model;
 using System.Collections.Generic;
 using SOAFramework.Service.SDK.Core;
 using System.Reflection;
 using System.IO;
+using SOAFramework.Service.Core.Model;
 
 namespace UnitTest
 {
