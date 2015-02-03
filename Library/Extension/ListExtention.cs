@@ -21,8 +21,8 @@ namespace SOAFramework.Library
             copyList.AddRange(array);
             return copyList;
         }
-        
-      
+
+
         /// <summary>
         /// 转换成DataTable
         /// </summary>
@@ -144,5 +144,93 @@ namespace SOAFramework.Library
             table.AcceptChanges();
             return table;
         }
+
+        public static IDictionary<TKey, TResult> MapReduce<TInput, TKey, TValue, TResult>(this IList<TInput> inputList,
+            Func<MapReduceData<TInput>, KeyValueClass<TKey, TValue>> map, Func<TKey, IList<TValue>, TResult> reduce)
+        {
+            object locker = new object();
+            ConcurrentDictionary<TKey, TResult> result = new ConcurrentDictionary<TKey, TResult>();
+            //保存map出来的结果
+            ConcurrentDictionary<TKey, IList<TValue>> mapDic = new ConcurrentDictionary<TKey, IList<TValue>>();
+            var parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = Environment.ProcessorCount;
+            //并行map
+            Parallel.For(0, inputList.Count(), parallelOptions, t =>
+            {
+                MapReduceData<TInput> data = new MapReduceData<TInput>
+                {
+                    Data = inputList[t],
+                    Index = t,
+                    List = inputList,
+                };
+                var pair = map(data);
+                if (pair != null && pair.Valid)
+                {
+                    //锁住防止并发操作list造成数据缺失
+                    lock (locker)
+                    {
+                        //将匹配出来的结果加入结果集放入字典
+                        IList<TValue> list = null;
+                        if (mapDic.ContainsKey(pair.Key))
+                        {
+                            list = mapDic[pair.Key];
+                        }
+                        else
+                        {
+                            list = new List<TValue>();
+                            mapDic[pair.Key] = list;
+                        }
+                        list.Add(pair.Value);
+                    }
+                }
+            });
+
+            //并行reduce
+            Parallel.For(0, mapDic.Keys.Count, parallelOptions, t =>
+            {
+                KeyValuePair<TKey, IList<TValue>> pair = mapDic.ElementAt(t);
+                result[pair.Key] = reduce(pair.Key, pair.Value);
+            });
+            return result;
+        }
+    }
+
+    public class KeyValueClass<K, V>
+    {
+        public KeyValueClass(K key, V value)
+        {
+            Key = key;
+            Value = value;
+            Valid = true;
+        }
+
+        public KeyValueClass()
+        {
+
+        }
+        public KeyValueClass(bool valid)
+        {
+            Valid = valid;
+        }
+
+        public K Key { get; set; }
+
+        public V Value { get; set; }
+
+        public bool Valid { get; set; }
+
+        public static KeyValueClass<K, V> Empty()
+        {
+            return new KeyValueClass<K, V>(false);
+        }
+    }
+
+    public class MapReduceData<TInput>
+    {
+        public TInput Data { get; set; }
+
+        public int Index { get; set; }
+
+        public IList<TInput> List { get; set; }
     }
 }

@@ -41,9 +41,14 @@
             this.niIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.tabContainer = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lbMessage = new System.Windows.Forms.ListBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tssTimer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tssStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlButtons.SuspendLayout();
+            this.ssBar.SuspendLayout();
             this.tabContainer.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +103,11 @@
             // 
             // ssBar
             // 
+            this.ssBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tssTimer,
+            this.toolStripStatusLabel1,
+            this.tssStatus,
+            this.toolStripStatusLabel2});
             this.ssBar.Location = new System.Drawing.Point(0, 363);
             this.ssBar.Name = "ssBar";
             this.ssBar.Size = new System.Drawing.Size(633, 22);
@@ -145,16 +155,6 @@
             this.tabPage1.Text = "接口调用即时显示";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(625, 244);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "即时性能监控";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // lbMessage
             // 
             this.lbMessage.BackColor = System.Drawing.SystemColors.Control;
@@ -167,6 +167,42 @@
             this.lbMessage.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lbMessage.Size = new System.Drawing.Size(619, 238);
             this.lbMessage.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(625, 244);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "即时性能监控";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tssTimer
+            // 
+            this.tssTimer.Name = "tssTimer";
+            this.tssTimer.Size = new System.Drawing.Size(44, 17);
+            this.tssTimer.Text = "时间：";
+            // 
+            // tssStatus
+            // 
+            this.tssStatus.AutoSize = false;
+            this.tssStatus.Name = "tssStatus";
+            this.tssStatus.Size = new System.Drawing.Size(80, 17);
+            this.tssStatus.Text = "状态：";
+            this.tssStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel1.Text = "|";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel2.Text = "|";
             // 
             // BaseUI
             // 
@@ -183,6 +219,8 @@
             this.Load += new System.EventHandler(this.BaseUI_Load);
             this.tlButtons.ResumeLayout(false);
             this.tlButtons.PerformLayout();
+            this.ssBar.ResumeLayout(false);
+            this.ssBar.PerformLayout();
             this.tabContainer.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -205,6 +243,10 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         protected System.Windows.Forms.ListBox lbMessage;
+        protected System.Windows.Forms.ToolStripStatusLabel tssTimer;
+        protected System.Windows.Forms.ToolStripStatusLabel tssStatus;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

@@ -51,6 +51,7 @@ namespace SOAFramework.Service.UI
                     list.Remove(message);
                 }
             }
+            tssTimer.Text = "时间：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         private void BaseUI_Load(object sender, EventArgs e)
@@ -96,7 +97,7 @@ namespace SOAFramework.Service.UI
         {
             if (started)
             {
-                if (MessageBox.Show("服务已启动，退出会造成服务不可用。确定退出程序吗？", "退出", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+                if (MessageBox.Show("服务已启动，退出会造成服务不可用。确定退出程序吗？", "退出", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 {
                     e.Cancel = true;
                 }

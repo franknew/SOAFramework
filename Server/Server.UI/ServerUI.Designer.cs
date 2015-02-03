@@ -29,6 +29,7 @@ namespace SOAFramework.Server.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -36,6 +37,7 @@ namespace SOAFramework.Server.UI
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(5D, 25D);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerUI));
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,9 +48,11 @@ namespace SOAFramework.Server.UI
             // timer1
             // 
             this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // txbMessage
+            // lbMessage
             // 
+            this.lbMessage.Size = new System.Drawing.Size(619, 292);
             // 
             // chart1
             // 
@@ -72,6 +76,11 @@ namespace SOAFramework.Server.UI
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
+            // timer2
+            // 
+            this.timer2.Interval = 1000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // ServerUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -81,6 +90,7 @@ namespace SOAFramework.Server.UI
             this.Location = new System.Drawing.Point(0, 0);
             this.Name = "ServerUI";
             this.Text = "SOA服务端";
+            this.Load += new System.EventHandler(this.ServerUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -91,5 +101,6 @@ namespace SOAFramework.Server.UI
         #endregion
 
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Timer timer2;
     }
 }

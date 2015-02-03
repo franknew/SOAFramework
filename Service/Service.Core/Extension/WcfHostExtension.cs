@@ -17,7 +17,7 @@ namespace SOAFramework.Service.Server
             {
                 try
                 {
-                    HttpHelper.Get(p.ListenUri.AbsoluteUri.TrimEnd('/') + "/Ping", 10000);
+                    HttpHelper.Get(p.ListenUri.AbsoluteUri.TrimEnd('/') + "/Ping", 3000);
                 }
                 catch
                 {

@@ -8,6 +8,6 @@ namespace SOAFramework.Library.DAL
 {
     public abstract class BaseNoSQLEntity
     {
-        public virtual string Id { get; set; }
+        public virtual string Id_string { get; set; }
     }
 }

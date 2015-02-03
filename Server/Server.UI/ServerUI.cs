@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using SOAFramework.Library;
 using SOAFramework.Service.Server;
 using SOAFramework.Service.Core;
+using System.ServiceModel;
 
 namespace SOAFramework.Server.UI
 {
@@ -19,6 +20,11 @@ namespace SOAFramework.Server.UI
     {
         internal AppDomain domain;
         private BackgroundWorker worker = new BackgroundWorker();
+        private ToolStripStatusLabel tssHostIp = new ToolStripStatusLabel("服务地址：暂无");
+        private ToolStripStatusLabel tssCpu = new ToolStripStatusLabel();
+        private ToolStripStatusLabel tssSep1 = new ToolStripStatusLabel("|");
+        private ToolStripStatusLabel tssRam = new ToolStripStatusLabel();
+        private Performance performance = new Performance();
 
         public ServerUI()
         {
@@ -28,11 +34,21 @@ namespace SOAFramework.Server.UI
             tbStop.Enabled = false;
             worker.DoWork += worker_DoWork;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            tssCpu.AutoSize = false;
+            tssCpu.TextAlign = ContentAlignment.MiddleLeft;
+            tssCpu.Width = 100;
+            tssRam.AutoSize = false;
+            tssRam.Width = 120;
+            tssRam.TextAlign = ContentAlignment.MiddleLeft;
+            ssBar.Items.Add(tssHostIp);
+            ssBar.Items.Add(tssSep1);
+            ssBar.Items.Add(tssCpu);
+            ssBar.Items.Add(tssRam);
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (host.State == System.ServiceModel.CommunicationState.Opened)
+            if (host.State == CommunicationState.Opened)
             {
                 tbStart.Enabled = false;
                 tbStop.Enabled = true;
@@ -43,25 +59,29 @@ namespace SOAFramework.Server.UI
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             host = new WebServiceHost(typeof(SOAService));
+
             try
             {
                 host.Open();
-                if (host.Ping())
-                {
-                }
-                else
+                tssHostIp.Text = "服务地址：" + host.Description.Endpoints.FirstOrDefault(t => t.Contract.Name == "IService")
+                    .Address.Uri.AbsoluteUri;
+                if (!host.Ping())
                 {
                     MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器启动超时" }, CacheEnum.FormMonitor);
+                    tbStart.Enabled = true;
+                    tbStop.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
                 MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = ex.Message }, CacheEnum.FormMonitor);
+                tbStart.Enabled = true;
+                tbStop.Enabled = false;
             }
         }
 
         private Task hostTask;
-        private WebServiceHost host; 
+        private WebServiceHost host;
 
         private void tbStart_Click(object sender, EventArgs e)
         {
@@ -69,14 +89,16 @@ namespace SOAFramework.Server.UI
             //{
             //    domain = AppDomain.CreateDomain("SOAServiceDomain");
             //}
+            tbStart.Enabled = false;
+            MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务正在启动中..." }, CacheEnum.FormMonitor);
             worker.RunWorkerAsync();
         }
 
         private void tbStop_Click(object sender, EventArgs e)
         {
-            if (host != null && host.State == System.ServiceModel.CommunicationState.Opened)
+            if (host != null && host.State == CommunicationState.Opened)
             {
-                host.Close(); 
+                host.Close();
                 tbStart.Enabled = true;
                 tbStop.Enabled = false;
                 MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已停止" }, CacheEnum.FormMonitor);
@@ -85,6 +107,60 @@ namespace SOAFramework.Server.UI
             //{
             //    AppDomain.Unload(domain);
             //}
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            tssStatus.Text = "状态：" + GetServiceStatusDesc(host);
+        }
+
+        private string GetServiceStatusDesc(WebServiceHost host)
+        {
+            string status = "";
+            if (host == null)
+            {
+                status = "未启动";
+                return status;
+            }
+            switch (host.State)
+            {
+                case CommunicationState.Closed:
+                    status = "已关闭";
+                    break;
+                case CommunicationState.Closing:
+                    status = "关闭中...";
+                    break;
+                case CommunicationState.Opened:
+                    status = "已启动";
+                    break;
+                case CommunicationState.Opening:
+                    status = "启动中...";
+                    break;
+                case CommunicationState.Created:
+                    status = "已创建";
+                    break;
+                case CommunicationState.Faulted:
+                    status = "发生错误";
+                    break;
+            }
+            return status;
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            DisplayMachineStatus();
+        }
+
+        private void DisplayMachineStatus()
+        {
+            tssCpu.Text = "CPU使用率：" + performance.GetCurrentCpuUsage().ToString("N0") + "%";
+            tssRam.Text = "可用内存：" + performance.GetCurrentRamUsage() + "MB";
+        }
+
+        private void ServerUI_Load(object sender, EventArgs e)
+        {
+            DisplayMachineStatus();
+            timer2.Start();
         }
     }
 }

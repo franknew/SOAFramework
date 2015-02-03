@@ -36,6 +36,106 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            #region mapreduce
+            Stopwatch sw = new Stopwatch();
+            MemberInfo[] mem = sw.GetType().GetProperties();
+            List<TestClass> listTestClass = new List<TestClass>();
+            Random r = new Random();
+            long allCount = 0;
+            sw.Start();
+            for (int i = 0; i < 1000000; i++)
+            {
+                allCount++;
+                listTestClass.Add(new TestClass { a = i.ToString(), g = r.Next(10) });
+                //listTestClass.Add(new TestClass { a = i.ToString(), g = i % 10 });
+            }
+            sw.Stop();
+            Console.WriteLine("新增{1}个元素耗时：{0}", sw.ElapsedMilliseconds, allCount);
+            allCount = 0;
+            sw.Restart();
+            var dic = listTestClass.MapReduce(t =>
+            {
+                if (t.Data.g < 5)
+                {
+                    return new KeyValueClass<int, string>(t.Data.g, t.Data.a);
+                }
+                return KeyValueClass<int, string>.Empty();
+            }, (key, values) =>
+            {
+                return values.Count;
+            });
+            sw.Stop();
+            Console.WriteLine("mapreduce耗时：{0}", sw.ElapsedMilliseconds);
+            foreach (var key in dic.Keys)
+            {
+                allCount += dic[key];
+                Console.WriteLine("key:{0}  value:{1}", key, dic[key]);
+            }
+
+            dic = listTestClass.MapReduce(t =>
+            {
+                if (t.Data.g >= 5)
+                {
+                    return new KeyValueClass<int, string>(t.Data.g, t.Data.a);
+                }
+                return KeyValueClass<int, string>.Empty();
+            }, (key, values) =>
+            {
+                return values.Count;
+            });
+            foreach (var key in dic.Keys)
+            {
+                allCount += dic[key];
+                Console.WriteLine("key:{0}  value:{1}", key, dic[key]);
+            }
+            Console.WriteLine("所有元素总数：{0}", allCount);
+            int x = listTestClass.Count(t => t.g == 0);
+
+            //搜词测试
+            List<string> wordMappingList = new List<string>();
+            wordMappingList.Add("韩立");
+            wordMappingList.Add("青竹云蜂剑");
+            wordMappingList.Add("冰凤");
+            wordMappingList.Add("南宫婉");
+            //读取文章
+            string words = File.ReadAllText("凡人修仙传.txt", System.Text.Encoding.GetEncoding("GBK"));
+            sw.Restart();
+            var dicWords = words.ToList().MapReduce(t =>
+            {
+                foreach (var w in wordMappingList)
+                {
+                    bool valid = true;
+                    if (w[0].Equals(t.Data))
+                    {
+                        for (int i = 1; i < w.Length; i++)
+                        {
+                            if (!w[i].Equals(t.List[t.Index + i]))
+                            {
+                                valid = false;
+                                break;
+                            }
+                        }
+                        if (valid)
+                        {
+                            return new KeyValueClass<string, int>(w, 1);
+                        }
+                    }
+                }
+                return KeyValueClass<string, int>.Empty();
+            }, (key, values) =>
+            {
+                return values.Count;
+            });
+            sw.Stop();
+            Console.WriteLine("搜词测试耗时：{0}", sw.ElapsedMilliseconds);
+            foreach (var key in dicWords.Keys)
+            {
+                Console.WriteLine("{0}出现次数：{1}", key, dicWords[key]);
+            }
+
+            Console.ReadLine();
+            #endregion
+
             TestClass cc = new TestClass();
             Update<TestClass>.Set(t => t.a, "");
             List<TestClass> lists = new List<TestClass>();
@@ -47,6 +147,7 @@ namespace Test
             IEnumerable<TestClass> query = (from a in lists
                                             where a.a == "a"
                                             select a);
+
             var q = query.TestSelect(t => new { a = t.a });
             query.Select(t => t.test);
             //TestLinq<TestClass>(a => return new { a = "a" });
@@ -424,8 +525,11 @@ namespace Test
         }
     }
 
-    public class a
+    public class a : DataContext
     {
+        public a(string str) :
+            base(str)
+        { }
         public void Go()
         {
             Console.WriteLine("go here");
@@ -493,7 +597,7 @@ namespace Test
 
             }
             R r = Activator.CreateInstance<R>();
-            
+
             return r;
         }
     }
