@@ -99,6 +99,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroFramework.Fonts", "Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroFramework.Demo", "Client\MetroFramework.Demo\MetroFramework.Demo.csproj", "{AF988819-4618-4852-9506-C1D06D04F6B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evaluation", "Library\Evaluation\Evaluation.csproj", "{82C67C11-88B3-4F02-8E29-57A7F27042F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{E166349C-D97F-4CA4-97B3-67AE7EDB1397}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\Dll\MongoDB.Bson.dll = Resources\Dll\MongoDB.Bson.dll
+		Resources\Dll\MongoDB.Bson.xml = Resources\Dll\MongoDB.Bson.xml
+		Resources\Dll\MongoDB.Driver.dll = Resources\Dll\MongoDB.Driver.dll
+		Resources\Dll\MongoDB.Driver.XML = Resources\Dll\MongoDB.Driver.XML
+		Resources\Dll\NPOI.dll = Resources\Dll\NPOI.dll
+		Resources\Dll\NPOI.OOXML.dll = Resources\Dll\NPOI.OOXML.dll
+		Resources\Dll\NPOI.OpenXml4Net.dll = Resources\Dll\NPOI.OpenXml4Net.dll
+		Resources\Dll\NPOI.OpenXmlFormats.dll = Resources\Dll\NPOI.OpenXmlFormats.dll
+		Resources\Dll\System.Data.SQLite.dll = Resources\Dll\System.Data.SQLite.dll
+		Resources\Dll\Tamir.SharpSSH.dll = Resources\Dll\Tamir.SharpSSH.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -502,6 +520,16 @@ Global
 		{AF988819-4618-4852-9506-C1D06D04F6B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AF988819-4618-4852-9506-C1D06D04F6B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AF988819-4618-4852-9506-C1D06D04F6B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -546,6 +574,8 @@ Global
 		{7316584D-9A16-4280-A8AB-6D45198C6E4D} = {F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}
 		{5A2FCAE8-C2FA-41BD-90EA-16103EA07B26} = {F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}
 		{AF988819-4618-4852-9506-C1D06D04F6B2} = {F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}
+		{82C67C11-88B3-4F02-8E29-57A7F27042F7} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
+		{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D} = {E166349C-D97F-4CA4-97B3-67AE7EDB1397}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SOAFramework.vsmdi

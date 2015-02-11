@@ -94,11 +94,26 @@ namespace Test
             //搜词测试
             List<string> wordMappingList = new List<string>();
             wordMappingList.Add("韩立");
-            wordMappingList.Add("青竹云蜂剑");
             wordMappingList.Add("冰凤");
             wordMappingList.Add("南宫婉");
+            wordMappingList.Add("真仙");
+            wordMappingList.Add("真魔");
+            wordMappingList.Add("马良");
+            wordMappingList.Add("炼气");
+            wordMappingList.Add("筑基");
+            wordMappingList.Add("真丹");
+            wordMappingList.Add("元婴");
+            wordMappingList.Add("化神");
+            wordMappingList.Add("化神");
+            wordMappingList.Add("炼虚");
+            wordMappingList.Add("合体");
+            wordMappingList.Add("大乘");
+            wordMappingList.Add("韩道友");
             //读取文章
             string words = File.ReadAllText("凡人修仙传.txt", System.Text.Encoding.GetEncoding("GBK"));
+            FileInfo fileInfo = new FileInfo("凡人修仙传.txt");
+            double size = fileInfo.Length;
+            double sizeMB = (size / (1024 * 1024));
             sw.Restart();
             var dicWords = words.ToList().MapReduce(t =>
             {
@@ -127,10 +142,13 @@ namespace Test
                 return values.Count;
             });
             sw.Stop();
-            Console.WriteLine("搜词测试耗时：{0}", sw.ElapsedMilliseconds);
-            foreach (var key in dicWords.Keys)
+            Console.WriteLine("词频统计 - 文件大小：{1}MB  测试耗时：{0}", sw.ElapsedMilliseconds, sizeMB.ToString("N2"));
+            foreach (var key in wordMappingList)
             {
-                Console.WriteLine("{0}出现次数：{1}", key, dicWords[key]);
+                if (dicWords.ContainsKey(key))
+                {
+                    Console.WriteLine("{0}出现次数：{1}", key, dicWords[key]);
+                }
             }
 
             Console.ReadLine();

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel.Web;
@@ -23,8 +24,10 @@ namespace SOAFramework.Server.UI
         private ToolStripStatusLabel tssHostIp = new ToolStripStatusLabel("服务地址：暂无");
         private ToolStripStatusLabel tssCpu = new ToolStripStatusLabel();
         private ToolStripStatusLabel tssSep1 = new ToolStripStatusLabel("|");
+        private ToolStripStatusLabel tssSep2 = new ToolStripStatusLabel("|");
         private ToolStripStatusLabel tssRam = new ToolStripStatusLabel();
         private Performance performance = new Performance();
+        private ToolStripStatusLabel tssDispatcher = new ToolStripStatusLabel();
 
         public ServerUI()
         {
@@ -44,6 +47,8 @@ namespace SOAFramework.Server.UI
             ssBar.Items.Add(tssSep1);
             ssBar.Items.Add(tssCpu);
             ssBar.Items.Add(tssRam);
+            ssBar.Items.Add(tssSep2);
+            ssBar.Items.Add(tssDispatcher);
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -159,6 +164,14 @@ namespace SOAFramework.Server.UI
 
         private void ServerUI_Load(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["DispatcherServerUrl"]))
+            {
+                tssDispatcher.Text = "是否分发服务器：是";
+            }
+            else
+            {
+                tssDispatcher.Text = "分发服务器地址：" + ConfigurationManager.AppSettings["DispatcherServerUrl"];
+            }
             DisplayMachineStatus();
             timer2.Start();
         }
