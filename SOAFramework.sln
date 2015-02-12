@@ -35,8 +35,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Startup\Test\Test.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService", "Library\WebService\WebService.csproj", "{09576270-B770-442D-9C90-9F82B2C8F8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServicePool", "Startup\WebServicePool\WebServicePool.csproj", "{AFA71425-60D1-46D6-9264-D0B286D9DF16}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{C8E88402-4AB0-41A0-9C7E-9BD5273CE9AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Models\Model.csproj", "{47026C03-6F4D-4155-BD42-78EC73044C73}"
@@ -114,6 +112,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{BCCF7AEA-B76
 		Resources\Dll\NPOI.OpenXml4Net.dll = Resources\Dll\NPOI.OpenXml4Net.dll
 		Resources\Dll\NPOI.OpenXmlFormats.dll = Resources\Dll\NPOI.OpenXmlFormats.dll
 		Resources\Dll\System.Data.SQLite.dll = Resources\Dll\System.Data.SQLite.dll
+		Resources\Dll\System.Web.Razor.dll = Resources\Dll\System.Web.Razor.dll
+		Resources\Dll\System.Web.Razor.xml = Resources\Dll\System.Web.Razor.xml
 		Resources\Dll\Tamir.SharpSSH.dll = Resources\Dll\Tamir.SharpSSH.dll
 	EndProjectSection
 EndProject
@@ -250,16 +250,6 @@ Global
 		{09576270-B770-442D-9C90-9F82B2C8F8CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{09576270-B770-442D-9C90-9F82B2C8F8CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{09576270-B770-442D-9C90-9F82B2C8F8CF}.Release|x86.ActiveCfg = Release|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16}.Release|x86.ActiveCfg = Release|Any CPU
 		{47026C03-6F4D-4155-BD42-78EC73044C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47026C03-6F4D-4155-BD42-78EC73044C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47026C03-6F4D-4155-BD42-78EC73044C73}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -547,7 +537,6 @@ Global
 		{C9437F89-A710-4097-9AC6-1A0B4DAF2B2B} = {28CAA9FE-110E-4B62-ACA6-CE3144E61CB9}
 		{07760BFF-1828-4681-8583-76929FB8A2ED} = {6211479C-E633-44D3-BAE9-E18E1CDB4B72}
 		{09576270-B770-442D-9C90-9F82B2C8F8CF} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
-		{AFA71425-60D1-46D6-9264-D0B286D9DF16} = {6211479C-E633-44D3-BAE9-E18E1CDB4B72}
 		{47026C03-6F4D-4155-BD42-78EC73044C73} = {C8E88402-4AB0-41A0-9C7E-9BD5273CE9AA}
 		{74F3B6DE-FE00-433C-A658-9169FF0B3456} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{B5168C1F-6145-4453-9E20-D2F69883B49B} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
