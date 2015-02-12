@@ -1,0 +1,10 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#+
+// <copyright file="Template1.tt" company="">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+public class TestClass2
+{
+}
+#>
