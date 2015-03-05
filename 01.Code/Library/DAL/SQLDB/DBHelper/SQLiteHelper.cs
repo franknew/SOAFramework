@@ -16,18 +16,34 @@ namespace SOAFramework.Library.DAL
             this.ConnectionString = connectionstring;
             Assembly ass = Assembly.GetCallingAssembly();
             FileInfo file = new FileInfo(ass.Location);
-            FileInfo interop = new FileInfo(file.Directory.FullName.TrimEnd('\\') + "\\SQLite.Interop.dll");
+            string filePath = file.Directory.FullName.TrimEnd('\\');
+            string modelesPath = filePath + "\\Modules";
+            FileInfo interop = new FileInfo(filePath + "\\SQLite.Interop.dll");
             bool is64bitSystem = Environment.Is64BitOperatingSystem;
             string newInterop;
             if (is64bitSystem)
             {
-                newInterop = file.Directory.FullName.TrimEnd('\\') + "\\SQLite.Interop64.dll";
+                newInterop = filePath + "\\SQLite.Interop64.dll";
             }
             else
             {
-                newInterop = file.Directory.FullName.TrimEnd('\\') + "\\SQLite.Interop32.dll";
+                newInterop = filePath + "\\SQLite.Interop32.dll";
             }
             FileInfo newInteropFile = new FileInfo(newInterop);
+            if (!newInteropFile.Exists)
+            {
+                interop = new FileInfo(modelesPath + "\\SQLite.Interop.dll");
+                if (is64bitSystem)
+                {
+                    newInterop = modelesPath + "\\SQLite.Interop64.dll";
+                }
+                else
+                {
+                    newInterop = modelesPath + "\\SQLite.Interop32.dll";
+                }
+                newInteropFile = new FileInfo(newInterop);
+            }
+
             if (!newInteropFile.Exists)
             {
                 return;

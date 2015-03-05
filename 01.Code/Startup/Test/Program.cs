@@ -28,6 +28,7 @@ using System.Data.Linq;
 using SOAFramework.Library.DAL;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using System.Data;
 
 namespace Test
 {
@@ -42,47 +43,33 @@ namespace Test
             List<TestClass> listTestClass = new List<TestClass>();
             Random r = new Random();
             long allCount = 0;
+            DataTable table = new DataTable();
+            table.Columns.Add("a");
+            table.Columns.Add("b", typeof(int));
             sw.Start();
             for (int i = 0; i < 1000000; i++)
             {
                 allCount++;
-                listTestClass.Add(new TestClass { a = i.ToString(), g = r.Next(10) });
+                DataRow row = table.NewRow();
+                row["a"] = i.ToString();
+                row["b"] = r.Next(10);
+                table.Rows.Add(row);
+                //listTestClass.Add(new TestClass { a = i.ToString(), g = r.Next(10) });
                 //listTestClass.Add(new TestClass { a = i.ToString(), g = i % 10 });
             }
             sw.Stop();
             Console.WriteLine("新增{1}个元素耗时：{0}", sw.ElapsedMilliseconds, allCount);
             allCount = 0;
             sw.Restart();
-            var dic = listTestClass.MapReduce(t =>
+            var dic = table.MapReduce(t =>
             {
-                if (t.Data.g < 5)
-                {
-                    return new KeyValueClass<int, string>(t.Data.g, t.Data.a);
-                }
-                return KeyValueClass<int, string>.Empty();
+                return new KeyValueClass<int, string>(Convert.ToInt32(t.Row["b"]), t.Row["a"].ToString());
             }, (key, values) =>
             {
                 return values.Count;
             });
             sw.Stop();
             Console.WriteLine("mapreduce耗时：{0}", sw.ElapsedMilliseconds);
-            foreach (var key in dic.Keys)
-            {
-                allCount += dic[key];
-                Console.WriteLine("key:{0}  value:{1}", key, dic[key]);
-            }
-
-            dic = listTestClass.MapReduce(t =>
-            {
-                if (t.Data.g >= 5)
-                {
-                    return new KeyValueClass<int, string>(t.Data.g, t.Data.a);
-                }
-                return KeyValueClass<int, string>.Empty();
-            }, (key, values) =>
-            {
-                return values.Count;
-            });
             foreach (var key in dic.Keys)
             {
                 allCount += dic[key];

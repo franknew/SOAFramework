@@ -193,7 +193,56 @@ namespace SOAFramework.Library
             });
             return result;
         }
+        public static IDictionary<TKey, TResult> MapReduce<TKey, TValue, TResult>(this DataTable table,
+                Func<MapReduceData, KeyValueClass<TKey, TValue>> map, Func<TKey, IList<TValue>, TResult> reduce)
+        {
+            object locker = new object();
+            ConcurrentDictionary<TKey, TResult> result = new ConcurrentDictionary<TKey, TResult>();
+            //保存map出来的结果
+            ConcurrentDictionary<TKey, IList<TValue>> mapDic = new ConcurrentDictionary<TKey, IList<TValue>>();
+            var parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = Environment.ProcessorCount;
+            //并行map
+            Parallel.For(0, table.Rows.Count, parallelOptions, t =>
+            {
+                MapReduceData data = new MapReduceData
+                {
+                    Row = table.Rows[t],
+                    Index = t,
+                    Table = table,
+                };
+                var pair = map(data);
+                if (pair != null && pair.Valid)
+                {
+                    //锁住防止并发操作list造成数据缺失
+                    lock (locker)
+                    {
+                        //将匹配出来的结果加入结果集放入字典
+                        IList<TValue> list = null;
+                        if (mapDic.ContainsKey(pair.Key))
+                        {
+                            list = mapDic[pair.Key];
+                        }
+                        else
+                        {
+                            list = new List<TValue>();
+                            mapDic[pair.Key] = list;
+                        }
+                        list.Add(pair.Value);
+                    }
+                }
+            });
+
+            //并行reduce
+            Parallel.For(0, mapDic.Keys.Count, parallelOptions, t =>
+            {
+                KeyValuePair<TKey, IList<TValue>> pair = mapDic.ElementAt(t);
+                result[pair.Key] = reduce(pair.Key, pair.Value);
+            });
+            return result;
+        }
     }
+
 
     public class KeyValueClass<K, V>
     {
@@ -232,5 +281,14 @@ namespace SOAFramework.Library
         public int Index { get; set; }
 
         public IList<TInput> List { get; set; }
+    }
+
+    public class MapReduceData
+    {
+        public DataTable Table { get; set; }
+
+        public int Index { get; set; }
+
+        public DataRow Row { get; set; }
     }
 }

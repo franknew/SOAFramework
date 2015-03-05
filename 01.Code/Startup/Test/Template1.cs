@@ -15,7 +15,7 @@ namespace Test
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "E:\AppLib\SOAFramework\Startup\Test\Template1.tt"
+    #line 1 "E:\AppLib\SOAFramework\01.Code\Startup\Test\Template1.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class Template1 : Template1Base
     {
@@ -28,7 +28,7 @@ namespace Test
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 3 "E:\AppLib\SOAFramework\Startup\Test\Template1.tt"
+        #line 3 "E:\AppLib\SOAFramework\01.Code\Startup\Test\Template1.tt"
 
 // <copyright file="Template1.tt" company="">
 //  Copyright © . All Rights Reserved.
