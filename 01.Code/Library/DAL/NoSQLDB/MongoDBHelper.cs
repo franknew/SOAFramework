@@ -24,10 +24,10 @@ namespace SOAFramework.Library.DAL
             }
             connectionString = connectionstring;
             MongoClient client = new MongoClient(connectionString);
-            mongoDataBaseManager = client.GetServer().GetDatabase(database);
+            mongoDataBaseManager = client.GetDatabase(database);
         }
 
-        private MongoDatabase mongoDataBaseManager = null;
+        private IMongoDatabase mongoDataBaseManager = null;
 
         private string dataBase = "";
 
@@ -43,13 +43,13 @@ namespace SOAFramework.Library.DAL
             get { return connectionString; }
         }
 
-        public MongoCollection<T> GetDataManager<T>() where T : BaseNoSQLEntity
+        public IMongoCollection<T> GetDataManager<T>() where T : BaseNoSQLEntity
         {
             if (mongoDataBaseManager == null)
             {
                 return null;
             }
-            MongoCollection<T> mongoDataBase = mongoDataBaseManager.GetCollection<T>(typeof(T).Name);
+            IMongoCollection<T> mongoDataBase = mongoDataBaseManager.GetCollection<T>(typeof(T).Name);
             return mongoDataBase;
         }
     }

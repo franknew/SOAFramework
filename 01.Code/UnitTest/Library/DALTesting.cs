@@ -5,45 +5,47 @@ using MongoDB.Bson;
 using MongoDB.Driver.Linq;
 using SOAFramework.Library.DAL;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 namespace UnitTest.Library
 {
     [TestClass]
     public class DALTesting
     {
-        static MongoCollection<MongoEntity> manager = null;
+        static IMongoCollection<MongoEntity> manager = null;
 
         [TestMethod]
         public void TestMongoInsert()
         {
             MongoEntity entity = new MongoEntity { Remark = "insert1" };
-            manager.Insert(entity);
-            Assert.IsNotNull(manager.FindOneById(entity.Id));
-            var query = Query<MongoEntity>.EQ(t=>t.Id, entity.Id);
-            manager.Remove(query);
+            manager.InsertOneAsync(entity);
+            Assert.IsNotNull(manager.FindAsync(new FilterDefinitionBuilder<MongoEntity>().Eq(t => t.Id, entity.Id)).Result);
+            manager.FindOneAndDeleteAsync(new FilterDefinitionBuilder<MongoEntity>().Eq(t => t.Id, entity.Id));
         }
 
         [TestMethod]
         public void TestMongoUpdate()
         {
-            manager.Update(Query<MongoEntity>.EQ(t => t.Remark, "hello"), Update<MongoEntity>.Set(t => t.Remark, "world"));
-            Assert.AreEqual("world", manager.FindOne(Query<MongoEntity>.EQ(t => t.Remark, "world")).Remark);
+            manager.FindOneAndUpdateAsync(new FilterDefinitionBuilder<MongoEntity>().Eq(t => t.Remark, "hello"), new UpdateDefinitionBuilder<MongoEntity>().Set(t => t.Remark, "world"));
+            Assert.AreEqual("world", manager.FindAsync(new FilterDefinitionBuilder<MongoEntity>().Eq(t => t.Remark, "world")));
         }
 
         [TestMethod]
         public void TestMongoRemove()
         {
             MongoEntity entity = new MongoEntity { Remark = "remove1" };
-            manager.Insert(entity);
-            manager.Remove(Query<MongoEntity>.EQ(t => t.Id, entity.Id));
-            Assert.IsNull(manager.FindOneById(entity.Id));
-            
+            manager.InsertOneAsync(entity);
+            manager.FindOneAndDeleteAsync(new FilterDefinitionBuilder<MongoEntity>().Eq(t => t.Id, entity.Id));
+            Assert.IsNull(manager.FindAsync(new FilterDefinitionBuilder<MongoEntity>().Eq(t => t.Id, entity.Id)));
+
         }
 
         [TestMethod]
         public void TestMongoQuery()
         {
-            Assert.IsNotNull(manager.FindOne(Query<MongoEntity>.EQ(t => t.Remark, "query1")));
+            FilterDefinitionBuilder<MongoEntity> builder = new FilterDefinitionBuilder<MongoEntity>();
+            builder.Eq(t => t.Remark, "query1");
+            Assert.IsNotNull(manager.Find(builder.Eq(t => t.Remark, "query1")).FirstOrDefaultAsync());
+            //Assert.IsNotNull(manager.FindOne(Query<MongoEntity>.EQ(t=>t.Id, BsonValue)));
+            //Assert.IsNotNull(manager.FindOne(Query.And(Query.Not(Query.EQ("id", null)), Query<MongoEntity>.EQ(t => t.Remark, "query1"))));
         }
 
         [TestInitialize()]
@@ -53,13 +55,13 @@ namespace UnitTest.Library
             manager = helper.GetDataManager<MongoEntity>();
             MongoEntity entity = new MongoEntity { Remark = "hello" };
             MongoEntity queryentity = new MongoEntity { Remark = "query1" };
-            manager.Insert(entity);
-            manager.Insert(queryentity);
+            manager.InsertOneAsync(entity);
+            manager.InsertOneAsync(queryentity);
         }
         [TestCleanup]
         public void Clearnup()
         {
-            manager.RemoveAll();
+            manager.DeleteManyAsync("{}");
         }
 
         private TestContext testContextInstance;

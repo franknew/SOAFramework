@@ -10,10 +10,6 @@ namespace SOAFramework.Library.DAL
 {
     public static class LinqExtension
     {
-        public static IMongoQuery ToMongoQuery<T>(this Expression<Func<T, bool>> query) where T : BaseNoSQLEntity
-        {
-            IMongoQuery mongoQuery = (query as MongoQueryable<T>).GetMongoQuery();
-            return mongoQuery;
-        }
+        
     }
 }

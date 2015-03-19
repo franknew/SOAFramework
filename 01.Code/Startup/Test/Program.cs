@@ -27,7 +27,6 @@ using System.Linq.Expressions;
 using System.Data.Linq;
 using SOAFramework.Library.DAL;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 using System.Data;
 
 namespace Test
@@ -142,9 +141,10 @@ namespace Test
             #endregion
 
             TestClass cc = new TestClass();
-            Update<TestClass>.Set(t => t.a, "");
+            //Update<TestClass>.Set(t => t.a, "");
             List<TestClass> lists = new List<TestClass>();
             lists.Add(new TestClass { a = "a" });
+
             var c = (from a in lists
                      select a);
             var g = Select(new { a = "a", b = "b" });

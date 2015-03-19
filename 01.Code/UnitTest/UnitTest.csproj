@@ -77,6 +77,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Modules\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Driver.Core">
+      <HintPath>..\Bin\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.7Zip">
       <HintPath>..\Bin\Modules\SOAFramework.Library.7Zip.dll</HintPath>
     </Reference>
