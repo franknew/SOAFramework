@@ -1,15 +1,20 @@
 ﻿
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Norm.Attributes;
+using Norm;
 
 namespace SOAFramework.Library.DAL
 {
     public class BaseMongoEntity : BaseNoSQLEntity
     {
+        public BaseMongoEntity()
+        {
+            Id = ObjectId.NewObjectId();
+        }
+
         public override string Id_string
         {
             get
@@ -27,7 +32,6 @@ namespace SOAFramework.Library.DAL
             }
         }
 
-        [BsonId]
-        public ObjectId Id { get; set; }
+        public ObjectId Id { get; private set; }
     }
 }
