@@ -8,12 +8,9 @@ using Norm;
 
 namespace SOAFramework.Library.DAL
 {
-    public class BaseMongoEntity : BaseNoSQLEntity
+    public class BaseMongoEntity<T> : BaseNoSQLEntity
+        where T : BaseNoSQLEntity
     {
-        public BaseMongoEntity()
-        {
-            Id = ObjectId.NewObjectId();
-        }
 
         public override string Id_string
         {
@@ -33,5 +30,12 @@ namespace SOAFramework.Library.DAL
         }
 
         public ObjectId Id { get; private set; }
+
+        public T Create()
+        {
+            T t = Activator.CreateInstance<T>();
+            t.Id_string = ObjectId.NewObjectId();
+            return t;
+        }
     }
 }
