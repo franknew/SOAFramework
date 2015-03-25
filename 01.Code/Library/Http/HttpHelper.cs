@@ -14,7 +14,7 @@ namespace SOAFramework.Library
     {
         public static string Post(string url, byte[] data, int timeout = -1)
         {
-            WebRequest request = WebRequest.CreateHttp(url);
+            WebRequest request = WebRequest.Create(url);
             request.ContentType = "application/json"; 
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -31,7 +31,7 @@ namespace SOAFramework.Library
 
         public static string Get(string url, int timeout = -1)
         {
-            WebRequest request = WebRequest.CreateHttp(url);
+            WebRequest request = WebRequest.Create(url);
             request.Credentials = CredentialCache.DefaultCredentials;
             request.Timeout = timeout;
             WebResponse response = request.GetResponse();
