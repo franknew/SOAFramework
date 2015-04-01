@@ -79,6 +79,25 @@ namespace SOAFramework.Library.DAL
             }
             return helper;
         }
+
+        public static IPagingSQL CreateSqlPager(DBType type)
+        {
+            IPagingSQL paging = null;
+            switch(type)
+            {
+                case DBType.MSSQL2005P:
+                case DBType.MSSQL:
+                    paging = new MSSQLPagingSQL();
+                    break;
+                case DBType.SQLite:
+                    paging = new SQLitePagingSQL();
+                    break;
+                case DBType.Oracle:
+                    paging = new OraclePagingSQL();
+                    break;
+            }
+            return paging;
+        }
     }
 
 }

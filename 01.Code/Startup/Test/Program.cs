@@ -36,6 +36,36 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            string testa = "b";
+            int enumb = testa.ToEnumValue<TestEnum>();
+            TestClass cc = new TestClass();
+            //Update<TestClass>.Set(t => t.a, "");
+            List<TestClass> lists = new List<TestClass>();
+            lists.Add(new TestClass { a = "a" });
+            lists.SetTest(t => t.a, "aaa");
+            
+            var c = (from a in lists
+                     select a);
+            var g = Select(new { a = "a", b = "b" });
+            var d = new { a = "", b = "" };
+            IEnumerable<TestClass> query = (from a in lists
+                                            where a.a == "a"
+                                            select a);
+
+            var q = query.TestSelect(t => new { a = t.a });
+            query.Select(t => t.test);
+            //TestLinq<TestClass>(a => return new { a = "a" });
+            DoAction<TestClass>(t => t.a = "b");
+            string strData = "";
+            byte[] data = null;
+            string testresult = "";
+            List<SOAFramework.Service.SDK.Core.PostArgItem> argslist = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
+
+            List<string> listT = new List<string>();
+            Type[] ts = listT.GetType().GetGenericArguments();
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            Stopwatch watch = new Stopwatch();
+
             #region mapreduce
             Stopwatch sw = new Stopwatch();
             MemberInfo[] mem = sw.GetType().GetProperties();
@@ -139,33 +169,6 @@ namespace Test
 
             Console.ReadLine();
             #endregion
-
-            TestClass cc = new TestClass();
-            //Update<TestClass>.Set(t => t.a, "");
-            List<TestClass> lists = new List<TestClass>();
-            lists.Add(new TestClass { a = "a" });
-
-            var c = (from a in lists
-                     select a);
-            var g = Select(new { a = "a", b = "b" });
-            var d = new { a = "", b = "" };
-            IEnumerable<TestClass> query = (from a in lists
-                                            where a.a == "a"
-                                            select a);
-
-            var q = query.TestSelect(t => new { a = t.a });
-            query.Select(t => t.test);
-            //TestLinq<TestClass>(a => return new { a = "a" });
-            DoAction<TestClass>(t => t.a = "b");
-            string strData = "";
-            byte[] data = null;
-            string testresult = "";
-            List<SOAFramework.Service.SDK.Core.PostArgItem> argslist = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
-
-            List<string> listT = new List<string>();
-            Type[] ts = listT.GetType().GetGenericArguments();
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            Stopwatch watch = new Stopwatch();
 
             #region codesmith testing
 
@@ -605,6 +608,15 @@ namespace Test
 
             return r;
         }
-    }
 
+        public static void SetTest<T, TValue>(this IEnumerable<T> list, Expression<Func<T, TValue>> expression, TValue value)
+        {
+
+        }
+    }
+    public enum TestEnum
+    {
+        a = 1,
+        b = 2,
+    }
 }

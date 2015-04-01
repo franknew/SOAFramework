@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Linq.Expressions;
 
 namespace SOAFramework.Library
 {
@@ -241,8 +242,14 @@ namespace SOAFramework.Library
             });
             return result;
         }
-    }
 
+        public static void Set<T, TValue>(this IEnumerable<T> list, Expression<Func<T, TValue>> expression, TValue value)
+        {
+            foreach (var t in list)
+            {
+            }
+        }
+    }
 
     public class KeyValueClass<K, V>
     {

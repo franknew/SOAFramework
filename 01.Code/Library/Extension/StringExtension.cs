@@ -125,9 +125,6 @@ namespace SOAFramework.Library
             return result;
         }
 
-       
-
-      
 
         /// <summary>
         /// Removes the specified chars from the beginning of a string.
@@ -447,6 +444,21 @@ namespace SOAFramework.Library
             return oOut;
         }
 
+        public static int ToEnumValue<T>(this string enumName)
+        {
+            int value = -1;
+            try
+            {
+                T t = (T)Enum.Parse(typeof(T), enumName);
+                value = Convert.ToInt32(t);
+            }
+            catch
+            {
+
+            }
+            return value;
+        }
+
         /// <summary>
         /// Fills the entities.
         /// </summary>
@@ -737,6 +749,8 @@ namespace SOAFramework.Library
             }
             return null;
         }
+
+
 
         /// <summary>
         /// Fills the US States.
