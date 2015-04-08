@@ -115,6 +115,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{BCCF7AEA-B76
 		Resources\Dll\Tamir.SharpSSH.dll = Resources\Dll\Tamir.SharpSSH.dll
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Key", "Key", "{F107B164-CADB-4508-A06B-61631E2217DD}"
+	ProjectSection(SolutionItems) = preProject
+		SOAFramework.Key.pfx = SOAFramework.Key.pfx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

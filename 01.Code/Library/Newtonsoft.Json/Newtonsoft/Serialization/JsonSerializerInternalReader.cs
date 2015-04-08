@@ -327,7 +327,6 @@ namespace Newtonsoft.Json.Serialization
             CheckedRead(reader);
 
             string id = null;
-            int index = 0;
             if (reader.TokenType == JsonToken.PropertyName)
             {
                 string propertyName = reader.Value.ToString();

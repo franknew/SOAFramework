@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SOAFramework.Key.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,6 +77,9 @@
     <Folder Include="7zip\Compress\LzmaAlone\LZMA\" />
     <Folder Include="7zip\Compress\LzmaAlone\LZ\" />
     <Folder Include="7zip\Compress\LzmaAlone\RangeCoder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SOAFramework.Key.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

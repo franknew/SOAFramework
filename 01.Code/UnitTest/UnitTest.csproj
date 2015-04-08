@@ -138,12 +138,6 @@
     <Reference Include="SOAFramework.Service.DefaultFilter">
       <HintPath>..\Bin\Modules\SOAFramework.Service.DefaultFilter.dll</HintPath>
     </Reference>
-    <Reference Include="SOAFramework.Service.Interface">
-      <HintPath>..\Bin\Modules\SOAFramework.Service.Interface.dll</HintPath>
-    </Reference>
-    <Reference Include="SOAFramework.Service.Model">
-      <HintPath>..\Bin\Modules\SOAFramework.Service.Model.dll</HintPath>
-    </Reference>
     <Reference Include="SOAFramework.Service.SDK.Core">
       <HintPath>..\Bin\Modules\SOAFramework.Service.SDK.Core.dll</HintPath>
     </Reference>

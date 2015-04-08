@@ -10,9 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SOAFramework.Library.Json</RootNamespace>
     <AssemblyName>SOAFramework.Library.Json</AssemblyName>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>SOAFramework.Key.pfx</AssemblyOriginatorKeyFile>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -270,6 +269,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Newtonsoft\Dynamic.snk" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="SOAFramework.Key.pfx" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
