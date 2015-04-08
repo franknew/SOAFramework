@@ -44,9 +44,17 @@ namespace SOAFramework.Library.DAL
         {
             get { return mStr_Value; }
             set 
-            { 
-                obj_Type = value.GetType();
-                mStr_Value = value;
+            {
+                if (value != null)
+                {
+                    obj_Type = value.GetType();
+                    mStr_Value = value;
+                }
+                else
+                {
+                    obj_Type = DBNull.Value.GetType();
+                    mStr_Value = DBNull.Value;
+                }
             }
         }
 

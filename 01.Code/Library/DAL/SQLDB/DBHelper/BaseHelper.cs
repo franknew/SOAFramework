@@ -122,10 +122,13 @@ namespace SOAFramework.Library.DAL
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            strSQL.Append(strCommandString);
             if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty)
             {
                 strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
+            }
+            else
+            {
+                strSQL.Append(strCommandString);
             }
             if (string.IsNullOrEmpty(strConnectionString))
             {
@@ -334,10 +337,13 @@ namespace SOAFramework.Library.DAL
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            strSQL.Append(strCommandString);
             if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty)
             {
                 strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
+            }
+            else
+            {
+                strSQL.Append(strCommandString);
             }
             DataSet dsData = new DataSet();
             if (string.IsNullOrEmpty(strConnectionString))

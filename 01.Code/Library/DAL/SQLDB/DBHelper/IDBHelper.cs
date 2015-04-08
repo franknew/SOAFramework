@@ -9,20 +9,36 @@ namespace SOAFramework.Library.DAL
     public interface IDBHelper
     {
         #region Attributes
+        /// <summary>
+        /// 连接字符创
+        /// </summary>
         string ConnectionString { get; }
 
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
         DBType DBType { get; }
         #endregion
 
         #region BeginTransaction
+        /// <summary>
+        /// 设置开始事务
+        /// </summary>
+        /// <param name="ConnectionString"></param>
         void BeginTransaction(string ConnectionString = null);
         #endregion
 
         #region Commit
+        /// <summary>
+        /// 提交事务
+        /// </summary>
         void Commit();
         #endregion
 
         #region RollBack
+        /// <summary>
+        /// 回滚事务
+        /// </summary>
         void RollBack();
         #endregion
 
