@@ -83,9 +83,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IJsonSerializor.cs" />
-    <Compile Include="JsonSerializorFactory.cs" />
-    <Compile Include="MicrosoftSerializor.cs" />
+    <Compile Include="IJsonSerializer.cs" />
+    <Compile Include="JsonSerializerFactory.cs" />
+    <Compile Include="MicrosoftSerializer.cs" />
     <Compile Include="Newtonsoft\Bson\BsonBinaryType.cs" />
     <Compile Include="Newtonsoft\Bson\BsonBinaryWriter.cs" />
     <Compile Include="Newtonsoft\Bson\BsonReader.cs" />
@@ -237,7 +237,7 @@
     <Compile Include="Newtonsoft\Utilities\ReflectionUtils.cs" />
     <Compile Include="Newtonsoft\Utilities\StringUtils.cs" />
     <Compile Include="Newtonsoft\Utilities\ValidationUtils.cs" />
-    <Compile Include="NewtonsoftSerializor.cs" />
+    <Compile Include="NewtonsoftSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

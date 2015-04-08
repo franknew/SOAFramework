@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SOAFramework.Library
 {
-    public class MicrosoftSerializor : IJsonSerializor
+    public class MicrosoftSerializer : IJsonSerializer
     {
         /// <summary>
         /// 将对象序列化成json
