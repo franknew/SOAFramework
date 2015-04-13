@@ -7,7 +7,7 @@ namespace SOAFramework.Library.DAL
 {
     public class OraclePagingSQL : IPagingSQL
     {
-        public string GetPagingSQL(string SQL, string OrderBy, int StartIndex, int EndIndex)
+        public string GetPagingSQL(string SQL, string OrderByColumn, int StartIndex, int EndIndex, OrderBy orderby)
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat("SELECT * FROM (SELECT t.*, rownum as _rownum FROM ({0}) t) WHERE _rownum>={1} AND rownum<={2}", SQL, StartIndex, EndIndex);

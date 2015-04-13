@@ -14,4 +14,9 @@ namespace SOAFramework.Library.DAL
         SQLite = 5,
     }
 
+    public enum OrderBy
+    {
+        ASC,
+        DESC
+    }
 }

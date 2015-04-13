@@ -14,10 +14,10 @@ namespace SOAFramework.Library.DAL
         /// <param name="StartIndex">开始索引</param>
         /// <param name="EndIndex">结束索引</param>
         /// <returns></returns>
-        public string GetPagingSQL(string SQL, string OrderBy, int StartIndex, int EndIndex)
+        public string GetPagingSQL(string SQL, string OrderByColumn, int StartIndex, int EndIndex, OrderBy orderby = OrderBy.ASC)
         {
             StringBuilder sbSQL = new StringBuilder();
-            sbSQL.AppendFormat("SELECT * FROM (SELECT *, ROW_NUMBER() OVER(ORDER BY {0}) AS _RowNumber FROM ({1}) Temp1 ) Temp", OrderBy, SQL);
+            sbSQL.AppendFormat("SELECT * FROM (SELECT *, ROW_NUMBER() OVER(ORDER BY {0} {2}) AS _RowNumber FROM ({1}) Temp1 ) Temp", OrderByColumn, SQL, orderby.ToString());
             sbSQL.AppendFormat(" WHERE _RowNumber BETWEEN {0} AND {1} ", StartIndex, EndIndex);
             return sbSQL.ToString();
         }
