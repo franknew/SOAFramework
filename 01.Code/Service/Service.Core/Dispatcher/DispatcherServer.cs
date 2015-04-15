@@ -16,7 +16,7 @@ namespace SOAFramework.Service.Core
 {
     public class DispatcherServer : IDispatcher
     {
-        Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, string> args, List<IFilter> filterList,
+        Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, string> args, List<BaseFilter> filterList,
             bool enableConsoleMonitor)
         {
             try

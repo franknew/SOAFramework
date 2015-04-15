@@ -16,5 +16,7 @@ namespace SOAFramework.Service.Core.Model
 
         [DataMember(EmitDefaultValue = false)]
         public MethodInfo MethodInfo { get; set; }
+
+        public List<IFilter> FilterList { get; set; }
     }
 }

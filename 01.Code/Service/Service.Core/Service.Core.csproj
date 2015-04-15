@@ -62,6 +62,7 @@
     <Compile Include="Interface\IRequest.cs" />
     <Compile Include="Interface\IResponse.cs" />
     <Compile Include="Model\AssemblyWatcherInfo.cs" />
+    <Compile Include="Model\Config\Configuration.cs" />
     <Compile Include="Model\MachinePerformance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\DefaultService.cs" />
@@ -76,6 +77,10 @@
     <ProjectReference Include="..\..\Library\CacheManager\ServicePoolManager.csproj">
       <Project>{d6312221-f728-4a36-8811-e958a530c113}</Project>
       <Name>ServicePoolManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Cache\Cache.csproj">
+      <Project>{3dd01adf-6859-4d75-aae0-473c7dfe944b}</Project>
+      <Name>Cache</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Extension\Extension.csproj">
       <Project>{94f414d4-4c82-46fe-96fc-b0f1c1faab5a}</Project>
@@ -93,9 +98,17 @@
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Json</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\XML\XML.csproj">
+      <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
+      <Name>XML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Zip\Zip.csproj">
       <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
       <Name>Zip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DefaultFilter\DefaultFilter.csproj">
+      <Project>{41379561-95a9-4210-8a8f-69659a48d764}</Project>
+      <Name>DefaultFilter</Name>
     </ProjectReference>
     <ProjectReference Include="..\Service.Core.Model\Service.Core.Model.csproj">
       <Project>{1a1b845c-37f7-47a9-9f98-fd634a93040f}</Project>

@@ -10,7 +10,7 @@ namespace SOAFramework.Service.Core
 {
     public interface IDispatcher
     {
-        Stream Execute(string typeName, string functionName, Dictionary<string, string> args, List<IFilter> filterList,
+        Stream Execute(string typeName, string functionName, Dictionary<string, string> args, List<BaseFilter> filterList,
             bool enableConsoleMonitor);
 
         void StartRegisterTask(string dispatchServerUrl);

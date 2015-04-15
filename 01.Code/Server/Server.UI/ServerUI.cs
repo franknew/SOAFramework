@@ -51,6 +51,16 @@ namespace SOAFramework.Server.UI
             ssBar.Items.Add(tssDispatcher);
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            if (!e.Cancel)
+            {
+                host.Close();
+                worker.Dispose();
+            }
+        }
+
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (host.State == CommunicationState.Opened)

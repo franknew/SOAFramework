@@ -1,6 +1,7 @@
 ﻿using SOAFramework.Library;
 using SOAFramework.Service.Core;
 using SOAFramework.Service.Core.Model;
+using SOAFramework.Service.Filter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace SOAFramework.Service.Server
         /// </summary>
         /// <param name="name">接口名称</param>
         /// <returns>服务对象</returns>
+        [NoneExecMonitorFilter]
         public ServiceInfo DiscoverServiceByName(string name)
         {
             List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();

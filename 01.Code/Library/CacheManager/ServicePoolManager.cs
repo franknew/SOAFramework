@@ -11,28 +11,50 @@ namespace SOAFramework.Library
 {
     public class ServicePoolManager
     {
-        public static readonly Dictionary<string, object> instance = new Dictionary<string, object>();
+        private readonly static object syncRoot = new Object();
+        private static Dictionary<string, object> instance = new Dictionary<string, object>();
+
+        /// <summary>
+        /// 线程安全的单例
+        /// </summary>
+        public static Dictionary<string, object> Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new Dictionary<string, object>();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
 
         public static void AddItem(string key, object value)
         {
-            if (!instance.ContainsKey(key))
+            if (!Instance.ContainsKey(key))
             {
-                instance.Add(key, value);
+                Instance.Add(key, value);
             }
         }
 
         public static void SetItem(string key, object value)
         {
-            if (instance.ContainsKey(key))
+            if (Instance.ContainsKey(key))
             {
-                instance[key] = value;
+                Instance[key] = value;
             }
         }
 
         public static T GetItem<T>(string key) 
         {
             T t = default(T);
-            if (instance.ContainsKey(key))
+            if (Instance.ContainsKey(key))
             {
                 t = (T)instance[key];
             }
@@ -45,7 +67,7 @@ namespace SOAFramework.Library
             foreach (var key in instance.Keys)
             {
                 T t = default(T);
-                t = (T)instance[key];
+                t = (T)Instance[key];
                 list.Add(t);
             }
             return list;

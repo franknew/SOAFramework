@@ -40,5 +40,17 @@ namespace SOAFramework.Library
             }
             return t;
         }
+
+        /// <summary>
+        /// XML String 反序列化成对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xmlPath"></param>
+        /// <returns></returns>
+        public static T DeserializeFromFile<T>(string xmlPath)
+        {
+            string xml = File.ReadAllText(xmlPath);
+            return Deserialize<T>(xml);
+        }
     }
 }

@@ -32,14 +32,13 @@ namespace SOAFramework.Service.Server
 
         private static bool enableConsoleMonitor = false;
 
-        private static List<IFilter> _filterList = new List<IFilter>();
+        private static List<BaseFilter> _filterList = new List<BaseFilter>();
         static SOAService()
         {
             try
             {
                 //把DLL中的所有方法加载到缓存中
-                ServiceUtility.InitBusinessCache();
-                _filterList = ServiceUtility.InitFilterList();
+                ServiceUtility.Init();
 
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
                 {

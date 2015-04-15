@@ -24,13 +24,30 @@ namespace SOAFramework.Service.Server
     [ServiceLayer(Enabled = false)]
     public class ServiceUtility
     {
-        const string bussinessConfig = "soaConfigGroup/businessFileConfig";
-        const string filterConfig = "soaConfigGroup/filterConfig";
-        const string businessLayer = null;
-        const string filterLayer = null;
+        private static readonly Dictionary<string, DateTime> _dicWatcher = new Dictionary<string, DateTime>();
+        private static readonly List<MachinePerformance> _listPerformance = new List<MachinePerformance>();
+        private static SOAConfiguration config = null;
+        internal static List<IFilter> filterList = new List<IFilter>();
 
-        private static readonly Dictionary<string, DateTime> dicWatcher = new Dictionary<string, DateTime>();
-        private static readonly List<MachinePerformance> listPerformance = new List<MachinePerformance>();
+        static ServiceUtility()
+        {
+            try
+            {
+                config = XMLHelper.DeserializeFromFile<SOAConfiguration>(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void Init()
+        {
+            filterList = InitFilterList();
+            List<Assembly> assmList = GetBusinessAssmeblyList();
+
+            AddAssInCache(assmList, filterList);
+        }
 
         /// <summary>
         /// 通过反射执行缓存中的方法
@@ -53,9 +70,7 @@ namespace SOAFramework.Service.Server
             }
             object result = null;
 
-            string key = typeName + "." + functionName;
-
-            ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(key);
+            ServiceModel service = GetServiceModel(typeName, functionName);
             MethodInfo method = null;
             if (service != null)
             {
@@ -96,35 +111,32 @@ namespace SOAFramework.Service.Server
         /// <param name="cache"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static void InitBusinessCache()
+        public static List<Assembly> GetBusinessAssmeblyList()
         {
             List<Assembly> assmList = GetBussinessConfigAss();
             assmList.Add(Assembly.GetCallingAssembly());
             assmList.Add(Assembly.GetExecutingAssembly());
-
-            AddAssInCache(assmList);
+            return assmList;
         }
 
         public static List<Assembly> GetBussinessConfigAss()
         {
-            ConfigurationManager.RefreshSection(bussinessConfig);
-            IDictionary config = ConfigurationManager.GetSection(bussinessConfig) as IDictionary;
             //设置业务层缓存
             if (config == null)
             {
                 throw new Exception("配置错误，没有配置业务层dll！");
             }
             List<Assembly> assmList = new List<Assembly>();
-            foreach (string value in config.Values)
+            foreach (var value in config.SOAConfig.FilterConfigSection.Configs)
             {
                 Assembly ass = null;
-                if (value.ToLower().EndsWith(".dll"))
+                if (value.Type.ToLower().EndsWith(".dll"))
                 {
-                    ass = Assembly.LoadFile(value);
+                    ass = Assembly.LoadFile(value.Type);
                 }
                 else
                 {
-                    ass = Assembly.Load(value);
+                    ass = Assembly.Load(value.Type);
                 }
                 if (ass == null)
                 {
@@ -137,15 +149,22 @@ namespace SOAFramework.Service.Server
 
         public static List<IFilter> InitFilterList()
         {
-            IDictionary config = ConfigurationManager.GetSection(filterConfig) as IDictionary;
             List<Assembly> assmList = new List<Assembly>();
             assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
             assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
             if (config != null)
             {
-                foreach (string value in config.Values)
+                foreach (var value in config.SOAConfig.FilterConfigSection.Configs)
                 {
-                    Assembly ass = Assembly.Load(value);
+                    Assembly ass = null;
+                    if (value.Type.ToLower().EndsWith(".dll"))
+                    {
+                        ass = Assembly.LoadFile(value.Type);
+                    }
+                    else
+                    {
+                        ass = Assembly.Load(value.Type);
+                    }
                     if (ass == null)
                     {
                         continue;
@@ -167,11 +186,35 @@ namespace SOAFramework.Service.Server
                     {
                         object instance = Activator.CreateInstance(type);
                         IFilter filter = instance as IFilter;
-                        list.Add(filter);
+                        if (filter.GlobalUse)
+                        {
+                            list.Add(filter);
+                        }
                     }
                 }
             }
+
             return list;
+        }
+
+        public static void AttatchFiltersToMethods(List<IFilter> filterList, ServiceModel service)
+        {
+            List<IFilter> filterListCopy = filterList.ToList();
+            List<IFilter> methodFilter = new List<IFilter>();
+            methodFilter.AddRange(service.MethodInfo.DeclaringType.GetCustomAttributes<BaseFilter>(true));
+            methodFilter.AddRange(service.MethodInfo.GetCustomAttributes<BaseFilter>(true));
+            service.FilterList = new List<IFilter>();
+            List<IFilter> noneExecFilter = methodFilter.FindAll(t => t is INoneExecuteFilter);
+            //移除所有不执行标签
+            filterListCopy.RemoveAll(t => t is INoneExecuteFilter);
+            foreach (var filter in noneExecFilter)
+            {
+                filterListCopy.RemoveAll(t => t.GetType().IsInstanceOfType(filter));
+            }
+            foreach (var filter in filterListCopy)
+            {
+                service.FilterList.Add(filter);
+            }
         }
 
         /// <summary>
@@ -179,12 +222,13 @@ namespace SOAFramework.Service.Server
         /// </summary>
         /// <param name="filterList"></param>
         /// <returns>运行失败的filter</returns>
-        public static IFilter FilterExecuting(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
+        public static IFilter FilterExecuting(string typeName, string funcName, ServiceModel service,
             Dictionary<string, object> parameters)
         {
             if (filterList != null)
             {
-                foreach (IFilter filter in filterList)
+                //执行公共的过滤器
+                foreach (var filter in service.FilterList)
                 {
                     ActionContext context = new ActionContext
                     {
@@ -194,9 +238,10 @@ namespace SOAFramework.Service.Server
                             Action = funcName,
                             TypeName = typeName,
                         },
-                        MethodInfo = method,
+                        MethodInfo = service.MethodInfo,
                         Parameters = parameters,
                     };
+
                     if (!filter.OnActionExecuting(context))
                     {
                         return filter;
@@ -206,12 +251,13 @@ namespace SOAFramework.Service.Server
             return null;
         }
 
-        public static IFilter FilterExecuted(List<IFilter> filterList, string typeName, string funcName, MethodInfo method,
+        public static IFilter FilterExecuted(string typeName, string funcName, ServiceModel servide,
             Dictionary<string, object> parameters, long ElapsedMilliseconds, ServerResponse response)
         {
             if (filterList != null)
             {
-                foreach (IFilter filter in filterList)
+                //执行公共的过滤器
+                foreach (var filter in servide.FilterList)
                 {
                     ActionContext context = new ActionContext
                     {
@@ -221,7 +267,7 @@ namespace SOAFramework.Service.Server
                             Action = funcName,
                             TypeName = typeName,
                         },
-                        MethodInfo = method,
+                        MethodInfo = servide.MethodInfo,
                         Parameters = parameters,
                         PerformanceContext = new PerformanceContext
                         {
@@ -234,7 +280,6 @@ namespace SOAFramework.Service.Server
                         return filter;
                     }
                 }
-
             }
             return null;
         }
@@ -259,26 +304,26 @@ namespace SOAFramework.Service.Server
             return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
         }
 
-        public static void AddAssInCache(List<Assembly> assmList)
+        public static void AddAssInCache(List<Assembly> assmList, List<IFilter> filters)
         {
             foreach (var ass in assmList)
             {
                 #region 判断监视缓存
                 FileInfo assFile = new FileInfo(ass.Location);
-                if (dicWatcher.ContainsKey(ass.FullName))
+                if (_dicWatcher.ContainsKey(ass.FullName))
                 {
-                    if (assFile.LastWriteTime <= dicWatcher[ass.FullName])
+                    if (assFile.LastWriteTime <= _dicWatcher[ass.FullName])
                     {
                         continue;
                     }
                     else
                     {
-                        dicWatcher[ass.FullName] = assFile.LastWriteTime;
+                        _dicWatcher[ass.FullName] = assFile.LastWriteTime;
                     }
                 }
                 else
                 {
-                    dicWatcher[ass.FullName] = assFile.LastWriteTime;
+                    _dicWatcher[ass.FullName] = assFile.LastWriteTime;
                 }
                 #endregion
 
@@ -401,6 +446,7 @@ namespace SOAFramework.Service.Server
                         }
 
                         ServiceModel model = new ServiceModel { MethodInfo = method, ServiceInfo = info };
+                        AttatchFiltersToMethods(filters, model);
                         ServicePoolManager.AddItem(key, model);
                     }
                 }
@@ -409,7 +455,7 @@ namespace SOAFramework.Service.Server
 
         public static void RegisterDispatcher(string url, float cpu)
         {
-            MachinePerformance m = listPerformance.Find(t => t.Url == url);
+            MachinePerformance m = _listPerformance.Find(t => t.Url == url);
             if (m == null)
             {
                 m = new MachinePerformance
@@ -417,7 +463,7 @@ namespace SOAFramework.Service.Server
                     Url = url,
                     CpuRate = cpu,
                 };
-                listPerformance.Add(m);
+                _listPerformance.Add(m);
             }
             else
             {
@@ -428,7 +474,7 @@ namespace SOAFramework.Service.Server
         public static string GetMinCpuDispatcher()
         {
             MachinePerformance performance = null;
-            foreach (var m in listPerformance)
+            foreach (var m in _listPerformance)
             {
                 if (performance == null || performance.CpuRate > m.CpuRate)
                 {
@@ -464,7 +510,7 @@ namespace SOAFramework.Service.Server
             }
         }
 
-        public static Stream Execute(string typeName, string functionName, Dictionary<string, string> args, List<IFilter> filterList,
+        public static Stream Execute(string typeName, string functionName, Dictionary<string, string> args, List<BaseFilter> filterList,
             bool enableConsoleMonitor)
         {
 
@@ -487,7 +533,7 @@ namespace SOAFramework.Service.Server
                 //如果找不到方法重新加载配置的DLL
                 else
                 {
-                    ServiceUtility.InitBusinessCache();
+                    ServiceUtility.Init();
                     service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
                     if (service != null)
                     {
@@ -514,7 +560,7 @@ namespace SOAFramework.Service.Server
                 #endregion
 
                 #region 执行前置filter
-                IFilter failedFilter = ServiceUtility.FilterExecuting(filterList, typeName, functionName, method, parsedArgs);
+                IFilter failedFilter = ServiceUtility.FilterExecuting(typeName, functionName, service, parsedArgs);
                 if (failedFilter != null)
                 {
                     response.IsError = true;
@@ -544,7 +590,7 @@ namespace SOAFramework.Service.Server
                 #endregion
 
                 #region 执行后置filter
-                failedFilter = ServiceUtility.FilterExecuted(filterList, typeName, functionName, method, parsedArgs, watch.ElapsedMilliseconds, response);
+                failedFilter = ServiceUtility.FilterExecuted(typeName, functionName, service, parsedArgs, watch.ElapsedMilliseconds, response);
                 if (failedFilter != null && !response.IsError)
                 {
                     response.IsError = true;
@@ -578,6 +624,14 @@ namespace SOAFramework.Service.Server
             }
             #endregion
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
+        }
+
+        protected static ServiceModel GetServiceModel(string typeName, string functionName)
+        {
+            string key = typeName + "." + functionName;
+
+            ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(key);
+            return service;
         }
     }
 }

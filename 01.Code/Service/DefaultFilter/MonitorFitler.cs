@@ -17,6 +17,7 @@ namespace SOAFramework.Service.Filter
         {
             watcher.AddNoticer(new LogNoticer());
             watcher.AddNoticer(new FormNoticer());
+            this.GlobalUse = true;
         }
         
         public override bool OnActionExecuted(ActionContext context)
@@ -31,5 +32,10 @@ namespace SOAFramework.Service.Filter
             }
             return true;
         }
+    }
+
+    public class NoneExecMonitorFilter : MonitorFitler, INoneExecuteFilter
+    {
+
     }
 }

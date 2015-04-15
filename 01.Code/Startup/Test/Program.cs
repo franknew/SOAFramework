@@ -36,6 +36,13 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            TestInterfaceDerived1 testclass1 = new TestInterfaceDerived1();
+            testclass1.str1 = "str1";
+            testclass1.str2 = "str2";
+            TestInterface interface1 = testclass1;
+            TestInterfaceDerived1 testclass2 = interface1 as TestInterfaceDerived1;
+            TestInterfaceDerived2 testclass3 = new TestInterfaceDerived2();
+
             string testa = "b";
             int enumb = testa.ToEnumValue<TestEnum>();
             TestClass cc = new TestClass();
@@ -43,7 +50,7 @@ namespace Test
             List<TestClass> lists = new List<TestClass>();
             lists.Add(new TestClass { a = "a" });
             lists.SetTest(t => t.a, "aaa");
-            
+
             var c = (from a in lists
                      select a);
             var g = Select(new { a = "a", b = "b" });
@@ -521,6 +528,23 @@ namespace Test
         {
             return t;
         }
+    }
+
+    public interface TestInterface
+    {
+        string str1 { get; set; }
+    }
+
+    public class TestInterfaceDerived1 : TestInterface
+    {
+        public string str1 { get; set; }
+
+        public string str2 { get; set; }
+    }
+
+    public class TestInterfaceDerived2 : TestInterfaceDerived1
+    {
+
     }
 
     [AOPClass(AttributeArea = AOPAttributeArea.Class)]

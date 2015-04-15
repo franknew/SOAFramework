@@ -9,12 +9,12 @@ namespace SOAFramework.Library.DAL
     {
         public static IDBHelper CreateDBHelper()
         {
-            string strConn = ConfigurationManager.AppSettings["ConnectionString"];
             string strDBType = DBType.MSSQL.ToString();
             if (ConfigurationManager.AppSettings["DBType"] != null && ConfigurationManager.AppSettings["DBType"] != string.Empty)
             {
                 strDBType = ConfigurationManager.AppSettings["DBType"];
             }
+            string strConn = ConfigurationManager.ConnectionStrings[strDBType].ConnectionString;
             return CreateDBHelper(strConn, strDBType);
         }
 
@@ -41,7 +41,7 @@ namespace SOAFramework.Library.DAL
 
         public static IDBHelper CreateDBHelper(DBType objType)
         {
-            string strConn = ConfigurationManager.AppSettings["ConnectionString"];
+            string strConn = ConfigurationManager.ConnectionStrings[objType.ToString()].ConnectionString;
             return CreateDBHelper(strConn, objType);
         }
 

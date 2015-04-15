@@ -18,7 +18,7 @@ namespace SOAFramework.Library.DAL
             dataBase = database;
             if (string.IsNullOrEmpty(connectionstring) && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ConnectionString"]))
             {
-                connectionstring = ConfigurationManager.AppSettings["ConnectionString"];
+                connectionstring = ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             }
             connectionString = connectionstring;
         }

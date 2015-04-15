@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace SOAFramework.Service.Core.Model
 {
     [DataContract]
-    public class PostArgItem 
+    public class PostArgItem
     {
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public string Key { get; set; }
 
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public object Value { get; set; }
 
     }
