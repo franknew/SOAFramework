@@ -38,7 +38,7 @@ namespace SOAFramework.Service.Server
             try
             {
                 //把DLL中的所有方法加载到缓存中
-                ServiceUtility.Init();
+                ServicePool.Instance.Init();
 
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
                 {
@@ -95,7 +95,7 @@ namespace SOAFramework.Service.Server
             float rate = 0;
             float.TryParse(usage, out rate);
             string strUrl = url;
-            ServiceUtility.RegisterDispatcher(strUrl, rate);
+            ServicePool.Instance.RegisterDispatcher(strUrl, rate);
         }
 
         /// <summary>

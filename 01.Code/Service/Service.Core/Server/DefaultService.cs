@@ -23,9 +23,9 @@ namespace SOAFramework.Service.Server
         /// <returns>服务对象列表</returns>
         public List<ServiceInfo> DiscoverService()
         {
-            List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();
+            List<ServiceModel> methodList = ServicePool.Instance.GetAllServiceModel();
             List<ServiceInfo> list = (from s in methodList
-                                      where s.ServiceInfo != null
+                                      where !s.ServiceInfo.IsHidden
                                       select s.ServiceInfo).ToList();
             return list;
         }
@@ -38,11 +38,12 @@ namespace SOAFramework.Service.Server
         [NoneExecMonitorFilter]
         public ServiceInfo DiscoverServiceByName(string name)
         {
-            List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();
-            ServiceInfo info = (from s in methodList
-                                where s.ServiceInfo != null && s.ServiceInfo.InterfaceName.Equals(name)
-                                select s.ServiceInfo).FirstOrDefault();
-            return info;
+            ServiceModel service = ServicePool.Instance.GetServiceModel(name);
+            if (service != null && !service.ServiceInfo.IsHidden)
+            {
+                return service.ServiceInfo;
+            }
+            return null;
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace SOAFramework.Service.Server
             {
                 module = "";
             }
-            List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();
+            List<ServiceModel> methodList = ServicePool.Instance.GetAllServiceModel();
             var query = from s in methodList
                         where s.ServiceInfo != null && s.ServiceInfo.Module == module
                         select s.ServiceInfo;
@@ -72,9 +73,9 @@ namespace SOAFramework.Service.Server
         /// <returns></returns>
         public List<string> GetServiceModuleNames()
         {
-            List<ServiceModel> methodList = ServicePoolManager.GetAllItems<ServiceModel>();
+            List<ServiceModel> methodList = ServicePool.Instance.GetAllServiceModel();
             List<string> list = (from s in methodList
-                                 where s.ServiceInfo != null && !string.IsNullOrEmpty(s.ServiceInfo.Module)
+                                 where !s.ServiceInfo.IsHidden && !string.IsNullOrEmpty(s.ServiceInfo.Module)
                                  select s.ServiceInfo.Module).Distinct().ToList();
             if (!list.Contains("Default"))
             {

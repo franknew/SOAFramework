@@ -21,7 +21,7 @@ namespace SOAFramework.Service.Core
         {
             try
             {
-                string url = ServiceUtility.GetMinCpuDispatcher();
+                string url = ServicePool.Instance.GetMinCpuDispatcher();
                 string executeUrl = string.Format("{0}/Execute/{1}/{2}", url.TrimEnd('/'), typeName, functionName);
                 //分配到自己
                 if (string.IsNullOrEmpty(url) || url == "Server")
@@ -60,7 +60,7 @@ namespace SOAFramework.Service.Core
         {
             while (true)
             {
-                ServiceUtility.RegisterDispatcher(dispatchServerUrl, ServiceUtility.GetCpuRate());
+                ServicePool.Instance.RegisterDispatcher(dispatchServerUrl, ServicePool.Instance.GetCpuRate());
 
                 Thread.Sleep(1000);
             }

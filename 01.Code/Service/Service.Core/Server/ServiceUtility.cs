@@ -24,10 +24,7 @@ namespace SOAFramework.Service.Server
     [ServiceLayer(Enabled = false)]
     public class ServiceUtility
     {
-        private static readonly Dictionary<string, DateTime> _dicWatcher = new Dictionary<string, DateTime>();
-        private static readonly List<MachinePerformance> _listPerformance = new List<MachinePerformance>();
         private static SOAConfiguration config = null;
-        internal static List<IFilter> filterList = new List<IFilter>();
 
         static ServiceUtility()
         {
@@ -39,14 +36,6 @@ namespace SOAFramework.Service.Server
             {
                 throw ex;
             }
-        }
-
-        public static void Init()
-        {
-            filterList = InitFilterList();
-            List<Assembly> assmList = GetBusinessAssmeblyList();
-
-            AddAssInCache(assmList, filterList);
         }
 
         /// <summary>
@@ -70,7 +59,7 @@ namespace SOAFramework.Service.Server
             }
             object result = null;
 
-            ServiceModel service = GetServiceModel(typeName, functionName);
+            ServiceModel service = ServicePool.Instance.GetServiceModel(typeName + "." + functionName);
             MethodInfo method = null;
             if (service != null)
             {
@@ -111,7 +100,7 @@ namespace SOAFramework.Service.Server
         /// <param name="cache"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static List<Assembly> GetBusinessAssmeblyList()
+        private static List<Assembly> GetBusinessAssmeblyList()
         {
             List<Assembly> assmList = GetBussinessConfigAss();
             assmList.Add(Assembly.GetCallingAssembly());
@@ -119,7 +108,7 @@ namespace SOAFramework.Service.Server
             return assmList;
         }
 
-        public static List<Assembly> GetBussinessConfigAss()
+        private static List<Assembly> GetBussinessConfigAss()
         {
             //设置业务层缓存
             if (config == null)
@@ -147,7 +136,7 @@ namespace SOAFramework.Service.Server
             return assmList;
         }
 
-        public static List<IFilter> InitFilterList()
+        private static List<IFilter> InitFilterList()
         {
             List<Assembly> assmList = new List<Assembly>();
             assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
@@ -182,7 +171,7 @@ namespace SOAFramework.Service.Server
                 Type[] types = ass.GetTypes();
                 foreach (var type in types)
                 {
-                    if (type.GetInterface("IFilter") != null)
+                    if (type.GetInterface("IFilter") != null && type.GetInterface("INoneExecuteFilter") == null)
                     {
                         object instance = Activator.CreateInstance(type);
                         IFilter filter = instance as IFilter;
@@ -225,62 +214,58 @@ namespace SOAFramework.Service.Server
         public static IFilter FilterExecuting(string typeName, string funcName, ServiceModel service,
             Dictionary<string, object> parameters)
         {
-            if (filterList != null)
+            //执行公共的过滤器
+            foreach (var filter in service.FilterList)
             {
-                //执行公共的过滤器
-                foreach (var filter in service.FilterList)
+                ActionContext context = new ActionContext
                 {
-                    ActionContext context = new ActionContext
+                    Context = HttpContext.Current,
+                    Router = new RouterData
                     {
-                        Context = HttpContext.Current,
-                        Router = new RouterData
-                        {
-                            Action = funcName,
-                            TypeName = typeName,
-                        },
-                        MethodInfo = service.MethodInfo,
-                        Parameters = parameters,
-                    };
+                        Action = funcName,
+                        TypeName = typeName,
+                    },
+                    MethodInfo = service.MethodInfo,
+                    Parameters = parameters,
+                };
 
-                    if (!filter.OnActionExecuting(context))
-                    {
-                        return filter;
-                    }
+                if (!filter.OnActionExecuting(context))
+                {
+                    return filter;
                 }
             }
+
             return null;
         }
 
-        public static IFilter FilterExecuted(string typeName, string funcName, ServiceModel servide,
+        public static IFilter FilterExecuted(string typeName, string funcName, ServiceModel service,
             Dictionary<string, object> parameters, long ElapsedMilliseconds, ServerResponse response)
         {
-            if (filterList != null)
+            //执行公共的过滤器
+            foreach (var filter in service.FilterList)
             {
-                //执行公共的过滤器
-                foreach (var filter in servide.FilterList)
+                ActionContext context = new ActionContext
                 {
-                    ActionContext context = new ActionContext
+                    Context = HttpContext.Current,
+                    Router = new RouterData
                     {
-                        Context = HttpContext.Current,
-                        Router = new RouterData
-                        {
-                            Action = funcName,
-                            TypeName = typeName,
-                        },
-                        MethodInfo = servide.MethodInfo,
-                        Parameters = parameters,
-                        PerformanceContext = new PerformanceContext
-                        {
-                            ElapsedMilliseconds = ElapsedMilliseconds,
-                        },
-                        Response = response,
-                    };
-                    if (!filter.OnActionExecuted(context))
+                        Action = funcName,
+                        TypeName = typeName,
+                    },
+                    MethodInfo = service.MethodInfo,
+                    Parameters = parameters,
+                    PerformanceContext = new PerformanceContext
                     {
-                        return filter;
-                    }
+                        ElapsedMilliseconds = ElapsedMilliseconds,
+                    },
+                    Response = response,
+                };
+                if (!filter.OnActionExecuted(context))
+                {
+                    return filter;
                 }
             }
+
             return null;
         }
 
@@ -304,190 +289,7 @@ namespace SOAFramework.Service.Server
             return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
         }
 
-        public static void AddAssInCache(List<Assembly> assmList, List<IFilter> filters)
-        {
-            foreach (var ass in assmList)
-            {
-                #region 判断监视缓存
-                FileInfo assFile = new FileInfo(ass.Location);
-                if (_dicWatcher.ContainsKey(ass.FullName))
-                {
-                    if (assFile.LastWriteTime <= _dicWatcher[ass.FullName])
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        _dicWatcher[ass.FullName] = assFile.LastWriteTime;
-                    }
-                }
-                else
-                {
-                    _dicWatcher[ass.FullName] = assFile.LastWriteTime;
-                }
-                #endregion
-
-                Type[] types = ass.GetTypes();
-                FileInfo file = new FileInfo(ass.Location.Remove(ass.Location.LastIndexOf(".")) + ".xml");
-                List<XElement> elementList = null;
-                if (file.Exists)
-                {
-                    elementList = XElement.Load(file.FullName).Descendants("member").ToList();
-                }
-
-                foreach (var type in types)
-                {
-                    ServiceLayer layer = type.GetCustomAttribute<ServiceLayer>();
-                    MethodInfo[] methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-                    List<MethodInfo> list = methods.ToList().FindAll(t => !t.Name.StartsWith("get_")
-                        && !t.Name.StartsWith("set_")
-                        && t.DeclaringType.Name.IndexOf("<>c__DisplayClass") == -1);
-                    string module = "";
-                    //如果类上设置不可用，该类中所有的方法不进入服务池
-                    if (layer != null && !layer.Enabled)
-                    {
-                        continue;
-                    }
-                    //获得模块名
-                    else if (layer != null && !string.IsNullOrEmpty(layer.Module))
-                    {
-                        module = layer.Module;
-                    }
-                    foreach (var method in list)
-                    {
-                        string key = type.FullName + "." + method.Name;
-                        ServiceInfo info = null;
-                        ServiceInvoker attribute = method.GetCustomAttribute<ServiceInvoker>(true);
-                        if (attribute != null)
-                        {
-                            //如果方法上设置了不可用，那么该方法就不进入服务池
-                            if (!attribute.Enabled)
-                            {
-                                continue;
-                            }
-                            //获得设置的接口名称
-                            if (!string.IsNullOrEmpty(attribute.InterfaceName))
-                            {
-                                key = attribute.InterfaceName;
-                            }
-                            //获得模块名称
-                            if (!string.IsNullOrEmpty(attribute.Module))
-                            {
-                                module = attribute.Module;
-                            }
-                        }
-                        //如果方法或者类上设置了隐藏发现，就不能通过这个方法显示出来
-                        if ((layer == null || !layer.IsHiddenDiscovery) && (attribute == null || !attribute.IsHiddenDiscovery))
-                        {
-                            string description = "";
-                            string returnDesc = "";
-                            List<ServiceParameter> parameters = null;
-                            XElement methodElement = null;
-                            if (elementList != null)
-                            {
-                                methodElement = elementList.Find(t => t.Attribute("name").Value.StartsWith("M:" + key));
-                            }
-                            if (methodElement != null)
-                            {
-                                description = methodElement.Element("summary").Value.Trim('\n', ' ');
-                                returnDesc = methodElement.Element("returns").Value.Trim('\n', ' ');
-                            }
-                            ParameterInfo[] param = method.GetParameters();
-                            if (param.Length > 0)
-                            {
-                                parameters = new List<ServiceParameter>();
-                                foreach (ParameterInfo p in param)
-                                {
-                                    ServiceParameter sp = new ServiceParameter
-                                    {
-                                        Index = p.Position,
-                                        Name = p.Name,
-                                        TypeInfo = new SOAFramework.Service.Core.Model.TypeInfo
-                                        {
-                                            FullTypeName = p.ParameterType.FullName,
-                                            TypeName = GetTypeName(p.ParameterType),
-                                            IsClass = IsClassType(p.ParameterType),
-                                            NameSpace = p.ParameterType.Namespace,
-                                        },
-                                    };
-                                    XElement paramElement = null;
-                                    if (methodElement != null)
-                                    {
-                                        paramElement = methodElement.Descendants("param").FirstOrDefault(t => t.Attribute("name").Value.Equals(p.Name));
-                                    }
-                                    if (paramElement != null && !string.IsNullOrEmpty(paramElement.Value))
-                                    {
-                                        sp.Description = paramElement.Value;
-                                    }
-                                    parameters.Add(sp);
-                                }
-                            }
-                            info = new ServiceInfo
-                            {
-                                InterfaceName = key,
-                                Parameters = parameters,
-                                Module = module,
-                                ReturnTypeInfo = new SOAFramework.Service.Core.Model.TypeInfo
-                                {
-                                    FullTypeName = method.ReturnType.FullName,
-                                    TypeName = GetTypeName(method.ReturnType),
-                                    IsClass = IsClassType(method.ReturnType),
-                                    NameSpace = method.ReturnType.Namespace,
-                                },
-                            };
-                            if (!string.IsNullOrEmpty(description))
-                            {
-                                info.Description = description;
-                            }
-                            if (!string.IsNullOrEmpty(returnDesc))
-                            {
-                                info.ReturnDesc = returnDesc;
-                            }
-                        }
-
-                        ServiceModel model = new ServiceModel { MethodInfo = method, ServiceInfo = info };
-                        AttatchFiltersToMethods(filters, model);
-                        ServicePoolManager.AddItem(key, model);
-                    }
-                }
-            }
-        }
-
-        public static void RegisterDispatcher(string url, float cpu)
-        {
-            MachinePerformance m = _listPerformance.Find(t => t.Url == url);
-            if (m == null)
-            {
-                m = new MachinePerformance
-                {
-                    Url = url,
-                    CpuRate = cpu,
-                };
-                _listPerformance.Add(m);
-            }
-            else
-            {
-                m.CpuRate = cpu;
-            }
-        }
-
-        public static string GetMinCpuDispatcher()
-        {
-            MachinePerformance performance = null;
-            foreach (var m in _listPerformance)
-            {
-                if (performance == null || performance.CpuRate > m.CpuRate)
-                {
-                    performance = m;
-                }
-            }
-            string url = "";
-            if (performance != null)
-            {
-                url = performance.Url;
-            }
-            return url;
-        }
+        
 
         public static float GetCpuRate()
         {
@@ -524,7 +326,7 @@ namespace SOAFramework.Service.Server
             {
                 #region 准备工作
                 string methodFullName = typeName + "." + functionName;
-                ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                ServiceModel service = ServicePool.Instance.GetServiceModel(methodFullName);
                 MethodInfo method = null;
                 if (service != null)
                 {
@@ -533,8 +335,8 @@ namespace SOAFramework.Service.Server
                 //如果找不到方法重新加载配置的DLL
                 else
                 {
-                    ServiceUtility.Init();
-                    service = ServicePoolManager.GetItem<ServiceModel>(methodFullName);
+                    ServicePool.Instance.FillPool();
+                    service = ServicePool.Instance.GetServiceModel(methodFullName);
                     if (service != null)
                     {
                         method = service.MethodInfo;
@@ -624,14 +426,6 @@ namespace SOAFramework.Service.Server
             }
             #endregion
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
-        }
-
-        protected static ServiceModel GetServiceModel(string typeName, string functionName)
-        {
-            string key = typeName + "." + functionName;
-
-            ServiceModel service = ServicePoolManager.GetItem<ServiceModel>(key);
-            return service;
         }
     }
 }

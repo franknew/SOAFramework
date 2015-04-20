@@ -10,6 +10,7 @@ namespace SOAFramework.Service.Core.Model
     [DataContract]
     public class ServiceInfo
     {
+
         [DataMember(EmitDefaultValue = false)]
         public string InterfaceName { get; set; }
 
@@ -27,6 +28,8 @@ namespace SOAFramework.Service.Core.Model
 
         [DataMember(EmitDefaultValue = false)]
         public TypeInfo ReturnTypeInfo { get; set; }
+
+        public bool IsHidden { get; set; }
     }
 
     [DataContract]
