@@ -14,12 +14,13 @@ using System.Threading.Tasks;
 
 namespace SOAFramework.Service.Core
 {
+    [ServiceLayer(IsHiddenDiscovery = true)]
     public class DispatcherClient : IDispatcher
     {
         Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, string> args, List<BaseFilter> filterList,
                bool enableConsoleMonitor)
         {
-            return ServiceUtility.Execute(typeName, functionName, args, filterList, enableConsoleMonitor);
+            return ServicePool.Instance.Execute(typeName, functionName, args);
         }
 
         void IDispatcher.StartRegisterTask(string dispatchServerUrl)
@@ -38,7 +39,7 @@ namespace SOAFramework.Service.Core
                         HttpHelper.Post(url, byteArgs);
                     }
                 }
-                catch
+                catch (TimeoutException ex)
                 {
 
                 }

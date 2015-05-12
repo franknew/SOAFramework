@@ -11,7 +11,7 @@ namespace SOAFramework.Service.SDK.Core
 {
     public class Executer
     {
-        private string _url = ConfigurationManager.AppSettings["ServiceUrl"];
+        private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"].ConnectionString;
 
         public T Execute<T>(IRequest<T> request, string url = null) where T : BaseResponse
         {

@@ -57,6 +57,8 @@
   <ItemGroup>
     <Compile Include="Analyzer\IAnalyzer.cs" />
     <Compile Include="Analyzer\ServiceAnalyzer.cs" />
+    <Compile Include="Dispatcher\HttpDispatcherExecuter.cs" />
+    <Compile Include="Dispatcher\IDispatcherExecuter.cs" />
     <Compile Include="Extension\WcfHostExtension.cs" />
     <Compile Include="Filter\FilterHandler.cs" />
     <Compile Include="Filter\FilterWatcher.cs" />

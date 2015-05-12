@@ -39,12 +39,12 @@ namespace SOAFramework.Service.Server
             {
                 //把DLL中的所有方法加载到缓存中
                 ServicePool.Instance.Init();
-
+                
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
                 {
                     if (ConfigurationManager.AppSettings["EnableConsoleMonitor"] == "1")
                     {
-                        enableConsoleMonitor = true;
+                        ServicePool.Instance.EnableConsoleMonitor = true;
                     }
                 }
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DispatcherServerUrl"]))
