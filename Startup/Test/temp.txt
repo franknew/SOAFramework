@@ -1,3 +1,0 @@
-﻿@*@model IEnumerable<mvcapplication2.controllers.querybillfollowdetail>*@
-@(Model)
-

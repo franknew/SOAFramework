@@ -1,13 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Startup", "Startup", "{6211479C-E633-44D3-BAE9-E18E1CDB4B72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{5C5527B8-D852-45F9-A892-7C81EE3B7975}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ORM", "ORM", "{8684A08E-2B19-4E9E-AD10-AE9F7104382F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controller", "Controller", "{28CAA9FE-110E-4B62-ACA6-CE3144E61CB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{C8E88402-4AB0-41A0-9C7E-9BD5273CE9AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{EBB91AA3-6271-4411-82D6-849550C5046C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SOAService", "SOAService", "{6E1C9072-68AD-4A60-8552-0D013449AB13}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{7AA3BEBE-B65C-42FD-94CC-8363F427B02B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{E166349C-D97F-4CA4-97B3-67AE7EDB1397}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\Dll\Norm.dll = Resources\Dll\Norm.dll
+		Resources\Dll\Norm.xml = Resources\Dll\Norm.xml
+		Resources\Dll\NPOI.dll = Resources\Dll\NPOI.dll
+		Resources\Dll\NPOI.OOXML.dll = Resources\Dll\NPOI.OOXML.dll
+		Resources\Dll\NPOI.OpenXml4Net.dll = Resources\Dll\NPOI.OpenXml4Net.dll
+		Resources\Dll\NPOI.OpenXmlFormats.dll = Resources\Dll\NPOI.OpenXmlFormats.dll
+		Resources\Dll\System.Data.SQLite.dll = Resources\Dll\System.Data.SQLite.dll
+		Resources\Dll\System.Web.Razor.dll = Resources\Dll\System.Web.Razor.dll
+		Resources\Dll\System.Web.Razor.xml = Resources\Dll\System.Web.Razor.xml
+		Resources\Dll\Tamir.SharpSSH.dll = Resources\Dll\Tamir.SharpSSH.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Key", "Key", "{F107B164-CADB-4508-A06B-61631E2217DD}"
+	ProjectSection(SolutionItems) = preProject
+		SOAFramework.Key.pfx = SOAFramework.Key.pfx
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOP", "Library\AOP\AOP.csproj", "{61444396-8AFD-4041-B9A0-6D3B36440024}"
 EndProject
@@ -27,23 +60,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XML", "Library\XML\XML.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "Library\DAL\DAL.csproj", "{323CA08D-7749-484C-B7A3-EE709D1AF0FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controller", "Controller", "{28CAA9FE-110E-4B62-ACA6-CE3144E61CB9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{C9437F89-A710-4097-9AC6-1A0B4DAF2B2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Startup\Test\Test.csproj", "{07760BFF-1828-4681-8583-76929FB8A2ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService", "Library\WebService\WebService.csproj", "{09576270-B770-442D-9C90-9F82B2C8F8CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{C8E88402-4AB0-41A0-9C7E-9BD5273CE9AA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Models\Model.csproj", "{47026C03-6F4D-4155-BD42-78EC73044C73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "7Zip", "Library\7Zip\7Zip.csproj", "{74F3B6DE-FE00-433C-A658-9169FF0B3456}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{EBB91AA3-6271-4411-82D6-849550C5046C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SOAService", "SOAService", "{6E1C9072-68AD-4A60-8552-0D013449AB13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Http", "Library\Http\Http.csproj", "{B5168C1F-6145-4453-9E20-D2F69883B49B}"
 EndProject
@@ -73,8 +98,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barcode", "Library\Barcode\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Library\Validator\Validator.csproj", "{E8C697C0-7705-450D-B294-A48D16373849}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{7AA3BEBE-B65C-42FD-94CC-8363F427B02B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{4CF7D6DF-4D60-490E-A1B3-757CAEE580A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscoverServiceWeb", "Startup\DiscoverServiceWeb\DiscoverServiceWeb.csproj", "{AF291BB9-5036-4386-8AF3-935607E1C00D}"
@@ -87,8 +110,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSmith", "Library\CodeSm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSmithConsole", "Library\CodeSmithConsole\CodeSmithConsole.csproj", "{3016FA05-CC20-4725-9095-DEB7A77C5DEA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroFramework", "Client\MetroFramework\MetroFramework.csproj", "{BB41AC8B-CBED-4387-A7E0-4567EDB3F57F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroFramework.Design", "Client\MetroFramework.Design\MetroFramework.Design.csproj", "{7316584D-9A16-4280-A8AB-6D45198C6E4D}"
@@ -98,27 +119,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroFramework.Demo", "Client\MetroFramework.Demo\MetroFramework.Demo.csproj", "{AF988819-4618-4852-9506-C1D06D04F6B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evaluation", "Library\Evaluation\Evaluation.csproj", "{82C67C11-88B3-4F02-8E29-57A7F27042F7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{E166349C-D97F-4CA4-97B3-67AE7EDB1397}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D}"
-	ProjectSection(SolutionItems) = preProject
-		Resources\Dll\Norm.dll = Resources\Dll\Norm.dll
-		Resources\Dll\Norm.xml = Resources\Dll\Norm.xml
-		Resources\Dll\NPOI.dll = Resources\Dll\NPOI.dll
-		Resources\Dll\NPOI.OOXML.dll = Resources\Dll\NPOI.OOXML.dll
-		Resources\Dll\NPOI.OpenXml4Net.dll = Resources\Dll\NPOI.OpenXml4Net.dll
-		Resources\Dll\NPOI.OpenXmlFormats.dll = Resources\Dll\NPOI.OpenXmlFormats.dll
-		Resources\Dll\System.Data.SQLite.dll = Resources\Dll\System.Data.SQLite.dll
-		Resources\Dll\System.Web.Razor.dll = Resources\Dll\System.Web.Razor.dll
-		Resources\Dll\System.Web.Razor.xml = Resources\Dll\System.Web.Razor.xml
-		Resources\Dll\Tamir.SharpSSH.dll = Resources\Dll\Tamir.SharpSSH.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Key", "Key", "{F107B164-CADB-4508-A06B-61631E2217DD}"
-	ProjectSection(SolutionItems) = preProject
-		SOAFramework.Key.pfx = SOAFramework.Key.pfx
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "D:\Download\OpenFileOrFolderDialog-master\WindowsFormsApplication1.csproj", "{3AED20CE-C8F7-44F7-97BB-C75ED445C2B4}"
 EndProject
@@ -554,6 +554,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D} = {E166349C-D97F-4CA4-97B3-67AE7EDB1397}
 		{61444396-8AFD-4041-B9A0-6D3B36440024} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{E21BA0D2-9CF5-478F-9E50-5AFE78712B97} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{F83315EC-3CD0-413F-B8E6-C6259FB75A10} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
@@ -593,7 +594,6 @@ Global
 		{5A2FCAE8-C2FA-41BD-90EA-16103EA07B26} = {F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}
 		{AF988819-4618-4852-9506-C1D06D04F6B2} = {F1C98741-F0D6-44A2-B7EE-EEB3CBD83A0C}
 		{82C67C11-88B3-4F02-8E29-57A7F27042F7} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
-		{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D} = {E166349C-D97F-4CA4-97B3-67AE7EDB1397}
 		{D607173D-DD70-467D-83FE-C27CC7E15D8C} = {6E1C9072-68AD-4A60-8552-0D013449AB13}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
