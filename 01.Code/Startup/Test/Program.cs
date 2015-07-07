@@ -36,12 +36,8 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
-            TestInterfaceDerived1 testclass1 = new TestInterfaceDerived1();
-            testclass1.str1 = "str1";
-            testclass1.str2 = "str2";
-            TestInterface interface1 = testclass1;
-            TestInterfaceDerived1 testclass2 = interface1 as TestInterfaceDerived1;
-            TestInterfaceDerived2 testclass3 = new TestInterfaceDerived2();
+
+            IDBHelper helper = DBFactory.CreateDBHelper();
 
             string testa = "b";
             int enumb = testa.ToEnumValue<TestEnum>();
