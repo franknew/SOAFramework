@@ -26,6 +26,8 @@ namespace SOAFramework.Service.Server
     {
         private static SOAConfiguration config = null;
 
+        public delegate bool FilterDelegate(ActionContext context);
+
         static ServiceUtility()
         {
             try
@@ -38,7 +40,7 @@ namespace SOAFramework.Service.Server
             }
         }
 
-        
+
 
         /// <summary>
         /// 初始化缓存
@@ -157,61 +159,54 @@ namespace SOAFramework.Service.Server
         /// </summary>
         /// <param name="filterList"></param>
         /// <returns>运行失败的filter</returns>
-        public static IFilter FilterExecuting(string typeName, string funcName, ServiceModel service,
-            Dictionary<string, object> parameters)
+        public static IFilter FilterExecuting(ServiceModel service, ActionContext context)
         {
+            string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
+            string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {
-                ActionContext context = new ActionContext
+                var result = InvokeFilter(service, filter, filter.OnActionExecuting, context);
+                if (result != null)
                 {
-                    Context = HttpContext.Current,
-                    Router = new RouterData
-                    {
-                        Action = funcName,
-                        TypeName = typeName,
-                    },
-                    MethodInfo = service.MethodInfo,
-                    Parameters = parameters,
-                };
-
-                if (!filter.OnActionExecuting(context))
-                {
-                    return filter;
+                    return result;
                 }
             }
-
             return null;
         }
 
-        public static IFilter FilterExecuted(string typeName, string funcName, ServiceModel service,
-            Dictionary<string, object> parameters, long ElapsedMilliseconds, ServerResponse response)
+        public static IFilter FilterExecuted(ServiceModel service, ServerResponse response, ActionContext context)
         {
+            context = null;
+            string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
+            string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {
-                ActionContext context = new ActionContext
+                var result = InvokeFilter(service, filter, filter.OnActionExecuted, context);
+                if (result != null)
                 {
-                    Context = HttpContext.Current,
-                    Router = new RouterData
-                    {
-                        Action = funcName,
-                        TypeName = typeName,
-                    },
-                    MethodInfo = service.MethodInfo,
-                    Parameters = parameters,
-                    PerformanceContext = new PerformanceContext
-                    {
-                        ElapsedMilliseconds = ElapsedMilliseconds,
-                    },
-                    Response = response,
-                };
-                if (!filter.OnActionExecuted(context))
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public static IFilter InvokeFilter(ServiceModel service, IFilter filter, FilterDelegate filterDelegate, ActionContext context)
+        {
+            if (filterDelegate == null)
+            {
+                return null;
+            }
+            var classAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<IFilter>(true);
+            var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
+            if ((classAttr != null || methodAttr != null) && !(classAttr is INoneExecuteFilter) && !(methodAttr is INoneExecuteFilter))
+            {
+                if (!filterDelegate.Invoke(context))
                 {
                     return filter;
                 }
             }
-
             return null;
         }
 
@@ -235,7 +230,7 @@ namespace SOAFramework.Service.Server
             return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
         }
 
-        
+
 
         public static float GetCpuRate()
         {

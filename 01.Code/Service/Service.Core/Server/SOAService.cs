@@ -11,24 +11,23 @@ using System.Reflection.Emit;
 using System.Reflection;
 using System.Configuration;
 using System.Collections;
-using SOAFramework.Service.Interface;
 using SOAFramework.Service.Core;
 using System.IO;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using SOAFramework.Service.Core.Model;
+using System.Dynamic;
+using System.Web;
 
 namespace SOAFramework.Service.Server
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class SOAService : IService
     {
         private static IDispatcher _dispatcher = null;
 
         private static string _filePath = "";
-
-        private static string _dispatcherServerUrl = "";
 
         private static bool enableConsoleMonitor = false;
 
@@ -39,19 +38,7 @@ namespace SOAFramework.Service.Server
             {
                 //把DLL中的所有方法加载到缓存中
                 ServicePool.Instance.Init();
-                
-                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
-                {
-                    if (ConfigurationManager.AppSettings["EnableConsoleMonitor"] == "1")
-                    {
-                        ServicePool.Instance.EnableConsoleMonitor = true;
-                    }
-                }
-                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DispatcherServerUrl"]))
-                {
-                    _dispatcherServerUrl = ConfigurationManager.AppSettings["DispatcherServerUrl"];
-                }
-                if (string.IsNullOrEmpty(_dispatcherServerUrl))
+                if (string.IsNullOrEmpty(ServicePool.Instance.DispatchServerUrl))
                 {
                     _dispatcher = new DispatcherServer();
                 }
@@ -60,11 +47,14 @@ namespace SOAFramework.Service.Server
                     _dispatcher = new DispatcherClient();
                 }
 
-                Task task = new Task(() =>
+                if (ServicePool.Instance.EnableRegDispatcher)
                 {
-                    _dispatcher.StartRegisterTask(_dispatcherServerUrl);
-                });
-                task.Start();
+                    Task task = new Task(() =>
+                    {
+                        _dispatcher.StartRegisterTask(ServicePool.Instance.DispatchServerUrl);
+                    });
+                    task.Start();
+                }
             }
             catch (Exception ex)
             {
@@ -84,9 +74,37 @@ namespace SOAFramework.Service.Server
         /// <param name="args"></param>
         /// <returns>return stream for pure json</returns>
         [ServiceInvoker(IsHiddenDiscovery = true)]
-        public Stream Execute(string typeName, string functionName, Dictionary<string, string> args)
+        public Stream Execute(string typeName, string functionName, string args)
         {
-            return _dispatcher.Execute(typeName, functionName, args, _filterList, enableConsoleMonitor);
+            Stream stream = null;
+            Dictionary<string, object> dic = null;
+            try
+            {
+                dic = JsonHelper.Deserialize<Dictionary<string, object>>(args);
+            }
+            catch (Exception ex)
+            {
+                ServerResponse response = new ServerResponse();
+                response.IsError = true;
+                response.StackTrace = ex.StackTrace;
+                response.ErrorMessage = "反序列化传入json字符串时出错！Json:" + args;
+                stream = response.ToStream();
+                return stream;
+            }
+            try
+            {
+                stream = _dispatcher.Execute(typeName, functionName, dic, _filterList, enableConsoleMonitor);
+            }
+            catch (Exception ex)
+            {
+                ServerResponse response = new ServerResponse();
+                response.IsError = true;
+                response.StackTrace = ex.StackTrace;
+                response.ErrorMessage = ex.Message;
+                stream = response.ToStream();
+                return stream;
+            }
+            return stream;
         }
 
         [ServiceInvoker(IsHiddenDiscovery = true)]
@@ -159,8 +177,10 @@ namespace SOAFramework.Service.Server
             return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
         }
 
-        public void Ping()
-        { }
+        public bool Ping()
+        {
+            return true;
+        }
 
         #region test
         [ServiceInvoker(Module = "Test")]
@@ -192,5 +212,11 @@ namespace SOAFramework.Service.Server
             public TestClass c1 { get; set; }
         }
         #endregion
+
+
+        public string PostTest(string data)
+        {
+            return data;
+        }
     }
 }

@@ -10,4 +10,18 @@ namespace SOAFramework.Service.SDK.Core
     {
         string GetApi();
     }
+
+    public abstract class BaseRequest<T> : IRequest<T> where T:BaseResponse
+    {
+        public abstract string GetApi();
+
+        public RequestBody Body { get; set; }
+    }
+
+    public class RequestBody
+    {
+        public string URL { get; set; }
+
+        public string PostData { get; set; }
+    }
 }

@@ -11,7 +11,7 @@ namespace SOAFramework.Service.Core
     [ServiceLayer(IsHiddenDiscovery = true)]
     public class HttpDispatcherExecuter : IDispatcherExecuter
     {
-        public string Execute(string endPoint, string typeName, string functionName, Dictionary<string, string> args)
+        public string Execute(string endPoint, string typeName, string functionName, IDictionary<string, object> args)
         {
             string executeUrl = string.Format("{0}/Execute/{1}/{2}", endPoint.TrimEnd('/'), typeName, functionName);
             string result = null;

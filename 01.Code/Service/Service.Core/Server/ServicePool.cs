@@ -13,6 +13,8 @@ using System.Threading;
 using System.Diagnostics;
 using System.ServiceModel.Web;
 using SOAFramework.Service.Server;
+using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace SOAFramework.Service.Core.Model
 {
@@ -20,12 +22,13 @@ namespace SOAFramework.Service.Core.Model
     public class ServicePool
     {
         #region attributes
-        private Dictionary<string, ServiceModel> _pool = new Dictionary<string, ServiceModel>();
-        private Dictionary<string, DateTime> _AssWatcher = new Dictionary<string, DateTime>();
-        private List<IFilter> _filterList = new List<IFilter>();
-        private List<Assembly> _businessAssList = new List<Assembly>();
-        private List<MachinePerformance> _performanceList = new List<MachinePerformance>();
-        private SOAConfiguration _config = null;
+        protected Dictionary<string, ServiceModel> _pool = new Dictionary<string, ServiceModel>();
+        protected Dictionary<string, DateTime> _AssWatcher = new Dictionary<string, DateTime>();
+        protected List<IFilter> _filterList = new List<IFilter>();
+        protected List<Assembly> _businessAssList = new List<Assembly>();
+        protected List<MachinePerformance> _performanceList = new List<MachinePerformance>();
+        protected SOAConfiguration _config = null;
+        protected Dictionary<string, ServiceSession> _session = new Dictionary<string, ServiceSession>();
         #endregion
 
         #region singleton
@@ -70,16 +73,48 @@ namespace SOAFramework.Service.Core.Model
             get { return _filterList; }
         }
 
+        /// <summary>
+        /// 开启性能监控
+        /// </summary>
         public bool EnableConsoleMonitor
         {
             get;
             set;
+        }
+
+        private bool enableRegDispatcher = true;
+        /// <summary>
+        /// 开启注册分发起
+        /// </summary>
+        public bool EnableRegDispatcher
+        {
+            get { return enableRegDispatcher; }
+            set { enableRegDispatcher = value; }
+        }
+
+        /// <summary>
+        /// 分发服务器url
+        /// </summary>
+        public string DispatchServerUrl { get; set; }
+
+        public Dictionary<string, ServiceSession> Session
+        {
+            get { return _session; }
+        }
+
+        private bool enableZippedResponse = false;
+
+        public bool EnableZippedResponse
+        {
+            get { return enableZippedResponse; }
+            set { enableZippedResponse = value; }
         }
         #endregion
 
         #region action
         public void Init()
         {
+            InitFromConfig();
             _filterList = GetGlobalFilters();
             _businessAssList = GetBusinessAssmeblyList();
             FillPool(_filterList, _businessAssList);
@@ -100,6 +135,7 @@ namespace SOAFramework.Service.Core.Model
                 FillPoolWithSingleAssembly(ass, filterList);
             }
         }
+
         public void FillPoolWithSingleAssembly(Assembly assmbly, List<IFilter> filterList)
         {
             #region 判断监视缓存
@@ -201,71 +237,15 @@ namespace SOAFramework.Service.Core.Model
             return p.GetCurrentCpuUsage();
         }
 
-        public object InvokeInterface(string typeName, string functionName, Dictionary<string, object> args)
-        {
-            if (string.IsNullOrEmpty(typeName))
-            {
-                throw new Exception("没有设置类名！");
-            }
-            if (string.IsNullOrEmpty(functionName))
-            {
-                throw new Exception("没有设置方法名！");
-            }
-            string interfaceName = typeName + "." + functionName;
-            return InvokeInterface(interfaceName, args);
-        }
-
-        public object InvokeInterface(string interfaceName, Dictionary<string, object> args)
-        {
-            if (string.IsNullOrEmpty(interfaceName))
-            {
-                throw new Exception("没有设置接口名！");
-            }
-            object result = null;
-
-            ServiceModel service = GetServiceModel(interfaceName);
-            MethodInfo method = null;
-            if (service != null)
-            {
-                method = service.MethodInfo;
-            }
-            if (method == null)
-            {
-                throw new Exception("方法不存在，错误的接口名或者方法！");
-            }
-            var instance = Activator.CreateInstance(method.DeclaringType);
-            List<ParameterInfo> parameters = new List<ParameterInfo>();
-            parameters.AddRange(method.GetParameters());
-            parameters.Sort((l, r) => l.Position - r.Position);
-            List<object> listParameters = null;
-            if (parameters != null && parameters.Count > 0)
-            {
-                listParameters = new List<object>();
-                foreach (var parameter in parameters)
-                {
-                    if (args.Keys.Contains(parameter.Name))
-                    {
-                        listParameters.Add(args[parameter.Name]);
-                    }
-                }
-            }
-            object[] paramArray = null;
-            if (listParameters != null)
-            {
-                paramArray = listParameters.ToArray();
-            }
-            result = method.Invoke(instance, paramArray);
-            return result;
-        }
-
-        public Stream Execute(string typeName, string functionName, Dictionary<string, string> args)
+        public Stream Execute(string typeName, string functionName, Dictionary<string, object> args)
         {
             //执行方法
             ServerResponse response = new ServerResponse();
             Stopwatch watch = new Stopwatch();
             Stopwatch allWatch = new Stopwatch();
+            ActionContext context = null;
+            string sessionid = (new StackFrame()).GetMethod().GetHashCode().ToString();
             allWatch.Start();
-            string json = "";
             string interfaceName = GetIntefaceName(typeName, functionName);
             try
             {
@@ -291,22 +271,20 @@ namespace SOAFramework.Service.Core.Model
                 {
                     throw new Exception("未能找到接口：" + interfaceName + "！");
                 }
-                Dictionary<string, object> parsedArgs = new Dictionary<string, object>();
-                ParameterInfo[] parameters = method.GetParameters();
-                if (parameters != null)
+
+                context = new ActionContext(typeName, functionName, method, -1, args, null);
+                ServiceSession session = new ServiceSession
                 {
-                    foreach (var p in parameters)
-                    {
-                        if (args.ContainsKey(p.Name))
-                        {
-                            parsedArgs[p.Name] = JsonHelper.Deserialize(args[p.Name], p.ParameterType);
-                        }
-                    }
-                }
+                    Context = context,
+                    Method = method,
+                    Service = service.ServiceInfo,
+                };
+                _session[sessionid] = session;
                 #endregion
 
                 #region 执行前置filter
-                IFilter failedFilter = ServiceUtility.FilterExecuting(typeName, functionName, service, parsedArgs);
+
+                IFilter failedFilter = ServiceUtility.FilterExecuting(service, context);
                 if (failedFilter != null)
                 {
                     response.IsError = true;
@@ -317,26 +295,20 @@ namespace SOAFramework.Service.Core.Model
                 #region 执行方法
                 if (!response.IsError)
                 {
-                    try
-                    {
-                        watch.Start();
-                        //执行方法
-                        object result = InvokeInterface(interfaceName, parsedArgs);
-                        watch.Stop();
-                        response.Data = result;
-                        WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
-                    }
-                    catch (Exception ex)
-                    {
-                        response.IsError = true;
-                        response.ErrorMessage = ex.Message;
-                        response.StackTrace = ex.StackTrace;
-                    }
+                    watch.Start();
+                    //执行方法
+                    object result = service.Invoke(args);
+                    watch.Stop();
+                    response.Data = result;
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
                 }
                 #endregion
 
                 #region 执行后置filter
-                failedFilter = ServiceUtility.FilterExecuted(typeName, functionName, service, parsedArgs, watch.ElapsedMilliseconds, response);
+                context.PerformanceContext.ElapsedMilliseconds = watch.ElapsedMilliseconds;
+                context.Response = response;
+                _session[sessionid] = session;
+                failedFilter = ServiceUtility.FilterExecuted(service, response, context);
                 if (failedFilter != null && !response.IsError)
                 {
                     response.IsError = true;
@@ -346,30 +318,28 @@ namespace SOAFramework.Service.Core.Model
             }
             catch (Exception ex)
             {
+                Exception exinner = ex;
+                while (exinner.InnerException != null)
+                {
+                    exinner = exinner.InnerException;
+                }
                 response.IsError = true;
-                response.ErrorMessage = ex.Message;
-                response.StackTrace = ex.StackTrace;
+                response.ErrorMessage = exinner.Message;
+                response.StackTrace = exinner.StackTrace;
             }
 
             #region 处理结果
-            //序列化对象成json
-            if (response.IsError)
-            {
-                json = JsonHelper.Serialize(response);
-            }
-            else
-            {
-                json = JsonHelper.Serialize(response.Data);
-            }
-            //压缩json
-            string zippedJson = ZipHelper.Zip(json);
+            Stream stream = response.ToStream(enableZippedResponse);
             allWatch.Stop();
             if (EnableConsoleMonitor)
             {
                 Console.WriteLine("{0} -- 耗时：{1}", interfaceName, allWatch.ElapsedMilliseconds);
             }
+            _session[sessionid].Dispose();
+            _session.Remove(sessionid);
             #endregion
-            return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
+
+            return stream;
         }
 
         public string GetIntefaceName(string typeName, string functionName)
@@ -388,14 +358,18 @@ namespace SOAFramework.Service.Core.Model
             List<Assembly> assmList = new List<Assembly>();
             assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
             assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
-            if (_config != null)
+            if (_config != null
+                && _config.SOAConfig != null
+                && _config.SOAConfig.FilterConfigSection != null
+                && _config.SOAConfig.FilterConfigSection.Configs != null)
             {
                 foreach (var value in _config.SOAConfig.FilterConfigSection.Configs)
                 {
                     Assembly ass = null;
                     if (value.Type.ToLower().EndsWith(".dll"))
                     {
-                        ass = Assembly.LoadFile(value.Type);
+                        string fullPath = GetAssmStaticPath(value.Type);
+                        ass = Assembly.LoadFile(fullPath);
                     }
                     else
                     {
@@ -428,17 +402,18 @@ namespace SOAFramework.Service.Core.Model
         private List<Assembly> GetBussinessConfigAss()
         {
             //设置业务层缓存
-            if (_config == null)
+            if (_config == null || _config.SOAConfig == null || _config.SOAConfig.BusinessConfigSection.Configs == null)
             {
-                throw new Exception("配置错误，没有配置业务层dll！");
+                return new List<Assembly>();
             }
             List<Assembly> assmList = new List<Assembly>();
-            foreach (var value in _config.SOAConfig.FilterConfigSection.Configs)
+            foreach (var value in _config.SOAConfig.BusinessConfigSection.Configs)
             {
                 Assembly ass = null;
                 if (value.Type.ToLower().EndsWith(".dll"))
                 {
-                    ass = Assembly.LoadFile(value.Type);
+                    string dllPath = GetAssmStaticPath(value.Type);
+                    ass = Assembly.LoadFile(dllPath);
                 }
                 else
                 {
@@ -464,6 +439,56 @@ namespace SOAFramework.Service.Core.Model
             return assmList;
         }
 
+        private string GetAssmStaticPath(string path)
+        {
+            string dllPath = path;
+            if (path.IndexOf("\\") == -1)
+            {
+                dllPath = AppDomain.CurrentDomain.BaseDirectory + path;
+            }
+            else
+            {
+                dllPath = path.Replace("{AppDir}", AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\'));
+            }
+            if (!File.Exists(dllPath))
+            {
+                dllPath = dllPath.Insert(dllPath.LastIndexOf('\\'), "\\bin");
+            }
+            return dllPath;
+        }
+
+        private void InitFromConfig()
+        {
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableConsoleMonitor"]))
+            {
+                if (ConfigurationManager.AppSettings["EnableConsoleMonitor"] == "1")
+                {
+                    this.EnableConsoleMonitor = true;
+                }
+            }
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableRegDispatcher"]))
+            {
+                if (ConfigurationManager.AppSettings["EnableRegDispatcher"] == "1")
+                {
+                    this.EnableRegDispatcher = true;
+                }
+                else
+                {
+                    this.EnableRegDispatcher = false;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DispatcherServerUrl"]))
+            {
+                this.DispatchServerUrl = ConfigurationManager.AppSettings["DispatcherServerUrl"];
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableZipResponse"])
+                && ConfigurationManager.AppSettings["EnableZipResponse"].Equals("1"))
+            {
+                this.enableZippedResponse = true;
+            }
+        }
         #endregion
     }
 }

@@ -57,6 +57,7 @@
     <Compile Include="Response\PagingServerResponse.cs" />
     <Compile Include="Filter\PerformanceContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceInfo\PostData.cs" />
     <Compile Include="ServiceInfo\PropertyDescription.cs" />
     <Compile Include="Filter\Router.cs" />
     <Compile Include="Response\ServerResponse.cs" />

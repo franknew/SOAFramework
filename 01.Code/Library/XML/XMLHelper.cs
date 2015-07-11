@@ -52,5 +52,18 @@ namespace SOAFramework.Library
             string xml = File.ReadAllText(xmlPath);
             return Deserialize<T>(xml);
         }
+
+        public static string ToSOAPString(object o)
+        {
+            string soapString = null;
+            XmlTypeMapping myTypeMapping = (new SoapReflectionImporter().ImportTypeMapping(o.GetType()));
+            XmlSerializer mySerializer = new XmlSerializer(myTypeMapping);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                mySerializer.Serialize(ms, o);
+                soapString = Encoding.UTF8.GetString(ms.ToArray());
+            }
+            return soapString;
+        }
     }
 }

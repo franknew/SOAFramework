@@ -18,8 +18,14 @@ namespace SOAFramework.Library
             cpuCounter.CategoryName = "Processor";
             cpuCounter.CounterName = "% Processor Time";
             cpuCounter.InstanceName = "_Total";
+            try
+            {
+                ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            }
+            catch
+            {
 
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            }
         }
 
         public float GetCurrentCpuUsage()

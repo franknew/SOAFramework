@@ -6,7 +6,11 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using SOAFramework.Service.Core;
 using SOAFramework.Service.Server;
+using System.Dynamic;
+using System.ServiceModel.Activation;
+using SOAFramework.Service.Core.Model;
 
 namespace SOAFramework.Service.Host
 {
@@ -15,14 +19,14 @@ namespace SOAFramework.Service.Host
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class SOAServiceHost : IService
     {
-        private SOAService service = new SOAService();
+        private static readonly SOAService service = new SOAService();
 
         Stream IService.Download(string fileName)
         {
             return service.Download(fileName);
         }
 
-        Stream IService.Execute(string typeName, string functionName, Dictionary<string, string> args)
+        Stream IService.Execute(string typeName, string functionName, string args)
         {
             return service.Execute(typeName, functionName, args);
         }
@@ -32,9 +36,9 @@ namespace SOAFramework.Service.Host
             throw new NotImplementedException();
         }
 
-        void IService.Ping()
+        bool IService.Ping()
         {
-            service.Ping();
+            return service.Ping();
         }
 
         void IService.RegisterDispatcher(string usage, string url)
@@ -46,5 +50,13 @@ namespace SOAFramework.Service.Host
         {
             return service.Upload(fileName, fileContent);
         }
+
+
+        public string PostTest(string data)
+        {
+            return service.PostTest(data);
+        }
     }
+
+   
 }

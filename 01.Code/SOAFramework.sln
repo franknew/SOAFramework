@@ -25,15 +25,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{BCCF7AEA-B76B-46B0-B176-575F2FDF9A5D}"
 	ProjectSection(SolutionItems) = preProject
+		Resources\Dll\MySql.Data.dll = Resources\Dll\MySql.Data.dll
 		Resources\Dll\Norm.dll = Resources\Dll\Norm.dll
-		Resources\Dll\Norm.xml = Resources\Dll\Norm.xml
 		Resources\Dll\NPOI.dll = Resources\Dll\NPOI.dll
 		Resources\Dll\NPOI.OOXML.dll = Resources\Dll\NPOI.OOXML.dll
 		Resources\Dll\NPOI.OpenXml4Net.dll = Resources\Dll\NPOI.OpenXml4Net.dll
 		Resources\Dll\NPOI.OpenXmlFormats.dll = Resources\Dll\NPOI.OpenXmlFormats.dll
 		Resources\Dll\System.Data.SQLite.dll = Resources\Dll\System.Data.SQLite.dll
 		Resources\Dll\System.Web.Razor.dll = Resources\Dll\System.Web.Razor.dll
-		Resources\Dll\System.Web.Razor.xml = Resources\Dll\System.Web.Razor.xml
 		Resources\Dll\Tamir.SharpSSH.dll = Resources\Dll\Tamir.SharpSSH.dll
 	EndProjectSection
 EndProject

@@ -9,7 +9,12 @@ namespace SOAFramework.Library.Cache
 {
     public class DefaultCache : ICache
     {
-        public const string Region = "Default";
+        private string region = "Memory";
+
+        public DefaultCache(string regionName)
+        {
+            region = regionName;
+        }
 
         private MemoryCache _cache = MemoryCache.Default;
         CacheItemPolicy policy = new CacheItemPolicy();
@@ -29,22 +34,22 @@ namespace SOAFramework.Library.Cache
             {
                 policy.SlidingExpiration = new TimeSpan(seconds * 1000);
             }
-            _cache.Add(item, policy);
+            _cache.Add(item.Key, item.Value, policy, region);
         }
 
         public CacheItem GetItem(string key)
         {
-            return _cache.GetCacheItem(key, Region);
+            return _cache.GetCacheItem(key, region);
         }
 
         public void DelItem(CacheItem item)
         {
-            _cache.Remove(item.Key, Region);
+            _cache.Remove(item.Key, region);
         }
 
         public void DelItem(string key)
         {
-            _cache.Remove(key, Region);
+            _cache.Remove(key, region);
         }
 
         public List<CacheItem> GetAllItems()
@@ -60,7 +65,7 @@ namespace SOAFramework.Library.Cache
 
         public void UpdateItem(CacheItem item)
         {
-            _cache.Set(item.Key, item.Value, policy, Region);
+            _cache.Set(item.Key, item.Value, policy, region);
         }
     }
 }

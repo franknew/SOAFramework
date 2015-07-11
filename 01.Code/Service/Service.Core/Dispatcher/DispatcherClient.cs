@@ -17,7 +17,7 @@ namespace SOAFramework.Service.Core
     [ServiceLayer(IsHiddenDiscovery = true)]
     public class DispatcherClient : IDispatcher
     {
-        Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, string> args, List<BaseFilter> filterList,
+        Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, object> args, List<BaseFilter> filterList,
                bool enableConsoleMonitor)
         {
             return ServicePool.Instance.Execute(typeName, functionName, args);

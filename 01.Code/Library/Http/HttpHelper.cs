@@ -12,10 +12,10 @@ namespace SOAFramework.Library
 {
     public class HttpHelper
     {
-        public static string Post(string url, byte[] data, int timeout = -1)
+        public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json")
         {
             WebRequest request = WebRequest.Create(url);
-            request.ContentType = "application/json"; 
+            request.ContentType = contentType; 
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;
             request.ContentLength = data.Length;

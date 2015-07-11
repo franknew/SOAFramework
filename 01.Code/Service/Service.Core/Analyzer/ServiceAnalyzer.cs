@@ -35,10 +35,7 @@ namespace SOAFramework.Service.Core
                 {
                     object instance = Activator.CreateInstance(type);
                     IFilter filter = instance as IFilter;
-                    if (filter.GlobalUse)
-                    {
-                        list.Add(filter);
-                    }
+                    list.Add(filter);
                 }
             }
 
@@ -58,6 +55,7 @@ namespace SOAFramework.Service.Core
             {
                 filterListCopy.RemoveAll(t => t.GetType().IsInstanceOfType(filter));
             }
+            filterListCopy.Sort((l, r) => r.Index - l.Index);
             service.FilterList = filterListCopy;
         }
 
@@ -91,7 +89,7 @@ namespace SOAFramework.Service.Core
             }
             foreach (var method in list)
             {
-                string key = type.FullName + "." + method.Name;
+                string key = ServicePool.Instance.GetIntefaceName(type.FullName, method.Name);
 
                 ServiceInfo info = GetServiceInfoFromMethodInfo(method, elementList, hiddenService);
                 if (string.IsNullOrEmpty(info.Module))
@@ -107,7 +105,8 @@ namespace SOAFramework.Service.Core
         {
             ServiceInvoker attribute = method.GetCustomAttribute<ServiceInvoker>(true);
 
-            string key = method.DeclaringType.FullName + "." + method.Name;
+            string key = ServicePool.Instance.GetIntefaceName(method.DeclaringType.FullName, method.Name); ;
+            
             string module = "";
             if (attribute != null)
             {
@@ -183,6 +182,7 @@ namespace SOAFramework.Service.Core
             }
             #endregion
 
+            #region 设置serviceinfo
             ServiceInfo info = new ServiceInfo
             {
                 InterfaceName = key,
@@ -198,7 +198,9 @@ namespace SOAFramework.Service.Core
                 IsHidden = isHiddenDiscovery,
                 Description = description.Trim(),
                 ReturnDesc = returnDesc.Trim(),
+                Assembly = method.DeclaringType.Assembly,
             };
+            #endregion
             return info;
         }
 
@@ -217,11 +219,22 @@ namespace SOAFramework.Service.Core
             return typeName;
         }
 
+        /// <summary>
+        /// 是否用户自定义类
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public bool IsCustomClassType(Type t)
         {
             return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
         }
 
+        /// <summary>
+        /// 获得方法中所有的过滤器
+        /// </summary>
+        /// <param name="filterList"></param>
+        /// <param name="method"></param>
+        /// <returns></returns>
         private List<IFilter> GetFilterFromMethod(List<IFilter> filterList, MethodInfo method)
         {
             List<IFilter> filterListCopy = filterList.ToList();
@@ -238,6 +251,11 @@ namespace SOAFramework.Service.Core
             return filterListCopy;
         }
 
+        /// <summary>
+        /// 设置服务信息到内存池中
+        /// </summary>
+        /// <param name="serviceDic"></param>
+        /// <param name="filterList"></param>
         public void GetService(Dictionary<string, ServiceModel> serviceDic, List<IFilter> filterList)
         {
             Type[] types = _ass.GetTypes();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,8 @@ namespace SOAFramework.Service.Core.Model
         public TypeInfo ReturnTypeInfo { get; set; }
 
         public bool IsHidden { get; set; }
+
+        public Assembly Assembly { get; set; }
     }
 
     [DataContract]

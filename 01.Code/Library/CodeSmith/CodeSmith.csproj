@@ -37,23 +37,23 @@
   <ItemGroup>
     <Reference Include="CodeSmith.ActiproSoftware.Text.Addons.DotNet.Wpf, Version=114.2.610.0, Culture=neutral, PublicKeyToken=9fd61cdb91609a7a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Resources\Dll\CodeSmith.ActiproSoftware.Text.Addons.DotNet.Wpf.dll</HintPath>
+      <HintPath>..\..\Bin\Modules\CodeSmith.ActiproSoftware.Text.Addons.DotNet.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="CodeSmith.ActiproSoftware.Text.LLParser.Wpf, Version=114.2.610.0, Culture=neutral, PublicKeyToken=9fd61cdb91609a7a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Resources\Dll\CodeSmith.ActiproSoftware.Text.LLParser.Wpf.dll</HintPath>
+      <HintPath>..\..\Bin\Modules\CodeSmith.ActiproSoftware.Text.LLParser.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="CodeSmith.ActiproSoftware.Text.Wpf, Version=114.2.610.0, Culture=neutral, PublicKeyToken=9fd61cdb91609a7a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Resources\Dll\CodeSmith.ActiproSoftware.Text.Wpf.dll</HintPath>
+      <HintPath>..\..\Bin\Modules\CodeSmith.ActiproSoftware.Text.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="CodeSmith.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=9fd61cdb91609a7a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Resources\Dll\CodeSmith.Core.dll</HintPath>
+      <HintPath>..\..\Bin\Modules\CodeSmith.Core.dll</HintPath>
     </Reference>
     <Reference Include="CodeSmith.Engine, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fd61cdb91609a7a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Resources\Dll\CodeSmith.Engine.dll</HintPath>
+      <HintPath>..\..\Bin\Modules\CodeSmith.Engine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

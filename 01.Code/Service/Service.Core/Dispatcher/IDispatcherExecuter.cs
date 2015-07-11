@@ -9,7 +9,7 @@ namespace SOAFramework.Service.Core
     [ServiceLayer(IsHiddenDiscovery = true)]
     public interface IDispatcherExecuter
     {
-        string Execute(string endPoint, string typeName, string functionName, Dictionary<string, string> args);
+        string Execute(string endPoint, string typeName, string functionName, IDictionary<string, object> args);
     }
 
     public class DispatcherExecuterFactory

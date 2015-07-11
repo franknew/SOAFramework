@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Configuration;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace SOAFramework.Library.DAL
 {
@@ -12,11 +10,19 @@ namespace SOAFramework.Library.DAL
         public static IDBHelper CreateDBHelper()
         {
             string strDBType = DBType.MSSQL.ToString();
-            if (ConfigurationManager.AppSettings["DBType"] != null && ConfigurationManager.AppSettings["DBType"] != string.Empty)
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DBType"]))
             {
                 strDBType = ConfigurationManager.AppSettings["DBType"];
             }
-            string strConn = ConfigurationManager.ConnectionStrings[strDBType].ConnectionString;
+            string strConn = null;
+            if (ConfigurationManager.ConnectionStrings[strDBType] != null && !string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings[strDBType].ConnectionString))
+            {
+                strConn = ConfigurationManager.ConnectionStrings[strDBType].ConnectionString;
+            }
+            if (string.IsNullOrEmpty(strConn))
+            {
+                throw new Exception("没有在ConnectionString配置节点配置连接字符串！");
+            }
             return CreateDBHelper(strConn, strDBType);
         }
 
@@ -55,20 +61,16 @@ namespace SOAFramework.Library.DAL
         public static IDBHelper CreateDBHelper(string strConnectionString, DBType objType)
         {
             IDBHelper helper = null;
-            string typeName = "";
             switch (objType)
             {
                 case DBType.MSSQL:
-                    typeName = "MSSQLHelper";
-                    //helper = new MSSQLHelper(strConnectionString);
+                    helper = new MSSQLHelper(strConnectionString);
                     break;
                 case DBType.MSSQL2005P:
-                    typeName = "MSSQLHelper";
-                    //helper = new MSSQLHelper(strConnectionString);
+                    helper = new MSSQLHelper(strConnectionString);
                     break;
                 case DBType.Oracle:
-                    typeName = "OracleHelper";
-                    //helper = new OracleHelper(strConnectionString);
+                    helper = new OracleHelper(strConnectionString);
                     break;
                 //case DBType.MySQL:
                 //    MySQLHelper objMySQL = new MySQLHelper(strConnectionString);
@@ -77,16 +79,12 @@ namespace SOAFramework.Library.DAL
                     //helper = new AccessHelper(strConnectionString);
                     break;
                 case DBType.SQLite:
-                    typeName = "SQLiteHelper";
-                    //helper = new SQLiteHelper(strConnectionString);
+                    helper = new SQLiteHelper(strConnectionString);
                     break;
                 default:
-                    typeName = "MSSQLHelper";
-                    //helper = new MSSQLHelper(strConnectionString);
+                    helper = new MSSQLHelper(strConnectionString);
                     break;
             }
-            Type type = Assembly.GetAssembly(typeof(IDBHelper)).GetType("SOAFramework.Library.DAL." + typeName, true);
-            helper = Activator.CreateInstance(type, strConnectionString) as IDBHelper;
             return helper;
         }
 

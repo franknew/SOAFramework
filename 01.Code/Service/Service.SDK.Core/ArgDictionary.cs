@@ -17,4 +17,11 @@ namespace SOAFramework.Service.SDK.Core
         public object Value { get; set; }
 
     }
+
+    [DataContract]
+    public class PostData
+    {
+        [DataMember]
+        public string Data { get; set; }
+    }
 }

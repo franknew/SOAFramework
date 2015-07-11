@@ -33,7 +33,7 @@ namespace SOAFramework.Service.SDK.Core
         }
     }
 
-    public abstract class BaseResponseShadow
+    public sealed class BaseResponseShadow
     {
         public bool IsError { get; set; }
 

@@ -13,52 +13,103 @@ namespace SOAFramework.Service.SDK.Core
     {
         private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"].ConnectionString;
 
-        public T Execute<T>(IRequest<T> request, string url = null) where T : BaseResponse
+        public T Execute<T>(IRequest<T> request, string url = null, PostDataFomaterType type = PostDataFomaterType.Json) where T : BaseResponse
         {
             T t = default(T);
-            string api = request.GetApi();
             if (string.IsNullOrEmpty(url))
             {
-                url = _url;
+                //生成完整的url
+                url = GetRealUrl(request, url);
             }
-            if (string.IsNullOrEmpty(url))
+            //访问服务
+            string response = PostSerivce(request, url, type);
+            //通过服务器返回的json生成response对象
+            t = GenerateResponse<T>(response);
+            return t;
+        }
+
+        #region helper method
+        private string GetRealUrl<T>(IRequest<T> request, string serviceUrl) where T : BaseResponse
+        {
+            string api = request.GetApi();
+            if (string.IsNullOrEmpty(serviceUrl))
+            {
+                serviceUrl = _url;
+            }
+            if (string.IsNullOrEmpty(serviceUrl))
             {
                 throw new Exception("没有设置服务url！");
             }
             string typeName = api.Remove(api.LastIndexOf("."));
             string actionName = api.Substring(api.LastIndexOf(".") + 1);
-            string fullUrl = url.TrimEnd('/') + "/Execute/" + typeName + "/" + actionName;
+            string fullUrl = serviceUrl.TrimEnd('/') + "/Execute/" + typeName + "/" + actionName;
+            return fullUrl;
+        }
+
+        private string PostSerivce<T>(IRequest<T> request, string fullUrl, PostDataFomaterType type) where T : BaseResponse
+        {
             Type requestType = request.GetType();
             PropertyInfo[] properties = requestType.GetProperties();
-            List<PostArgItem> args = new List<PostArgItem>();
+            Dictionary<string, object> argdic = new Dictionary<string, object>();
+            //反射获得请求属性
             foreach (PropertyInfo pro in properties)
             {
-                ArgMapping mapping = pro.GetCustomAttribute<ArgMapping>();
+                ArgMapping mapping = pro.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
                 string name = pro.Name;
                 if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping))
                 {
                     name = mapping.Mapping;
                 }
-                args.Add(new PostArgItem { Key = name, Value = JsonHelper.Serialize(pro.GetValue(request)) });
+                object value = pro.GetValue(request, null);
+                argdic[name] = value;
             }
-            string json = JsonHelper.Serialize(args);
+            //格式化成post数据
+            IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
+            string json = fomatter.Format(argdic);
             byte[] data = Encoding.UTF8.GetBytes(json);
             string zippedResponse = HttpHelper.Post(fullUrl, data);
-            string response = ZipHelper.UnZip(zippedResponse);
+            //string response = ZipHelper.UnZip(zippedResponse);
+            string response = zippedResponse;
+
+            //设置请求信息
+            if (request is BaseRequest<T>)
+            {
+                var req = request as BaseRequest<T>;
+                req.Body = new RequestBody
+                {
+                    PostData = json,
+                    URL = fullUrl,
+                };
+            }
+            return response;
+        }
+
+        private T GenerateResponse<T>(string response) where T : BaseResponse
+        {
+            T t = Activator.CreateInstance<T>();
             BaseResponseShadow shadow = null;
             try
             {
+                //如果报错生成一个Response
                 if (response.Contains("\"IsError\""))
                 {
-                    shadow = JsonHelper.Deserialize<BaseResponseShadow>(response);
+                    try
+                    {
+                        shadow = JsonHelper.Deserialize<BaseResponseShadow>(response);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(response, ex);
+                    }
                 }
             }
             catch
             {
             }
-            t = Activator.CreateInstance<T>();
+            //null意味着没有报错
             if (shadow == null)
             {
+                //将返回的对象值设置到response的第一个属性上面
                 PropertyInfo[] responseProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
                 if (responseProperties != null && responseProperties.Length > 0)
                 {
@@ -67,18 +118,21 @@ namespace SOAFramework.Service.SDK.Core
                     {
                         o = JsonHelper.Deserialize(response, responseProperties[0].PropertyType);
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        throw new Exception(response, ex);
                     }
-                    responseProperties[0].SetValue(t, o);
+                    responseProperties[0].SetValue(t, o, null);
                 }
             }
             else
             {
+                //否则设置错误信息
                 t.SetValues(shadow.IsError, shadow.ErrorMessage, shadow.StackTrace);
             }
             t.SetBody(response);
             return t;
         }
+        #endregion
     }
 }

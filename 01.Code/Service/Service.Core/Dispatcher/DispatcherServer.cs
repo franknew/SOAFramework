@@ -17,7 +17,7 @@ namespace SOAFramework.Service.Core
     [ServiceLayer(IsHiddenDiscovery = true)]
     public class DispatcherServer : IDispatcher
     {
-        Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, string> args, List<BaseFilter> filterList,
+        Stream IDispatcher.Execute(string typeName, string functionName, Dictionary<string, object> args, List<BaseFilter> filterList,
             bool enableConsoleMonitor)
         {
             try
@@ -69,9 +69,7 @@ namespace SOAFramework.Service.Core
                 response.IsError = true;
                 response.ErrorMessage = ex.Message;
 
-                string json = JsonHelper.Serialize(response.Data);
-                string zippedJson = ZipHelper.Zip(json);
-                return new MemoryStream(Encoding.UTF8.GetBytes(zippedJson));
+                return response.ToStream();
             }
         }
 
