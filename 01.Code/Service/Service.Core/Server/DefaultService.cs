@@ -93,6 +93,7 @@ namespace SOAFramework.Service.Server
         {
             Type type = Type.GetType(fullTypeName);
             TypeDescription t = null;
+            Type nullableType = Nullable.GetUnderlyingType(type);
             if (type == null)
             {
                 List<Assembly> list = AppDomain.CurrentDomain.GetAssemblies().ToList().FindAll(p => !p.FullName.StartsWith("System"));
@@ -114,6 +115,10 @@ namespace SOAFramework.Service.Server
                 else if (type.IsArray)
                 {
                     type = type.GetElementType();
+                }
+                else if (nullableType != null)
+                {
+                    type = nullableType;
                 }
                 t = new TypeDescription();
                 t.TypeInfo = new SOAFramework.Service.Core.Model.TypeInfo

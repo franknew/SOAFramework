@@ -289,6 +289,7 @@ namespace SOAFramework.Service.Core.Model
                 {
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
+                    response.Code = context.Code;
                 }
                 #endregion
 
@@ -313,6 +314,7 @@ namespace SOAFramework.Service.Core.Model
                 {
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
+                    response.Code = context.Code;
                 }
                 #endregion
             }

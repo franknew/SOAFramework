@@ -33,7 +33,7 @@
                     {
                         <img src="~/Images/Jqx/icon-right.png" style="cursor:pointer;width:17px;height:17px;" onclick="ClickImg(this);" />
                         <input type="hidden" value="@(item.PropertyTypeInfo.FullTypeName.Replace(".","-"))" />
-                        <span>@(item.PropertyName)</span> <span>--</span>    <a href="/ServiceDiscovery/TypeDescription/@(item.PropertyTypeInfo.FullTypeName.Replace(".", "-"))" target="_blank">
+                        <span>@(item.PropertyName)</span> <span>--</span>    <a href="~/ServiceDiscovery/TypeDescription/@(item.PropertyTypeInfo.FullTypeName.Replace(".", "-"))" target="_blank">
                             @(item.PropertyTypeInfo.TypeName)
                         </a>
                     }
@@ -47,7 +47,7 @@
         </ul>
     </div>
     <div class="panel-body">
-        <form method="get" action="/ServiceDiscovery/GenerateCodeFile/@(ViewBag.Data.TypeInfo.FullTypeName.Replace(".", "-"))">
+        <form method="get" action="~/ServiceDiscovery/GenerateCodeFile/@(ViewBag.Data.TypeInfo.FullTypeName.Replace(".", "-"))">
             <input type="submit" value="生成代码文件" />
         </form>
     </div>

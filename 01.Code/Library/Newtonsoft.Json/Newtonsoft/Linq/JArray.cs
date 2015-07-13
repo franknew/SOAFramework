@@ -31,6 +31,7 @@ using System.Text;
 using Newtonsoft.Json.Utilities;
 using System.IO;
 using System.Globalization;
+using System.Reflection;
 
 namespace Newtonsoft.Json.Linq
 {
@@ -330,13 +331,37 @@ namespace Newtonsoft.Json.Linq
 
         public IList<object> ToList(Type type)
         {
+            Type convertType = type;
+            if (type.IsGenericType)
+            {
+                var genericArgs = type.GetGenericArguments();
+                convertType = genericArgs[0];
+            }
             IList<object> list = new List<object>();
             JsonSerializer ser = new JsonSerializer();
             foreach (var obj in this._values)
             {
-                list.Add(obj.ToObject(ser, type));
+                list.Add(obj.ToObject(ser, convertType));
             }
             return list;
+        }
+
+        public object ToListObject(Type type)
+        {
+            object o = null;
+            if (type.IsGenericType)
+            {
+                IList<object> list = this.ToList(type);
+                Type listType = typeof(List<>);
+                var genericType = listType.MakeGenericType(type.GetGenericArguments());
+                o = Activator.CreateInstance(genericType);
+                MethodInfo addMethod = genericType.GetMethod("Add");
+                foreach (var obj in list)
+                {
+                    addMethod.Invoke(o, new object[] { obj });
+                }
+            }
+            return o;
         }
 
         public IList<T> ToList<T>()

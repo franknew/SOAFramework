@@ -33,15 +33,18 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    @foreach (var item in ViewBag.Modules)
+                    @if (ViewBag.Modules != null)
                     {
-                        if (ViewBag.CurrentModule == item)
+                        foreach (var item in ViewBag.Modules)
                         {
-                            <li class="active"><a href="/ServiceDiscovery/Index/@(item)">@(item)</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="/ServiceDiscovery/Index/@(item)">@(item)</a></li>
+                            if (ViewBag.CurrentModule == item)
+                            {
+                                <li class="active"><a href="~/ServiceDiscovery/Index/@(item.Replace(".", "-"))">@(item)</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="~/ServiceDiscovery/Index/@(item.Replace(".", "-"))">@(item)</a></li>
+                            }
                         }
                     }
                 </ul>

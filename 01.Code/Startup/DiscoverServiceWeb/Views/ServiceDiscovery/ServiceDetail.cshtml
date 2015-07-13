@@ -35,12 +35,12 @@
         <span class="text-info">@(ViewBag.Data.ReturnDesc)</span>
     </div>
     <div class="panel-body">
-        <form action="/ServiceDiscovery/GenerateCodeFile/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" method="get">
+        <form action="~/ServiceDiscovery/GenerateCodeFile/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" method="get">
             <span class="text-danger">回参类型信息：</span>
             @if (ViewBag.Data.ReturnTypeInfo.IsClass)
             {
                 <span class="text-info">
-                    <a href="/ServiceDiscovery/TypeDescription/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" target="_blank">
+                    <a href="~/ServiceDiscovery/TypeDescription/@(ViewBag.Data.ReturnTypeInfo.FullTypeName.Replace(".","-"))" target="_blank">
                         @(ViewBag.Data.ReturnTypeInfo.TypeName)
                     </a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -74,7 +74,7 @@
                         <td>
                             @if (item.TypeInfo.IsClass)
                             {
-                                <span><a href="/ServiceDiscovery/TypeDescription/@(item.TypeInfo.FullTypeName.Replace(".","-"))" target="_blank">@(item.TypeInfo.TypeName)</a></span>
+                                <span><a href="~/ServiceDiscovery/TypeDescription/@(item.TypeInfo.FullTypeName.Replace(".","-"))" target="_blank">@(item.TypeInfo.TypeName)</a></span>
                             }
                             else
                             {

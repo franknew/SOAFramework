@@ -23,13 +23,13 @@ namespace SOAFramework.Library.Cache
 
     public class CacheFactory
     {
-        public static ICache Create(CacheType type)
+        public static ICache Create(CacheType type, string region = "Memory")
         {
             ICache cache = null;
             switch (type)
             {
                 case CacheType.DefaultMemoryCache:
-                    cache = new DefaultCache();
+                    cache = new DefaultCache(region);
                     break;
                 case CacheType.Memcached:
                     cache = new Memcache();

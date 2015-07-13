@@ -52,5 +52,7 @@ namespace SOAFramework.Service.Core.Model
         }
 
         public ServerResponse Response { get; set; }
+
+        public int Code { get; set; }
     }
 }

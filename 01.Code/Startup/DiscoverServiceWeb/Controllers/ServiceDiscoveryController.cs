@@ -24,7 +24,7 @@ namespace DiscoverServiceWeb.Controllers
             string moduleName = "Default";
             if (!string.IsNullOrEmpty(id))
             {
-                moduleName = id;
+                moduleName = id.Replace("-", ".");
             }
             GetModuleNamesRequest gmnRequest = new GetModuleNamesRequest();
             GetModuleNamesResponse gmnResponse = SDKFactory.Client.Execute(gmnRequest);

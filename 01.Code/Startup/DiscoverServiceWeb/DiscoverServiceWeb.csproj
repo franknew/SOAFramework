@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DiscoverServiceWeb</RootNamespace>
     <AssemblyName>DiscoverServiceWeb</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -35,7 +35,7 @@
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -48,12 +48,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CodeSmith.Core">
-      <HintPath>..\..\Bin\Modules\CodeSmith.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="CodeSmith.Engine">
-      <HintPath>..\..\Bin\Modules\CodeSmith.Engine.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="SOAFramework.Library.CodeSmith">
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.CodeSmith.dll</HintPath>
@@ -97,9 +91,6 @@
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -265,6 +256,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\bootstrap\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap\bootstrap.css.map" />
+    <None Include="Properties\PublishProfiles\web.config.pubxml" />
     <None Include="Scripts\JQuery\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\Jqx\backgroundTop.png" />
     <Content Include="Images\Jqx\backImage.png" />

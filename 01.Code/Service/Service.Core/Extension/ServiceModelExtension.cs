@@ -87,14 +87,14 @@ namespace SOAFramework.Service.Core.Model
             Stream stream = null;
             string zippedjson = null;
             string json = null;
-            if (response.IsError)
-            {
+            //if (response.IsError)
+            //{
                 json = JsonHelper.Serialize(response);
-            }
-            else
-            {
-                json = JsonHelper.Serialize(response.Data);
-            }
+            //}
+            //else
+            //{
+            //    json = JsonHelper.Serialize(response.Data);
+            //}
             if (zipped)
             {
                 zippedjson = ZipHelper.Zip(json);

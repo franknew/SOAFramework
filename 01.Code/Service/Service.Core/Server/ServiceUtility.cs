@@ -21,7 +21,7 @@ using System.Xml.Linq;
 
 namespace SOAFramework.Service.Server
 {
-    [ServiceLayer(Enabled = false)]
+    [ServiceLayer(Enabled = false, IsHiddenDiscovery = true)]
     public class ServiceUtility
     {
         private static SOAConfiguration config = null;
@@ -213,6 +213,7 @@ namespace SOAFramework.Service.Server
         public static string GetTypeName(Type t)
         {
             string typeName = t.Name;
+            Type nullableType = Nullable.GetUnderlyingType(t);
             if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>))
             {
                 Type TType = t.GetGenericArguments()[0];
@@ -222,12 +223,16 @@ namespace SOAFramework.Service.Server
             {
                 typeName = t.GetElementType().Name + "[]";
             }
+            else if (nullableType != null)
+            {
+                typeName = nullableType.Name;
+            }
             return typeName;
         }
 
         public static bool IsClassType(Type t)
         {
-            return (!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray);
+            return ((!t.Namespace.StartsWith("System") || t.IsGenericType || t.IsArray) && !t.IsValueType);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using SOAFramework.Library;
+﻿using Newtonsoft.Json.Linq;
+using SOAFramework.Library;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -107,22 +108,32 @@ namespace SOAFramework.Service.SDK.Core
             {
             }
             //null意味着没有报错
-            if (shadow == null)
+            if (shadow != null && !shadow.IsError)
             {
                 //将返回的对象值设置到response的第一个属性上面
                 PropertyInfo[] responseProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
                 if (responseProperties != null && responseProperties.Length > 0)
                 {
-                    object o = null;
+                    BaseResponseShadow o = null;
                     try
                     {
-                        o = JsonHelper.Deserialize(response, responseProperties[0].PropertyType);
+                        o = JsonHelper.Deserialize < BaseResponseShadow>(response);
                     }
                     catch (Exception ex)
                     {
                         throw new Exception(response, ex);
                     }
-                    responseProperties[0].SetValue(t, o, null);
+                    object data = null;
+                    if (o.Data is JObject)
+                    {
+                        data = (o.Data as JObject).ToObject(responseProperties[0].PropertyType);
+                    }
+                    else if (o.Data is JArray)
+                    {
+                        data = (o.Data as JArray).ToListObject(responseProperties[0].PropertyType);
+
+                    }
+                    responseProperties[0].SetValue(t, data, null);
                 }
             }
             else

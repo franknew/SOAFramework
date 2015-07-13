@@ -31,6 +31,8 @@ namespace SOAFramework.Service.Server
 
         private static bool enableConsoleMonitor = false;
 
+        private static bool _isError = false;
+
         private static List<BaseFilter> _filterList = new List<BaseFilter>();
         static SOAService()
         {
@@ -58,7 +60,9 @@ namespace SOAFramework.Service.Server
             }
             catch (Exception ex)
             {
-                throw ex;
+                string log = ex.Message + "    Statck trace:" + ex.StackTrace;
+                File.WriteAllText("C\\wwwroot\\Log.txt", log);
+                _isError = true;
             }
         }
 
@@ -77,6 +81,14 @@ namespace SOAFramework.Service.Server
         public Stream Execute(string typeName, string functionName, string args)
         {
             Stream stream = null;
+            if (_isError)
+            {
+                ServerResponse response = new ServerResponse();
+                response.IsError = true;
+                response.ErrorMessage = "系统初始化时报错！";
+                stream = response.ToStream();
+                return stream;
+            }
             Dictionary<string, object> dic = null;
             try
             {
@@ -179,7 +191,7 @@ namespace SOAFramework.Service.Server
 
         public bool Ping()
         {
-            return true;
+            return !_isError;
         }
 
         #region test

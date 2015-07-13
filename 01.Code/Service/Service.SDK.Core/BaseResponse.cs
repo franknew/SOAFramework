@@ -20,6 +20,8 @@ namespace SOAFramework.Service.SDK.Core
         private string stackTrace;
         public string StackTrace { get { return stackTrace; } }
 
+        public int Code { get; set; }
+
         internal void SetValues(bool isError,string errormsg, string stacktrace)
         {
             this.isError = isError;
@@ -42,5 +44,9 @@ namespace SOAFramework.Service.SDK.Core
         public string ErrorMessage { get; set; }
 
         public string StackTrace { get; set; }
+
+        public int Code { get; set; }
+
+        public object Data { get; set; }
     }
 }

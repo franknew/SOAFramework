@@ -21,5 +21,8 @@ namespace SOAFramework.Service.Core.Model
 
         [DataMember(EmitDefaultValue = false)]
         public object Data { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public int Code { get; set; }
     }
 }

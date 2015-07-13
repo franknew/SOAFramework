@@ -72,7 +72,8 @@ namespace SOAFramework.Library.DAL
                 case DBType.Oracle:
                     helper = new OracleHelper(strConnectionString);
                     break;
-                //case DBType.MySQL:
+                case DBType.MySQL:
+                    
                 //    MySQLHelper objMySQL = new MySQLHelper(strConnectionString);
                 //    return (DBHelper)objMySQL;
                 case DBType.Access:

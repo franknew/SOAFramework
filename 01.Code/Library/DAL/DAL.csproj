@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Software\MySQLConnector\Assemblies\v4.0\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Norm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\Norm.dll</HintPath>
@@ -63,11 +67,13 @@
     <Compile Include="SQLDB\DBHelper\BaseHelper.cs" />
     <Compile Include="SQLDB\DBFactory.cs" />
     <Compile Include="SQLDB\DBHelper\IDBHelper.cs" />
+    <Compile Include="SQLDB\DBHelper\MySQLHelper.cs" />
     <Compile Include="SQLDB\DBType.cs" />
     <Compile Include="SQLDB\Paging\IPagingSQL.cs" />
     <Compile Include="SQLDB\DBHelper\MSSQLHelper.cs" />
     <Compile Include="SQLDB\DBHelper\OracleHelper.cs" />
     <Compile Include="SQLDB\Paging\MSPagingSQL.cs" />
+    <Compile Include="SQLDB\Paging\MySQLPagingSQL.cs" />
     <Compile Include="SQLDB\Paging\OraclePagingSQL.cs" />
     <Compile Include="SQLDB\Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
