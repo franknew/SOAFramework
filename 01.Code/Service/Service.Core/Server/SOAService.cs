@@ -61,7 +61,7 @@ namespace SOAFramework.Service.Server
             catch (Exception ex)
             {
                 string log = ex.Message + "    Statck trace:" + ex.StackTrace;
-                File.WriteAllText("C\\wwwroot\\Log.txt", log);
+                File.WriteAllText("C\\webroot\\Log.txt", log);
                 _isError = true;
             }
         }

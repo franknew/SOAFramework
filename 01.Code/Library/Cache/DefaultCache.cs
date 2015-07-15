@@ -11,7 +11,7 @@ namespace SOAFramework.Library.Cache
     {
         private string region = "Memory";
 
-        public DefaultCache(string regionName)
+        public DefaultCache(string regionName = null)
         {
             region = regionName;
         }

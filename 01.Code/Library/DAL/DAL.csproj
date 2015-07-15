@@ -35,9 +35,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Resources\Dll\IBatisNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Resources\Dll\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Software\MySQLConnector\Assemblies\v4.0\MySql.Data.dll</HintPath>
+      <HintPath>..\..\Resources\Dll\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Norm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -58,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\BaseDao.cs" />
+    <Compile Include="Dao\BaseEntity.cs" />
+    <Compile Include="Dao\BaseUpdateForm.cs" />
+    <Compile Include="Dao\SimpleDao.cs" />
+    <Compile Include="Dao\SimpleEntity.cs" />
+    <Compile Include="Dao\SimpleUpdateForm.cs" />
     <Compile Include="LinqExtension.cs" />
     <Compile Include="NoSQLDB\BaseMongoEntity.cs" />
     <Compile Include="NoSQLDB\BaseNoSQLEntity.cs" />

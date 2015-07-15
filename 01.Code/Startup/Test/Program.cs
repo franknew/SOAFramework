@@ -37,7 +37,8 @@ namespace Test
         static void Main(string[] args)
         {
 
-            IDBHelper helper = DBFactory.CreateDBHelper();
+            IDBHelper helper = DBFactory.CreateDBHelper("Data Source=55a2335ca1f37.gz.cdb.myqcloud.com;Initial Catalog=RiskMgr;User Id=cdb_outerroot;Password=liuxiao7658490;Port=9582;", DBType.MySQL);
+            DataTable dt = helper.GetTableWithSQL("SELECT * FROM Workflow");
 
             string testa = "b";
             int enumb = testa.ToEnumValue<TestEnum>();

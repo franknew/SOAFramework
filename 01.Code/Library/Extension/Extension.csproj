@@ -50,6 +50,7 @@
     <Compile Include="EnumExtension.cs" />
     <Compile Include="ExtensionLib.cs" />
     <Compile Include="FileExtention.cs" />
+    <Compile Include="GUIDExtension.cs" />
     <Compile Include="ListExtention.cs" />
     <Compile Include="Numeric.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

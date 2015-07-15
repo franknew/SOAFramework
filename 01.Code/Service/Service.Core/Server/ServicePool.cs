@@ -82,7 +82,7 @@ namespace SOAFramework.Service.Core.Model
             set;
         }
 
-        private bool enableRegDispatcher = true;
+        private bool enableRegDispatcher = false;
         /// <summary>
         /// 开启注册分发起
         /// </summary>
@@ -392,7 +392,11 @@ namespace SOAFramework.Service.Core.Model
             foreach (var ass in assmList)
             {
                 IAnalyzer analyzer = new ServiceAnalyzer(ass);
-                list.AddRange(analyzer.AnalyzeFilter());
+                var filterList = analyzer.AnalyzeFilter();
+                if (filterList != null && filterList.Count > 0)
+                {
+                    list.AddRange(filterList);
+                }
             }
 
             return list;

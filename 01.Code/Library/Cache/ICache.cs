@@ -23,7 +23,7 @@ namespace SOAFramework.Library.Cache
 
     public class CacheFactory
     {
-        public static ICache Create(CacheType type, string region = "Memory")
+        public static ICache Create(CacheType type, string region = null)
         {
             ICache cache = null;
             switch (type)

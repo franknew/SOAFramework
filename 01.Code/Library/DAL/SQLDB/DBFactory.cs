@@ -60,32 +60,40 @@ namespace SOAFramework.Library.DAL
 
         public static IDBHelper CreateDBHelper(string strConnectionString, DBType objType)
         {
+            string helperType = "";
             IDBHelper helper = null;
             switch (objType)
             {
                 case DBType.MSSQL:
-                    helper = new MSSQLHelper(strConnectionString);
+                    //helper = new MSSQLHelper(strConnectionString);
+                    helperType = "MSSQLHelper";
                     break;
                 case DBType.MSSQL2005P:
-                    helper = new MSSQLHelper(strConnectionString);
+                    //helper = new MSSQLHelper(strConnectionString);
+                    helperType = "MSSQLHelper";
                     break;
                 case DBType.Oracle:
-                    helper = new OracleHelper(strConnectionString);
+                    //helper = new OracleHelper(strConnectionString);
+                    helperType = "OracleHelper";
                     break;
                 case DBType.MySQL:
-                    
-                //    MySQLHelper objMySQL = new MySQLHelper(strConnectionString);
-                //    return (DBHelper)objMySQL;
+                    //helper = new MySQLHelper(strConnectionString);
+                    helperType = "MySQLHelper";
+                    break;
                 case DBType.Access:
                     //helper = new AccessHelper(strConnectionString);
                     break;
                 case DBType.SQLite:
-                    helper = new SQLiteHelper(strConnectionString);
+                    //helper = new SQLiteHelper(strConnectionString);
+                    helperType = "SQLiteHelper";
                     break;
                 default:
-                    helper = new MSSQLHelper(strConnectionString);
+                    //helper = new MSSQLHelper(strConnectionString);
+                    helperType = "MSSQLHelper";
                     break;
             }
+            Type type = Type.GetType("SOAFramework.Library.DAL." + helperType);
+            helper = Activator.CreateInstance(type, strConnectionString) as IDBHelper;
             return helper;
         }
 

@@ -64,6 +64,7 @@
     <Compile Include="Filter\FilterHandler.cs" />
     <Compile Include="Filter\FilterWatcher.cs" />
     <Compile Include="Dispatcher\IDispatcher.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="Model\AssemblyWatcherInfo.cs" />
     <Compile Include="Model\Config\Configuration.cs" />
     <Compile Include="Model\MachinePerformance.cs" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <Folder Include="Attribute\" />
     <Folder Include="Interface\" />
+    <Folder Include="Log\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SOAFramework.Key.pfx" />
