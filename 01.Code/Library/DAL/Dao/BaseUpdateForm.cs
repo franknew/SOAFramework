@@ -7,5 +7,6 @@ namespace SOAFramework.Library.DAL
 {
     public class BaseUpdateForm<TEntity> where TEntity : BaseEntity
     {
+        public TEntity Entity { get; set; }
     }
 }

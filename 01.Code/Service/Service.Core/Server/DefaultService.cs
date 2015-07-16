@@ -93,7 +93,6 @@ namespace SOAFramework.Service.Server
         {
             Type type = Type.GetType(fullTypeName);
             TypeDescription t = null;
-            Type nullableType = Nullable.GetUnderlyingType(type);
             if (type == null)
             {
                 List<Assembly> list = AppDomain.CurrentDomain.GetAssemblies().ToList().FindAll(p => !p.FullName.StartsWith("System"));
@@ -108,6 +107,7 @@ namespace SOAFramework.Service.Server
             }
             if (type != null)
             {
+                Type nullableType = Nullable.GetUnderlyingType(type);
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
                 {
                     type = type.GetGenericArguments()[0];

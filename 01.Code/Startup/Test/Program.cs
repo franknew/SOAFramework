@@ -36,6 +36,10 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            LogonRequest logonrequest = new LogonRequest();
+            logonrequest.username = "admin";
+            logonrequest.password = "admin";
+            var res = SDKFactory.Client.Execute(logonrequest);
 
             IDBHelper helper = DBFactory.CreateDBHelper("Data Source=55a2335ca1f37.gz.cdb.myqcloud.com;Initial Catalog=RiskMgr;User Id=cdb_outerroot;Password=liuxiao7658490;Port=9582;", DBType.MySQL);
             DataTable dt = helper.GetTableWithSQL("SELECT * FROM Workflow");
@@ -613,6 +617,23 @@ namespace Test
     public class PerformanceResponse : BaseResponse
     {
         public TestClass Data { get; set; }
+    }
+
+    public class LogonResponse : BaseResponse
+    {
+        public string token { get; set; }
+    }
+
+    public class LogonRequest : BaseRequest<BaseResponse>
+    {
+        public override string GetApi()
+        {
+            return "RiskMgr.Api.LogonApi.Logon";
+        }
+
+        public string username { get; set; }
+
+        public string password { get; set; }
     }
 
     public static class TestExtension

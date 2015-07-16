@@ -74,7 +74,7 @@ namespace DiscoverServiceWeb.Controllers
             GetTypeDescriptionRequest request = new GetTypeDescriptionRequest();
             request.FullTypeName = typeName;
             GetTypeDescriptionResponse response = SDKFactory.Client.Execute(request);
-            if (response.Item == null)
+            if (response.IsError || response.Item == null)
             {
                 response.Item = new TypeDescription();
             }

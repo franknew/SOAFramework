@@ -50,7 +50,7 @@ namespace SOAFramework.Service.SDK.Core
         private string PostSerivce<T>(IRequest<T> request, string fullUrl, PostDataFomaterType type) where T : BaseResponse
         {
             Type requestType = request.GetType();
-            PropertyInfo[] properties = requestType.GetProperties();
+            PropertyInfo[] properties = requestType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
             Dictionary<string, object> argdic = new Dictionary<string, object>();
             //反射获得请求属性
             foreach (PropertyInfo pro in properties)
