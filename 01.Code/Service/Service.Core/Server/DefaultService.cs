@@ -128,7 +128,7 @@ namespace SOAFramework.Service.Server
                     TypeName = ServiceUtility.GetTypeName(type),
                     IsClass = ServiceUtility.IsClassType(type),
                 };
-                PropertyInfo[] properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                PropertyInfo[] properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
                 if (properties != null)
                 {
                     t.Properties = new List<PropertyDescription>();

@@ -116,18 +116,26 @@ namespace SOAFramework.Service.Server
             List<IFilter> list = new List<IFilter>();
             foreach (var ass in assmList)
             {
-                Type[] types = ass.GetTypes();
-                foreach (var type in types)
+                try
                 {
-                    if (type.GetInterface("IFilter") != null && type.GetInterface("INoneExecuteFilter") == null)
+                    Type[] types = ass.GetTypes();
+                    foreach (var type in types)
                     {
-                        object instance = Activator.CreateInstance(type);
-                        IFilter filter = instance as IFilter;
-                        if (filter.GlobalUse)
+                        if (type.GetInterface("IFilter") != null && type.GetInterface("INoneExecuteFilter") == null)
                         {
-                            list.Add(filter);
+                            object instance = Activator.CreateInstance(type);
+                            IFilter filter = instance as IFilter;
+                            if (filter.GlobalUse)
+                            {
+                                list.Add(filter);
+                            }
                         }
                     }
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    string message = ex.Message + " stacktrace:" + ex.StackTrace;
+                    LogHelper.Write(message);
                 }
             }
 

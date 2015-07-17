@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using SOAFramework.Library.Cache;
+using System.Collections.Specialized;
 
 namespace SOAFramework.Library.Cache
 {
@@ -16,25 +17,27 @@ namespace SOAFramework.Library.Cache
             region = regionName;
         }
 
-        private MemoryCache _cache = MemoryCache.Default;
-        CacheItemPolicy policy = new CacheItemPolicy();
-
         public DefaultCache()
         {
         }
+
+        private ObjectCache _cache = MemoryCache.Default;
+
+        CacheItemPolicy policy = new CacheItemPolicy();
+
 
         public DefaultCache(int seconds)
         {
             policy.SlidingExpiration = new TimeSpan(seconds * 1000);
         }
 
-        public void AddItem(CacheItem item, int seconds = -1)
+        public bool AddItem(CacheItem item, int seconds = -1)
         {
             if (seconds > 0)
             {
                 policy.SlidingExpiration = new TimeSpan(seconds * 1000);
             }
-            _cache.Add(item.Key, item.Value, policy, region);
+            return _cache.Add(item.Key, item.Value, policy, region);
         }
 
         public CacheItem GetItem(string key)
@@ -42,14 +45,16 @@ namespace SOAFramework.Library.Cache
             return _cache.GetCacheItem(key, region);
         }
 
-        public void DelItem(CacheItem item)
+        public bool DelItem(CacheItem item)
         {
             _cache.Remove(item.Key, region);
+            return true;
         }
 
-        public void DelItem(string key)
+        public bool DelItem(string key)
         {
             _cache.Remove(key, region);
+            return true;
         }
 
         public List<CacheItem> GetAllItems()
@@ -63,9 +68,10 @@ namespace SOAFramework.Library.Cache
             return list;
         }
 
-        public void UpdateItem(CacheItem item)
+        public bool UpdateItem(CacheItem item)
         {
             _cache.Set(item.Key, item.Value, policy, region);
+            return true;
         }
     }
 }

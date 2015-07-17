@@ -57,16 +57,16 @@ namespace SOAFramework.Library.Cache
             client = new MemcachedClient(ConfigSection);
         }
 
-        public void AddItem(System.Runtime.Caching.CacheItem item, int seconds = -1)
+        public bool AddItem(System.Runtime.Caching.CacheItem item, int seconds = -1)
         {
             if (seconds > 0)
             {
                 TimeSpan ts = new TimeSpan(seconds * 1000);
-                client.Store(StoreMode.Add, item.Key, item.Value, ts);
+                return client.Store(StoreMode.Add, item.Key, item.Value, ts);
             }
             else
             {
-                client.Store(StoreMode.Add, item.Key, item.Value);
+                return client.Store(StoreMode.Add, item.Key, item.Value);
             }
         }
 
@@ -76,14 +76,14 @@ namespace SOAFramework.Library.Cache
             return new System.Runtime.Caching.CacheItem(key, value);
         }
 
-        public void DelItem(System.Runtime.Caching.CacheItem item)
+        public bool DelItem(System.Runtime.Caching.CacheItem item)
         {
-            client.Remove(item.Key);
+            return client.Remove(item.Key);
         }
 
-        public void DelItem(string key)
+        public bool DelItem(string key)
         {
-            client.Remove(key);
+            return client.Remove(key);
         }
 
         public List<System.Runtime.Caching.CacheItem> GetAllItems()
@@ -91,9 +91,9 @@ namespace SOAFramework.Library.Cache
             throw new NotImplementedException();
         }
 
-        public void UpdateItem(System.Runtime.Caching.CacheItem item)
+        public bool UpdateItem(System.Runtime.Caching.CacheItem item)
         {
-            client.Store(StoreMode.Replace, item.Key, item.Value);
+            return client.Store(StoreMode.Replace, item.Key, item.Value);
         }
     }
 }

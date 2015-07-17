@@ -8,22 +8,22 @@ namespace SOAFramework.Library.Cache
 {
     public interface ICache
     {
-        void AddItem(CacheItem item, int seconds);
+        bool AddItem(CacheItem item, int seconds);
 
         CacheItem GetItem(string key);
 
-        void DelItem(CacheItem item);
+        bool DelItem(CacheItem item);
 
-        void DelItem(string key);
+        bool DelItem(string key);
 
         List<CacheItem> GetAllItems();
 
-        void UpdateItem(CacheItem item);
+        bool UpdateItem(CacheItem item);
     }
 
     public class CacheFactory
     {
-        public static ICache Create(CacheType type, string region = null)
+        public static ICache Create(CacheType type = CacheType.DefaultMemoryCache, string region = null)
         {
             ICache cache = null;
             switch (type)

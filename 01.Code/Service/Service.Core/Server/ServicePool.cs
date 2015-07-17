@@ -122,10 +122,17 @@ namespace SOAFramework.Service.Core.Model
 
         public void FillPool()
         {
-            _config = XMLHelper.DeserializeFromFile<SOAConfiguration>(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
-            _filterList = GetGlobalFilters();
-            _businessAssList = GetBusinessAssmeblyList();
-            FillPool(_filterList, _businessAssList);
+            try
+            {
+                _config = XMLHelper.DeserializeFromFile<SOAConfiguration>(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+                _filterList = GetGlobalFilters();
+                _businessAssList = GetBusinessAssmeblyList();
+                FillPool(_filterList, _businessAssList);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Write(ex.Message + " stack trace:" + ex.StackTrace);
+            }
         }
 
         public void FillPool(List<IFilter> filterList, List<Assembly> assmList)
