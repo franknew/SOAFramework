@@ -60,8 +60,23 @@ namespace SOAFramework.Service.Server
             }
             catch (Exception ex)
             {
-                string log = ex.Message + "    Statck trace:" + ex.StackTrace;
-                File.WriteAllText("C\\webroot\\Log.txt", log);
+                Exception exinner = ex;
+                StringBuilder stacktrace = new StringBuilder();
+                StringBuilder message = new StringBuilder();
+                while (exinner.InnerException != null)
+                {
+                    stacktrace.Append(exinner.StackTrace);
+                    message.Append(message);
+                    exinner = exinner.InnerException;
+                }
+                StringBuilder log = new StringBuilder();
+                log.AppendFormat("Message:{0} \r\n Stack Trace:{1}", message.ToString(), stacktrace.ToString());
+                string logPath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\Logs\\";
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+                File.AppendAllText(logPath + DateTime.Now.ToString("yyMMdd") + ".log", log.ToString());
                 _isError = true;
             }
         }

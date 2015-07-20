@@ -174,10 +174,16 @@ namespace SOAFramework.Service.Server
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {
-                var result = InvokeFilter(service, filter, filter.OnActionExecuting, context);
-                if (result != null)
+                var classAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<IFilter>(true);
+                var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
+                var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
+                var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
+                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null))
                 {
-                    return result;
+                    if (!filter.OnActionExecuting(context))
+                    {
+                        return filter;
+                    }
                 }
             }
             return null;
@@ -191,28 +197,16 @@ namespace SOAFramework.Service.Server
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {
-                var result = InvokeFilter(service, filter, filter.OnActionExecuted, context);
-                if (result != null)
+                var classAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<IFilter>(true);
+                var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
+                var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
+                var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
+                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null))
                 {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        public static IFilter InvokeFilter(ServiceModel service, IFilter filter, FilterDelegate filterDelegate, ActionContext context)
-        {
-            if (filterDelegate == null)
-            {
-                return null;
-            }
-            var classAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<IFilter>(true);
-            var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
-            if ((classAttr != null || methodAttr != null) && !(classAttr is INoneExecuteFilter) && !(methodAttr is INoneExecuteFilter))
-            {
-                if (!filterDelegate.Invoke(context))
-                {
-                    return filter;
+                    if (!filter.OnActionExecuted(context))
+                    {
+                        return filter;
+                    }
                 }
             }
             return null;

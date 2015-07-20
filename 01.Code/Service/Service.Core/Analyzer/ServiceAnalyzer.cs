@@ -28,32 +28,25 @@ namespace SOAFramework.Service.Core
         public List<Model.IFilter> AnalyzeFilter()
         {
             List<IFilter> list = new List<IFilter>();
-            try
+            if (_ass != null)
             {
-                if (_ass != null)
+                Type[] types = null;
+                types = _ass.GetTypes();
+                if (types != null)
                 {
-                    Type[] types = _ass.GetTypes();
-                    if (types != null)
+                    foreach (var type in types)
                     {
-                        foreach (var type in types)
+                        if (type.GetInterface("IFilter") != null && type.GetInterface("INoneExecuteFilter") == null)
                         {
-                            if (type.GetInterface("IFilter") != null && type.GetInterface("INoneExecuteFilter") == null)
+                            object instance = Activator.CreateInstance(type);
+                            IFilter filter = instance as IFilter;
+                            if (filter != null)
                             {
-                                object instance = Activator.CreateInstance(type);
-                                IFilter filter = instance as IFilter;
-                                if (filter != null)
-                                {
-                                    list.Add(filter);
-                                }
+                                list.Add(filter);
                             }
                         }
                     }
                 }
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                string message = ex.Message + " stacktrace:" + ex.StackTrace;
-                LogHelper.Write(message);
             }
             return list;
         }
@@ -122,7 +115,7 @@ namespace SOAFramework.Service.Core
             ServiceInvoker attribute = method.GetCustomAttribute<ServiceInvoker>(true);
 
             string key = ServicePool.Instance.GetIntefaceName(method.DeclaringType.FullName, method.Name); ;
-            
+
             string module = "";
             if (attribute != null)
             {
@@ -274,10 +267,10 @@ namespace SOAFramework.Service.Core
         /// <param name="filterList"></param>
         public void GetService(Dictionary<string, ServiceModel> serviceDic, List<IFilter> filterList)
         {
-            try
+            Type[] types = null;
+            types = _ass.GetTypes();
+            if (types != null)
             {
-                Type[] types = _ass.GetTypes();
-
                 #region 处理程序集中的代码注释
                 //去掉程序集后缀名，加上.xml为程序集注释的xml文件
                 FileInfo file = new FileInfo(_ass.Location.Remove(_ass.Location.LastIndexOf(".")) + ".xml");
@@ -292,11 +285,6 @@ namespace SOAFramework.Service.Core
                 {
                     GetServiceFromType(type, elementList, serviceDic, filterList);
                 }
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                string message = ex.Message + " stacktrace:" + ex.StackTrace;
-                LogHelper.Write(message);
             }
         }
         #endregion

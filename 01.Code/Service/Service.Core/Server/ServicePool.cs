@@ -365,8 +365,8 @@ namespace SOAFramework.Service.Core.Model
         private List<IFilter> GetGlobalFilters()
         {
             List<Assembly> assmList = new List<Assembly>();
-            assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
+            //assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            //assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
             if (_config != null
                 && _config.SOAConfig != null
                 && _config.SOAConfig.FilterConfigSection != null
@@ -402,7 +402,10 @@ namespace SOAFramework.Service.Core.Model
                 var filterList = analyzer.AnalyzeFilter();
                 if (filterList != null && filterList.Count > 0)
                 {
-                    list.AddRange(filterList);
+                    foreach (var filter in filterList)
+                    {
+                        list.Add(filter);
+                    }
                 }
             }
 

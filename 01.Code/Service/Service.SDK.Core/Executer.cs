@@ -117,7 +117,7 @@ namespace SOAFramework.Service.SDK.Core
                     BaseResponseShadow o = null;
                     try
                     {
-                        o = JsonHelper.Deserialize < BaseResponseShadow>(response);
+                        o = JsonHelper.Deserialize<BaseResponseShadow>(response);
                     }
                     catch (Exception ex)
                     {
@@ -131,7 +131,10 @@ namespace SOAFramework.Service.SDK.Core
                     else if (o.Data is JArray)
                     {
                         data = (o.Data as JArray).ToListObject(responseProperties[0].PropertyType);
-
+                    }
+                    else
+                    {
+                        data = o.Data;
                     }
                     responseProperties[0].SetValue(t, data, null);
                 }
