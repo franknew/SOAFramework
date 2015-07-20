@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="CustomCache.cs" />
+    <Compile Include="CustomCacheEntity.cs" />
     <Compile Include="DefaultCache.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="Memcache.cs" />
