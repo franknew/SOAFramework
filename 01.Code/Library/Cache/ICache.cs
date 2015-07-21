@@ -23,7 +23,7 @@ namespace SOAFramework.Library.Cache
 
     public class CacheFactory
     {
-        public static ICache Create(CacheType type = CacheType.DefaultMemoryCache, string region = null)
+        public static ICache Create(CacheType type = CacheType.CustomCache, string region = "default")
         {
             ICache cache = null;
             switch (type)
@@ -34,6 +34,9 @@ namespace SOAFramework.Library.Cache
                 case CacheType.Memcached:
                     cache = new Memcache();
                     break;
+                default:
+                    cache = CustomCache.GetCache(region);
+                    break;
             }
             return cache;
         }
@@ -41,6 +44,7 @@ namespace SOAFramework.Library.Cache
 
     public enum CacheType
     {
+        CustomCache,
         DefaultMemoryCache,
         Memcached,
     }

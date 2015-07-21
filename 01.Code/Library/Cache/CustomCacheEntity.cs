@@ -17,5 +17,6 @@ namespace SOAFramework.Library.Cache
         public int ExpiredSeconds { get; set; }
 
         public DateTime ExpiredTime { get; set; }
+
     }
 }

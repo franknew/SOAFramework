@@ -49,32 +49,68 @@ namespace SOAFramework.Library.Cache
 
         public bool AddItem(CacheItem item, int seconds)
         {
-            throw new NotImplementedException();
+            CustomCacheEntity entity = new CustomCacheEntity
+            {
+                ExpiredSeconds = seconds,
+                ExpiredTime = DateTime.Now.AddSeconds(seconds),
+                Item = item,
+                Key = item.Key,
+                Value = item.Value,
+            };
+            cacheItemDic[item.Key] = entity;
+            return true;
         }
 
         public bool DelItem(string key)
         {
-            throw new NotImplementedException();
+            if (!cacheItemDic.ContainsKey(key))
+            {
+                return false;
+            }
+            cacheItemDic.Remove(key);
+            return true;
         }
 
         public bool DelItem(CacheItem item)
         {
-            throw new NotImplementedException();
+            return DelItem(item.Key);
         }
 
         public List<CacheItem> GetAllItems()
         {
-            throw new NotImplementedException();
+            List<CacheItem> list = new List<CacheItem>();
+            foreach (var key in cacheItemDic.Keys)
+            {
+                list.Add(cacheItemDic[key].Item);
+            }
+            return list;
         }
 
         public CacheItem GetItem(string key)
         {
-            throw new NotImplementedException();
+            CacheItem item = null;
+            if (cacheItemDic.ContainsKey(key))
+            {
+                item = cacheItemDic[key].Item;
+                var entity = cacheItemDic[key];
+                entity.ExpiredTime = DateTime.Now.AddSeconds(entity.ExpiredSeconds);
+                cacheItemDic[key] = entity;
+            }
+            return item;
         }
 
         public bool UpdateItem(CacheItem item)
         {
-            throw new NotImplementedException();
+            if (!cacheItemDic.ContainsKey(item.Key))
+            {
+                return false;
+            }
+            var entity = cacheItemDic[item.Key];
+            entity.Item = item;
+            entity.Value = item.Value;
+            entity.ExpiredTime = DateTime.Now.AddSeconds(entity.ExpiredSeconds);
+            cacheItemDic[item.Key] = entity;
+            return true;
         }
     }
 }
