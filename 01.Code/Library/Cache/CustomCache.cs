@@ -91,10 +91,17 @@ namespace SOAFramework.Library.Cache
             CacheItem item = null;
             if (cacheItemDic.ContainsKey(key))
             {
-                item = cacheItemDic[key].Item;
                 var entity = cacheItemDic[key];
-                entity.ExpiredTime = DateTime.Now.AddSeconds(entity.ExpiredSeconds);
-                cacheItemDic[key] = entity;
+                if (entity.ExpiredTime >= DateTime.Now)
+                {
+                    item = entity.Item;
+                    entity.ExpiredTime = DateTime.Now.AddSeconds(entity.ExpiredSeconds);
+                    cacheItemDic[key] = entity;
+                }
+                else
+                {
+                    cacheItemDic.Remove(key);
+                }
             }
             return item;
         }

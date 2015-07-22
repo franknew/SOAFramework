@@ -165,7 +165,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeSmithUnitTesting.cs" />
-    <Compile Include="Library\CacheItem.cs" />
     <Compile Include="Library\CacheTesting.cs" />
     <Compile Include="Library\JsonTesting.cs" />
     <Compile Include="Library\DALTesting.cs" />

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SOAFramework.Library.Cache;
 using System.Runtime.Caching;
+using System.Threading;
 
 namespace UnitTest.Library
 {
@@ -13,7 +14,7 @@ namespace UnitTest.Library
     [TestClass]
     public class CacheTesting
     {
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
+        private ICache cache = CacheFactory.Create();
 
         public CacheTesting()
         {
@@ -81,6 +82,11 @@ namespace UnitTest.Library
             var item = cache.GetItem("UnitTest2");
             Assert.AreEqual("UnitTest2", item.Key);
             cache.DelItem("UnitTest2");
+
+            cache.AddItem(new CacheItem("UnitTest3", "hello"), 1);
+            Thread.Sleep(2000);
+            item = cache.GetItem("UnitTest3");
+            Assert.IsNull(item);
         }
 
         [TestMethod]

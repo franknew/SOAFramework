@@ -66,7 +66,7 @@ namespace SOAFramework.Service.Server
                 while (exinner.InnerException != null)
                 {
                     stacktrace.Append(exinner.StackTrace);
-                    message.Append(message);
+                    message.Append(exinner.Message);
                     exinner = exinner.InnerException;
                 }
                 StringBuilder log = new StringBuilder();
@@ -76,7 +76,7 @@ namespace SOAFramework.Service.Server
                 {
                     Directory.CreateDirectory(logPath);
                 }
-                File.AppendAllText(logPath + DateTime.Now.ToString("yyMMdd") + ".log", log.ToString());
+                File.AppendAllText(logPath + DateTime.Now.ToString("yyMMddHH") + ".log", log.ToString());
                 _isError = true;
             }
         }
