@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Role" type="RiskMgr.Model.Role" />
+    <typeAlias alias="RoleQueryForm" type="RiskMgr.Form.RoleQueryForm" />
+    <typeAlias alias="RoleUpdateForm" type="RiskMgr.Form.RoleUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryRole" resultClass="Role" parameterClass="RoleQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Role` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddRole" parameterClass="Role">
+  INSERT INTO `Role`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#
+  )
+  </insert>
+  <update id="UpdateRole" parameterClass="RoleUpdateForm">
+  UPDATE `Role`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="RoleQueryForm.ID">
+        `ID`=#RoleQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.Name">
+        `Name` LIKE '%$RoleQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.Creator">
+        `Creator`=#RoleQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#RoleQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#RoleQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.Remark">
+        `Remark` LIKE '%$RoleQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#RoleQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#RoleQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.LastUpdator">
+        `LastUpdator`=#RoleQueryForm.LastUpdator#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteRole" parameterClass="RoleQueryForm">
+    DELETE FROM `Role` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </delete>
+   <select id="QueryRoleLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Role`
+   </select>
+   <select id="QueryRoleRecordCount" resultClass="int" parameterClass="RoleQueryForm">
+   SELECT COUNT(*) FROM `Role` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>
