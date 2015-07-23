@@ -9,11 +9,11 @@ namespace SOAFramework.Library.DAL
     {
         public string ID { get; set; }
 
-        public int PageSize { get; set; }
+        public int? PageSize { get; set; }
 
-        public int CurrentIndex { get; set; }
+        public int? CurrentIndex { get; set; }
 
-        public int StartIndex
+        public int? StartIndex
         {
             get
             {
@@ -21,7 +21,7 @@ namespace SOAFramework.Library.DAL
             }
         }
 
-        public int EndIndex
+        public int? EndIndex
         {
             get
             {
@@ -36,9 +36,9 @@ namespace SOAFramework.Library.DAL
             get
             {
                 int pagecount = 0;
-                if (PageSize > 0)
+                if (PageSize.HasValue && PageSize > 0 && RecordCount > 0)
                 {
-                    pagecount = RecordCount / PageSize;
+                    pagecount = RecordCount / PageSize.Value;
                     if (RecordCount % PageSize > 0)
                     {
                         pagecount += 1;

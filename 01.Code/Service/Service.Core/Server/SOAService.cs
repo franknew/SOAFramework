@@ -60,7 +60,7 @@ namespace SOAFramework.Service.Server
             }
             catch (Exception ex)
             {
-                Exception exinner = ex;
+                Exception exinner = ex; 
                 StringBuilder stacktrace = new StringBuilder();
                 StringBuilder message = new StringBuilder();
                 while (exinner.InnerException != null)

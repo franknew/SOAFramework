@@ -153,8 +153,8 @@ namespace SOAFramework.Service.Core
             #region 获得回参和注释
             if (methodElement != null)
             {
-                description = methodElement.Element("summary").Value.Trim('\n', ' ');
-                returnDesc = methodElement.Element("returns").Value.Trim('\n', ' ');
+                description = methodElement.Element("summary") != null ? methodElement.Element("summary").Value.Trim('\n', ' ') : "";
+                returnDesc = methodElement.Element("returns") != null ? methodElement.Element("returns").Value.Trim('\n', ' ') : "";
             }
             #endregion
 
