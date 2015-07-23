@@ -8,6 +8,7 @@ namespace SOAFramework.Library.DAL
 {
 
     public partial class BaseDao<TEngity, TQueryForm, TUpdateForm> where TEngity : BaseEntity
+        where TQueryForm : BaseQueryForm where TUpdateForm : BaseUpdateForm<TEngity>
     {
 
         public ISqlMapper Mapper { get; set; }
@@ -39,6 +40,11 @@ namespace SOAFramework.Library.DAL
 
         public List<TEngity> Query(TQueryForm form)
         {
+            if (form.PageSize > 0)
+            {
+                int count = Mapper.QueryForObject<int>("Query" + tableName + "RecordCount", form);
+                form.RecordCount = count;
+            }
             return Mapper.QueryForList<TEngity>("Query" + tableName, form).ToList();
         }
 

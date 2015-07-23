@@ -7,7 +7,7 @@ using System.Text;
 namespace SOAFramework.Library.DAL
 {
     public class SimpleDao<TEngity, TQueryForm, TUpdateForm> where TEngity : SimpleEntity
-        where TUpdateForm : SimpleUpdateForm<TEngity>
+        where TUpdateForm : SimpleUpdateForm<TEngity> where TQueryForm : SimpleQueryForm
     {
         public ISqlMapper Mapper { get; set; }
 
@@ -40,6 +40,11 @@ namespace SOAFramework.Library.DAL
 
         public List<TEngity> Query(TQueryForm form)
         {
+            if (form.PageSize > 0)
+            {
+                int count = Mapper.QueryForObject<int>("Query" + tableName + "RecordCount", form);
+                form.RecordCount = count;
+            }
             return Mapper.QueryForList<TEngity>("Query" + tableName, form).ToList();
         }
 

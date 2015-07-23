@@ -68,9 +68,11 @@
   <ItemGroup>
     <Compile Include="Dao\BaseDao.cs" />
     <Compile Include="Dao\BaseEntity.cs" />
+    <Compile Include="Dao\BaseQueryForm.cs" />
     <Compile Include="Dao\BaseUpdateForm.cs" />
     <Compile Include="Dao\SimpleDao.cs" />
     <Compile Include="Dao\SimpleEntity.cs" />
+    <Compile Include="Dao\SimpleQueryForm.cs" />
     <Compile Include="Dao\SimpleUpdateForm.cs" />
     <Compile Include="LinqExtension.cs" />
     <Compile Include="NoSQLDB\BaseMongoEntity.cs" />
