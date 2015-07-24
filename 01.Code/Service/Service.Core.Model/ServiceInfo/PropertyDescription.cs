@@ -13,7 +13,11 @@ namespace SOAFramework.Service.Core.Model
     {
         [DataMember(EmitDefaultValue = false)]
         public string PropertyName { get; set; }
+
         [DataMember(EmitDefaultValue = false)]
         public TypeInfo PropertyTypeInfo { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string Remark { get; set; }
     }
 }

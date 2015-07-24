@@ -4,12 +4,14 @@ using SOAFramework.Service.Core.Model;
 using SOAFramework.Service.Filter;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SOAFramework.Service.Server
 {
@@ -107,6 +109,18 @@ namespace SOAFramework.Service.Server
             }
             if (type != null)
             {
+                string dllfileName = type.Assembly.CodeBase;
+                string xmlFileName = dllfileName.Remove(dllfileName.LastIndexOf("."), 4) + ".xml";
+                xmlFileName = xmlFileName.Replace("file:///", "").Replace("/", @"\");
+                List<XElement> elementList = null; 
+                if (File.Exists(xmlFileName))
+                {
+                    elementList = XElement.Load(xmlFileName).Descendants("member").ToList();
+                    if (elementList != null)
+                    {
+                        elementList = elementList.FindAll(p => p.Attribute("name").Value.StartsWith("P:"));
+                    }
+                }
                 Type nullableType = Nullable.GetUnderlyingType(type);
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
                 {
@@ -134,6 +148,15 @@ namespace SOAFramework.Service.Server
                     t.Properties = new List<PropertyDescription>();
                     foreach (PropertyInfo p in properties)
                     {
+                        string remark = "";
+                        if (elementList != null)
+                        {
+                            var propertyElement = elementList.Find(x => x.Attribute("name").Value.EndsWith("." + p.Name));
+                            if (propertyElement != null)
+                            {
+                                remark = propertyElement.Element("summary").Value.ToString();
+                            }
+                        }
                         PropertyDescription pd = new PropertyDescription
                         {
                             PropertyName = p.Name,
@@ -144,6 +167,7 @@ namespace SOAFramework.Service.Server
                                 IsClass = ServiceUtility.IsClassType(p.PropertyType),
                                 TypeName = ServiceUtility.GetTypeName(p.PropertyType),
                             },
+                            Remark = remark,
                         };
                         Type element = type.GetElementType();
                         if (element != null)

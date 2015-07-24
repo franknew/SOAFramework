@@ -36,6 +36,11 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            string connectionString = @"Data Source=55a2335ca1f37.gz.cdb.myqcloud.com;Initial Catalog=test;User Id=cdb_outerroot;Password=liuxiao7658490;Port=9582;charset=utf8";
+            IDBHelper helper2 = DBFactory.CreateDBHelper(connectionString, DBType.MySQL);
+            string sql = "insert into test  values('测试') ";
+            helper2.ExecNoneQueryWithSQL(sql);
+
             LogonRequest logonrequest = new LogonRequest();
             logonrequest.username = "admin";
             logonrequest.password = "admin";

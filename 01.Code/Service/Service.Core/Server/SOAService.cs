@@ -124,6 +124,24 @@ namespace SOAFramework.Service.Server
             }
             catch (Exception ex)
             {
+                Exception exinner = ex;
+                StringBuilder stacktrace = new StringBuilder();
+                StringBuilder message = new StringBuilder();
+                while (exinner.InnerException != null)
+                {
+                    stacktrace.Append(exinner.StackTrace);
+                    message.Append(exinner.Message);
+                    exinner = exinner.InnerException;
+                }
+                StringBuilder log = new StringBuilder();
+                log.AppendFormat("Message:{0} \r\n Stack Trace:{1}", message.ToString(), stacktrace.ToString());
+                string logPath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\Logs\\";
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+                File.AppendAllText(logPath + DateTime.Now.ToString("yyMMddHH") + ".log", log.ToString());
+
                 ServerResponse response = new ServerResponse();
                 response.IsError = true;
                 response.StackTrace = ex.StackTrace;

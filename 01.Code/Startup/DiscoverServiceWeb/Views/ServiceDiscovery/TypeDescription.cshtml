@@ -41,13 +41,13 @@
                             <img src="~/Images/Jqx/icon-right.png" style="cursor:pointer;width:17px;height:17px;" onclick="ClickImg(this);" />
                             <input type="hidden" value="@(typeName)" />
                             <span>@(item.PropertyName)</span> <span>--</span>    <a href="~/ServiceDiscovery/TypeDescription/@(typeName)" target="_blank">
-        @(item.PropertyTypeInfo.TypeName)
-    </a>
+        @(item.PropertyTypeInfo.TypeName) 
+    </a><span> : @(item.Remark)</span>
                         }
                         else
                         {
                             <span style="padding-left:22px;">@(item.PropertyName)</span> <span>--</span>
-                            <span>@(item.PropertyTypeInfo.TypeName)</span>
+                            <span>@(item.PropertyTypeInfo.TypeName)</span><span> : @(item.Remark)</span>
                         }
                     </li>
                 }

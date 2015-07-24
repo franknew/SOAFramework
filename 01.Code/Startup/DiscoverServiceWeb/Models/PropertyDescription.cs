@@ -15,5 +15,7 @@ namespace DiscoverServiceWeb.Models
             get { return propertyTypeInfo; }
             set { propertyTypeInfo = value; }
         }
+
+        public string Remark { get; set; }
     }
 }
