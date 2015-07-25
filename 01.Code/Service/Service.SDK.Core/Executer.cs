@@ -118,25 +118,25 @@ namespace SOAFramework.Service.SDK.Core
                     try
                     {
                         o = JsonHelper.Deserialize<BaseResponseShadow>(response);
+                        object data = null;
+                        if (o.Data is JObject)
+                        {
+                            data = (o.Data as JObject).ToObject(responseProperties[0].PropertyType);
+                        }
+                        else if (o.Data is JArray)
+                        {
+                            data = (o.Data as JArray).ToListObject(responseProperties[0].PropertyType);
+                        }
+                        else
+                        {
+                            data = o.Data;
+                        }
+                        responseProperties[0].SetValue(t, data, null);
                     }
                     catch (Exception ex)
                     {
                         throw new Exception(response, ex);
                     }
-                    object data = null;
-                    if (o.Data is JObject)
-                    {
-                        data = (o.Data as JObject).ToObject(responseProperties[0].PropertyType);
-                    }
-                    else if (o.Data is JArray)
-                    {
-                        data = (o.Data as JArray).ToListObject(responseProperties[0].PropertyType);
-                    }
-                    else
-                    {
-                        data = o.Data;
-                    }
-                    responseProperties[0].SetValue(t, data, null);
                 }
             }
             else

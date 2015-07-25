@@ -55,8 +55,8 @@ namespace SOAFramework.Service.Core.Model
                         {
                             paramValue = args[parameter.Name].ChangeTypeTo(parameter.ParameterType);
                         }
+                        listParameters.Add(paramValue);
                     }
-                    listParameters.Add(paramValue);
                 }
             }
             object[] paramArray = null;

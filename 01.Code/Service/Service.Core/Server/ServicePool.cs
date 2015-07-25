@@ -344,8 +344,11 @@ namespace SOAFramework.Service.Core.Model
             {
                 Console.WriteLine("{0} -- 耗时：{1}", interfaceName, allWatch.ElapsedMilliseconds);
             }
-            _session[sessionid].Dispose();
-            _session.Remove(sessionid);
+            if (_session.ContainsKey(sessionid))
+            {
+                _session[sessionid].Dispose();
+                _session.Remove(sessionid);
+            }
             #endregion
 
             return stream;
