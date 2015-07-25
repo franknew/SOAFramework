@@ -37,7 +37,15 @@ namespace SOAFramework.Service.Core.Model
                         return null;
                     }
                     string sessionid = frame.GetMethod().GetHashCode().ToString();
-                    return ServicePool.Instance.Session[sessionid];
+                    if (ServicePool.Instance.Session.ContainsKey(sessionid))
+                    {
+                        return ServicePool.Instance.Session[sessionid];
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    
                 }
             }
         }

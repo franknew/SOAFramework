@@ -11,7 +11,22 @@ namespace SOAFramework.Library.DAL
 
         public int? PageSize { get; set; }
 
-        public int? CurrentIndex { get; set; }
+        private int? currrentIndex = 0;
+        public int? CurrentIndex 
+        { 
+            get
+            {
+                if ((!PageSize.HasValue || PageSize.Value <=0) && currrentIndex <=0)
+                {
+                    currrentIndex = 1;
+                }
+                return currrentIndex;
+            }
+            set
+            {
+                currrentIndex = value;
+            }
+        }
 
         public int? StartIndex
         {
