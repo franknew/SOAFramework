@@ -70,6 +70,7 @@
     <Compile Include="Model\Config\Configuration.cs" />
     <Compile Include="Model\MachinePerformance.cs" />
     <Compile Include="Extension\ServiceModelExtension.cs" />
+    <Compile Include="Server\MessageMapper.cs" />
     <Compile Include="Server\ServicePool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\DefaultService.cs" />

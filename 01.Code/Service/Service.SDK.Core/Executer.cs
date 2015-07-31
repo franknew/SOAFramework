@@ -43,7 +43,7 @@ namespace SOAFramework.Service.SDK.Core
             }
             string typeName = api.Remove(api.LastIndexOf("."));
             string actionName = api.Substring(api.LastIndexOf(".") + 1);
-            string fullUrl = serviceUrl.TrimEnd('/') + "/Execute/" + typeName + "/" + actionName;
+            string fullUrl = serviceUrl.TrimEnd('/') + "/" + typeName + "/" + actionName;
             return fullUrl;
         }
 

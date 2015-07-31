@@ -69,12 +69,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="JsonHost.svc" />
     <Content Include="SOAServiceHost.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IJsonHost.cs" />
+    <Compile Include="JsonHost.svc.cs">
+      <DependentUpon>JsonHost.svc</DependentUpon>
+    </Compile>
     <Compile Include="SOAServiceHost.svc.cs">
       <DependentUpon>SOAServiceHost.svc</DependentUpon>
     </Compile>

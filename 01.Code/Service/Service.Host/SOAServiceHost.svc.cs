@@ -56,6 +56,12 @@ namespace SOAFramework.Service.Host
         {
             return service.PostTest(data);
         }
+
+
+        public Stream PostStream(Stream args)
+        {
+            return args;
+        }
     }
 
    
