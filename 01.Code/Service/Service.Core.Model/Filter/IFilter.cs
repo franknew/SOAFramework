@@ -35,7 +35,7 @@ namespace SOAFramework.Service.Core.Model
         /// <summary>
         /// 是否给所有类公用
         /// </summary>
-        bool GlobalUse { get; }
+        bool GlobalUse { get; set; }
 
         /// <summary>
         /// 执行顺序
@@ -78,7 +78,7 @@ namespace SOAFramework.Service.Core.Model
         /// <summary>
         /// 是否给所有类公用
         /// </summary>
-        public bool GlobalUse { get; protected set; }
+        public bool GlobalUse { get; set; }
 
         public int Index { get; set; }
     }

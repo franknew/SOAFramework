@@ -67,7 +67,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.Machine.dll</HintPath>
     </Reference>
-    <Reference Include="SOAFramework.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SOAFramework.Service.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9a50c39ae211549b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Service.Core.dll</HintPath>
     </Reference>

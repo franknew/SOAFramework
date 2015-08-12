@@ -28,6 +28,7 @@ namespace SOAFramework.Server.UI
         private ToolStripStatusLabel tssRam = new ToolStripStatusLabel();
         private Performance performance = new Performance();
         private ToolStripStatusLabel tssDispatcher = new ToolStripStatusLabel();
+        private bool _isError = false;
 
         public ServerUI()
         {
@@ -69,34 +70,40 @@ namespace SOAFramework.Server.UI
                 tbStop.Enabled = true;
                 MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器已启动" }, CacheEnum.FormMonitor);
             }
-        }
-
-        private void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            host = new WebServiceHost(typeof(SOAService));
-
-            try
+            else
             {
-                host.Open();
-                tssHostIp.Text = "服务地址：" + host.Description.Endpoints.FirstOrDefault(t => t.Contract.Name == "IService")
-                    .Address.Uri.AbsoluteUri;
-                if (!host.Ping())
-                {
-                    MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器启动超时" }, CacheEnum.FormMonitor);
-                    tbStart.Enabled = true;
-                    tbStop.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = ex.Message }, CacheEnum.FormMonitor);
                 tbStart.Enabled = true;
                 tbStop.Enabled = false;
             }
         }
 
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            host = new ServiceHost(typeof(JsonHost));
+
+            try
+            {
+                host.Open(); 
+                _isError = false;
+                var endpoint = host.Description.Endpoints.FirstOrDefault(t => t.Contract.Name == typeof(JsonHost).Name);
+                if (endpoint != null)
+                {
+                    tssHostIp.Text = "服务地址：" + endpoint.Address.Uri.AbsoluteUri;
+                }
+                if (!host.Ping())
+                {
+                    MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务器启动超时" }, CacheEnum.FormMonitor);
+                }
+            }
+            catch (Exception ex)
+            {
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = ex.Message }, CacheEnum.FormMonitor);
+                _isError = true;
+            }
+        }
+
         private Task hostTask;
-        private WebServiceHost host;
+        private ServiceHost host;
 
         private void tbStart_Click(object sender, EventArgs e)
         {
@@ -111,7 +118,7 @@ namespace SOAFramework.Server.UI
 
         private void tbStop_Click(object sender, EventArgs e)
         {
-            if (host != null && host.State == CommunicationState.Opened)
+            if (host != null && host.State == CommunicationState.Opened && !_isError)
             {
                 host.Close();
                 tbStart.Enabled = true;
@@ -129,7 +136,7 @@ namespace SOAFramework.Server.UI
             tssStatus.Text = "状态：" + GetServiceStatusDesc(host);
         }
 
-        private string GetServiceStatusDesc(WebServiceHost host)
+        private string GetServiceStatusDesc(ServiceHost host)
         {
             string status = "";
             if (host == null)
@@ -184,6 +191,10 @@ namespace SOAFramework.Server.UI
             }
             DisplayMachineStatus();
             timer2.Start();
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AutoStart"]))
+            {
+                tbStart_Click(sender, e);
+            }
         }
     }
 }

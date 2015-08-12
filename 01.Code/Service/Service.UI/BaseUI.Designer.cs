@@ -36,6 +36,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbClear = new System.Windows.Forms.ToolStripButton();
             this.ssBar = new System.Windows.Forms.StatusStrip();
+            this.tssTimer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tssStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.gpbCondition = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.niIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -43,10 +47,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.lbMessage = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tssTimer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tssStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlButtons.SuspendLayout();
             this.ssBar.SuspendLayout();
             this.tabContainer.SuspendLayout();
@@ -114,6 +114,32 @@
             this.ssBar.TabIndex = 1;
             this.ssBar.Text = "statusStrip1";
             // 
+            // tssTimer
+            // 
+            this.tssTimer.Name = "tssTimer";
+            this.tssTimer.Size = new System.Drawing.Size(44, 17);
+            this.tssTimer.Text = "时间：";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel1.Text = "|";
+            // 
+            // tssStatus
+            // 
+            this.tssStatus.AutoSize = false;
+            this.tssStatus.Name = "tssStatus";
+            this.tssStatus.Size = new System.Drawing.Size(120, 17);
+            this.tssStatus.Text = "状态：";
+            this.tssStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel2.Text = "|";
+            // 
             // gpbCondition
             // 
             this.gpbCondition.Dock = System.Windows.Forms.DockStyle.Top;
@@ -177,32 +203,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "即时性能监控";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tssTimer
-            // 
-            this.tssTimer.Name = "tssTimer";
-            this.tssTimer.Size = new System.Drawing.Size(44, 17);
-            this.tssTimer.Text = "时间：";
-            // 
-            // tssStatus
-            // 
-            this.tssStatus.AutoSize = false;
-            this.tssStatus.Name = "tssStatus";
-            this.tssStatus.Size = new System.Drawing.Size(80, 17);
-            this.tssStatus.Text = "状态：";
-            this.tssStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel1.Text = "|";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel2.Text = "|";
             // 
             // BaseUI
             // 

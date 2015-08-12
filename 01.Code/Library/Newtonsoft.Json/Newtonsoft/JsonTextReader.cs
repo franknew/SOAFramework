@@ -518,7 +518,12 @@ namespace Newtonsoft.Json
             int i;
             if (TokenType == JsonToken.String)
             {
-                if (int.TryParse((string)Value, NumberStyles.Integer, Culture, out i))
+                if (string.IsNullOrEmpty(Value.ToString()))
+                {
+                    SetToken(JsonToken.Integer, 0);
+                    return 0;
+                }
+                else if (int.TryParse((string)Value, NumberStyles.Integer, Culture, out i))
                 {
                     SetToken(JsonToken.Integer, i);
                     return i;

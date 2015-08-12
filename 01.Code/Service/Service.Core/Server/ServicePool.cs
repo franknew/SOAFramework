@@ -367,9 +367,7 @@ namespace SOAFramework.Service.Core.Model
         /// <returns></returns>
         private List<IFilter> GetGlobalFilters()
         {
-            List<Assembly> assmList = new List<Assembly>();
-            //assmList = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            //assmList.RemoveAll(t => t.FullName.StartsWith("System.") || t.FullName.StartsWith("Microsoft.") || t.FullName.Equals("System"));
+            List<ConfigSetting> assmList = new List<ConfigSetting>();
             if (_config != null
                 && _config.SOAConfig != null
                 && _config.SOAConfig.FilterConfigSection != null
@@ -391,9 +389,15 @@ namespace SOAFramework.Service.Core.Model
                     {
                         continue;
                     }
-                    if (!assmList.Contains(ass))
+                    ConfigSetting setting = new ConfigSetting
                     {
-                        assmList.Add(ass);
+                        Assembly = ass,
+                        FilterConfig = new Dictionary<string, object> (),
+                    };
+                    setting.FilterConfig["GlobalUse"] = value.GlobalUse;
+                    if (!assmList.Contains(setting))
+                    {
+                        assmList.Add(setting);
                     }
                 }
             }
@@ -401,12 +405,13 @@ namespace SOAFramework.Service.Core.Model
             List<IFilter> list = new List<IFilter>();
             foreach (var ass in assmList)
             {
-                IAnalyzer analyzer = new ServiceAnalyzer(ass);
+                IAnalyzer analyzer = new ServiceAnalyzer(ass.Assembly);
                 var filterList = analyzer.AnalyzeFilter();
                 if (filterList != null && filterList.Count > 0)
                 {
                     foreach (var filter in filterList)
                     {
+                        filter.GlobalUse = (bool)ass.FilterConfig["GlobalUse"];
                         list.Add(filter);
                     }
                 }
@@ -509,5 +514,12 @@ namespace SOAFramework.Service.Core.Model
             }
         }
         #endregion
+    }
+
+    public class ConfigSetting
+    {
+        public Assembly Assembly { get; set; }
+
+        public Dictionary<string, object> FilterConfig { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace SOAFramework.Service.SDK.Core
     {
         public string Format(object o)
         {
-            return JsonHelper.Serialize(JsonHelper.Serialize(o));
+            return JsonHelper.Serialize(o);
         }
     }
 }

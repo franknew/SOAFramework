@@ -95,6 +95,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MongoDB.Driver.Core.dll</HintPath>
     </Reference>
+    <Reference Include="RiskMgr.Model">
+      <HintPath>..\..\..\..\RiskMgr\source\background\RiskMgr\Bin\RiskMgr.Model.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.7Zip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\Modules\SOAFramework.Library.7Zip.dll</HintPath>

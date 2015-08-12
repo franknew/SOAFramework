@@ -63,6 +63,51 @@ namespace SOAFramework.Library
             return data;
         }
 
+        public static T ConvertTo<T>(this object o)
+        {
+            T result = Activator.CreateInstance<T>();
+            Type ttype = typeof(T);
+            Type otype = o.GetType();
+            var properties = ttype.GetProperties(BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
+            foreach (var property in properties)
+            {
+                PropertyInfo oprop = otype.GetProperty(property.Name, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
+                if (oprop != null)
+                {
+                    Type t = Nullable.GetUnderlyingType(oprop.PropertyType)
+                       ?? oprop.PropertyType;
+                    object safeValue = null;
+                    object odata = oprop.GetValue(o, null);
+                    if (odata == null)
+                    {
+                        continue;
+                    }
+                    if (t == typeof(byte[]))
+                    {
+                        safeValue = Encoding.Default.GetBytes(odata.ToString());
+                    }
+                    else if (t == typeof(char[]))
+                    {
+                        safeValue = odata.ToString().ToCharArray();
+                    }
+                    else if (t.BaseType == typeof(Enum))
+                    {
+                        safeValue = odata;
+                    }
+                    else
+                    {
+                        safeValue = Convert.ChangeType(odata, t);
+                    }
+                    //object value = Convert.ChangeType(row[column], property.PropertyType);
+                    if (property.CanWrite)
+                    {
+                        property.SetValue(result, safeValue, null);
+                    }
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// DataTable转换成对象数组
         /// </summary>

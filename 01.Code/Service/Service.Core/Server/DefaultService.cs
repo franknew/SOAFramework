@@ -151,7 +151,7 @@ namespace SOAFramework.Service.Server
                         string remark = "";
                         if (elementList != null)
                         {
-                            var propertyElement = elementList.Find(x => x.Attribute("name").Value.EndsWith("." + p.Name));
+                            var propertyElement = elementList.Find(x => x.Attribute("name").Value.EndsWith("." + p.DeclaringType.Name + "." + p.Name));
                             if (propertyElement != null)
                             {
                                 remark = propertyElement.Element("summary").Value.ToString();

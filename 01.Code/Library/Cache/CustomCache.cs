@@ -3,14 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
+using System.Timers;
 
 namespace SOAFramework.Library.Cache
 {
     public class CustomCache : ICache
     {
+        private Timer timer = new Timer(1000);
+
         public CustomCache(string regionName = "default")
         {
             this.regionName = regionName;
+            //计时清除过期项
+            timer.Elapsed += timer_Elapsed;
+            timer.Start();
+        }
+
+        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            foreach (var key in cacheMapDic.Keys)
+            {
+                var items = cacheMapDic[key];
+                lock (locker)
+                {
+                    foreach (var itemkey in items.cacheItemDic.Keys)
+                    {
+                        if (DateTime.Now > items.cacheItemDic[itemkey].ExpiredTime)
+                        {
+                            items.cacheItemDic.Remove(itemkey);
+                        }
+                    }
+                }
+            }
         }
 
         public static CustomCache GetCache(string regionName)

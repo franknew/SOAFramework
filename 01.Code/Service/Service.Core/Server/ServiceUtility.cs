@@ -178,7 +178,7 @@ namespace SOAFramework.Service.Server
                 var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
                 var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
                 var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
-                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null))
+                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null) || filter.GlobalUse)
                 {
                     if (!filter.OnActionExecuting(context))
                     {
@@ -191,7 +191,6 @@ namespace SOAFramework.Service.Server
 
         public static IFilter FilterExecuted(ServiceModel service, ServerResponse response, ActionContext context)
         {
-            context = null;
             string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
             string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
             //执行公共的过滤器
@@ -201,7 +200,7 @@ namespace SOAFramework.Service.Server
                 var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
                 var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
                 var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
-                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null))
+                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null) || filter.GlobalUse)
                 {
                     if (!filter.OnActionExecuted(context))
                     {
