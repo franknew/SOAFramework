@@ -42,6 +42,12 @@ namespace SOAFramework.Service.Core
                             IFilter filter = instance as IFilter;
                             if (filter != null)
                             {
+                                FilterAttribute attr = type.GetCustomAttribute<FilterAttribute>(true);
+                                if (attr != null)
+                                {
+                                    filter.Index = attr.Index;
+                                    filter.GlobalUse = attr.GlobalUse;
+                                }
                                 list.Add(filter);
                             }
                         }
@@ -64,7 +70,6 @@ namespace SOAFramework.Service.Core
             {
                 filterListCopy.RemoveAll(t => t.GetType().IsInstanceOfType(filter));
             }
-            filterListCopy.Sort((l, r) => r.Index - l.Index);
             service.FilterList = filterListCopy;
         }
 

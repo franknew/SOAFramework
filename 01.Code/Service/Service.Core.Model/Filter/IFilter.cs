@@ -27,6 +27,8 @@ namespace SOAFramework.Service.Core.Model
         /// <returns></returns>
         bool OnActionExecuted(ActionContext context);
 
+        void OnExceptionOccurs(ActionContext context);
+
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -70,6 +72,11 @@ namespace SOAFramework.Service.Core.Model
             return true;
         }
 
+        public virtual void OnExceptionOccurs(ActionContext context)
+        {
+
+        }
+
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -89,4 +96,13 @@ namespace SOAFramework.Service.Core.Model
     [ServiceLayer(Enabled = false)]
     public interface INoneExecuteFilter
     { }
+
+    [ServiceLayer(Enabled = false)]
+    [AttributeUsage(AttributeTargets.Class)]
+    public class FilterAttribute: Attribute
+    {
+        public bool GlobalUse { get; set; }
+
+        public int Index { get; set; }
+    }
 }

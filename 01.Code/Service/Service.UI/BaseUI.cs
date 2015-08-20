@@ -24,7 +24,7 @@ namespace SOAFramework.Service.UI
             niIcon.ContextMenu.MenuItems.Add(new MenuItem("退出", close_Click));
         }
 
-        private bool started = false;
+        protected bool started = false;
 
         private BackgroundWorker worker = new BackgroundWorker();
 

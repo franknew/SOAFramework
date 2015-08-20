@@ -83,7 +83,8 @@ namespace SOAFramework.Server.UI
 
             try
             {
-                host.Open(); 
+                host.Open();
+                started = true;
                 _isError = false;
                 var endpoint = host.Description.Endpoints.FirstOrDefault(t => t.Contract.Name == typeof(JsonHost).Name);
                 if (endpoint != null)
@@ -107,10 +108,6 @@ namespace SOAFramework.Server.UI
 
         private void tbStart_Click(object sender, EventArgs e)
         {
-            //if (domain == null)
-            //{
-            //    domain = AppDomain.CreateDomain("SOAServiceDomain");
-            //}
             tbStart.Enabled = false;
             MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "服务正在启动中..." }, CacheEnum.FormMonitor);
             worker.RunWorkerAsync();

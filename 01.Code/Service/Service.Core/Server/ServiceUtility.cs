@@ -171,6 +171,17 @@ namespace SOAFramework.Service.Server
         {
             string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
             string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
+            service.FilterList.Sort((l, r) =>
+            {
+                if (l.Index > r.Index)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            });
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {
@@ -178,7 +189,12 @@ namespace SOAFramework.Service.Server
                 var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
                 var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
                 var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
-                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null) || filter.GlobalUse)
+                if ((classNoneAttr != null && filter.GetType().Equals(classNoneAttr.GetType().BaseType)) 
+                    || (methodNoneAttr != null && filter.GetType().Equals(methodNoneAttr.GetType().BaseType)))
+                {
+                    continue;
+                }
+                if (classAttr != null || methodAttr != null || filter.GlobalUse)
                 {
                     if (!filter.OnActionExecuting(context))
                     {
@@ -193,6 +209,7 @@ namespace SOAFramework.Service.Server
         {
             string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
             string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
+            service.FilterList.Sort((l, r) => r.Index - l.Index);
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {
@@ -200,7 +217,12 @@ namespace SOAFramework.Service.Server
                 var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
                 var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
                 var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
-                if ((classAttr != null && classNoneAttr == null) || (methodAttr != null && methodNoneAttr == null) || filter.GlobalUse)
+                if ((classNoneAttr != null && filter.GetType().Equals(classNoneAttr.GetType().BaseType))
+                    || (methodNoneAttr != null && filter.GetType().Equals(methodNoneAttr.GetType().BaseType)))
+                {
+                    continue;
+                }
+                if (classAttr != null || methodAttr != null || filter.GlobalUse)
                 {
                     if (!filter.OnActionExecuted(context))
                     {
@@ -209,6 +231,24 @@ namespace SOAFramework.Service.Server
                 }
             }
             return null;
+        }
+
+        public static void FilterException(ServiceModel service, ActionContext context)
+        {
+            string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
+            string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
+            service.FilterList.Sort((l, r) => l.Index - r.Index);
+            foreach (var filter in service.FilterList)
+            {
+                var classAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<IFilter>(true);
+                var methodAttr = service.MethodInfo.GetCustomAttribute<IFilter>(true);
+                var classNoneAttr = service.MethodInfo.DeclaringType.GetCustomAttribute<INoneExecuteFilter>(true);
+                var methodNoneAttr = service.MethodInfo.GetCustomAttribute<INoneExecuteFilter>(true);
+                if (classAttr != null || methodAttr != null || filter.GlobalUse)
+                {
+                    filter.OnExceptionOccurs(context);
+                }
+            }
         }
 
         public static string GetTypeName(Type t)

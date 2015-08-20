@@ -303,11 +303,18 @@ namespace SOAFramework.Service.Core.Model
                 #region 执行方法
                 if (!response.IsError)
                 {
-                    watch.Start();
-                    //执行方法
-                    object result = service.Invoke(args);
-                    watch.Stop();
-                    response.Data = result;
+                    try
+                    {
+                        watch.Start();
+                        //执行方法
+                        object result = service.Invoke(args);
+                        watch.Stop();
+                        response.Data = result;
+                    }
+                    catch
+                    {
+                        throw;
+                    }
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
                 }
                 #endregion
@@ -392,7 +399,7 @@ namespace SOAFramework.Service.Core.Model
                     ConfigSetting setting = new ConfigSetting
                     {
                         Assembly = ass,
-                        FilterConfig = new Dictionary<string, object> (),
+                        FilterConfig = new Dictionary<string, object>(),
                     };
                     setting.FilterConfig["GlobalUse"] = value.GlobalUse;
                     if (!assmList.Contains(setting))
@@ -409,11 +416,7 @@ namespace SOAFramework.Service.Core.Model
                 var filterList = analyzer.AnalyzeFilter();
                 if (filterList != null && filterList.Count > 0)
                 {
-                    foreach (var filter in filterList)
-                    {
-                        filter.GlobalUse = (bool)ass.FilterConfig["GlobalUse"];
-                        list.Add(filter);
-                    }
+                    list.AddRange(filterList);
                 }
             }
 
