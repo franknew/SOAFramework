@@ -9,7 +9,7 @@ namespace SOAFramework.Service.Core
 {
     public interface IAnalyzer
     {
-        void AnalyzeService(Dictionary<string, Model.ServiceModel> inputDic, List<IFilter> filterList);
+        void AnalyzeService(IDictionary<string, Model.ServiceModel> inputDic, List<IFilter> filterList);
 
         List<IFilter> AnalyzeFilter();
 

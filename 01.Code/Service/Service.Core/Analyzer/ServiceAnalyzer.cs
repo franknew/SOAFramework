@@ -20,7 +20,7 @@ namespace SOAFramework.Service.Core
             _ass = assembly;
         }
 
-        public void AnalyzeService(Dictionary<string, Model.ServiceModel> inputDic, List<IFilter> filterList)
+        public void AnalyzeService(IDictionary<string, Model.ServiceModel> inputDic, List<IFilter> filterList)
         {
             GetService(inputDic, filterList);
         }
@@ -76,7 +76,7 @@ namespace SOAFramework.Service.Core
         #region helper method
 
 
-        private void GetServiceFromType(Type type, List<XElement> elementList, Dictionary<string, ServiceModel> serviceDic,
+        private void GetServiceFromType(Type type, List<XElement> elementList, IDictionary<string, ServiceModel> serviceDic,
             List<IFilter> filterList)
         {
             if (type.IsInterface)
@@ -270,7 +270,7 @@ namespace SOAFramework.Service.Core
         /// </summary>
         /// <param name="serviceDic"></param>
         /// <param name="filterList"></param>
-        public void GetService(Dictionary<string, ServiceModel> serviceDic, List<IFilter> filterList)
+        public void GetService(IDictionary<string, ServiceModel> serviceDic, List<IFilter> filterList)
         {
             Type[] types = null;
             types = _ass.GetTypes();

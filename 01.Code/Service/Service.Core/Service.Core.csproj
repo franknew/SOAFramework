@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Analyzer\IAnalyzer.cs" />
     <Compile Include="Analyzer\ServiceAnalyzer.cs" />
+    <Compile Include="Attribute\ExecuteAttribute.cs" />
     <Compile Include="Dispatcher\HttpDispatcherExecuter.cs" />
     <Compile Include="Dispatcher\IDispatcherExecuter.cs" />
     <Compile Include="Extension\TypeExtension.cs" />
@@ -123,7 +124,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Attribute\" />
     <Folder Include="Interface\" />
     <Folder Include="Log\" />
   </ItemGroup>

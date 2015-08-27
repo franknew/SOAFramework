@@ -171,17 +171,7 @@ namespace SOAFramework.Service.Server
         {
             string typeName = service.ServiceInfo.InterfaceName.Substring(0, service.ServiceInfo.InterfaceName.LastIndexOf("."));
             string actionName = service.ServiceInfo.InterfaceName.Substring(service.ServiceInfo.InterfaceName.LastIndexOf(".") + 1);
-            service.FilterList.Sort((l, r) =>
-            {
-                if (l.Index > r.Index)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            });
+            service.FilterList.Sort((l, r) => l.Index - r.Index);
             //执行公共的过滤器
             foreach (var filter in service.FilterList)
             {

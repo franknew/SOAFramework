@@ -63,6 +63,8 @@ namespace SOAFramework.Service.Server
                 Exception exinner = ex; 
                 StringBuilder stacktrace = new StringBuilder();
                 StringBuilder message = new StringBuilder();
+                stacktrace.Append(exinner.StackTrace);
+                message.Append(exinner.Message);
                 while (exinner.InnerException != null)
                 {
                     stacktrace.Append(exinner.StackTrace);

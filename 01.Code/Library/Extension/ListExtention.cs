@@ -91,7 +91,7 @@ namespace SOAFramework.Library
             return table;
         }
 
-        /// <summary>
+        /// <summary>b
         /// 转换成DataTable
         /// </summary>
         /// <param name="list"></param>

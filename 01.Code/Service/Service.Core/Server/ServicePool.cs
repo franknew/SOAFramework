@@ -15,6 +15,7 @@ using System.ServiceModel.Web;
 using SOAFramework.Service.Server;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
+using System.Collections.Concurrent;
 
 namespace SOAFramework.Service.Core.Model
 {
@@ -22,13 +23,13 @@ namespace SOAFramework.Service.Core.Model
     public class ServicePool
     {
         #region attributes
-        protected Dictionary<string, ServiceModel> _pool = new Dictionary<string, ServiceModel>();
-        protected Dictionary<string, DateTime> _AssWatcher = new Dictionary<string, DateTime>();
+        protected ConcurrentDictionary<string, ServiceModel> _pool = new ConcurrentDictionary<string, ServiceModel>();
+        protected ConcurrentDictionary<string, DateTime> _AssWatcher = new ConcurrentDictionary<string, DateTime>();
         protected List<IFilter> _filterList = new List<IFilter>();
         protected List<Assembly> _businessAssList = new List<Assembly>();
         protected List<MachinePerformance> _performanceList = new List<MachinePerformance>();
         protected SOAConfiguration _config = null;
-        protected Dictionary<string, ServiceSession> _session = new Dictionary<string, ServiceSession>();
+        protected IDictionary<string, ServiceSession> _session = new Dictionary<string, ServiceSession>();
         #endregion
 
         #region singleton
@@ -97,7 +98,7 @@ namespace SOAFramework.Service.Core.Model
         /// </summary>
         public string DispatchServerUrl { get; set; }
 
-        public Dictionary<string, ServiceSession> Session
+        public IDictionary<string, ServiceSession> Session
         {
             get { return _session; }
         }
@@ -244,6 +245,7 @@ namespace SOAFramework.Service.Core.Model
             return p.GetCurrentCpuUsage();
         }
 
+        [Execute]
         public Stream Execute(string typeName, string functionName, Dictionary<string, object> args)
         {
             //执行方法
@@ -286,6 +288,7 @@ namespace SOAFramework.Service.Core.Model
                     Method = method,
                     Service = service.ServiceInfo,
                 };
+                //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "sessionid:" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
                 _session[sessionid] = session;
                 #endregion
 
@@ -313,6 +316,7 @@ namespace SOAFramework.Service.Core.Model
                     }
                     catch
                     {
+                        ServiceUtility.FilterException(service, context);
                         throw;
                     }
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
@@ -346,6 +350,11 @@ namespace SOAFramework.Service.Core.Model
 
             #region 处理结果
             Stream stream = response.ToStream(enableZippedResponse);
+            if (ServiceSession.Current != null)
+            {
+                //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "has session"}, SOAFramework.Library.CacheEnum.FormMonitor);
+            }
+
             allWatch.Stop();
             if (EnableConsoleMonitor)
             {
