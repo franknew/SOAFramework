@@ -253,7 +253,9 @@ namespace SOAFramework.Service.Core.Model
             Stopwatch watch = new Stopwatch();
             Stopwatch allWatch = new Stopwatch();
             ActionContext context = null;
-            string sessionid = (new StackFrame()).GetMethod().GetHashCode().ToString();
+            StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t => t.GetMethod().DeclaringType.Equals(typeof(ServicePool)) &&
+                    t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
+            string sessionid = frame.GetMethod().GetHashCode().ToString();
             allWatch.Start();
             string interfaceName = GetIntefaceName(typeName, functionName);
             try
@@ -288,8 +290,8 @@ namespace SOAFramework.Service.Core.Model
                     Method = method,
                     Service = service.ServiceInfo,
                 };
-                //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "sessionid:" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
-                _session[sessionid] = session;
+                //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = interfaceName + " sessionid:" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
+                _session.Add(sessionid, session);
                 #endregion
 
                 #region 执行前置filter

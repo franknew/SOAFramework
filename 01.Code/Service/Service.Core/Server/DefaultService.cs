@@ -65,7 +65,11 @@ namespace SOAFramework.Service.Server
             var query = from s in methodList
                         where s.ServiceInfo != null && s.ServiceInfo.Module == module
                         select s.ServiceInfo;
+
             list = query.ToList();
+            list = (from l in list
+                    orderby l.InterfaceName
+                    select l).ToList();
             return list;
         }
 
@@ -83,6 +87,9 @@ namespace SOAFramework.Service.Server
             {
                 list.Insert(0, "Default");
             }
+            list = (from l in list
+                   orderby l
+                   select l).ToList();
             return list;
         }
 
@@ -112,7 +119,7 @@ namespace SOAFramework.Service.Server
                 string dllfileName = type.Assembly.CodeBase;
                 string xmlFileName = dllfileName.Remove(dllfileName.LastIndexOf("."), 4) + ".xml";
                 xmlFileName = xmlFileName.Replace("file:///", "").Replace("/", @"\");
-                List<XElement> elementList = null; 
+                List<XElement> elementList = null;
                 if (File.Exists(xmlFileName))
                 {
                     elementList = XElement.Load(xmlFileName).Descendants("member").ToList();

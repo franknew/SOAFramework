@@ -49,7 +49,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Bin\Modules\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Bin\Modules\SOAFramework.Library.Json.XML</DocumentationFile>
@@ -108,6 +108,7 @@
     <Compile Include="Newtonsoft\Converters\VersionConverter.cs" />
     <Compile Include="Newtonsoft\JsonConstructorAttribute.cs" />
     <Compile Include="JsonHelper.cs" />
+    <Compile Include="Newtonsoft\Schema\DateTimeFormatEnum.cs" />
     <Compile Include="Newtonsoft\Utilities\DynamicProxy.cs" />
     <Compile Include="Newtonsoft\Linq\JPath.cs" />
     <Compile Include="Newtonsoft\Linq\JRaw.cs" />

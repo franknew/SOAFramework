@@ -321,7 +321,7 @@ namespace Newtonsoft.Json.Serialization
             return converter;
         }
 
-        private object CreateObject(JsonReader reader, Type objectType, JsonContract contract, JsonProperty member, object existingValue, 
+        private object CreateObject(JsonReader reader, Type objectType, JsonContract contract, JsonProperty member, object existingValue,
             Dictionary<int, string> classSchema)
         {
             CheckedRead(reader);
@@ -521,7 +521,7 @@ namespace Newtonsoft.Json.Serialization
         {
             if (targetType == null)
                 return value;
-
+            object result = null;
             Type valueType = ReflectionUtils.GetObjectType(value);
 
             // type of value and type of target don't match
@@ -538,15 +538,37 @@ namespace Newtonsoft.Json.Serialization
                         if (contract.NonNullableUnderlyingType.IsEnum)
                         {
                             if (value is string)
-                                return Enum.Parse(contract.NonNullableUnderlyingType, value.ToString(), true);
+                            {
+                                result = Enum.Parse(contract.NonNullableUnderlyingType, value.ToString(), true);
+                            }
                             else if (ConvertUtils.IsInteger(value))
-                                return Enum.ToObject(contract.NonNullableUnderlyingType, value);
+                            {
+                                result = Enum.ToObject(contract.NonNullableUnderlyingType, value);
+                            }
                         }
-
-                        return Convert.ChangeType(value, contract.NonNullableUnderlyingType, culture);
+                        else if (contract.NonNullableUnderlyingType.FullName.Equals("System.DateTime"))
+                        {
+                            long parse = -1;
+                            long.TryParse(value.ToString(), out parse);
+                            if (parse > 0)
+                            {
+                                result = JsonConvert.ConvertJavaScriptTicksToDateTime(parse);
+                            }
+                            else
+                            {
+                                result = Convert.ChangeType(value, contract.NonNullableUnderlyingType, culture);
+                            }
+                        }
+                        else
+                        {
+                            result = Convert.ChangeType(value, contract.NonNullableUnderlyingType, culture);
+                        }
                     }
-
-                    return ConvertUtils.ConvertOrCast(value, culture, contract.NonNullableUnderlyingType);
+                    else
+                    {
+                        result = ConvertUtils.ConvertOrCast(value, culture, contract.NonNullableUnderlyingType);
+                    }
+                    return result;
                 }
                 catch (Exception ex)
                 {

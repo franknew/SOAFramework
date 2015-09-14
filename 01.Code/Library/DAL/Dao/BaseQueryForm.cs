@@ -62,5 +62,20 @@ namespace SOAFramework.Library.DAL
                 return pagecount;
             }
         }
+
+        public List<string> Ids
+        {
+            get
+            {
+                return ids;
+            }
+
+            set
+            {
+                ids = value;
+            }
+        }
+
+        private List<string> ids = new List<string>();
     }
 }

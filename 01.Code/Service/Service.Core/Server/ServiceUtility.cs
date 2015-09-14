@@ -184,7 +184,8 @@ namespace SOAFramework.Service.Server
                 {
                     continue;
                 }
-                if (classAttr != null || methodAttr != null || filter.GlobalUse)
+                if ((classAttr != null && !(classAttr is INoneExecuteFilter)) || 
+                    (methodAttr != null && !(methodAttr is INoneExecuteFilter)) || filter.GlobalUse)
                 {
                     if (!filter.OnActionExecuting(context))
                     {

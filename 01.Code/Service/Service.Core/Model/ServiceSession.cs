@@ -36,16 +36,17 @@ namespace SOAFramework.Service.Core.Model
                     t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
                     if (frame == null)
                     {
-                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "frame is null" }, SOAFramework.Library.CacheEnum.FormMonitor);
                         return null;
                     }
                     string sessionid = frame.GetMethod().GetHashCode().ToString();
+                    //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "sessionid=" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
                     if (ServicePool.Instance.Session.ContainsKey(sessionid))
                     {
                         return ServicePool.Instance.Session[sessionid];
                     }
                     else
                     {
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = frame.GetMethod().Name + " no session sessionid=" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
                         return null;
                     }
                     
