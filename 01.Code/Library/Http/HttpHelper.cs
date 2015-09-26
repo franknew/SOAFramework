@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
 using System.Net;
 using System.Web;
 using System.IO;
@@ -12,15 +9,24 @@ namespace SOAFramework.Library
 {
     public class HttpHelper
     {
-        public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json")
+        public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json", 
+            NetworkCredential credential = null)
         {
             WebRequest request = WebRequest.Create(url);
-            request.ContentType = contentType; 
+            request.ContentType = contentType;
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;
             request.ContentLength = data.Length;
             request.Timeout = timeout;
-            Stream requestStream = request.GetRequestStream();
+            if (credential != null)
+            {
+                CredentialCache cache = new CredentialCache();
+                cache.Add(new Uri(url), "Basic", credential);
+                string code = "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(credential.UserName + ":" + credential.Password));
+                request.Credentials = cache;
+                request.Headers.Add(HttpRequestHeader.Authorization, code);
+            }
+            Stream requestStream = request.GetRequestStream(); 
             requestStream.Write(data, 0, data.Length);
             requestStream.Close();
             WebResponse response = request.GetResponse();

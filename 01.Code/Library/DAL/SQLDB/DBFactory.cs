@@ -14,6 +14,10 @@ namespace SOAFramework.Library.DAL
             {
                 strDBType = ConfigurationManager.AppSettings["DBType"];
             }
+            else
+            {
+                strDBType = DBType.MSSQL.ToString();
+            }
             string strConn = null;
             if (ConfigurationManager.ConnectionStrings[strDBType] != null && !string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings[strDBType].ConnectionString))
             {
