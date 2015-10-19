@@ -23,16 +23,35 @@ namespace SOAFramework.Service.SDK.Core
                 url = GetRealUrl(request, url);
             }
             //访问服务
-            string response = PostSerivce(request, url, type);
+            string response = PostService(request, url, type);
             //通过服务器返回的json生成response对象
             t = GenerateResponse<T>(response);
+            return t;
+        }
+
+        public object Execute(object request, Type responseType, string url = null, PostDataFomaterType type = PostDataFomaterType.Json)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                //生成完整的url
+                url = GetRealUrlBase(request, url);
+            }
+            //访问服务
+            string response = PostService(request, url, type);
+            object t = GenerateResponse(response, responseType);
             return t;
         }
 
         #region helper method
         private string GetRealUrl<T>(IRequest<T> request, string serviceUrl) where T : BaseResponse
         {
-            string api = request.GetApi();
+            return GetRealUrlBase(request, serviceUrl);
+        }
+
+        private string GetRealUrlBase(object request, string serviceUrl)
+        {
+            dynamic dyrequest = request;
+            string api = dyrequest.GetApi();
             if (string.IsNullOrEmpty(serviceUrl))
             {
                 serviceUrl = _url;
@@ -47,10 +66,10 @@ namespace SOAFramework.Service.SDK.Core
             return fullUrl;
         }
 
-        private string PostSerivce<T>(IRequest<T> request, string fullUrl, PostDataFomaterType type) where T : BaseResponse
+        private string PostService<T>(IRequest<T> request, string fullUrl, PostDataFomaterType type) where T : BaseResponse
         {
             Type requestType = request.GetType();
-            PropertyInfo[] properties = requestType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             Dictionary<string, object> argdic = new Dictionary<string, object>();
             //反射获得请求属性
             foreach (PropertyInfo pro in properties)
@@ -85,9 +104,54 @@ namespace SOAFramework.Service.SDK.Core
             return response;
         }
 
+        private string PostService(object request, string fullUrl, PostDataFomaterType type)
+        {
+            Type requestType = request.GetType();
+            PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            Dictionary<string, object> argdic = new Dictionary<string, object>();
+            //反射获得请求属性
+            foreach (PropertyInfo pro in properties)
+            {
+                ArgMapping mapping = pro.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
+                string name = pro.Name;
+                if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping))
+                {
+                    name = mapping.Mapping;
+                }
+                object value = pro.GetValue(request, null);
+                argdic[name] = value;
+            }
+            //格式化成post数据
+            IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
+            string json = fomatter.Format(argdic);
+            byte[] data = Encoding.UTF8.GetBytes(json);
+            string zippedResponse = HttpHelper.Post(fullUrl, data);
+            //string response = ZipHelper.UnZip(zippedResponse);
+            string response = zippedResponse;
+
+            //设置请求信息
+            if (request.GetType().IsSubclassOf(typeof(BaseRequest<>)))
+            {
+                dynamic req = request;
+                req.Body = new RequestBody
+                {
+                    PostData = json,
+                    URL = fullUrl,
+                };
+            }
+            return response;
+        }
+
         private T GenerateResponse<T>(string response) where T : BaseResponse
         {
-            T t = Activator.CreateInstance<T>();
+            T t = (T)GenerateResponse(response, typeof(T));
+            return t;
+        }
+
+        private object GenerateResponse(string response, Type responseType)
+        {
+            object t = Activator.CreateInstance(responseType);
+            dynamic dyt = t;
             BaseResponseShadow shadow = null;
             try
             {
@@ -111,7 +175,7 @@ namespace SOAFramework.Service.SDK.Core
             if (shadow != null && !shadow.IsError)
             {
                 //将返回的对象值设置到response的第一个属性上面
-                PropertyInfo[] responseProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                PropertyInfo[] responseProperties = responseType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
                 if (responseProperties != null && responseProperties.Length > 0)
                 {
                     BaseResponseShadow o = null;
@@ -142,9 +206,9 @@ namespace SOAFramework.Service.SDK.Core
             else
             {
                 //否则设置错误信息
-                t.SetValues(shadow.IsError, shadow.ErrorMessage, shadow.StackTrace);
+                dyt.SetValues(shadow.IsError, shadow.ErrorMessage, shadow.StackTrace);
             }
-            t.SetBody(response);
+            dyt.SetBody(response);
             return t;
         }
         #endregion
