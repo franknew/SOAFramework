@@ -60,7 +60,7 @@ namespace SOAFramework.Service.Server
             }
             catch (Exception ex)
             {
-                Exception exinner = ex; 
+                Exception exinner = ex;
                 StringBuilder stacktrace = new StringBuilder();
                 StringBuilder message = new StringBuilder();
                 stacktrace.Append(exinner.StackTrace);
@@ -170,23 +170,18 @@ namespace SOAFramework.Service.Server
         /// <returns></returns>
         public Stream Download(string fileName)
         {
-            if (string.IsNullOrEmpty(_filePath))
-            {
-                _filePath = AppDomain.CurrentDomain.BaseDirectory;
-            }
-            if (!_filePath.EndsWith("\\"))
-            {
-                _filePath += "\\";
-            }
+            _filePath = AppDomain.CurrentDomain.BaseDirectory;
+            _filePath = _filePath.TrimEnd('\\') + "\\Download\\";
             string fullFileName = _filePath + fileName;
             FileInfo file = new FileInfo(fullFileName);
             if (!file.Exists)
             {
                 throw new System.IO.FileNotFoundException("文件:" + fileName + "未找到！");
             }
-            string fileString = file.FileToString();
+            FileStream stream = new FileStream(file.FullName, FileMode.Open);
+            WebOperationContext.Current.OutgoingResponse.ContentType = "application/octet-stream";
             //string zipped = ZipHelper.Zip(fileString);
-            return new MemoryStream(Encoding.UTF8.GetBytes(fileString));
+            return stream;
         }
 
         /// <summary>
