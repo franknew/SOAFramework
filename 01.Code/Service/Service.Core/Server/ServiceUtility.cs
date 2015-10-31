@@ -184,12 +184,26 @@ namespace SOAFramework.Service.Server
                 {
                     continue;
                 }
-                if ((classAttr != null && !(classAttr is INoneExecuteFilter)) || 
-                    (methodAttr != null && !(methodAttr is INoneExecuteFilter)) || filter.GlobalUse)
+                if (filter.GlobalUse)
                 {
-                    if (!filter.OnActionExecuting(context))
+                    if ((classAttr != null && !(classAttr is INoneExecuteFilter)) ||
+                        (methodAttr != null && !(methodAttr is INoneExecuteFilter)))
                     {
-                        return filter;
+                        if (!filter.OnActionExecuting(context))
+                        {
+                            return filter;
+                        }
+                    }
+                }
+                else
+                {
+                    if ((classAttr != null && filter.GetType().Equals(classAttr.GetType())) || 
+                        (methodAttr != null && filter.GetType().Equals(methodAttr.GetType())))
+                    {
+                        if (!filter.OnActionExecuting(context))
+                        {
+                            return filter;
+                        }
                     }
                 }
             }
@@ -213,11 +227,26 @@ namespace SOAFramework.Service.Server
                 {
                     continue;
                 }
-                if (classAttr != null || methodAttr != null || filter.GlobalUse)
+                if (filter.GlobalUse)
                 {
-                    if (!filter.OnActionExecuted(context))
+                    if ((classAttr != null && !(classAttr is INoneExecuteFilter)) ||
+                        (methodAttr != null && !(methodAttr is INoneExecuteFilter)))
                     {
-                        return filter;
+                        if (!filter.OnActionExecuted(context))
+                        {
+                            return filter;
+                        }
+                    }
+                }
+                else
+                {
+                    if ((classAttr != null && filter.GetType().Equals(classAttr.GetType())) ||
+                        (methodAttr != null && filter.GetType().Equals(methodAttr.GetType())))
+                    {
+                        if (!filter.OnActionExecuted(context))
+                        {
+                            return filter;
+                        }
                     }
                 }
             }

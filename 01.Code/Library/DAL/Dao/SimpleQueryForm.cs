@@ -21,20 +21,5 @@ namespace SOAFramework.Library.DAL
         public DateTime? LastUpdateTime_Start { get; set; }
 
         public DateTime? LastUpdateTime_End { get; set; }
-
-        public List<string> Creators
-        {
-            get
-            {
-                return creators;
-            }
-
-            set
-            {
-                creators = value;
-            }
-        }
-
-        private List<string> creators = new List<string>();
     }
 }

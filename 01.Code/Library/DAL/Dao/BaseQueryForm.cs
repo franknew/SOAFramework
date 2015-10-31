@@ -63,19 +63,6 @@ namespace SOAFramework.Library.DAL
             }
         }
 
-        public List<string> Ids
-        {
-            get
-            {
-                return ids;
-            }
-
-            set
-            {
-                ids = value;
-            }
-        }
-
-        private List<string> ids = new List<string>();
+        public List<string> IDs { get; set; }
     }
 }
