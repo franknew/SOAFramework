@@ -9,12 +9,13 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.ServiceModel.Activation;
 
 namespace SOAFramework.Service.Server
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的接口名“IService1”。
     [ServiceLayer(Enabled = false)]
-    [ServiceContract(SessionMode = SessionMode.Allowed)]
+    [ServiceContract(SessionMode = SessionMode.Required)]
     public interface IService
     {
         [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Execute/{typeName}/{functionName}", Method = "POST")]

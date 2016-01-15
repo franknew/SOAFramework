@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Configuration;
 
 namespace SOAFramework.Library.DAL
 {
     public class SimpleDao<TEngity, TQueryForm, TUpdateForm> where TEngity : SimpleEntity
         where TUpdateForm : SimpleUpdateForm<TEngity> where TQueryForm : SimpleQueryForm
     {
+        private bool enableLog = false;
         public ISqlMapper Mapper { get; set; }
 
         internal string tableName = null;
@@ -24,6 +26,7 @@ namespace SOAFramework.Library.DAL
                 this.Mapper = mapper;
             }
             tableName = typeof(TEngity).Name;
+            if (ConfigurationManager.AppSettings["EnableSqlLog"] != null && ConfigurationManager.AppSettings["EnableSqlLog"] == "1") enableLog = true;
         }
 
         public string Add(TEngity entity)
@@ -32,33 +35,51 @@ namespace SOAFramework.Library.DAL
             {
                 entity.ID = Guid.NewGuid().ToString().Replace("-", "");
             }
+            string action = "Add" + tableName;
             entity.CreateTime = DateTime.Now;
             entity.LastUpdateTime = DateTime.Now;
-            Mapper.Insert("Add" + tableName, entity);
+            WriteSqlLog(action, entity);
+            Mapper.Insert(action, entity);
             return entity.ID;
         }
 
         public List<TEngity> Query(TQueryForm form)
         {
+            string action = "Query" + tableName;
             if (form.PageSize > 0)
             {
-                int count = Mapper.QueryForObject<int>("Query" + tableName + "RecordCount", form);
+                WriteSqlLog(action + "RecordCount", form);
+                int count = Mapper.QueryForObject<int>(action + "RecordCount", form);
                 form.RecordCount = count;
             }
-            return Mapper.QueryForList<TEngity>("Query" + tableName, form).ToList();
+            WriteSqlLog(action, form);
+            var list = Mapper.QueryForList<TEngity>(action, form).ToList();
+
+            return list;
         }
 
         public bool Delete(TQueryForm form)
         {
-            Mapper.Delete("Delete" + tableName, form);
+            string action = "Delete" + tableName;
+            WriteSqlLog(action, form);
+            Mapper.Delete(action, form);
             return true;
         }
 
         public bool Update(TUpdateForm entity)
         {
+            string action = "Update" + tableName;
             entity.Entity.LastUpdateTime = DateTime.Now;
-            Mapper.Update("Update" + tableName, entity);
+            WriteSqlLog(action, entity);
+            Mapper.Update(action, entity);
             return true;
+        }
+
+        private void WriteSqlLog(string statementName, object entity)
+        {
+            if (!enableLog) return;
+            string sql = Mapper.GetRuntimeSql(statementName, entity);
+            LogHelper.WriteLog(sql);
         }
     }
 }

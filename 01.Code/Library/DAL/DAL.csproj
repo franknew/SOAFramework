@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\Extension.cs" />
     <Compile Include="Dao\BaseDao.cs" />
     <Compile Include="Dao\BaseEntity.cs" />
     <Compile Include="Dao\BaseQueryForm.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Dao\SimpleQueryForm.cs" />
     <Compile Include="Dao\SimpleUpdateForm.cs" />
     <Compile Include="LinqExtension.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="NoSQLDB\BaseMongoEntity.cs" />
     <Compile Include="NoSQLDB\BaseNoSQLEntity.cs" />
     <Compile Include="NoSQLDB\IDataManager.cs" />

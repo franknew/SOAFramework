@@ -8,5 +8,6 @@ namespace SOAFramework.Service.Core
     [AttributeUsage(AttributeTargets.Method)]
     public class ExecuteAttribute : Attribute
     {
+        public string SessionID { get; set; }
     }
 }

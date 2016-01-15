@@ -7,6 +7,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.ServiceModel;
 
 namespace SOAFramework.Service.Core.Model
 {
@@ -32,13 +34,14 @@ namespace SOAFramework.Service.Core.Model
             {
                 lock (syncRoot)
                 {
-                    StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t=>t.GetMethod().DeclaringType.Equals(typeof(ServicePool)) &&
+                    StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t=>
                     t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
                     if (frame == null)
                     {
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = frame.GetMethod().Name + " no frame " }, SOAFramework.Library.CacheEnum.FormMonitor);
                         return null;
                     }
-                    string sessionid = frame.GetMethod().GetHashCode().ToString();
+                    string sessionid = OperationContext.Current.IncomingMessageProperties[ServicePool.SessionIDKey].ToString();
                     //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "sessionid=" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
                     if (ServicePool.Instance.Session.ContainsKey(sessionid))
                     {

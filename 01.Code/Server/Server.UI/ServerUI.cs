@@ -79,10 +79,11 @@ namespace SOAFramework.Server.UI
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            host = new ServiceHost(typeof(JsonHost));
+            host = null; 
 
             try
             {
+                host = new ServiceHost(typeof(JsonHost));
                 host.Open();
                 started = true;
                 _isError = false;

@@ -16,6 +16,8 @@ using SOAFramework.Service.Server;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Collections.Concurrent;
+using System.Web;
+using System.ServiceModel;
 
 namespace SOAFramework.Service.Core.Model
 {
@@ -102,6 +104,8 @@ namespace SOAFramework.Service.Core.Model
         {
             get { return _session; }
         }
+
+        public const string SessionIDKey = "_sessionid";
 
         private bool enableZippedResponse = false;
 
@@ -253,10 +257,10 @@ namespace SOAFramework.Service.Core.Model
             Stopwatch watch = new Stopwatch();
             Stopwatch allWatch = new Stopwatch();
             ActionContext context = null;
-            StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t => t.GetMethod().DeclaringType.Equals(typeof(ServicePool)) &&
-                    t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
-            string sessionid = frame.GetMethod().GetHashCode().ToString();
-            allWatch.Start();
+
+            StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t=> t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
+            string sessionid = Guid.NewGuid().ToString();
+            OperationContext.Current.IncomingMessageProperties.Add(SessionIDKey, sessionid);
             string interfaceName = GetIntefaceName(typeName, functionName);
             try
             {

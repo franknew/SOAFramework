@@ -11,7 +11,7 @@ namespace SOAFramework.Library.DAL
 
         public int? PageSize { get; set; }
 
-        private int? currrentIndex = 0;
+        private int? currrentIndex = 1;
         public int? CurrentIndex 
         { 
             get

@@ -18,11 +18,14 @@ using System.Threading.Tasks;
 using SOAFramework.Service.Core.Model;
 using System.Dynamic;
 using System.Web;
+using System.Threading;
+using System.ServiceModel.Activation;
 
 namespace SOAFramework.Service.Server
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class SOAService : IService
     {
         private static IDispatcher _dispatcher = null;
@@ -34,6 +37,8 @@ namespace SOAFramework.Service.Server
         private static bool _isError = false;
 
         private static List<BaseFilter> _filterList = new List<BaseFilter>();
+
+        private static bool _initialized = false;
         static SOAService()
         {
             try
@@ -57,6 +62,7 @@ namespace SOAFramework.Service.Server
                     });
                     task.Start();
                 }
+                _initialized = true;
             }
             catch (Exception ex)
             {
@@ -105,6 +111,11 @@ namespace SOAFramework.Service.Server
                 response.ErrorMessage = "系统初始化时报错！";
                 stream = response.ToStream();
                 return stream;
+            }
+            //如果没有初始化结束，就休眠等待
+            while (!_initialized)
+            {
+                Thread.Sleep(500);
             }
             Dictionary<string, object> dic = null;
             try
