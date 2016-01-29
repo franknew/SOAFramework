@@ -79,7 +79,7 @@ namespace SOAFramework.Server.UI
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            host = null; 
+            host = null;
 
             try
             {
@@ -186,6 +186,10 @@ namespace SOAFramework.Server.UI
             else
             {
                 tssDispatcher.Text = "分发服务器地址：" + ConfigurationManager.AppSettings["DispatcherServerUrl"];
+            }
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ApplicationName"]))
+            {
+                this.Text = ConfigurationManager.AppSettings["ApplicationName"];
             }
             DisplayMachineStatus();
             timer2.Start();
