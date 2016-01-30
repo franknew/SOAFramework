@@ -1,6 +1,6 @@
-﻿namespace SOAFramework.Server.WindowsService
+﻿namespace SOAFramework.Server
 {
-    partial class Service
+    partial class BackendService 
     {
         /// <summary> 
         /// 必需的设计器变量。

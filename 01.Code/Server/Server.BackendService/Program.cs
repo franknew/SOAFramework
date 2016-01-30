@@ -4,9 +4,8 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using SOAFramework.Server.WindowsService;
 
-namespace Server.WindowsService
+namespace SOAFramework.Server.Backend
 {
     static class Program
     {
@@ -18,7 +17,7 @@ namespace Server.WindowsService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new WindowsServiceServer()
+                new BackendService()
             };
             ServiceBase.Run(ServicesToRun);
         }
