@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DB0AC623-C667-491B-A3CD-CB4D04D76292}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SOAFramework.Library.WeiXin</RootNamespace>
+    <AssemblyName>SOAFramework.Library.WeiXin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Bin\Modules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Bin\Modules\SOAFramework.Library.WeiXin.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Api\User\User_GetUserInfoRequest.cs" />
+    <Compile Include="Api\User\User_GetUserInfoResponse.cs" />
+    <Compile Include="Api\WeiXinApi.cs" />
+    <Compile Include="ApiHelper.cs" />
+    <Compile Include="Api\Department\DepartmentApi.cs" />
+    <Compile Include="Api\Department\Department_CreateRequest.cs" />
+    <Compile Include="Api\Department\Department_DeleteRequest.cs" />
+    <Compile Include="Api\Department\Department_ListRequest.cs" />
+    <Compile Include="Api\Department\Department_UpdateRequest.cs" />
+    <Compile Include="Api\User\UserApi.cs" />
+    <Compile Include="Api\User\User_CreateRequest.cs" />
+    <Compile Include="Api\User\User_DeleteRequest.cs" />
+    <Compile Include="Api\User\User_SimpleListRequest.cs" />
+    <Compile Include="Api\User\User_SimpleListResponse.cs" />
+    <Compile Include="Api\User\User_UpdateRequest.cs" />
+    <Compile Include="QueryString\CommonIDQueryString.cs" />
+    <Compile Include="QueryString\User_DeleteQueryString.cs" />
+    <Compile Include="QueryString\User_GetQueryString.cs" />
+    <Compile Include="QueryString\User_GetUserInfoQueryString.cs" />
+    <Compile Include="QueryString\User_SimpleListQueryString.cs" />
+    <Compile Include="Request\IWeiXinRequest.cs" />
+    <Compile Include="Api\User\User_GetRequest.cs" />
+    <Compile Include="Api\Department\Department_ListResponse.cs" />
+    <Compile Include="Api\User\User_GetResponse.cs" />
+    <Compile Include="WeiXinSDK.cs" />
+    <Compile Include="UrlConfig.cs" />
+    <Compile Include="Entity\Department.cs" />
+    <Compile Include="Entity\User.cs" />
+    <Compile Include="Response\AddActionResponse.cs" />
+    <Compile Include="Response\WeiXinBaseResponse.cs" />
+    <Compile Include="Response\GetToken.cs" />
+    <Compile Include="SignIn.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cache\Cache.csproj">
+      <Project>{3dd01adf-6859-4d75-aae0-473c7dfe944b}</Project>
+      <Name>Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Http\Http.csproj">
+      <Project>{b5168c1f-6145-4453-9e20-d2f69883b49b}</Project>
+      <Name>Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Newtonsoft.Json\Json.csproj">
+      <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
+      <Name>Json</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
