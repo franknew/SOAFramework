@@ -50,6 +50,9 @@ namespace SOAFramework.Server.UI
             ssBar.Items.Add(tssRam);
             ssBar.Items.Add(tssSep2);
             ssBar.Items.Add(tssDispatcher);
+            lbMessage.ContextMenu = new ContextMenu(new MenuItem[] {
+                new MenuItem("复制", Copy)
+                });
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -197,6 +200,15 @@ namespace SOAFramework.Server.UI
             {
                 tbStart_Click(sender, e);
             }
+        }
+
+        private void lbMessage_MouseClick(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void Copy(object sender, EventArgs e)
+        {
+            if (lbMessage.SelectedItem != null) Clipboard.SetDataObject(lbMessage.SelectedItem.ToString());
         }
     }
 }

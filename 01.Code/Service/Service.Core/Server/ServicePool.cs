@@ -257,8 +257,7 @@ namespace SOAFramework.Service.Core.Model
             Stopwatch watch = new Stopwatch();
             Stopwatch allWatch = new Stopwatch();
             ActionContext context = null;
-
-            StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t=> t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
+            
             string sessionid = Guid.NewGuid().ToString();
             OperationContext.Current.IncomingMessageProperties.Add(SessionIDKey, sessionid);
             string interfaceName = GetIntefaceName(typeName, functionName);
@@ -306,6 +305,7 @@ namespace SOAFramework.Service.Core.Model
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
                     response.Code = context.Code;
+                    ServiceUtility.FilterException(service, context);
                 }
                 #endregion
 
@@ -339,6 +339,7 @@ namespace SOAFramework.Service.Core.Model
                     response.IsError = true;
                     response.ErrorMessage = failedFilter.Message;
                     response.Code = context.Code;
+                    ServiceUtility.FilterException(service, context);
                 }
                 #endregion
             }
@@ -356,10 +357,6 @@ namespace SOAFramework.Service.Core.Model
 
             #region 处理结果
             Stream stream = response.ToStream(enableZippedResponse);
-            if (ServiceSession.Current != null)
-            {
-                //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "has session"}, SOAFramework.Library.CacheEnum.FormMonitor);
-            }
 
             allWatch.Stop();
             if (EnableConsoleMonitor)

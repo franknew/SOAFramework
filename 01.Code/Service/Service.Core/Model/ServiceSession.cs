@@ -34,11 +34,9 @@ namespace SOAFramework.Service.Core.Model
             {
                 lock (syncRoot)
                 {
-                    StackFrame frame = (new StackTrace()).GetFrames().FirstOrDefault(t=>
-                    t.GetMethod().GetCustomAttribute<ExecuteAttribute>(false) != null);
-                    if (frame == null)
+                    if (OperationContext.Current == null || !OperationContext.Current.IncomingMessageProperties.ContainsKey(ServicePool.SessionIDKey))
                     {
-                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = frame.GetMethod().Name + " no frame " }, SOAFramework.Library.CacheEnum.FormMonitor);
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = " no cuurent context " }, SOAFramework.Library.CacheEnum.FormMonitor);
                         return null;
                     }
                     string sessionid = OperationContext.Current.IncomingMessageProperties[ServicePool.SessionIDKey].ToString();
@@ -49,7 +47,7 @@ namespace SOAFramework.Service.Core.Model
                     }
                     else
                     {
-                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = frame.GetMethod().Name + " no session sessionid=" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = " no session sessionid=" + sessionid }, SOAFramework.Library.CacheEnum.FormMonitor);
                         return null;
                     }
                     

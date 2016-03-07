@@ -68,6 +68,7 @@
     <Compile Include="Api\User\User_GetRequest.cs" />
     <Compile Include="Api\Department\Department_ListResponse.cs" />
     <Compile Include="Api\User\User_GetResponse.cs" />
+    <Compile Include="WeiXinException.cs" />
     <Compile Include="WeiXinSDK.cs" />
     <Compile Include="UrlConfig.cs" />
     <Compile Include="Entity\Department.cs" />

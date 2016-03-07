@@ -25,18 +25,25 @@ namespace SOAFramework.Library.WeiXin
             var querystringproperty = type.GetProperty("QueryString", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
             object querystring = null;
             if (querystringproperty != null) querystring = querystringproperty.GetValue(request, null);
+            string response = "";
             switch (request.RequestType)
             {
                 case RequestType.Get:
-                    t = ApiHelper.Get<T>(request.AccessToken, fullurl, querystring);
+                    response = ApiHelper.Get<T>(request.AccessToken, fullurl, querystring);
                     break;
                 case RequestType.Post:
                     object postdata = null;
                     var postdataproperty = type.GetProperty("PostData", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
                     if (postdataproperty != null) postdata = postdataproperty.GetValue(request, null);
                     fullurl = HttpHelper.CombineUrl(fullurl, querystring);
-                    t = ApiHelper.Post<T>(request.AccessToken, fullurl, postdata);
+                    response = ApiHelper.Post<T>(request.AccessToken, fullurl, postdata);
                     break;
+            }
+            t = JsonHelper.Deserialize<T>(response);
+            if (t != null)
+            {
+                t.Request = fullurl;
+                t.Response = response;
             }
             switch (t.errcode)
             {
@@ -49,7 +56,12 @@ namespace SOAFramework.Library.WeiXin
                     t = this.Execute(request);
                     break;
                 default:
-                    if (t.errcode != "0") throw new Exception(t.errmsg);
+                    if (t.errcode != "0" && !string.IsNullOrEmpty(t.errcode))
+                    {
+                        string msg = "code=" + t.errcode + ";msg=" + t.errmsg + ";request=" + t.Request + ";response=" + t.Response;
+                        MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = msg }, CacheEnum.FormMonitor);
+                        throw new WeiXinException(t.errcode, t.errmsg);
+                    }
                     break;
             }
             return t;
