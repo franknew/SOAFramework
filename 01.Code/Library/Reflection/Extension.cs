@@ -40,21 +40,12 @@ namespace SOAFramework.Library
                 property = GetProperty(property.CurrentObject, propertyarr[i]);
                 if (property == null)
                 {
-                    if (isTry)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        throw new Exception(string.Format("属性：{0}在对象：{0}中找不到！", propertyarr[i], type.FullName));
-                    }
+                    if (isTry) return null;
+                    else throw new Exception(string.Format("属性：{0}在对象：{0}中找不到！", propertyarr[i], type.FullName));
                 }
             }
             var pro = property.CurrentObject.GetType().GetProperty(propertyarr[propertyarr.Length - 1]);
-            if (pro != null)
-            {
-                value = pro.GetValue(property.CurrentObject, null);
-            }
+            if (pro != null) value = pro.GetValue(property.CurrentObject, null);
             return value;
         }
 
@@ -90,7 +81,11 @@ namespace SOAFramework.Library
             var pro = property.CurrentObject.GetType().GetProperty(propertyarr[propertyarr.Length - 1]);
             if (pro != null)
             {
-                pro.SetValue(property.CurrentObject, value, null);
+                Type t = Nullable.GetUnderlyingType(pro.PropertyType)
+                           ?? pro.PropertyType;
+                object safeValue = (value == null || value == DBNull.Value) ? value
+                                                               : Convert.ChangeType(value, t);
+                pro.SetValue(property.CurrentObject, safeValue, null);
             }
         }
 

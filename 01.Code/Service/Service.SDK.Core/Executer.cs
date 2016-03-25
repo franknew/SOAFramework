@@ -12,7 +12,7 @@ namespace SOAFramework.Service.SDK.Core
 {
     public class Executer
     {
-        private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"].ConnectionString;
+        private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"]?.ConnectionString;
 
         public T Execute<T>(IRequest<T> request, string url = null, PostDataFomaterType type = PostDataFomaterType.Json) where T : BaseResponse
         {
