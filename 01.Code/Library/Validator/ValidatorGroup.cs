@@ -25,10 +25,11 @@ namespace SOAFramework.Library.Validator
         /// </summary>
         public int ValidateIndex { get; set; }
 
-        public ValidatorGroup(string name = "", int validateIndex = 0)
+        public ValidatorGroup(string name = "", IValidatorBase validator = null, int validateIndex = 0)
         {
             Name = name;
             ValidateIndex = validateIndex;
+            if (validator != null) listValidator.Add(validator);
         }
 
         public void AddValidator(IValidatorBase validator)

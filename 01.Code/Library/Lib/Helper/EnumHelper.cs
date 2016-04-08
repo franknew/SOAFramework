@@ -138,6 +138,8 @@ namespace SOAFramework.Library
         #endregion
     }
 
+
+    [Serializable]
     public class ReadEnum
     {
         public object Value { get; set; }

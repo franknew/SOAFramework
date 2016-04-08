@@ -18,9 +18,9 @@ namespace SOAFramework.Library
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static T GetValue<T>(this object obj, string propertyName, bool isTry = false)
+        public static T GetValue<T>(this object obj, string propertyName, bool isTry = false, bool newProperty = true)
         {
-            return (T)obj.GetValue(propertyName, isTry);
+            return (T)obj.GetValue(propertyName, isTry, newProperty);
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace SOAFramework.Library
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static object GetValue(this object obj, string propertyName, bool isTry = false)
+        public static object GetValue(this object obj, string propertyName, bool isTry = false, bool newProperty = true)
         {
             Type type = obj.GetType();
             string[] propertyarr = propertyName.Split('.');
@@ -37,7 +37,7 @@ namespace SOAFramework.Library
             PropertyObject property = new PropertyObject { CurrentObject = obj };
             for (int i = 0; i < propertyarr.Length - 1; i++)
             {
-                property = GetProperty(property.CurrentObject, propertyarr[i]);
+                property = GetProperty(property.CurrentObject, propertyarr[i], newProperty, isTry);
                 if (property == null)
                 {
                     if (isTry) return null;
@@ -49,12 +49,12 @@ namespace SOAFramework.Library
             return value;
         }
 
-        public static object TryGetValue(this object obj, string propertyName)
+        public static object TryGetValue(this object obj, string propertyName, bool newProperty = true)
         {
-            return obj.GetValue(propertyName, true);
+            return obj.GetValue(propertyName, true, newProperty);
         }
 
-        public static T TryGetValue<T>(this object obj, string propertyName)
+        public static T TryGetValue<T>(this object obj, string propertyName, bool newProperty = true)
         {
             return obj.GetValue<T>(propertyName, true);
         }
@@ -83,9 +83,18 @@ namespace SOAFramework.Library
             {
                 Type t = Nullable.GetUnderlyingType(pro.PropertyType)
                            ?? pro.PropertyType;
-                object safeValue = (value == null || value == DBNull.Value) ? value
-                                                               : Convert.ChangeType(value, t);
-                pro.SetValue(property.CurrentObject, safeValue, null);
+                object safeValue = value;
+                if (!(t.Equals(typeof(Object))))
+                {
+                    safeValue = (value == null || value == DBNull.Value) ? value
+                                                                   : Convert.ChangeType(value, t);
+                }
+                try
+                {
+                    pro.SetValue(property.CurrentObject, safeValue, null);
+                }
+                catch
+                { }
             }
         }
 
@@ -96,10 +105,7 @@ namespace SOAFramework.Library
 
         public static PropertyObject GetProperty(object obj, string propertyName, bool newproperty = false, bool isTry = false)
         {
-            if (obj == null)
-            {
-                return null;
-            }
+            if (obj == null) return null;
             Type type = obj.GetType();
 
             int index = 0;
@@ -108,19 +114,14 @@ namespace SOAFramework.Library
             {
                 propertyName = propertyName.TrimEnd(']');
                 var arr = propertyName.Split('[');
-                if (arr.Length == 2)
-                {
-                    index = Convert.ToInt32(arr[1]);
-                }
+                if (arr.Length == 2) index = Convert.ToInt32(arr[1]);
                 propertyName = arr[0];
             }
 
             var property = type.GetProperty(propertyName);
-            if (property == null)
-            {
-                return null;
-            }
+            if (property == null) return null;
             object value = property.GetValue(obj, null);
+
             if ((property.PropertyType.IsGenericType &&
                 (property.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) || property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
                 || property.PropertyType.IsArray)
@@ -133,10 +134,7 @@ namespace SOAFramework.Library
                     var args = property.PropertyType.GetGenericArguments();
                     valueType = args[0];
                 }
-                else
-                {
-                    valueType = property.PropertyType.GetElementType();
-                }
+                else valueType = property.PropertyType.GetElementType();
                 if (value == null && newproperty)
                 {
                     var constructedListType = property.PropertyType.GetGenericTypeDefinition().MakeGenericType(valueType);
@@ -150,20 +148,11 @@ namespace SOAFramework.Library
                     }
                     property.SetValue(obj, listvalue, null);
                 }
-                else if (value == null)
-                {
-                    return null;
-                }
+                else if (value == null) return null;
                 else
                 {
-                    if (index >= valuelist.Count)
-                    {
-                        throw new IndexOutOfRangeException();
-                    }
-                    else
-                    {
-                        value = valuelist[index];
-                    }
+                    if (index >= valuelist.Count) throw new IndexOutOfRangeException();
+                    else value = valuelist[index];
                 }
                 property = valueType.GetProperty(propertyName);
                 #endregion
@@ -183,14 +172,8 @@ namespace SOAFramework.Library
                 else
                 {
                     table = value as DataTable;
-                    if (index >= table.Rows.Count)
-                    {
-                        throw new IndexOutOfRangeException();
-                    }
-                    else
-                    {
-                        value = table.Rows[index];
-                    }
+                    if (index >= table.Rows.Count) throw new IndexOutOfRangeException(); 
+                    else value = table.Rows[index]; 
                 }
                 #endregion
             }
