@@ -22,11 +22,12 @@ namespace SOAFramework.Service.SDK.Core
 
         public int Code { get; set; }
 
-        internal void SetValues(bool isError,string errormsg, string stacktrace)
+        internal void SetValues(bool isError,string errormsg, string stacktrace, int code)
         {
             this.isError = isError;
             errorMessage = errormsg;
             this.stackTrace = stacktrace;
+            this.Code = code;
         }
 
         internal void SetBody(string body)

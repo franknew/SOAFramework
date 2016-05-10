@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace SOAFramework.Service.SDK.Core
 {
@@ -151,7 +152,7 @@ namespace SOAFramework.Service.SDK.Core
         private object GenerateResponse(string response, Type responseType)
         {
             object t = Activator.CreateInstance(responseType);
-            dynamic dyt = t;
+            BaseResponse dyt = t as BaseResponse;
             BaseResponseShadow shadow = null;
             try
             {
@@ -160,6 +161,7 @@ namespace SOAFramework.Service.SDK.Core
                 {
                     try
                     {
+                        //t = JsonHelper.Deserialize(response, responseType);
                         shadow = JsonHelper.Deserialize<BaseResponseShadow>(response);
                     }
                     catch (Exception ex)
@@ -168,8 +170,11 @@ namespace SOAFramework.Service.SDK.Core
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                dyt.SetBody(response);
+                dyt.SetValues(true, ex.Message, ex.StackTrace, 0);
+                return t;
             }
             //null意味着没有报错
             if (shadow != null && !shadow.IsError)
@@ -183,7 +188,11 @@ namespace SOAFramework.Service.SDK.Core
                     {
                         o = JsonHelper.Deserialize<BaseResponseShadow>(response);
                         object data = null;
-                        if (o.Data is JObject)
+                        if (o.Data is JArray && responseProperties[0].PropertyType.Equals(typeof(DataTable)))
+                        {
+                            data = (o.Data as JArray).ToDataTable();
+                        }
+                        else if (o.Data is JObject)
                         {
                             data = (o.Data as JObject).ToObject(responseProperties[0].PropertyType);
                         }
@@ -195,6 +204,8 @@ namespace SOAFramework.Service.SDK.Core
                         {
                             data = o.Data;
                         }
+                        if (data is object) data = Convert.ChangeType(data, responseProperties[0].PropertyType);
+                        //t.TrySetValue(responseProperties[0].Name, data);
                         responseProperties[0].SetValue(t, data, null);
                     }
                     catch (Exception ex)
@@ -206,7 +217,7 @@ namespace SOAFramework.Service.SDK.Core
             else
             {
                 //否则设置错误信息
-                dyt.SetValues(shadow.IsError, shadow.ErrorMessage, shadow.StackTrace);
+                dyt.SetValues(shadow.IsError, shadow?.ErrorMessage, shadow?.StackTrace, shadow.Code);
             }
             dyt.SetBody(response);
             return t;

@@ -113,7 +113,7 @@ namespace Newtonsoft.Json
             WriteDateTimeString(writer, value, value.GetUtcOffset(), value.Kind);
         }
 
-        internal static void WriteDateTimeString(TextWriter writer, DateTime value, TimeSpan offset, DateTimeKind kind, DateTimeFormatEnum format = DateTimeFormatEnum.Unix)
+        internal static void WriteDateTimeString(TextWriter writer, DateTime value, TimeSpan offset, DateTimeKind kind, DateTimeFormatEnum format = DateTimeFormatEnum.Standard)
         {
             long javaScriptTicks = ConvertDateTimeToJavaScriptTicks(value, offset);
             switch (format)

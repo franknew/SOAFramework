@@ -29,85 +29,10 @@ namespace SOAFramework.Library
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static DataTable ToDataTable(this Object[] list)
+        public static DataTable ToDataTable(this object[] list, List<ToDataTableMapping> mappinglist = null)
         {
-            DataTable table = new DataTable();
-            if (list != null && list.Length > 0)
-            {
-                //create data table schema
-                object schema = list[0];
-                if (schema is IDictionary)
-                {
-                    IDictionary<string, object> dic = schema as Dictionary<string, object>;
-                    foreach (var data in list)
-                    {
-                        IDictionary<string, object> dicData = data as Dictionary<string, object>;
-                        DataRow row = table.NewRow();
-                        foreach (var key in dicData.Keys)
-                        {
-                            if (!table.Columns.Contains(key))
-                            {
-                                table.Columns.Add(key, dicData[key].GetType());
-                            }
-                            row[key] = dicData[key];
-                        }
-                        table.Rows.Add(row);
-                    }
-                }
-                else
-                {
-                    PropertyInfo[] properties = schema.GetType().GetProperties();
-                    foreach (PropertyInfo property in properties)
-                    {
-                        if (property.Name.Contains("Entity"))
-                        {
-                            continue;
-                        }
-                        Type t = Nullable.GetUnderlyingType(property.PropertyType)
-                            ?? property.PropertyType;
-                        table.Columns.Add(property.Name, t);
-                    }
-                    foreach (var data in list)
-                    {
-                        DataRow row = table.NewRow();
-                        foreach (PropertyInfo property in properties)
-                        {
-                            if (property.Name.Contains("Entity"))
-                            {
-                                continue;
-                            }
-                            Type t = Nullable.GetUnderlyingType(property.PropertyType)
-                                ?? property.PropertyType;
-                            object value = property.GetValue(data, null);
-                            object safeValue = (value == null || value == DBNull.Value) ? DBNull.Value
-                                                               : Convert.ChangeType(value, t);
-                            row[property.Name] = safeValue;
-                        }
-                        table.Rows.Add(row);
-                    }
-                }
-            }
-            table.AcceptChanges();
-            return table;
+            return ArrayToDataTable(list, mappinglist);
         }
-
-        /// <summary>b
-        /// 转换成DataTable
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        //public static DataTable ToDataTable(this IList list)
-        //{
-
-        //    if (list == null) return null;
-
-        //    object[] array = new object[list.Count];
-        //    for (int i = 0; i < list.Count; i++)
-        //    {
-        //        array[i] = list[i];
-        //    }
-        //     return array.ToDataTable();
-        //}
 
         /// <summary>
         /// 转换成DataTable,如果没有数据能自动生成架构
@@ -115,23 +40,13 @@ namespace SOAFramework.Library
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static DataTable ToDataTable<T>(this IList<T> list)
+        public static DataTable ToDataTable<T>(this IList<T> list, List<ToDataTableMapping> mappinglist = null)
         {
             DataTable table = new DataTable();
             //如果没有数据则生成架构
             if (list == null || list.Count == 0)
             {
-                PropertyInfo[] properties = typeof(T).GetProperties();
-                foreach (PropertyInfo property in properties)
-                {
-                    Type t = Nullable.GetUnderlyingType(property.PropertyType)
-                        ?? property.PropertyType;
-                    DataColumn column = new DataColumn(property.Name, t);
-                    if (!table.Columns.Contains(column.ColumnName))
-                    {
-                        table.Columns.Add(column);
-                    }
-                }
+                table = typeof(T).GetSchema(mappinglist);
             }
             else
             {
@@ -140,9 +55,91 @@ namespace SOAFramework.Library
                 {
                     array[i] = list[i];
                 }
-                table = array.ToDataTable();
+                table = ArrayToDataTable(list, mappinglist);
             }
             table.AcceptChanges();
+            return table;
+        }
+
+        private static DataTable ArrayToDataTable(IEnumerable list, List<ToDataTableMapping> mappinglist = null)
+        {
+            DataTable table = new DataTable();
+            var enumerator = list.GetEnumerator();
+            if (enumerator.MoveNext())
+            {
+                //create data table schema
+                object schema = enumerator.Current;
+                if (schema is IDictionary)
+                {
+                    IDictionary<string, object> dic = schema as Dictionary<string, object>;
+                    foreach (var data in list)
+                    {
+                        IDictionary<string, object> dicData = data as Dictionary<string, object>;
+                        DataRow row = table.NewRow();
+                        foreach (DataColumn col in table.Columns)
+                        {
+                            row[col] = dicData[col.ColumnName];
+                        }
+                        table.Rows.Add(row);
+                    }
+                }
+                else
+                {
+                    var objType = schema.GetType();
+                    table = objType.GetSchema(mappinglist);
+                    foreach (var data in list)
+                    {
+                        DataRow row = table.NewRow();
+                        foreach (DataColumn col in table.Columns)
+                        {
+                            if (col.ColumnName.Contains("Entity")) continue;
+                            var property = objType.GetProperty(col.ColumnName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+                            Type t = Nullable.GetUnderlyingType(property.PropertyType)
+                                ?? property.PropertyType;
+                            object value = property.GetValue(data, null);
+                            object safeValue = (value == null || value == DBNull.Value) ? DBNull.Value
+                                                               : Convert.ChangeType(value, t);
+                            row[col] = safeValue;
+                        }
+                        table.Rows.Add(row);
+                    }
+                }
+            }
+            table.AcceptChanges();
+            if (mappinglist != null)
+            {
+                foreach (DataColumn col in table.Columns)
+                {
+                    col.ColumnName = mappinglist.Find(t => t.OrignalName.Equals(col.ColumnName))?.MappingName;
+                }
+            }
+            return table;
+        }
+
+        public static DataTable GetSchema(this Type type, List<ToDataTableMapping> mappinglist = null)
+        {
+            DataTable table = new DataTable();
+            PropertyInfo[] properties = type.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                string columnName = property.Name;
+                Type t = Nullable.GetUnderlyingType(property.PropertyType)
+                    ?? property.PropertyType;
+                if (mappinglist != null)
+                {
+                    var mapping = mappinglist.Find(p => p.OrignalName.Equals(columnName));
+                    if (mapping != null)
+                    {
+                        DataColumn column = new DataColumn(columnName, t);
+                        if (!table.Columns.Contains(column.ColumnName)) table.Columns.Add(column);
+                    }
+                }
+                else
+                {
+                    DataColumn column = new DataColumn(columnName, t);
+                    if (!table.Columns.Contains(column.ColumnName)) table.Columns.Add(column);
+                }
+            }
             return table;
         }
 
@@ -194,6 +191,7 @@ namespace SOAFramework.Library
             });
             return result;
         }
+
         public static IDictionary<TKey, TResult> MapReduce<TKey, TValue, TResult>(this DataTable table,
                 Func<MapReduceData, KeyValueClass<TKey, TValue>> map, Func<TKey, IList<TValue>, TResult> reduce)
         {
@@ -297,5 +295,11 @@ namespace SOAFramework.Library
         public int Index { get; set; }
 
         public DataRow Row { get; set; }
+    }
+
+    public class ToDataTableMapping
+    {
+        public string OrignalName { get; set; }
+        public string MappingName { get; set; }
     }
 }

@@ -17,24 +17,15 @@ namespace SOAFramework.Library.DAL
 
         public SimpleDao(ISqlMapper mapper = null)
         {
-            if (mapper == null)
-            {
-                this.Mapper = IBatisNet.DataMapper.Mapper.Instance();
-            }
-            else
-            {
-                this.Mapper = mapper;
-            }
+            if (mapper == null) this.Mapper = IBatisNet.DataMapper.Mapper.Instance(); 
+            else this.Mapper = mapper; 
             tableName = typeof(TEngity).Name;
             if (ConfigurationManager.AppSettings["EnableSqlLog"] != null && ConfigurationManager.AppSettings["EnableSqlLog"] == "1") enableLog = true;
         }
 
         public string Add(TEngity entity)
         {
-            if (string.IsNullOrEmpty(entity.ID))
-            {
-                entity.ID = Guid.NewGuid().ToString().Replace("-", "");
-            }
+            if (string.IsNullOrEmpty(entity.ID)) entity.ID = Guid.NewGuid().ToString().Replace("-", ""); 
             string action = "Add" + tableName;
             entity.CreateTime = DateTime.Now;
             entity.LastUpdateTime = DateTime.Now;
@@ -75,7 +66,7 @@ namespace SOAFramework.Library.DAL
             return true;
         }
 
-        private void WriteSqlLog(string statementName, object entity)
+        public void WriteSqlLog(string statementName, object entity)
         {
             if (!enableLog) return;
             string sql = Mapper.GetRuntimeSql(statementName, entity);

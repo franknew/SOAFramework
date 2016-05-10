@@ -69,6 +69,10 @@
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Json</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Reflection\Reflection.csproj">
+      <Project>{9d8d8ab0-f912-47d7-b8a6-37bdf83dbe86}</Project>
+      <Name>Reflection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\XML\XML.csproj">
       <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
       <Name>XML</Name>

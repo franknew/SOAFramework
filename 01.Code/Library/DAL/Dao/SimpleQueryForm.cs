@@ -14,6 +14,8 @@ namespace SOAFramework.Library.DAL
 
         public DateTime? CreateTime_Start { get; set; }
 
+        public DateTime? CreateTime { get; set; }
+
         public DateTime? CreateTime_End { get; set; }
 
         public string LastUpdator { get; set; }
@@ -21,5 +23,7 @@ namespace SOAFramework.Library.DAL
         public DateTime? LastUpdateTime_Start { get; set; }
 
         public DateTime? LastUpdateTime_End { get; set; }
+
+        public DateTime? LastUpdateTime { get; set; }
     }
 }

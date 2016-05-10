@@ -219,6 +219,16 @@ namespace SOAFramework.Library
         {
             return GetProperty(obj, propertyName) != null;
         }
+
+        public static T ToObject<T>(this IDictionary dic, T obj = default(T))
+        {
+            if (obj == null) obj = Activator.CreateInstance<T>();
+            foreach (string key in dic.Keys)
+            {
+                obj.TrySetValue(key, dic[key]);
+            }
+            return obj;
+        }
     }
 
     public class PropertyObject

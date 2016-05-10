@@ -32,6 +32,7 @@ using Newtonsoft.Json.Utilities;
 using System.IO;
 using System.Globalization;
 using System.Reflection;
+using System.Data;
 
 namespace Newtonsoft.Json.Linq
 {
@@ -362,6 +363,11 @@ namespace Newtonsoft.Json.Linq
                 }
             }
             return o;
+        }
+
+        public DataTable ToDataTable()
+        {
+            return JsonConvert.DeserializeObject<DataTable>(this.ToString());
         }
 
         public IList<T> ToList<T>()

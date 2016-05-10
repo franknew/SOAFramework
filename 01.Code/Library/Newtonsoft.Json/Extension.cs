@@ -13,5 +13,11 @@ namespace SOAFramework.Library
             T instance = JsonHelper.Deserialize<T>(json);
             return instance;
         }
+
+        public static object Clone(this object obj, Type targetType)
+        {
+            string json = JsonHelper.Serialize(obj);
+            return JsonHelper.Deserialize(json, targetType);
+        }
     }
 }
