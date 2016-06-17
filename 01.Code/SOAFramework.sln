@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Startup", "Startup", "{6211479C-E633-44D3-BAE9-E18E1CDB4B72}"
 EndProject
@@ -136,6 +136,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.BackendService", "Server\Server.BackendService\Server.BackendService.csproj", "{B82FEF93-61B4-4286-B98F-55968D170172}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeiXin", "Library\WeiXin\WeiXin.csproj", "{DB0AC623-C667-491B-A3CD-CB4D04D76292}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDGenerator", "Library\IDGenerator\IDGenerator.csproj", "{D5ECCF03-314B-4117-B9DD-B57F303C358A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -599,6 +601,18 @@ Global
 		{DB0AC623-C667-491B-A3CD-CB4D04D76292}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DB0AC623-C667-491B-A3CD-CB4D04D76292}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB0AC623-C667-491B-A3CD-CB4D04D76292}.Release|x86.Build.0 = Release|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -648,6 +662,7 @@ Global
 		{73C78C6A-31E2-4EC0-8F2E-384B431C224D} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{B82FEF93-61B4-4286-B98F-55968D170172} = {EBB91AA3-6271-4411-82D6-849550C5046C}
 		{DB0AC623-C667-491B-A3CD-CB4D04D76292} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
+		{D5ECCF03-314B-4117-B9DD-B57F303C358A} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SOAFramework.vsmdi
