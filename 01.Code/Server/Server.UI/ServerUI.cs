@@ -55,6 +55,9 @@ namespace SOAFramework.Server.UI
                 });
         }
 
+        private Task hostTask;
+        private ServiceHost host;
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
@@ -106,9 +109,6 @@ namespace SOAFramework.Server.UI
                 _isError = true;
             }
         }
-
-        private Task hostTask;
-        private ServiceHost host;
 
         private void tbStart_Click(object sender, EventArgs e)
         {

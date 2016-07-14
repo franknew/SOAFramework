@@ -208,6 +208,12 @@ namespace SOAFramework.Service.Server
             }
             return list;
         }
+
+        [ServiceInvoker(Module = "Test")]
+        public bool Test()
+        {
+            return true;
+        }
         #endregion
     }
 }
