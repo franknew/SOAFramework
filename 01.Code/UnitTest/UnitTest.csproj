@@ -67,7 +67,9 @@
       <HintPath>..\Bin\Modules\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.LoadTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Norm">
       <HintPath>..\Bin\Norm.dll</HintPath>
@@ -168,11 +170,16 @@
     <Compile Include="Library\CacheTesting.cs" />
     <Compile Include="Library\JsonTesting.cs" />
     <Compile Include="Library\DALTesting.cs" />
+    <Compile Include="Library\XmlTesting.cs" />
     <Compile Include="Library\ZipTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WcfServerTesting.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Library\XML\XML.csproj">
+      <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
+      <Name>XML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Model.csproj">
       <Project>{47026C03-6F4D-4155-BD42-78EC73044C73}</Project>
       <Name>Model</Name>

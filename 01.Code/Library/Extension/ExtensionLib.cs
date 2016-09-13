@@ -7,6 +7,7 @@ using System.Text;
 using System.Reflection;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace SOAFramework.Library
 {
@@ -65,43 +66,55 @@ namespace SOAFramework.Library
 
         public static T ConvertTo<T>(this object o)
         {
-            T result = Activator.CreateInstance<T>();
-            Type ttype = typeof(T);
-            Type otype = o.GetType();
-            var properties = ttype.GetProperties(BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
-            foreach (var property in properties)
+            T result = (T)o.ConvertTo(typeof(T));
+            return result;
+        }
+
+        public static object ConvertTo(this object o, Type type)
+        {
+            object result = Activator.CreateInstance(type);
+            if (type.IsValueType)
             {
-                PropertyInfo oprop = otype.GetProperty(property.Name, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
-                if (oprop != null)
+                result = Convert.ChangeType(o, type);
+            }
+            else
+            {
+                Type otype = o.GetType();
+                var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
+                foreach (var property in properties)
                 {
-                    Type t = Nullable.GetUnderlyingType(oprop.PropertyType)
-                       ?? oprop.PropertyType;
-                    object safeValue = null;
-                    object odata = oprop.GetValue(o, null);
-                    if (odata == null)
+                    PropertyInfo oprop = otype.GetProperty(property.Name, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
+                    if (oprop != null)
                     {
-                        continue;
-                    }
-                    if (t == typeof(byte[]))
-                    {
-                        safeValue = Encoding.Default.GetBytes(odata.ToString());
-                    }
-                    else if (t == typeof(char[]))
-                    {
-                        safeValue = odata.ToString().ToCharArray();
-                    }
-                    else if (t.BaseType == typeof(Enum))
-                    {
-                        safeValue = odata;
-                    }
-                    else
-                    {
-                        safeValue = Convert.ChangeType(odata, t);
-                    }
-                    //object value = Convert.ChangeType(row[column], property.PropertyType);
-                    if (property.CanWrite)
-                    {
-                        property.SetValue(result, safeValue, null);
+                        Type t = Nullable.GetUnderlyingType(oprop.PropertyType)
+                           ?? oprop.PropertyType;
+                        object safeValue = null;
+                        object odata = oprop.GetValue(o, null);
+                        if (odata == null)
+                        {
+                            continue;
+                        }
+                        if (t == typeof(byte[]))
+                        {
+                            safeValue = Encoding.Default.GetBytes(odata.ToString());
+                        }
+                        else if (t == typeof(char[]))
+                        {
+                            safeValue = odata.ToString().ToCharArray();
+                        }
+                        else if (t.BaseType == typeof(Enum))
+                        {
+                            safeValue = odata;
+                        }
+                        else
+                        {
+                            safeValue = Convert.ChangeType(odata, t);
+                        }
+                        //object value = Convert.ChangeType(row[column], property.PropertyType);
+                        if (property.CanWrite)
+                        {
+                            property.SetValue(result, safeValue, null);
+                        }
                     }
                 }
             }
@@ -320,6 +333,22 @@ namespace SOAFramework.Library
             // Now that we've guaranteed conversionType is something Convert.ChangeType can handle (i.e. not a
             // nullable type), pass the call on to Convert.ChangeType
             return Convert.ChangeType(value, conversionType);
+        }
+
+        public static void CopyLoad(this AppDomain domain, string fullFileName)
+        {
+            domain.Load(domain.CopyAssembly(fullFileName));
+        }
+
+        public static byte[] CopyAssembly(this AppDomain domain, string fullFileName)
+        {
+            byte[] assbyte = null;
+            using (FileStream stream = new FileStream(fullFileName, FileMode.Open))
+            {
+                assbyte = new byte[stream.Length];
+                stream.Read(assbyte, 0, (int)stream.Length);
+            }
+            return assbyte;
         }
     }
 }

@@ -245,6 +245,14 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\Json-Rpc\JsonRpc.csproj">
+      <Project>{24fc1a2a-0bc3-43a7-9bfe-b628c2c4a307}</Project>
+      <Name>JsonRpc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\MicroService\MicroService.csproj">
+      <Project>{04ed01e2-ee07-48b4-b7da-e1745c80ead6}</Project>
+      <Name>MicroService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\WeiXin\WeiXin.csproj">
       <Project>{db0ac623-c667-491b-a3cd-cb4d04d76292}</Project>
       <Name>WeiXin</Name>

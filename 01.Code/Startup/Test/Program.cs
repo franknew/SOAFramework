@@ -31,18 +31,113 @@ using System.Data;
 using System.Threading;
 using RiskMgr.Form;
 using SOAFramework.Library.WeiXin;
+using System.Net;
+using MicroService.Library;
+using AustinHarris.JsonRpc;
 
 namespace Test
 {
-    class Program
+    public class Program
     {
+        public Program()
+        {
+        }
+
+        private static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve1(object sender, ResolveEventArgs args)
+        {
+            return args.RequestingAssembly;
+        }
+
         public delegate void dl();
         static void Main(string[] args)
         {
             //string jsonstring = "{\"Buyers\":[{\"ID\":\"395f7ce8de8340eda2dfd22098c81290\",\"Name\":\"爱的色放\",\"CardType\":\"1\",\"IdentityCode\":\"4444444444\",\"Phone\":\"123123123123\",\"Gender\":\"1\",\"Marrage\":\"1\",\"Address\":\"啊都是法师打发而且额外人\",\"OrignalName\":\"\",\"OrignalIdentityCode\":\"\",\"BankCode\":\"\",\"BankType\":\"1\",\"WorkUnit\":\"\",\"Quotient\":\"222\"},{\"ID\":\"\",\"Name\":\"阿萨法 \",\"CardType\":\"1\",\"IdentityCode\":\"986799283948723984\",\"Phone\":\"123123\",\"Gender\":\"2\",\"Marrage\":\"1\",\"Address\":\"三个地方集团研究研究\",\"OrignalName\":\"\",\"OrignalIdentityCode\":\"\",\"BankCode\":\"\",\"BankType\":\"\",\"WorkUnit\":\"\",\"Quotient\":\"333\"},{\"ID\":\"712feaff6c034244ab3f066268b9fe5a\",\"Name\":\"阿斯顿飞\",\"CardType\":\"1\",\"IdentityCode\":\"12312312312323\",\"Phone\":\"123123123\",\"Gender\":\"1\",\"Marrage\":\"1\",\"Address\":\"嘎达嗦嘎多个地方十多个地方各个\",\"OrignalName\":\"\",\"OrignalIdentityCode\":\"\",\"BankCode\":\"\",\"BankType\":\"1\",\"WorkUnit\":\"\",\"Quotient\":\"222\"}],\"Sellers\":[{\"ID\":\"55b71c225dc841a7b99ead4cecc601c5\",\"Name\":\"aeeboo\",\"CardType\":\"1\",\"IdentityCode\":\"234234235235\",\"Phone\":\"324234234234\",\"Gender\":\"1\",\"Marrage\":\"2\",\"Address\":\"的方式购房合同和投入和\",\"OrignalName\":\"\",\"OrignalIdentityCode\":\"\",\"BankCode\":\"\",\"BankType\":\"2\",\"WorkUnit\":\"\",\"Quotient\":\"111\"},{\"ID\":\"\",\"Name\":\"阿萨德飞44\",\"CardType\":\"1\",\"IdentityCode\":\"237856234\",\"Phone\":\"34234234\",\"Gender\":\"1\",\"Marrage\":\"1\",\"Address\":\"然后统一集团研究与\",\"OrignalName\":\"\",\"OrignalIdentityCode\":\"\",\"BankCode\":\"\",\"BankType\":\"\",\"WorkUnit\":\"\",\"Quotient\":\"123\"}],\"Assets\":[{\"ID\":\"\",\"Code\":\"44444444\",\"Usage\":\"1\",\"Position\":\"2\",\"Address\":\"景田西路八个道路\",\"Area\":\"123\",\"RegPrice\":\"44232\"},{\"ID\":\"\",\"Code\":\"1412412132\",\"Usage\":\"1\",\"Position\":\"1\",\"Address\":\"水电费个人个人高\",\"Area\":\"234324\",\"RegPrice\":\"123123\"}],\"Project\":{\"Source\":\"1\",\"AgentName\":\"213213\",\"CertificateData\":\"2015-08-05\",\"AgentContact\":\"\",\"Rebater\":\"\",\"RebateAccount\":\"\",\"OtherRebateInfo\":\"\",\"OrignalMortgageBank\":\"1\",\"OrignalMortgageBranch\":\"阿斯顿发顺丰\",\"OrignalFundCenter\":\"1\",\"OrignalFundBranch\":\"\",\"SupplyCardCopy\":\"\",\"OrignalCreditPI\":\"123123\",\"OrignalCreditCommerceMoney\":\"123\",\"OrignalCreditFundMoney\":\"123\",\"AssetRansomCustomerManager\":\"124142\",\"AssetRansomContactPhone\":\"24124\",\"NewCreditBank\":\"1\",\"NewCreditBranch\":\"2r323\",\"ShortTermAssetRansomBank\":\"1\",\"ShortTermAssetRansomBranch\":\"\",\"GuaranteeMoney\":\"123\",\"GuaranteeMonth\":\"1231\",\"BuyerCreditCommerceMoney\":\"213\",\"BuyerCreditFundMoney\":\"2\",\"LoanMoney\":\"123123\",\"DealMoney\":\"123123\",\"EarnestMoney\":\"123123\",\"SupervisionMoney\":\"123123\",\"SupervisionBank\":\"12123\",\"AssetRansomMoney\":\"122323\",\"CustomerPredepositMoney\":\"323232\",\"CreditReceiverName\":\"23123\",\"CreditReceiverBank\":\"2323\",\"CreditReceiverAccount\":\"2323\",\"TrusteeshipAccount\":\"\",\"AssetRansomPredictMoney\":\"2323\",\"AssetRansomer\":\"232323\",\"AssetRansomType\":\"1\",\"PredictDays\":\"2323\",\"ChargeType\":\"1\",\"CheckNumbersAndLimit\":\"123123\",\"Stagnationer\":\"\"},\"token\":\"0cbbd08b6b694428a30afe52098e5f7a\"}";
             //var json = JsonHelper.Deserialize<AddProjectServiceForm>(jsonstring);
+            #region domain
+            //AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve1;
+            //AppDomainSetup info = new AppDomainSetup();
+            //info.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory + "Modules";
+            //AppDomain domain = AppDomain.CreateDomain("mydomain", null, info);
+            //Console.WriteLine(domain.BaseDirectory);
+            //var allass = domain.GetAssemblies();
+            //var ass = domain.Load(new AssemblyName("Controller"));
+            //allass = domain.GetAssemblies();
+            //var type = ass.GetType("SOAFramework.Library.HttpServer");
+            //var instance = Activator.CreateInstance(type, null);
+            //var start = type.GetMethod("Start");
+            //start.Invoke(instance, new object[] { new string[] { "http://10.1.50.195:8094/c" } });
+            //domain.AssemblyLoad += Domain_AssemblyLoad;
+            #endregion
 
-            var users = WeiXinApi.Department.Delete("广州研发中心");
+            #region http server
+            Console.WriteLine("begin");
+            NodeServer nodeserver = new NodeServer("http://10.1.50.195:8094/");
+            nodeserver.Start();
+            Console.ReadLine();
+            //nodeserver.Close();
+
+            HttpServer server = new HttpServer(new string[] { "http://10.1.50.195:8094/a" });
+            server.Executing += new HttpExecutingHandler((a, b) =>
+            {
+                StreamReader reder = new StreamReader(b.Request.InputStream, System.Text.Encoding.UTF8);
+                string post = reder.ReadToEnd();
+                Console.WriteLine("key:" + post);
+                return "";
+            });
+            server.Start();
+
+            //HttpServer server2 = new HttpServer(new string[] { "http://10.1.50.195:8094/b" });
+            //server2.Start();
+            Console.ReadLine();
+
+            string[] prefix = new string[] { "http://localhost:8088/", "http://localhost:8089/" };
+            if (!HttpListener.IsSupported)
+            {
+                Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+                return;
+            }
+            // URI prefixes are required,
+            // for example "http://contoso.com:8080/index/".
+            if (prefix == null || prefix.Length == 0)
+                throw new ArgumentException("prefixes");
+
+            // Create a listener.
+            HttpListener listener = new HttpListener();
+            // Add the prefixes.
+            foreach (string s in prefix)
+            {
+                listener.Prefixes.Add(s);
+            }
+            listener.Start();
+            Console.WriteLine("Listening...");
+            while (true)
+            {
+                // Note: The GetContext method blocks while waiting for a request. 
+                HttpListenerContext context = listener.GetContext();
+                HttpListenerRequest request = context.Request;
+                // Obtain a response object.
+                HttpListenerResponse response = context.Response;
+                // Construct a response.
+                string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                // Get a response stream and write the response to it.
+                response.ContentLength64 = buffer.Length;
+                System.IO.Stream output = response.OutputStream;
+                output.Write(buffer, 0, buffer.Length);
+                // You must close the output stream.
+                output.Close();
+                Thread.Sleep(1);
+            }
+            listener.Stop();
+            Console.ReadLine();
+            #endregion
+
+            //var users = WeiXinApi.Department.Delete("广州研发中心");
 
             TestClass tc = new TestClass
             {
@@ -449,11 +544,16 @@ namespace Test
             #endregion
 
             #region sdk testing
-            TestRequest request = new TestRequest();
-            TestResponse reseponse = SDKFactory.Client.Execute(request);
+            //TestRequest request = new TestRequest();
+            //TestResponse reseponse = SDKFactory.Client.Execute(request);
             #endregion
 
             Console.ReadLine();
+        }
+
+        private static void Domain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -484,7 +584,7 @@ namespace Test
         {
 
         }
-
+        #region fast sort
         public static void FastSort(List<long> SortInt, int StartIndex, int EndIndex)
         {
             //如果结束索引小于或等于开始索引，说明排序粒度已经最小，只有一个数字了
@@ -546,7 +646,7 @@ namespace Test
             //将初始比较值右边的数组进行一次排序
             FastSort(SortInt, intRightStartIndex, intRightEndIndex);
         }
-
+        #endregion
         public static void DoAction<T>(Action<T> action) where T : new()
         {
             T t = new T();
@@ -705,4 +805,6 @@ namespace Test
         a = 1,
         b = 2,
     }
+
+    
 }

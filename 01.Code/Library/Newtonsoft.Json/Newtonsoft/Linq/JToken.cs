@@ -442,7 +442,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator bool?(JToken value)
+        public static explicit operator bool? (JToken value)
         {
             if (value == null)
                 return null;
@@ -473,7 +473,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator DateTime?(JToken value)
+        public static explicit operator DateTime? (JToken value)
         {
             if (value == null)
                 return null;
@@ -491,7 +491,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator DateTimeOffset?(JToken value)
+        public static explicit operator DateTimeOffset? (JToken value)
         {
             if (value == null)
                 return null;
@@ -509,7 +509,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator decimal?(JToken value)
+        public static explicit operator decimal? (JToken value)
         {
             if (value == null)
                 return null;
@@ -526,7 +526,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator double?(JToken value)
+        public static explicit operator double? (JToken value)
         {
             if (value == null)
                 return null;
@@ -586,7 +586,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator int?(JToken value)
+        public static explicit operator int? (JToken value)
         {
             if (value == null)
                 return null;
@@ -603,7 +603,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator short?(JToken value)
+        public static explicit operator short? (JToken value)
         {
             if (value == null)
                 return null;
@@ -621,7 +621,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         [CLSCompliant(false)]
-        public static explicit operator ushort?(JToken value)
+        public static explicit operator ushort? (JToken value)
         {
             if (value == null)
                 return null;
@@ -652,7 +652,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator long?(JToken value)
+        public static explicit operator long? (JToken value)
         {
             if (value == null)
                 return null;
@@ -669,7 +669,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator float?(JToken value)
+        public static explicit operator float? (JToken value)
         {
             if (value == null)
                 return null;
@@ -701,7 +701,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         [CLSCompliant(false)]
-        public static explicit operator uint?(JToken value)
+        public static explicit operator uint? (JToken value)
         {
             if (value == null)
                 return null;
@@ -719,7 +719,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         [CLSCompliant(false)]
-        public static explicit operator ulong?(JToken value)
+        public static explicit operator ulong? (JToken value)
         {
             if (value == null)
                 return null;
@@ -811,7 +811,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator byte[](JToken value)
+        public static explicit operator byte[] (JToken value)
         {
             JValue v = EnsureValue(value);
             if (v == null || !ValidateBytes(v))
@@ -1186,6 +1186,15 @@ namespace Newtonsoft.Json.Linq
             ValidationUtils.ArgumentNotNull(jsonSerializer, "jsonSerializer");
             using (JTokenReader jsonReader = new JTokenReader(this))
             {
+                return jsonSerializer.Deserialize(jsonReader, type);
+            }
+        }
+
+        public object ToObject(Type type)
+        {
+            using (JTokenReader jsonReader = new JTokenReader(this))
+            {
+                JsonSerializer jsonSerializer = new JsonSerializer();
                 return jsonSerializer.Deserialize(jsonReader, type);
             }
         }

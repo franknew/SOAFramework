@@ -400,24 +400,15 @@ namespace SOAFramework.Service.Core.Model
                         string fullPath = GetAssmStaticPath(value.Type);
                         ass = Assembly.LoadFile(fullPath);
                     }
-                    else
-                    {
-                        ass = Assembly.Load(value.Type);
-                    }
-                    if (ass == null)
-                    {
-                        continue;
-                    }
+                    else ass = Assembly.Load(value.Type); 
+                    if (ass == null) continue; 
                     ConfigSetting setting = new ConfigSetting
                     {
                         Assembly = ass,
                         FilterConfig = new Dictionary<string, object>(),
                     };
                     setting.FilterConfig["GlobalUse"] = value.GlobalUse;
-                    if (!assmList.Contains(setting))
-                    {
-                        assmList.Add(setting);
-                    }
+                    if (!assmList.Contains(setting)) assmList.Add(setting); 
                 }
             }
 

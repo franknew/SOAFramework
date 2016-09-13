@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.ComponentModel;
 
 namespace SOAFramework.Service.SDK.Core
 {
@@ -204,7 +205,17 @@ namespace SOAFramework.Service.SDK.Core
                         {
                             data = o.Data;
                         }
-                        if (data is object) data = Convert.ChangeType(data, responseProperties[0].PropertyType);
+                        if (data is object)
+                        {
+                            try
+                            {
+                                data = Convert.ChangeType(data, responseProperties[0].PropertyType);
+                            }
+                            catch
+                            {
+                                data = data.Clone(responseProperties[0].PropertyType);
+                            }
+                        }
                         //t.TrySetValue(responseProperties[0].Name, data);
                         responseProperties[0].SetValue(t, data, null);
                     }
