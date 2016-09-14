@@ -21,6 +21,8 @@ namespace MicroService.Library
         private string _apiDirectory = null;
         private string _commonDirectory = null;
         private string _serviceEntry = null;
+        private NodeServer _server = null;
+    
 
         public string Host
         {
@@ -72,8 +74,9 @@ namespace MicroService.Library
             StartAllNode();
 
             string serverurl = string.Format("{0}/Server/", _host.TrimEnd('/'));
-            NodeServer server = new NodeServer(serverurl);
-            server.Start();
+            if (_server == null || _server.Status == ServerStatus.Close) _server = new NodeServer(serverurl);
+            if (_server.Status == ServerStatus.Start) _server.Stop();
+            _server.Start();
         }
 
         public void StartNode(string packageName)
@@ -107,7 +110,7 @@ namespace MicroService.Library
                 p.StartInfo = ps;
                 p.EnableRaisingEvents = true;
                 p.Start();
-                p.BeginErrorReadLine();
+                //p.BeginErrorReadLine();
                 node = SetData(packageName, ServerStatusType.Started, null, url);
 
                 _processes[packageName] = p;

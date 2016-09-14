@@ -14,6 +14,11 @@ namespace MicroService.Library
         private string url;
         const string sessionName = "__nodeMethods";
         private HttpServer httpServer;
+        public ServerStatus Status
+        {
+            get { return httpServer.Status; }
+            set { httpServer.Status = value; }
+        }
 
         public string Url
         {

@@ -15,6 +15,21 @@ namespace SOAFramework.Library
         private HttpListener _listener;
         public event HttpExecutingHandler Executing;
 
+        private ServerStatus status = ServerStatus.Wait;
+
+        public ServerStatus Status
+        {
+            get
+            {
+                return status;
+            }
+
+            set
+            {
+                status = value;
+            }
+        }
+
         public HttpServer()
         {
         }
@@ -34,6 +49,7 @@ namespace SOAFramework.Library
                 _listener.Prefixes.Add(p);
             }
             _listener.Start();
+            status = ServerStatus.Start;
             var result = _listener.BeginGetContext(new AsyncCallback(GetContextCallback), _listener);
         }
 
@@ -61,11 +77,13 @@ namespace SOAFramework.Library
         public void Stop()
         {
             _listener.Stop();
+            status = ServerStatus.Stop;
         }
 
         public void Close()
         {
             _listener.Close();
+            status = ServerStatus.Close;
         }
     }
 
@@ -79,4 +97,12 @@ public class HttpExcutingEventArgs : EventArgs
     public HttpListenerRequest Request { get; set; }
 
     public HttpListenerResponse Response { get; set; }
+}
+
+public enum ServerStatus
+{
+    Wait,
+    Start,
+    Stop,
+    Close,
 }

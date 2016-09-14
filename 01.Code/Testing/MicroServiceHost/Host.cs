@@ -10,18 +10,20 @@ using MicroService.Library;
 
 namespace MicroServiceTesting
 {
-    public partial class Form1 : Form
+    public partial class Host : Form
     {
-        public Form1()
+        public Host()
         {
             InitializeComponent();
         }
 
+        private MasterServer _server;
+
         private void button1_Click(object sender, EventArgs e)
         {
-            MasterServer server = new MasterServer();
-            server.DisplayShell = false;
-            server.StartNode(textBox1.Text);
+            if (_server == null) _server = new MasterServer();
+            _server.DisplayShell = false;
+            _server.StartNode(textBox1.Text);
         }
     }
 }

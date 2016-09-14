@@ -147,7 +147,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroService", "Library\Mic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeServerShell", "Library\NodeServerShell\NodeServerShell.csproj", "{20C9EE4C-BB7A-46E4-8894-4DA467638079}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroServiceTesting", "Testing\MicroServiceTesting\MicroServiceTesting.csproj", "{65CA9D8E-353F-48D8-B6A4-C8B3CFFEB2B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroServiceHost", "Testing\MicroServiceHost\MicroServiceHost.csproj", "{65CA9D8E-353F-48D8-B6A4-C8B3CFFEB2B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
