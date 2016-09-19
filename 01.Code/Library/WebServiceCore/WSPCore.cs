@@ -138,7 +138,7 @@ namespace SOAFramework.WebServiceCore
         /// <returns></returns>
         public static string GenerateCallMethodXML(ClientRequest Request)
         {
-            return XMLHelper.Serialize<ClientRequest>(Request);
+            return XMLHelper.Serialize(Request);
         }
         /// <summary>
         /// 根据服务器返回的xml,转换成对象

@@ -93,7 +93,7 @@ namespace SOAFramework.WebServiceCore
 
         private string ToXML()
         {
-            return XMLHelper.Serialize<ClientRequest>(this);
+            return XMLHelper.Serialize(this);
         }
 
         private string ToJSON()

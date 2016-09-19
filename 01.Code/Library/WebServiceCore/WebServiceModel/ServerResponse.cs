@@ -109,7 +109,7 @@ namespace SOAFramework.WebServiceCore
         /// <returns></returns>
         public string ReturnMSXML()
         {
-            return XMLHelper.Serialize<ServerResponse>(this);
+            return XMLHelper.Serialize(this);
         }
         /// <summary>
         /// 返回JSON格式的string

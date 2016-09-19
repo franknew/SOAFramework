@@ -26,11 +26,13 @@ namespace AustinHarris.JsonRpc
             get { return jsonMethodName; }
         }
 
+        public string Description { get; set; }
+
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class JsonRpcClassAttribute :Attribute
     {
-
+        public string Description { get; set; }
     }
 }

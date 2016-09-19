@@ -16,7 +16,7 @@ namespace MicroService.Library
     public class MasterServer : IDisposable
     {
         private static readonly Dictionary<string, NodeServerDataModel> _packages = new Dictionary<string, NodeServerDataModel>();
-        private Dictionary<string, Process> _processes = new Dictionary<string, Process>();
+        private static Dictionary<string, Process> _processes = new Dictionary<string, Process>();
         private string _host = null;
         private string _apiDirectory = null;
         private string _commonDirectory = null;
@@ -48,6 +48,8 @@ namespace MicroService.Library
             List<NodeServerDataModel> list = new List<NodeServerDataModel>();
             foreach (var key in _packages.Keys)
             {
+                if (_processes[key].HasExited) _packages[key].Status = ServerStatusType.Close;
+                else _packages[key].Status = ServerStatusType.Started;
                 list.Add(_packages[key]);
             }
             return list;
@@ -58,10 +60,10 @@ namespace MicroService.Library
             AppDomain.CurrentDomain.SetShadowCopyFiles();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Host"])) _host = ConfigurationManager.AppSettings["Host"];
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ApiDirectory"])) _apiDirectory = ConfigurationManager.AppSettings["ApiDirectory"];
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["CommonDirectory"])) _commonDirectory = ConfigurationManager.AppSettings["CommonDirectory"];
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ServiceEntry"])) _serviceEntry = ConfigurationManager.AppSettings["ServiceEntry"];
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.Host])) _host = ConfigurationManager.AppSettings[Config.Host];
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.ApiDirectory])) _apiDirectory = ConfigurationManager.AppSettings[Config.ApiDirectory];
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.CommonDirectory])) _commonDirectory = ConfigurationManager.AppSettings[Config.CommonDirectory];
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.ServiceEntry])) _serviceEntry = ConfigurationManager.AppSettings[Config.ServiceEntry];
 
             if (string.IsNullOrEmpty(_host)) throw new Exception("没有host");
             if (string.IsNullOrEmpty(_apiDirectory)) throw new Exception("没有ApiDirectory");
@@ -73,7 +75,7 @@ namespace MicroService.Library
         {
             StartAllNode();
 
-            string serverurl = string.Format("{0}/Server/", _host.TrimEnd('/'));
+            string serverurl = string.Format("{0}/{1}/", _host.TrimEnd('/'), Config.Server);
             if (_server == null || _server.Status == ServerStatus.Close) _server = new NodeServer(serverurl);
             if (_server.Status == ServerStatus.Start) _server.Stop();
             _server.Start();
@@ -82,9 +84,9 @@ namespace MicroService.Library
         public void StartNode(string packageName)
         {
             //如果进程没有关闭，就强行关闭
-            if (_processes.ContainsKey(packageName)) _processes[packageName].Kill();
+            string processName = string.Format("{0}.{1}", Config.MicroService, packageName);
             string destPath = string.Format(@"{0}\{1}\", _apiDirectory.TrimEnd('\\'), packageName);
-            string entrydestfile = string.Format(@"{0}\{1}", destPath, _serviceEntry);
+            string entrydestfile = string.Format(@"{0}\{1}.exe", destPath, processName);
             string entry = string.Format(@"{0}\{1}", _commonDirectory, _serviceEntry);
             string url = string.Format("{0}/{1}/", _host.TrimEnd('/'), packageName);
             NodeServerDataModel node = null;
@@ -94,22 +96,26 @@ namespace MicroService.Library
                 if (!Directory.Exists(destPath)) Directory.CreateDirectory(destPath);
                 if (!File.Exists(entrydestfile)) File.Copy(entry, entrydestfile);
 
-                Process p = new Process();
-                ProcessStartInfo ps = new ProcessStartInfo();
-                //ps.RedirectStandardError = true;
-                //ps.RedirectStandardOutput = true;
-                ps.CreateNoWindow = !DisplayShell;
-                ps.FileName = entrydestfile;
-                ps.UseShellExecute = false;
-                if (DisplayShell) ps.WindowStyle = ProcessWindowStyle.Normal;
-                else ps.WindowStyle = ProcessWindowStyle.Hidden;
-                string args = string.Format("-h {0} -c {1}", url, _commonDirectory);
-                ps.Arguments = args;
-                p.ErrorDataReceived += P_ErrorDataReceived;
-                p.Exited += P_Exited;
-                p.StartInfo = ps;
-                p.EnableRaisingEvents = true;
-                p.Start();
+                Process p = Process.GetProcessesByName(processName).FirstOrDefault();
+                if (p == null)
+                {
+                    p = new Process();
+                    ProcessStartInfo ps = new ProcessStartInfo();
+                    //ps.RedirectStandardError = true;
+                    //ps.RedirectStandardOutput = true;
+                    ps.CreateNoWindow = !DisplayShell;
+                    ps.FileName = entrydestfile;
+                    ps.UseShellExecute = false;
+                    if (DisplayShell) ps.WindowStyle = ProcessWindowStyle.Normal;
+                    else ps.WindowStyle = ProcessWindowStyle.Hidden;
+                    string args = string.Format("-h {0} -c {1}", url, _commonDirectory);
+                    ps.Arguments = args;
+                    p.ErrorDataReceived += P_ErrorDataReceived;
+                    p.Exited += P_Exited;
+                    p.StartInfo = ps;
+                    p.EnableRaisingEvents = true;
+                    p.Start();
+                }
                 //p.BeginErrorReadLine();
                 node = SetData(packageName, ServerStatusType.Started, null, url);
 
@@ -139,7 +145,7 @@ namespace MicroService.Library
 
         public void CloseNode(string packageName)
         {
-            if (_processes.ContainsKey(packageName)) _processes[packageName].Kill();
+            if (_processes.ContainsKey(packageName) && !_processes[packageName].HasExited) _processes[packageName].Kill();
             if (_packages.ContainsKey(packageName)) _packages[packageName].Status = ServerStatusType.Close;
         }
 

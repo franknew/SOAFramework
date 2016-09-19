@@ -31,6 +31,7 @@ namespace MicroService.Library
         public NodeServer(string url)
         {
             this.url = url;
+            httpServer = new HttpServer(new string[] { this.url });
         }
 
         public NodeServer()
@@ -39,7 +40,8 @@ namespace MicroService.Library
 
         private string HttpServer_Executing(object sender, HttpExcutingEventArgs e)
         {
-            var serializor = SerializeFactory.Create();
+            var type = ContentTypeConvert.Convert(e.Request.ContentType);
+            var serializor = SerializeFactory.Create(type);
             string rawUrl = e.Request.RawUrl.TrimEnd('/');
             int start = rawUrl.LastIndexOf("/");
             int end = rawUrl.LastIndexOf("?");
@@ -70,7 +72,7 @@ namespace MicroService.Library
         {
             ServiceBinder.BindService(sessionName);
             if (!string.IsNullOrEmpty(url)) this.url = url;
-            httpServer = new HttpServer(new string[] { this.url });
+            if (httpServer == null) httpServer = new HttpServer(new string[] { this.url });
             httpServer.Executing += HttpServer_Executing;
             httpServer.Start();
         }

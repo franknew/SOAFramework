@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library;
 
 namespace MicroService.Library
 {
@@ -14,21 +15,17 @@ namespace MicroService.Library
 
     public class SerializeFactory
     {
-        public static ISerializable Create(DataSerializeTypeEnum dataType = DataSerializeTypeEnum.Json)
+        public static ISerializable Create(ContentTypeEnum dataType = ContentTypeEnum.Json)
         {
             switch (dataType)
             {
-                case DataSerializeTypeEnum.Json:
+                case ContentTypeEnum.Json:
                     return new JsonSerializor();
+                case ContentTypeEnum.Xml:
+                    return new XmlSerializor();
                 default:
                     return new JsonSerializor();
             }
         }
-    }
-
-    public enum DataSerializeTypeEnum
-    {
-        Json,
-        Xml
     }
 }
