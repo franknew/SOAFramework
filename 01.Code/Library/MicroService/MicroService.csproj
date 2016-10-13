@@ -40,11 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseFilter.cs" />
+    <Compile Include="Filter\BaseFilter.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DiscoveryService.cs" />
-    <Compile Include="FilterBinder.cs" />
-    <Compile Include="IFilter.cs" />
+    <Compile Include="Filter\FilterBinder.cs" />
+    <Compile Include="Filter\IFilter.cs" />
     <Compile Include="Serialize\ISerializable.cs" />
     <Compile Include="Serialize\JsonSerializor.cs" />
     <Compile Include="MasterServer.cs" />

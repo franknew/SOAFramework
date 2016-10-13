@@ -61,6 +61,7 @@ namespace SOAFramework.Library
             HttpListenerRequest request = context.Request;
             // Obtain a response object.
             HttpListenerResponse response = context.Response;
+            response.StatusCode =(int)HttpStatusCode.OK;
             string responseString = Executing?.Invoke(this, new HttpExcutingEventArgs { Context = context, Request = request, Response = response });
             //nsole.WriteLine(request.RequestTraceIdentifier.ToString());
 

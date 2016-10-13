@@ -14,12 +14,14 @@ namespace SOAFramework.Library
         public static string Serialize(object obj)
         {
             string xmlString = string.Empty;
-            XmlSerializer xmlSerializer = new XmlSerializer(obj.GetType());
-            using (MemoryStream ms = new MemoryStream())
-            {
-                xmlSerializer.Serialize(ms, obj);
-                xmlString = Encoding.UTF8.GetString(ms.ToArray());
-            }
+            //XmlSerializer xmlSerializer = new XmlSerializer(obj.GetType());
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    xmlSerializer.Serialize(ms, obj);
+            //    xmlString = Encoding.UTF8.GetString(ms.ToArray());
+            //}
+            XmlCustomSerilizer serial = new XmlCustomSerilizer();
+            xmlString = serial.Serial(obj);
             return xmlString;
         }
 

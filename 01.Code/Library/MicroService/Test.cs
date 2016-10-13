@@ -15,26 +15,7 @@ namespace MicroService.Library
             return l + r;
         }
 
-        [JsonRpcMethod]
-        private int addInt(int l, int r)
-        {
-            return l + r;
-        }
-
-        [JsonRpcMethod]
-        public float? NullableFloatToNullableFloat(float? a)
-        {
-            return a;
-        }
-
-        [JsonRpcMethod]
         public decimal? Test2(decimal x)
-        {
-            return x;
-        }
-
-        [JsonRpcMethod]
-        public string StringMe(string x)
         {
             return x;
         }

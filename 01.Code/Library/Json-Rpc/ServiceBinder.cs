@@ -8,6 +8,19 @@
 
     public static class ServiceBinder
     {
+        static ServiceBinder()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            Assembly result = null;
+            var ass = AppDomain.CurrentDomain.GetAssemblies();
+            result = ass.FirstOrDefault(t => t.Equals(args.RequestingAssembly));
+            return result;
+        }
+
         public static void BindService<T>(string sessionID, Func<T> serviceFactory)
         {
             var instance = serviceFactory();

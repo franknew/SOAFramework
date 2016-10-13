@@ -17,12 +17,13 @@ namespace MicroService.Library
 #if DEBUG
             //Console.ReadLine();
 #endif
-            AppDomain.CurrentDomain.SetShadowCopyFiles();
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            //AppDomain.CurrentDomain.SetShadowCopyFiles();
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
             #region 分析参数
             Dictionary<string, string> argDic = new Dictionary<string, string>();
-            argDic["h"] = "http://10.1.50.195/api/";
-            argDic["c"] = @"E:\AppLib\SOAFramework\01.Code\Bin\Data";
+            //argDic["h"] = "http://10.1.50.195/api/";
+            //argDic["c"] = @"E:\AppLib\SOAFramework\01.Code\Bin\Data";
             for (int i = 0; i < args.Length; i++)
             {
                 if (!args[i].StartsWith("-")) continue;
@@ -38,22 +39,43 @@ namespace MicroService.Library
             _commonDirectory = argDic["c"];
             DirectoryInfo common = new DirectoryInfo(argDic["c"]);
             if (!common.Exists) common.Create();
-            var files = common.GetFiles();
+            var commondllfiles = common.GetFiles("*.dll", SearchOption.AllDirectories);
+            DirectoryInfo apidirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+
+            foreach (var f in commondllfiles)
+            {
+                string destFile = string.Format("{0}\\{1}", AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\'), f.Name);
+                if (!File.Exists(destFile)) f.CopyTo(destFile);
+                else
+                {
+                    FileInfo destVersion = new FileInfo(destFile);
+                    if (f.LastWriteTime > destVersion.LastWriteTime) f.CopyTo(destFile, true);
+                }
+            }
+
+            var apidllfiles = apidirectory.GetFiles("*.dll", SearchOption.AllDirectories);
+            List<FileInfo> files = new List<FileInfo>();
+            files.AddRange(commondllfiles);
+            files.AddRange(apidllfiles);
+
             foreach (var f in files)
             {
-                var ass = Assembly.LoadFrom(f.FullName);
+                Assembly.LoadFile(f.FullName);
             }
+
             #endregion
 
             #region 启动服务
             var serverAss = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.GetName().Name.Equals("MicroService.Library.Server"));
             //var serverAss  = Assembly.LoadFrom(argDic["c"] + "\\MicroService.Library.Server.dll");
             dynamic server = serverAss.CreateInstance("MicroService.Library.NodeServer");
+            server.CommonDllPath = _commonDirectory;
             //dynamic server = Activator.CreateInstance(serverType);
             server.Start(argDic["h"]);
             //NodeServer server = new NodeServer(argDic["h"]);
             //server.Start();
             #endregion
+
             Console.ReadLine();
         }
 
@@ -61,10 +83,19 @@ namespace MicroService.Library
         {
             Assembly a = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.Equals(args.RequestingAssembly));
             if (a != null) return a;
-            AssemblyName name = new AssemblyName(args.Name);
-            DirectoryInfo common = new DirectoryInfo(_commonDirectory);
-            var file = common.GetFiles().FirstOrDefault(t => t.Name.Equals(name.Name));
-            if (file != null) a = Assembly.Load(CopyAssembly(file.FullName));
+            string fileName = null;
+            if (args.Name.Contains("\\"))
+            {
+                fileName = args.Name.Replace("\\\\", "\\");
+            }
+            else
+            {
+                AssemblyName name = new AssemblyName(args.Name);
+                DirectoryInfo common = new DirectoryInfo(_commonDirectory);
+                var file = common.GetFiles("*.dll").FirstOrDefault(t => t.Name.Equals(name.Name));
+                if (file != null) fileName = file.FullName;
+            }
+            if (!string.IsNullOrEmpty(fileName)) a = Assembly.LoadFrom(fileName);
             if (a != null) return a;
             return null;
         }

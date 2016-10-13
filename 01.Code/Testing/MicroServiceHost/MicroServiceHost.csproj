@@ -78,6 +78,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\Extension\Extension.csproj">
+      <Project>{94f414d4-4c82-46fe-96fc-b0f1c1faab5a}</Project>
+      <Name>Extension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Http\Http.csproj">
       <Project>{b5168c1f-6145-4453-9e20-d2f69883b49b}</Project>
       <Name>Http</Name>

@@ -64,6 +64,8 @@
             this.txbApiDirectory = new System.Windows.Forms.TextBox();
             this.txbEntry = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnServer = new System.Windows.Forms.Button();
             this.tabPages.SuspendLayout();
             this.tabList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvlist)).BeginInit();
@@ -139,6 +141,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnServer);
             this.groupBox1.Controls.Add(this.btnStart);
             this.groupBox1.Controls.Add(this.btnRefresh);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -151,7 +154,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(87, 15);
+            this.btnStart.Location = new System.Drawing.Point(169, 15);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(110, 23);
             this.btnStart.TabIndex = 1;
@@ -161,7 +164,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(6, 15);
+            this.btnRefresh.Location = new System.Drawing.Point(88, 15);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnRefresh.TabIndex = 0;
@@ -260,18 +263,18 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(56, 63);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.Size = new System.Drawing.Size(65, 12);
             this.label1.TabIndex = 2;
-            this.label1.Text = "接口名称";
+            this.label1.Text = "服务包名称";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 100);
+            this.label2.Location = new System.Drawing.Point(32, 100);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 12);
+            this.label2.Size = new System.Drawing.Size(89, 12);
             this.label2.TabIndex = 3;
-            this.label2.Text = "部署文件夹";
+            this.label2.Text = "源服务包文件夹";
             // 
             // txbFile
             // 
@@ -293,6 +296,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.txbName);
             this.groupBox2.Controls.Add(this.btnSelect);
             this.groupBox2.Controls.Add(this.btnPub);
@@ -329,7 +333,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(56, 75);
+            this.label3.Location = new System.Drawing.Point(68, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 12);
             this.label3.TabIndex = 3;
@@ -338,7 +342,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(56, 117);
+            this.label4.Location = new System.Drawing.Point(68, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 4;
@@ -347,7 +351,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 161);
+            this.label5.Location = new System.Drawing.Point(20, 155);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(101, 12);
             this.label5.TabIndex = 5;
@@ -356,7 +360,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(86, 35);
+            this.label6.Location = new System.Drawing.Point(98, 32);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(23, 12);
             this.label6.TabIndex = 6;
@@ -399,6 +403,27 @@
             this.btnSave.Text = "保存";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(91, 23);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "部署并启动";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // btnServer
+            // 
+            this.btnServer.Location = new System.Drawing.Point(7, 15);
+            this.btnServer.Name = "btnServer";
+            this.btnServer.Size = new System.Drawing.Size(75, 23);
+            this.btnServer.TabIndex = 2;
+            this.btnServer.Text = "启动服务 ";
+            this.btnServer.UseVisualStyleBackColor = true;
+            this.btnServer.Click += new System.EventHandler(this.btnServer_Click);
             // 
             // Host
             // 
@@ -460,6 +485,8 @@
         private System.Windows.Forms.TextBox txbCommonDirectory;
         private System.Windows.Forms.TextBox txbUrl;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnServer;
     }
 }
 

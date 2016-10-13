@@ -28,14 +28,25 @@ namespace MicroService.Library
             }
         }
 
-        public NodeServer(string url)
+        public string CommonDllPath { get; set; }
+
+        public NodeServer(string url, string commonDllPath = null)
         {
             this.url = url;
+            CommonDllPath = commonDllPath;
             httpServer = new HttpServer(new string[] { this.url });
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        }
+
+        public NodeServer(string commonDllPath = null)
+        {
+            CommonDllPath = commonDllPath;
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         public NodeServer()
         {
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         private string HttpServer_Executing(object sender, HttpExcutingEventArgs e)
@@ -85,6 +96,17 @@ namespace MicroService.Library
         public void Close()
         {
             httpServer.Close();
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            Assembly result = null;
+            result = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.Equals(args.RequestingAssembly));
+            if (result != null) return result;
+            AssemblyName name = new AssemblyName(args.Name);
+            string dllName = string.Format(@"{0}\{1}.dll", CommonDllPath.TrimEnd('\\'), name.Name);
+            result = AssemblyHelper.LoadCopy(dllName);
+            return result;
         }
     }
 }

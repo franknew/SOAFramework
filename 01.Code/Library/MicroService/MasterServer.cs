@@ -22,7 +22,7 @@ namespace MicroService.Library
         private string _commonDirectory = null;
         private string _serviceEntry = null;
         private NodeServer _server = null;
-    
+
 
         public string Host
         {
@@ -76,7 +76,7 @@ namespace MicroService.Library
             StartAllNode();
 
             string serverurl = string.Format("{0}/{1}/", _host.TrimEnd('/'), Config.Server);
-            if (_server == null || _server.Status == ServerStatus.Close) _server = new NodeServer(serverurl);
+            if (_server == null || _server.Status == ServerStatus.Close) _server = new NodeServer(url: serverurl);
             if (_server.Status == ServerStatus.Start) _server.Stop();
             _server.Start();
         }

@@ -13,12 +13,13 @@ namespace SOAFramework.Library
         public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json",
             NetworkCredential credential = null)
         {
-            WebRequest request = WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = contentType;
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;
             request.ContentLength = data.Length;
             request.Timeout = timeout;
+            //request.ServicePoint.Expect100Continue = false;
             if (credential != null)
             {
                 CredentialCache cache = new CredentialCache();
@@ -29,10 +30,10 @@ namespace SOAFramework.Library
             }
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(data, 0, data.Length);
-            requestStream.Close();
             WebResponse response = request.GetResponse();
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
+            requestStream.Close();
             return responseReader.ReadToEnd();
         }
 

@@ -72,13 +72,14 @@ namespace SOAFramework.Library
 
         public static object ConvertTo(this object o, Type type)
         {
-            object result = Activator.CreateInstance(type);
-            if (type.IsValueType)
+            object result = null;
+            if (type.IsValueType || type.Name.ToLower().Equals("string"))
             {
                 result = Convert.ChangeType(o, type);
             }
             else
             {
+                result = Activator.CreateInstance(type);
                 Type otype = o.GetType();
                 var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
                 foreach (var property in properties)

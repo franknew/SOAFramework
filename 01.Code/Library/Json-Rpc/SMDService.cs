@@ -37,7 +37,8 @@ namespace AustinHarris.JsonRpc
         public void AddService(string method, Dictionary<string,Type> parameters, Dictionary<string, object> defaultValues)
         {
             var newService = new SMDService(transport,"JSON-RPC-2.0",parameters, defaultValues);
-            Services.Add(method,newService);
+            if (!Services.ContainsKey(method)) Services.Add(method, newService);
+            else Services[method] = newService;
         }
 
         public static int AddType(JObject jo)

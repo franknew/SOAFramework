@@ -28,11 +28,13 @@ namespace MicroServiceTesting
             if (!string.IsNullOrEmpty(txbFile.Text))
             {
                 DirectoryInfo directory = new DirectoryInfo(txbFile.Text);
-                if (directory.Exists) Directory.Move(directory.FullName, string.Format(@"{0}\{1}\", _server.ApiDirectory.TrimEnd('\\'), packageName));
+                string destPath = Path.Combine(_server.ApiDirectory, packageName);
+                if (directory.Exists) directory.Copy(destPath);
             }
             if (_server == null) _server = new MasterServer();
             
             _server.StartNode(packageName);
+            MessageBox.Show("部署并启动成功！");
         }
 
         private void timerTick_Tick(object sender, EventArgs e)
@@ -42,14 +44,12 @@ namespace MicroServiceTesting
 
         private void Host_Load(object sender, EventArgs e)
         {
+
             if (_server == null) _server = new MasterServer();
-            _server.Start();
-            Query();
             txbUrl.Text = _server.Host;
             txbEntry.Text = _server.ServiceEntry;
             txbApiDirectory.Text = _server.ApiDirectory;
             txbCommonDirectory.Text = _server.CommonDirectory;
-            timerTick.Start();
         }
 
         private void Query()
@@ -188,6 +188,20 @@ namespace MicroServiceTesting
             System.Configuration.ConfigurationManager.RefreshSection("appSettings");
 
             MessageBox.Show("保存配置成功！");
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            //NodeServer server = new NodeServer();
+            //server.CommonDllPath = @"E:\AppLib\SOAFramework\01.Code\Bin\MicroServiceTesting\Common";
+            //server.Start("http://10.1.50.195/面单接口/");
+        }
+
+        private void btnServer_Click(object sender, EventArgs e)
+        {
+            _server.Start();
+            Query();
+            timerTick.Start();
         }
     }
 }
