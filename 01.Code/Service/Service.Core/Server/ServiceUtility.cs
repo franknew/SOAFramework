@@ -135,7 +135,7 @@ namespace SOAFramework.Service.Server
                 catch (ReflectionTypeLoadException ex)
                 {
                     string message = ex.Message + " stacktrace:" + ex.StackTrace;
-                    LogHelper.Write(message);
+                    Core.LogHelper.Write(message);
                 }
             }
 

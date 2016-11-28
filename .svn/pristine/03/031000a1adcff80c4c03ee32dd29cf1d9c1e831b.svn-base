@@ -1,0 +1,15 @@
+@*@model IEnumerable<mvcapplication2.controllers.querybillfollowdetail>*@
+
+using System;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
+using SOAFramework.SDK.Core;
+
+namespace @(Model.RequestNameSpace).Response
+{
+    public class @(Model.ActionName)Response : BaseResponse
+    {
+        public @(Model.ServiceInfo.ReturnType.TypeName) Data { get; set; }
+    }
+}

@@ -1,0 +1,70 @@
+﻿@Scripts.Render("~/Scripts/Index.js")
+<div>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <h4 style="color:white;">类型：@(ViewBag.Data.TypeInfo.FullTypeName)</h4>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <!--<ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search...">
+                </form>
+                    -->
+            </div>
+    </nav>
+    <div class="panel-body">
+        <ul id="treeType" class="list-unstyled">
+            @if (ViewBag.Data.Properties != null && ViewBag.Data.Properties.Count > 0)
+            {
+                foreach (var item in ViewBag.Data.Properties)
+                {
+                    string typeName = "";
+                    if (!string.IsNullOrEmpty(item.PropertyTypeInfo.FullTypeName))
+                    {
+                        typeName = item.PropertyTypeInfo.FullTypeName.Replace(".", "-");
+                    }
+                    <li>
+                        @if (item.PropertyTypeInfo.IsClass)
+                        {
+                            <img src="~/Images/Jqx/icon-right.png" style="cursor:pointer;width:17px;height:17px;" onclick="ClickImg(this);" />
+                            <input type="hidden" value="@(typeName)" />
+                            <span>@(item.PropertyName)</span> <span>--</span>    <a href="~/ServiceDiscovery/TypeDescription/@(typeName)" target="_blank">
+        @(item.PropertyTypeInfo.TypeName) 
+    </a><span> : @(item.Remark)</span>
+                        }
+                        else
+                        {
+                            <span style="padding-left:22px;">@(item.PropertyName)</span> <span>--</span>
+                            <span>@(item.PropertyTypeInfo.TypeName)</span><span> : @(item.Remark)</span>
+                        }
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="panel-body">
+        @if (ViewBag.Data.TypeInfo != null)
+        {
+            string typeName = "";
+            if (!string.IsNullOrEmpty(ViewBag.Data.TypeInfo.FullTypeName))
+            {
+                typeName = ViewBag.Data.TypeInfo.FullTypeName.Replace(".", "-");
+            }
+            <form method="get" action="~/ServiceDiscovery/GenerateCodeFile/@(typeName)">
+                <input type="submit" value="生成代码文件" />
+            </form>
+        }
+    </div>
+</div>

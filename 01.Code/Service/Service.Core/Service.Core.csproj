@@ -35,7 +35,7 @@
     <DocumentationFile>..\..\Release\Modules\SOAFramework.Service.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SOAFramework.Key.pfx</AssemblyOriginatorKeyFile>
@@ -106,6 +106,10 @@
     <ProjectReference Include="..\..\Library\Newtonsoft.Json\Json.csproj">
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\SimpleLogger\SimpleLogger.csproj">
+      <Project>{73c78c6a-31e2-4ec0-8f2e-384b431c224d}</Project>
+      <Name>SimpleLogger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\XML\XML.csproj">
       <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
