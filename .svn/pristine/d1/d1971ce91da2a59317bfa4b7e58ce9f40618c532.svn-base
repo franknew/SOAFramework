@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<configuration>
+
+  <configSections>
+    <sectionGroup name="soaConfigGroup">
+      <section name="businessFileConfig" type="SOAFramework.Service.Core.Model.BusinessFileConfigSection" allowLocation="true" allowDefinition="Everywhere"/>
+      <section name="filterFileConfig" type="SOAFramework.Service.Core.Model.FilterFileConfigSection" allowLocation="true" allowDefinition="Everywhere"/>
+      <section name="log4net" type="System.Configuration.IgnoreSectionHandler"/>
+    </sectionGroup>
+  </configSections>
+
+  <appSettings>
+    <add key="AutoStart" value="1"/>
+    <add key="ApplicationName" value="SOA服务器端测试版"/>
+  </appSettings>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5"/>
+  </startup>
+
+  <system.serviceModel>
+    <bindings>
+      <basicHttpBinding>
+        <binding name="basicBinding" maxReceivedMessageSize="2147483647" maxBufferPoolSize="524288" closeTimeout="00:01:00" openTimeout="00:01:00" receiveTimeout="00:10:00" sendTimeout="00:01:00">
+        </binding>
+        <binding name="secureHttpBinding">
+          <security mode="Transport">
+            <transport clientCredentialType="None"/>
+          </security>
+        </binding>
+      </basicHttpBinding>
+      <webHttpBinding>
+        <binding name="WebHttpBindingSetting" maxBufferSize="2147483647"
+         maxBufferPoolSize="2147483647" maxReceivedMessageSize="2147483647"
+         contentTypeMapper="SOAFramework.Service.Core.CustomRawMapper, SOAFramework.Service.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <readerQuotas maxDepth="2147483647" maxStringContentLength="2147483647"
+            maxArrayLength="2147483647"
+            maxBytesPerRead="2147483647" maxNameTableCharCount="2147483647" />
+        </binding>
+      </webHttpBinding>
+    </bindings>
+    <services>
+      <service name="SOAFramework.Service.Server.JsonHost">
+        <endpoint behaviorConfiguration="WebHttpBehavior"
+          address="http://localhost/Service" binding="webHttpBinding"
+         bindingConfiguration="WebHttpBindingSetting" name="HttpEndPoint"
+         contract="SOAFramework.Service.Server.IJsonHost" />
+      </service>
+    </services>
+    <behaviors>
+      <endpointBehaviors>
+        <behavior name="WebHttpBehavior">
+          <webHttp helpEnabled="true"  faultExceptionEnabled="true" />
+        </behavior>
+      </endpointBehaviors>
+      <serviceBehaviors>
+        <behavior name="getBehavior">
+          <serviceMetadata httpGetEnabled="true" />
+          <dataContractSerializer maxItemsInObjectGraph="2147483647"/>
+          <serviceDebug includeExceptionDetailInFaults="true" />
+          <serviceThrottling maxConcurrentCalls="99999999" maxConcurrentSessions="99999999"/>
+        </behavior>
+      </serviceBehaviors>
+    </behaviors>
+    <serviceHostingEnvironment aspNetCompatibilityEnabled="true"/>
+  </system.serviceModel>
+
+  <soaConfigGroup>
+    <businessFileConfig>
+      <config name="Api" type="{AppDir}\Modules\RiskMgr.Api.dll"/>
+    </businessFileConfig>
+    <filterFileConfig>
+      <config name="Filter" type="{AppDir}\Modules\RiskMgr.Api.dll"/>
+      <config name="Default" type="SOAFramework.Service.DefaultFilter"/>
+    </filterFileConfig>
+  </soaConfigGroup>
+
+</configuration>

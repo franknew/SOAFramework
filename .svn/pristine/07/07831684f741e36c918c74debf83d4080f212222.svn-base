@@ -1,0 +1,5 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ output extension=".txt" #>
+<html><body>
+ The date and time now is: <#= DateTime.Now #>
+</body></html>

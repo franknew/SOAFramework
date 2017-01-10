@@ -15,13 +15,14 @@ namespace SOAFramework.Library
         public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json",
             NetworkCredential credential = null, bool https = false)
         {
-            WebRequest request = WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = contentType;
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;
             request.ContentLength = data.Length;
             request.Timeout = timeout;
             if (https) ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
+            request.ServicePoint.Expect100Continue = false;
             if (credential != null)
             {
                 CredentialCache cache = new CredentialCache();
@@ -32,10 +33,10 @@ namespace SOAFramework.Library
             }
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(data, 0, data.Length);
-            requestStream.Close();
             WebResponse response = request.GetResponse();
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
+            requestStream.Close();
             return responseReader.ReadToEnd();
         }
 
@@ -46,6 +47,7 @@ namespace SOAFramework.Library
             WebRequest request = WebRequest.Create(fullurl);
             request.Credentials = CredentialCache.DefaultCredentials;
             request.Timeout = timeout;
+            request.ContentType = "application/x-www-form-urlencoded";
             WebResponse response = request.GetResponse();
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);

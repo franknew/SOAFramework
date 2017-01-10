@@ -1,0 +1,2 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SOAFramework.Service.Host.SOAServiceHost" CodeBehind="SOAServiceHost.svc.cs"
+			 Factory="System.ServiceModel.Activation.WebServiceHostFactory"%>
