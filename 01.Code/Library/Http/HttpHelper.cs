@@ -5,13 +5,15 @@ using System.Net;
 using System.Web;
 using System.IO;
 using System.Reflection;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SOAFramework.Library
 {
     public class HttpHelper
     {
         public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json",
-            NetworkCredential credential = null)
+            NetworkCredential credential = null, bool https = false)
         {
             WebRequest request = WebRequest.Create(url);
             request.ContentType = contentType;
@@ -19,6 +21,7 @@ namespace SOAFramework.Library
             request.Credentials = CredentialCache.DefaultCredentials;
             request.ContentLength = data.Length;
             request.Timeout = timeout;
+            if (https) ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
             if (credential != null)
             {
                 CredentialCache cache = new CredentialCache();
@@ -36,9 +39,10 @@ namespace SOAFramework.Library
             return responseReader.ReadToEnd();
         }
 
-        public static string Get(string url, IDictionary<string, object> args = null, int timeout = -1)
+        public static string Get(string url, IDictionary<string, object> args = null, int timeout = -1, bool https = false)
         {
             string fullurl = CombineUrl(url, args);
+            if (https) ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
             WebRequest request = WebRequest.Create(fullurl);
             request.Credentials = CredentialCache.DefaultCredentials;
             request.Timeout = timeout;
@@ -82,6 +86,11 @@ namespace SOAFramework.Library
                 }
             }
             return urlbuilder.ToString().TrimEnd('&');
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true; //总是接受     
         }
     }
 }
