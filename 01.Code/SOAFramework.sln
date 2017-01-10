@@ -148,6 +148,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroServiceSDK", "Library\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthenaVersionForm", "Startup\AthenaVersionForm\AthenaVersionForm.csproj", "{CECE9247-125F-4CDD-8518-E54DAB5B6BFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Html", "Library\Html\Html.csproj", "{541D259A-D204-4BFA-8095-DBDC24AA693B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -706,6 +708,18 @@ Global
 		{CECE9247-125F-4CDD-8518-E54DAB5B6BFE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CECE9247-125F-4CDD-8518-E54DAB5B6BFE}.Release|x86.ActiveCfg = Release|Any CPU
 		{CECE9247-125F-4CDD-8518-E54DAB5B6BFE}.Release|x86.Build.0 = Release|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Debug|x86.Build.0 = Debug|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Release|x86.ActiveCfg = Release|Any CPU
+		{541D259A-D204-4BFA-8095-DBDC24AA693B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -763,6 +777,7 @@ Global
 		{65CA9D8E-353F-48D8-B6A4-C8B3CFFEB2B6} = {7AA3BEBE-B65C-42FD-94CC-8363F427B02B}
 		{5624C800-75B7-43B8-951B-F2EB15B2AA0D} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{CECE9247-125F-4CDD-8518-E54DAB5B6BFE} = {7AA3BEBE-B65C-42FD-94CC-8363F427B02B}
+		{541D259A-D204-4BFA-8095-DBDC24AA693B} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SOAFramework.vsmdi
