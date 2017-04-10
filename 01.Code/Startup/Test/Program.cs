@@ -439,7 +439,7 @@ namespace Test
 
             #region zip tester
             string zip = "i am a string, to be zipped!";
-            string zipped = ZipHelper.Zip(zip);
+            string zipped = ZipHelper.Zip(zip, System.Text.Encoding.Default);
             zip = ZipHelper.UnZip(zipped);
             #endregion
 
