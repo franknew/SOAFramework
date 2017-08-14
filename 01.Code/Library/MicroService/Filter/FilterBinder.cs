@@ -46,11 +46,11 @@ namespace MicroService.Library
             return handler;
         }
 
-        public static void BindFilter(string sessionName = null, AppDomain domain = null)
+        public static void BindFilter(string sessionName = null, AppDomain domain = null, List<Assembly> assList = null)
         {
             if (domain == null) domain = AppDomain.CurrentDomain;
-            var assemblies = domain.GetAssemblies();
-            foreach (var ass in assemblies)
+            if (assList == null) assList = domain.GetAssemblies().ToList();
+            foreach (var ass in assList)
             {
                 var types = ass.GetTypes();
                 foreach (var type in types)

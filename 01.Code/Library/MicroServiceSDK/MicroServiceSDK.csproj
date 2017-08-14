@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseResponse.cs" />
-    <Compile Include="IResponse.cs" />
+    <Compile Include="IRequest.cs" />
     <Compile Include="JsonRpcException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

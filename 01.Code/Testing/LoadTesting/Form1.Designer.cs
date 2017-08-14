@@ -30,6 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnZip = new System.Windows.Forms.Button();
+            this.btnChoose = new System.Windows.Forms.Button();
+            this.txbFile = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.btnRun = new System.Windows.Forms.Button();
             this.txbUrl = new System.Windows.Forms.TextBox();
@@ -46,7 +49,7 @@
             this.rabJson = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txbPost = new System.Windows.Forms.TextBox();
             this.dgvData = new System.Windows.Forms.DataGridView();
             this.Url = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Method = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,6 +61,7 @@
             this.progressbar = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.btnLoad = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCount)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -68,14 +72,45 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnLoad);
+            this.groupBox1.Controls.Add(this.btnZip);
+            this.groupBox1.Controls.Add(this.btnChoose);
+            this.groupBox1.Controls.Add(this.txbFile);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.btnRun);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1043, 50);
+            this.groupBox1.Size = new System.Drawing.Size(1491, 50);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // btnZip
+            // 
+            this.btnZip.Location = new System.Drawing.Point(634, 21);
+            this.btnZip.Name = "btnZip";
+            this.btnZip.Size = new System.Drawing.Size(75, 23);
+            this.btnZip.TabIndex = 4;
+            this.btnZip.Text = "压缩";
+            this.btnZip.UseVisualStyleBackColor = true;
+            this.btnZip.Click += new System.EventHandler(this.btnZip_Click);
+            // 
+            // btnChoose
+            // 
+            this.btnChoose.Location = new System.Drawing.Point(471, 20);
+            this.btnChoose.Name = "btnChoose";
+            this.btnChoose.Size = new System.Drawing.Size(75, 23);
+            this.btnChoose.TabIndex = 3;
+            this.btnChoose.Text = "选择";
+            this.btnChoose.UseVisualStyleBackColor = true;
+            this.btnChoose.Click += new System.EventHandler(this.txbChoose_Click);
+            // 
+            // txbFile
+            // 
+            this.txbFile.Location = new System.Drawing.Point(175, 21);
+            this.txbFile.Name = "txbFile";
+            this.txbFile.Size = new System.Drawing.Size(290, 21);
+            this.txbFile.TabIndex = 2;
             // 
             // button1
             // 
@@ -175,7 +210,7 @@
             this.groupBox2.Controls.Add(this.groupBox4);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.txbPost);
             this.groupBox2.Controls.Add(this.txbUrl);
             this.groupBox2.Controls.Add(this.numCount);
             this.groupBox2.Controls.Add(this.label1);
@@ -184,7 +219,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(0, 50);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1043, 253);
+            this.groupBox2.Size = new System.Drawing.Size(1491, 253);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             // 
@@ -250,14 +285,14 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "content type";
             // 
-            // textBox1
+            // txbPost
             // 
-            this.textBox1.Location = new System.Drawing.Point(47, 136);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(896, 111);
-            this.textBox1.TabIndex = 8;
+            this.txbPost.Location = new System.Drawing.Point(47, 136);
+            this.txbPost.Multiline = true;
+            this.txbPost.Name = "txbPost";
+            this.txbPost.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txbPost.Size = new System.Drawing.Size(896, 111);
+            this.txbPost.TabIndex = 8;
             // 
             // dgvData
             // 
@@ -277,7 +312,7 @@
             this.dgvData.Name = "dgvData";
             this.dgvData.ReadOnly = true;
             this.dgvData.RowTemplate.Height = 23;
-            this.dgvData.Size = new System.Drawing.Size(1043, 166);
+            this.dgvData.Size = new System.Drawing.Size(1491, 429);
             this.dgvData.TabIndex = 9;
             // 
             // Url
@@ -336,7 +371,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressbar.Location = new System.Drawing.Point(199, 364);
             this.progressbar.Name = "progressbar";
-            this.progressbar.Size = new System.Drawing.Size(600, 23);
+            this.progressbar.Size = new System.Drawing.Size(1048, 23);
             this.progressbar.TabIndex = 10;
             this.progressbar.Visible = false;
             // 
@@ -350,16 +385,26 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(199, 321);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(600, 23);
+            this.progressBar1.Size = new System.Drawing.Size(1048, 23);
             this.progressBar1.TabIndex = 11;
             this.progressBar1.Visible = false;
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Location = new System.Drawing.Point(553, 21);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnLoad.TabIndex = 5;
+            this.btnLoad.Text = "加载";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1043, 469);
+            this.ClientSize = new System.Drawing.Size(1491, 732);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.progressbar);
             this.Controls.Add(this.dgvData);
@@ -370,6 +415,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCount)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -398,7 +444,7 @@
         private System.Windows.Forms.ProgressBar progressbar;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txbPost;
         private System.Windows.Forms.DataGridViewTextBoxColumn Url;
         private System.Windows.Forms.DataGridViewTextBoxColumn Method;
         private System.Windows.Forms.DataGridViewTextBoxColumn Count;
@@ -413,6 +459,10 @@
         private System.Windows.Forms.RadioButton rabXml;
         private System.Windows.Forms.RadioButton rdoUrlencoded;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnChoose;
+        private System.Windows.Forms.TextBox txbFile;
+        private System.Windows.Forms.Button btnZip;
+        private System.Windows.Forms.Button btnLoad;
     }
 }
 

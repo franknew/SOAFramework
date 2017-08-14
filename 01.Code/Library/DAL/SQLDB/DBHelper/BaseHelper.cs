@@ -14,9 +14,10 @@ namespace SOAFramework.Library.DAL
         where Adp : IDbDataAdapter
         where Param : IDbDataParameter
     {
-        public BaseHelper(IPagingSQL paging)
+        public BaseHelper(IPagingSQL paging, DBType type)
         {
             this.paging = paging;
+            _type = type;
         }
 
         #region variables
@@ -25,6 +26,7 @@ namespace SOAFramework.Library.DAL
         private IDbConnection mObj_Connection = null;
         private bool mBl_IsTransaction = false;
         private IPagingSQL paging = null;
+        private DBType _type;
         #endregion
 
         #region properties
@@ -36,32 +38,27 @@ namespace SOAFramework.Library.DAL
 
         public DBType DBType
         {
-            get { return DBType.MSSQL2005P; }
+            get { return _type; }
         }
 
-        public DBSuit CreateDBSuit<Con, Com, Adp>(IDbConnection connection, IDbCommand command)
+        private bool autoCloseConnection = true;
+        public bool AutoCloseConnection
+        {
+            get { return autoCloseConnection; }
+            set { autoCloseConnection = value; }
+        }
+
+        public DBSuit CreateDBSuit<Con, Com, Adp>(ref IDbConnection connection, IDbCommand command)
             where Con : IDbConnection
             where Com : IDbCommand
             where Adp : IDbDataAdapter
         {
             DBSuit suit = new DBSuit();
             suit.Adapter = Activator.CreateInstance<Adp>();
-            if (connection == null)
-            {
-                suit.Conection = Activator.CreateInstance<Con>();
-            }
-            else
-            {
-                suit.Conection = connection;
-            }
-            if (command == null)
-            {
-                suit.Command = Activator.CreateInstance<Com>();
-            }
-            else
-            {
-                suit.Command = command;
-            }
+            if (connection == null) suit.Conection = connection = Activator.CreateInstance<Con>();
+            else suit.Conection = connection;
+            if (command == null) suit.Command = command = Activator.CreateInstance<Com>();
+            else suit.Command = command;
             return suit;
         }
         #endregion
@@ -69,10 +66,7 @@ namespace SOAFramework.Library.DAL
         #region BeginTransaction
         public void BeginTransaction(string ConnectionString = null)
         {
-            if (string.IsNullOrEmpty(ConnectionString))
-            {
-                ConnectionString = mStr_ConnectionString;
-            }
+            if (string.IsNullOrEmpty(ConnectionString)) ConnectionString = mStr_ConnectionString;
             mObj_Command = new SqlCommand();
             mObj_Connection = new SqlConnection(ConnectionString);
             mObj_Connection.Open();
@@ -118,23 +112,14 @@ namespace SOAFramework.Library.DAL
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
             DataTable dtData = new DataTable();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty)
-            {
-                strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
-            }
-            else
-            {
-                strSQL.Append(strCommandString);
-            }
-            if (string.IsNullOrEmpty(strConnectionString))
-            {
-                strConnectionString = mStr_ConnectionString;
-            }
-            objConnection.ConnectionString = strConnectionString;
+            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
+            else strSQL.Append(strCommandString);
+            if (string.IsNullOrEmpty(strConnectionString)) strConnectionString = mStr_ConnectionString;
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;
             objCommand.CommandText = strSQL.ToString();
             objCommand.CommandType = CommandType.Text;
             objCommand.Connection = objConnection;
@@ -147,19 +132,12 @@ namespace SOAFramework.Library.DAL
                 }
             }
             objAdp.SelectCommand = objCommand;
-
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
                 DataSet set = new DataSet();
                 objAdp.Fill(set);
-                if (set != null && set.Tables.Count > 0)
-                {
-                    dtData = set.Tables[0];
-                }
+                if (set != null && set.Tables.Count > 0) dtData = set.Tables[0];
                 return dtData;
             }
             catch (Exception ex)
@@ -168,7 +146,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -239,7 +217,7 @@ namespace SOAFramework.Library.DAL
         public DataTable GetTableWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             DataTable dtData = new DataTable();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -247,7 +225,7 @@ namespace SOAFramework.Library.DAL
             {
                 strConnectionString = mStr_ConnectionString;
             }
-            objConnection.ConnectionString = strConnectionString;
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
@@ -264,16 +242,10 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open();
                 DataSet set = new DataSet();
                 objAdp.Fill(set);
-                if (set != null && set.Tables.Count > 0)
-                {
-                    dtData = set.Tables[0];
-                }
+                if (set != null && set.Tables.Count > 0) dtData = set.Tables[0];
                 return dtData;
             }
             catch (Exception ex)
@@ -282,7 +254,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -333,7 +305,7 @@ namespace SOAFramework.Library.DAL
         {
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -348,7 +320,7 @@ namespace SOAFramework.Library.DAL
             DataSet dsData = new DataSet();
             if (string.IsNullOrEmpty(strConnectionString))
             {
-                objConnection.ConnectionString = strConnectionString;
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
             }
 
             objCommand.CommandText = strSQL.ToString();
@@ -366,10 +338,7 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open();
                 objAdp.Fill(dsData);
                 return dsData;
             }
@@ -379,7 +348,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -451,7 +420,7 @@ namespace SOAFramework.Library.DAL
         public DataSet GetDataSetWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             DataSet dsData = new DataSet();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -459,7 +428,7 @@ namespace SOAFramework.Library.DAL
             {
                 strConnectionString = mStr_ConnectionString;
             }
-            objConnection.ConnectionString = strConnectionString;
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
@@ -476,10 +445,7 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open();
                 objAdp.Fill(dsData);
                 return dsData;
             }
@@ -489,7 +455,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -540,7 +506,7 @@ namespace SOAFramework.Library.DAL
         public object GetScalarWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
         {
             object objData = null;
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -548,7 +514,7 @@ namespace SOAFramework.Library.DAL
             {
                 strConnectionString = mStr_ConnectionString;
             }
-            objConnection.ConnectionString = strConnectionString;
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
 
             objCommand.CommandText = strCommandString;
             objCommand.CommandType = CommandType.Text;
@@ -564,10 +530,7 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open();
                 objData = objCommand.ExecuteScalar();
                 return objData;
             }
@@ -577,7 +540,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -628,7 +591,7 @@ namespace SOAFramework.Library.DAL
         public object GetScalarWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             object objData = null;
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -636,7 +599,7 @@ namespace SOAFramework.Library.DAL
             {
                 strConnectionString = mStr_ConnectionString;
             }
-            objConnection.ConnectionString = strConnectionString;
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
@@ -652,10 +615,7 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
                 objData = objCommand.ExecuteScalar();
                 return objData;
             }
@@ -665,7 +625,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -708,15 +668,12 @@ namespace SOAFramework.Library.DAL
         #region ExecNoneQueryWithSQL
         public int ExecNoneQueryWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
         {
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            if (string.IsNullOrEmpty(strConnectionString))
-            {
-                strConnectionString = mStr_ConnectionString;
-            }
-            objConnection.ConnectionString = strConnectionString;
+            if (string.IsNullOrEmpty(strConnectionString))  strConnectionString = mStr_ConnectionString; 
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
 
             objCommand.CommandText = strCommandString;
             objCommand.CommandType = CommandType.Text;
@@ -731,10 +688,7 @@ namespace SOAFramework.Library.DAL
             }
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
                 return objCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -743,11 +697,11 @@ namespace SOAFramework.Library.DAL
                 {
                     objCommand.Transaction.Rollback();
                 }
-                throw ex;
+               throw ex;
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -773,7 +727,7 @@ namespace SOAFramework.Library.DAL
         #region ExecNoneQueryWithSP
         public int ExecNoneQueryWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
+            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -781,7 +735,7 @@ namespace SOAFramework.Library.DAL
             {
                 strConnectionString = mStr_ConnectionString;
             }
-            objConnection.ConnectionString = strConnectionString;
+            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
 
             objCommand.CommandText = strSPName;
             objCommand.CommandType = CommandType.StoredProcedure;
@@ -797,10 +751,7 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open)
-                {
-                    objConnection.Open();
-                }
+                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
                 return objCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -809,7 +760,7 @@ namespace SOAFramework.Library.DAL
             }
             finally
             {
-                if (!mBl_IsTransaction)
+                if (!mBl_IsTransaction && AutoCloseConnection)
                 {
                     objConnection.Close();
                 }
@@ -827,6 +778,11 @@ namespace SOAFramework.Library.DAL
         public int ExecNoneQueryWithSP(string strSPName)
         {
             return ExecNoneQueryWithSP(strSPName, null, mStr_ConnectionString);
+        }
+
+        public void CloseConnection()
+        {
+            if (mObj_Connection != null && mObj_Connection.State == ConnectionState.Open) mObj_Connection.Close();
         }
         #endregion
 

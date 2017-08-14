@@ -7,13 +7,10 @@ using Newtonsoft.Json;
 
 namespace MicroService.Library.SDK
 {
-    public class BaseResponse<T> : IResponse<T>
+    public class BaseResponse
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "jsonrpc")]
         public string JsonRpc { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "result")]
-        public T Result { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "error")]
         public JsonRpcException Error { get; set; }

@@ -142,6 +142,12 @@ namespace SOAFramework.Library
             }
             return table;
         }
+        public static IDictionary<TKey, TResult> MapReduce<TInput, TKey, TValue, TResult>(this List<TInput> inputList,
+            Func<MapReduceData<TInput>, KeyValueClass<TKey, TValue>> map, Func<TKey, IList<TValue>, TResult> reduce)
+        {
+            return inputList.MapReduce<TInput, TKey, TValue, TResult>(map, reduce);
+        }
+
 
         public static IDictionary<TKey, TResult> MapReduce<TInput, TKey, TValue, TResult>(this IList<TInput> inputList,
             Func<MapReduceData<TInput>, KeyValueClass<TKey, TValue>> map, Func<TKey, IList<TValue>, TResult> reduce)
@@ -239,13 +245,6 @@ namespace SOAFramework.Library
                 result[pair.Key] = reduce(pair.Key, pair.Value);
             });
             return result;
-        }
-
-        public static void Set<T, TValue>(this IEnumerable<T> list, Expression<Func<T, TValue>> expression, TValue value)
-        {
-            foreach (var t in list)
-            {
-            }
         }
     }
 

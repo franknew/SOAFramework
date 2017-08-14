@@ -233,6 +233,21 @@ namespace SOAFramework.Library
             var converter = TypeConverterFactory.Create(type);
             return converter.Convert(o, t);
         }
+
+        public static object CopyTo(this object o, object to)
+        {
+            if (to == null) return null;
+            var toType = to.GetType();
+            var oType = o.GetType();
+            var properties = oType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var property in properties)
+            {
+                if (!to.HasProperty(property.Name)) continue;
+                var value = property.GetValue(o, null);
+                to.TrySetValue(property.Name, value);
+            }
+            return to;
+        }
     }
 
     public class PropertyObject

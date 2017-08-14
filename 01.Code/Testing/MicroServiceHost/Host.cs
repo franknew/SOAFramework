@@ -105,7 +105,7 @@ namespace MicroServiceTesting
                 txbCommonDirectory.Text = _server.CommonDirectory;
                 txtTimingDirectory.Text = _server.TimingDirectory;
                 if (autoStart == "1") btnServer_Click(null, null);
-                if (autoStartTiming == "1") btnStartTiming_Click(null, null);
+                //if (autoStartTiming == "1") btnStartTiming_Click(null, null);
                 if (chkAutoRefresh.Checked)
                 {
                     timerTask.Start();

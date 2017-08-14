@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Bin\Modules\</OutputPath>
+    <OutputPath>..\..\Bin\MicroService\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,9 +46,12 @@
     <Compile Include="Filter\FilterHandler.cs" />
     <Compile Include="Filter\INoneExecutableFilterAttribute.cs" />
     <Compile Include="Model\Config.cs" />
-    <Compile Include="DiscoveryService.cs" />
+    <Compile Include="Module\DiscoveryService.cs" />
     <Compile Include="Filter\FilterBinder.cs" />
     <Compile Include="Filter\IFilterAttribute.cs" />
+    <Compile Include="Model\MasterServer.cs" />
+    <Compile Include="Module\WindowsServiceController\ServiceEntity.cs" />
+    <Compile Include="Module\WindowsServiceController\ServiceController.cs" />
     <Compile Include="ServerType\IServer.cs" />
     <Compile Include="Model\TextTypeHelper.cs" />
     <Compile Include="Model\HttpFilterResult.cs" />
@@ -55,7 +59,6 @@
     <Compile Include="Model\ServiceInfo.cs" />
     <Compile Include="Serialize\ISerializable.cs" />
     <Compile Include="Serialize\JsonSerializor.cs" />
-    <Compile Include="Model\MasterServer.cs" />
     <Compile Include="Model\NodeServer.cs" />
     <Compile Include="Model\NodeServerDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

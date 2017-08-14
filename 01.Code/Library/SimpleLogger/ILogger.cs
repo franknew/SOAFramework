@@ -8,5 +8,6 @@ namespace SOAFramework.Library
     public interface ILogger
     {
         void Write(string fileName, string log);
+        void WriteException(string fileName, Exception ex);
     }
 }

@@ -51,7 +51,7 @@
     <Compile Include="ILogger.cs" />
     <Compile Include="LogCacheManager.cs" />
     <Compile Include="LogEntity.cs" />
-    <Compile Include="LogHelper.cs" />
+    <Compile Include="SimpleLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

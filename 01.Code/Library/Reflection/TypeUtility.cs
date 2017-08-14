@@ -18,9 +18,21 @@ namespace SOAFramework.Library
             {
                 return ObjectTypeEnum.ArrayOrList;
             }
-            else if (t.Name.StartsWith("Dictionary"))
+            else if (t.Name.ToLower().StartsWith("dictionary"))
             {
                 return ObjectTypeEnum.Dictionary;
+            }
+            else if (t.Name.ToLower().StartsWith("datatable"))
+            {
+                return ObjectTypeEnum.DataTable;
+            }
+            else if (t.Name.ToLower().StartsWith("datarow"))
+            {
+                return ObjectTypeEnum.DataRow;
+            }
+            else if (t.Name.ToLower().StartsWith("tuple"))
+            {
+                throw new Exception("不支持Tuple转换");
             }
             else if (t.IsClass)
             {

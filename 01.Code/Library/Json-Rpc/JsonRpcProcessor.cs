@@ -267,9 +267,9 @@ namespace AustinHarris.JsonRpc
             try
             {
                 Tuple<JsonRequest, JsonResponse>[] batch = null;
-                
-                    batch = new[] { Tuple.Create(request, new JsonResponse()) };
-                
+
+                batch = new[] { Tuple.Create(request, new JsonResponse()) };
+
 
                 if (batch.Length == 0)
                 {
@@ -281,7 +281,7 @@ namespace AustinHarris.JsonRpc
                     return responselist;
                 }
 
-               
+
 
                 foreach (var tuple in batch)
                 {
@@ -499,6 +499,6 @@ namespace AustinHarris.JsonRpc
             return true;
         }
 
-     
+
     }
 }

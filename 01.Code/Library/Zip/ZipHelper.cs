@@ -10,7 +10,6 @@ namespace SOAFramework.Library
 {
     public class ZipHelper
     {
-        private const string zipMark = "#zip#";
 
         public static byte[] ZipToByte(string value, Encoding encode, bool useGzip = false)
         {
@@ -38,6 +37,12 @@ namespace SOAFramework.Library
             return data;
         }
 
+
+        public static string Zip(string value)
+        {
+            return Zip(value, Encoding.Default);
+        }
+
         public static string Zip(string value, Encoding encode)
         {
             //Transform string into byte[]  
@@ -47,49 +52,43 @@ namespace SOAFramework.Library
             {
                 sB.Append((char)item);
             }
-            sB.Insert(0, zipMark);
-            sB.Append(zipMark);
             return sB.ToString();
         }
 
         public static string UnZip(string value)
         {
             System.Text.StringBuilder sB = new StringBuilder();
-            if (value.StartsWith(zipMark) && value.EndsWith(zipMark))
+            //Transform string into byte[]
+            byte[] byteArray = new byte[value.Length];
+            int indexBA = 0;
+            foreach (char item in value.ToCharArray())
             {
-                value = value.Replace(zipMark, "");
-                //Transform string into byte[]
-                byte[] byteArray = new byte[value.Length];
-                int indexBA = 0;
-                foreach (char item in value.ToCharArray())
-                {
-                    byteArray[indexBA++] = (byte)item;
-                }
-
-                //Prepare for decompress
-                System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray);
-                System.IO.Compression.GZipStream sr = new System.IO.Compression.GZipStream(ms,
-                    System.IO.Compression.CompressionMode.Decompress);
-
-                List<byte> byteList = new List<byte>();
-                //Reset variable to collect uncompressed result
-                //byteArray = new byte[byteArray.Length * 3 ];
-                int data = sr.ReadByte();
-                while (data != -1)
-                {
-                    //sB.Append((char)data);
-                    byteList.Add((byte)data);
-                    data = sr.ReadByte();
-                }
-                //Decompress
-                sB.Append(Encoding.UTF8.GetString(byteList.ToArray()));
-                //Transform byte[] unzip data to string
-                //Read the number of bytes GZipStream red and do not a for each bytes in
-                sr.Close();
-                ms.Close();
-                sr.Dispose();
-                ms.Dispose();
+                byteArray[indexBA++] = (byte)item;
             }
+
+            //Prepare for decompress
+            System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray);
+            System.IO.Compression.GZipStream sr = new System.IO.Compression.GZipStream(ms,
+                System.IO.Compression.CompressionMode.Decompress);
+
+            List<byte> byteList = new List<byte>();
+            //Reset variable to collect uncompressed result
+            //byteArray = new byte[byteArray.Length * 3 ];
+            int data = sr.ReadByte();
+            while (data != -1)
+            {
+                //sB.Append((char)data);
+                byteList.Add((byte)data);
+                data = sr.ReadByte();
+            }
+            //Decompress
+            sB.Append(Encoding.UTF8.GetString(byteList.ToArray()));
+            //Transform byte[] unzip data to string
+            //Read the number of bytes GZipStream red and do not a for each bytes in
+            sr.Close();
+            ms.Close();
+            sr.Dispose();
+            ms.Dispose();
             return sB.ToString();
         }
 
@@ -124,11 +123,6 @@ namespace SOAFramework.Library
         {
             bool isuncompress = true;
             if (string.IsNullOrEmpty(value)) throw new ArgumentNullException("待解压缩的字符串不能为空!");
-            if (value.StartsWith(zipMark) && value.EndsWith(zipMark))
-            {
-                isuncompress = false;
-                value = value.Replace(zipMark, "");
-            }
 
             byte[] byteArray = DecodeBase64(value);
             if (!isuncompress)
@@ -189,5 +183,18 @@ namespace SOAFramework.Library
             var bytes = File.ReadAllBytes(fileName);
             return Convert.ToBase64String(bytes);
         }
+
+        public static string ZipParallel(string value, Encoding coding)
+        {
+            object locker = new object();
+            var parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = Environment.ProcessorCount;
+            Parallel.For(0, value.Length, parallelOptions, t =>
+            {
+
+            });
+            return null;
+        }
+
     }
 }

@@ -98,6 +98,10 @@
       <Project>{b5168c1f-6145-4453-9e20-d2f69883b49b}</Project>
       <Name>Http</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Zip\Zip.csproj">
+      <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
+      <Name>Zip</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -15,7 +15,7 @@ namespace SOAFramework.Library
         private HttpListener _listener;
         public event HttpExecutingHandler Executing;
 
-        private ServerStatus status = ServerStatus.Wait;
+        private ServerStatus status = ServerStatus.Waitting;
 
         public ServerStatus Status
         {
@@ -41,6 +41,7 @@ namespace SOAFramework.Library
 
         public void Start(string[] prefixes = null)
         {
+            status = ServerStatus.Starting;
             if (_listener == null) _listener = new HttpListener();
             if (prefixes != null) _prefixes = prefixes;
             foreach (var prefix in _prefixes)
@@ -49,8 +50,8 @@ namespace SOAFramework.Library
                 _listener.Prefixes.Add(p);
             }
             _listener.Start();
-            status = ServerStatus.Start;
             var result = _listener.BeginGetContext(new AsyncCallback(GetContextCallback), _listener);
+            status = ServerStatus.Running;
         }
 
         public void GetContextCallback(IAsyncResult result)
@@ -90,14 +91,16 @@ namespace SOAFramework.Library
 
         public void Stop()
         {
+            status = ServerStatus.Closing;
             _listener.Stop();
-            status = ServerStatus.Stop;
+            status = ServerStatus.Closed;
         }
 
         public void Close()
         {
+            status = ServerStatus.Closing;
             _listener.Close();
-            status = ServerStatus.Close;
+            status = ServerStatus.Closed;
         }
     }
 
@@ -115,9 +118,11 @@ public class HttpExcutingEventArgs : EventArgs
 
 public enum ServerStatus
 {
-    Wait = 0,
-    Start = 1,
-    Stop = 2,
-    Updating = 3,
-    Close = 4,
+    Waitting = 0,
+    Starting = 1,
+    Running = 2,
+    Closing = 3,
+    Updating = 4,
+    Closed = 5,
+    Pause = 6,
 }

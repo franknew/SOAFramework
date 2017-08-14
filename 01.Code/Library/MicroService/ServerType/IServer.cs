@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace MicroService.Library
 {
     public interface IServer
     {
-        void Bind(string sessionName, AppDomain domain);
+        void Bind(string sessionName, AppDomain domain, List<Assembly> assList = null);
     }
 
     public class ServerTypeFactory

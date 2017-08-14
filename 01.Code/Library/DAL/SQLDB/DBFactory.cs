@@ -46,6 +46,8 @@ namespace SOAFramework.Library.DAL
                     return CreateDBHelper(strConnectionString, DBType.MySQL);
                 case "sqlite":
                     return CreateDBHelper(strConnectionString, DBType.SQLite);
+                case "db2":
+                    return CreateDBHelper(strConnectionString, DBType.DB2);
                 default:
                     return CreateDBHelper(strConnectionString, DBType.MSSQL);
             }
@@ -90,6 +92,9 @@ namespace SOAFramework.Library.DAL
                 case DBType.SQLite:
                     //helper = new SQLiteHelper(strConnectionString);
                     helperType = "SQLiteHelper";
+                    break;
+                case DBType.DB2:
+                    helperType = "DB2Helper";
                     break;
                 default:
                     //helper = new MSSQLHelper(strConnectionString);

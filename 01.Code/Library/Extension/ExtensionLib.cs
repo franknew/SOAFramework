@@ -21,7 +21,8 @@ namespace SOAFramework.Library
         /// <returns></returns>
         public static T CopyToObject<T>(this DataRow row, T data)
         {
-            Type type = data.GetType();
+            Type type = typeof(T);
+            if (data == null) data = (T)Activator.CreateInstance(type);
             foreach (DataColumn column in row.Table.Columns)
             {
                 PropertyInfo property = type.GetProperty(column.ColumnName, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
@@ -32,30 +33,80 @@ namespace SOAFramework.Library
                     object safeValue = null;
                     if (t == typeof(byte[]))
                     {
-                        string v = row[column.ColumnName] == null ? "" : row[column.ColumnName].ToString();
-                        safeValue = Encoding.Default.GetBytes(v);
+                        if (column.DataType.Equals(typeof(byte[]))) safeValue = row[column.ColumnName];
+                        else
+                        {
+                            string v = row[column.ColumnName] == null ? "" : row[column.ColumnName].ToString();
+                            safeValue = Convert.FromBase64String(v);
+                        }
                     }
                     else if (t == typeof(char[]))
                     {
                         string v = row[column.ColumnName] == null ? "" : row[column.ColumnName].ToString();
                         safeValue = v.ToCharArray();
                     }
-                    else if (t.BaseType == typeof(Enum))
-                    {
-                        safeValue = row[column.ColumnName];
-                    }
-                    else
-                    {
-                        safeValue = (row[column.ColumnName] == null || row[column.ColumnName] == DBNull.Value) ? null
+                    else if (t.BaseType == typeof(Enum)) safeValue = row[column.ColumnName];
+                    else safeValue = (row[column.ColumnName] == null || row[column.ColumnName] == DBNull.Value || row[column.ColumnName].ToString().Equals("null")) ? null
                                                           : Convert.ChangeType(row[column.ColumnName], t);
-                    }
                     //object value = Convert.ChangeType(row[column], property.PropertyType);
-                    if (property.CanWrite)
-                    {
-                        property.SetValue(data, safeValue, null);
-                    }
+                    if (property.CanWrite) property.SetValue(data, safeValue, null);
 
                 }
+                //else
+                //{
+                //    throw new Exception("对象：" + type.Name + "中没有属性：" + column.ColumnName);
+                //}
+            }
+            return data;
+        }
+
+        public static object ToObject(this DataRow row, Type type)
+        {
+            object data = Activator.CreateInstance(type);
+            foreach (DataColumn column in row.Table.Columns)
+            {
+                PropertyInfo property = type.GetProperty(column.ColumnName, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
+                if (property != null)
+                {
+                    Type t = Nullable.GetUnderlyingType(property.PropertyType)
+                    ?? property.PropertyType;
+                    object safeValue = null;
+                    if (t == typeof(byte[]))
+                    {
+                        if (column.DataType.Equals(typeof(byte[]))) safeValue = row[column.ColumnName];
+                        else
+                        {
+                            string v = row[column.ColumnName] == null ? "" : row[column.ColumnName].ToString();
+                            safeValue = Convert.FromBase64String(v);
+                        }
+                    }
+                    else if (t == typeof(char[]))
+                    {
+                        string v = row[column.ColumnName] == null ? "" : row[column.ColumnName].ToString();
+                        safeValue = v.ToCharArray();
+                    }
+                    else if (t.BaseType == typeof(Enum)) safeValue = row[column.ColumnName];
+                    else safeValue = (row[column.ColumnName] == null || row[column.ColumnName] == DBNull.Value || row[column.ColumnName].ToString().Equals("null")) ? null
+                                                          : Convert.ChangeType(row[column.ColumnName], t);
+                    //object value = Convert.ChangeType(row[column], property.PropertyType);
+                    if (property.CanWrite) property.SetValue(data, safeValue, null);
+
+                }
+                //else
+                //{
+                //    throw new Exception("对象：" + type.Name + "中没有属性：" + column.ColumnName);
+                //}
+            }
+            return data;
+        }
+
+        public static Dictionary<string, object> ToDictionary(this DataRow row)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            foreach (DataColumn column in row.Table.Columns)
+            {
+                data[column.ColumnName] = row[column.ColumnName];
+                    
                 //else
                 //{
                 //    throw new Exception("对象：" + type.Name + "中没有属性：" + column.ColumnName);
@@ -264,6 +315,14 @@ namespace SOAFramework.Library
             {
                 return new Guid(value.ToString());
 
+            }
+            else if (conversionType == typeof(byte[]) && value.GetType() == typeof(string))
+            {
+                return Convert.FromBase64String(value.ToString());
+            }
+            else if (conversionType == typeof(string) && value.GetType() == typeof(byte[]))
+            {
+                return Convert.ToBase64String(value as byte[]);
             }
             else if (conversionType == typeof(Int64) && value.GetType() == typeof(int))
             {

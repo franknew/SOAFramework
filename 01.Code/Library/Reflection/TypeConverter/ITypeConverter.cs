@@ -27,6 +27,13 @@ namespace SOAFramework.Library
                 case ObjectTypeEnum.Dictionary:
                     converter = new DictionaryValueConverter();
                     break;
+                case ObjectTypeEnum.DataRow:
+                    converter = new DataRowTypeConverter();
+                    break;
+                case ObjectTypeEnum.ArrayOrList:
+                case ObjectTypeEnum.DataTable:
+                    throw new Exception("不支持数组转换");
+                    break;
             }
             return converter;
         }

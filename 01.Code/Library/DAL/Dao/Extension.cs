@@ -12,10 +12,7 @@ namespace SOAFramework.Library.DAL
         {
             string sql = "";
             var statment = mapper.GetMappedStatement(statmenName);
-            if (!mapper.IsSessionStarted)
-            {
-                mapper.OpenConnection();
-            }
+            if (!mapper.IsSessionStarted) mapper.OpenConnection(); 
             sql = statment.Statement.Sql.GetRequestScope(statment, entity, mapper.LocalSession).PreparedStatement.PreparedSql;
             return sql;
         }

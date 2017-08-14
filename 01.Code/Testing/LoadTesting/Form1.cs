@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SOAFramework.Library;
+using System.IO;
 
 namespace LoadTesting
 {
@@ -90,7 +88,7 @@ namespace LoadTesting
             int taskcount = (int)numCount.Value;
             bool post = rabPost.Checked;
             string[] urls = txbUrl.Text.Split(';');
-            string postdata = textBox1.Text;
+            string postdata = txbPost.Text;
             string contentType = rabJson.Text;
             if (rabJson.Checked) contentType = rabJson.Text;
             if (rabXml.Checked) contentType = rabXml.Text;
@@ -132,6 +130,32 @@ namespace LoadTesting
 
         private void button1_Click(object sender, EventArgs e)
         {
+        }
+
+        private void txbChoose_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK) txbFile.Text = dialog.FileName; 
+        }
+
+        private void btnZip_Click(object sender, EventArgs e)
+        {
+            var content = File.ReadAllBytes(txbFile.Text);
+            //content.ToList().MapReduce(t =>
+            //{
+            //    return new KeyValueClass<string, byte>("", t);
+            //},
+            //(key, value) =>
+            //{
+            //    return value;
+            //});
+            txbPost.Text = ZipHelper.Zip(Convert.ToBase64String(content));
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            var content = File.ReadAllBytes(txbFile.Text);
+            txbPost.Text = Convert.ToBase64String(content);
         }
     }
 

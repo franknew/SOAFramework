@@ -10,7 +10,7 @@ namespace SOAFramework.Library.DAL
     public class MySQLHelper : BaseHelper<MySqlConnection, MySqlCommand, MySqlDataAdapter, MySqlParameter>
     {
         public MySQLHelper(string connectionstring) :
-            base(new MySQLPagingSQL())
+            base(new MySQLPagingSQL(), DBType.MySQL)
         {
             this.ConnectionString = connectionstring;
         }

@@ -52,7 +52,7 @@
     <Compile Include="ArgDictionary.cs" />
     <Compile Include="ArgMapping.cs" />
     <Compile Include="BaseResponse.cs" />
-    <Compile Include="Executer.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="IPostDataFormatter.cs" />
     <Compile Include="IRequest.cs" />

@@ -11,7 +11,7 @@ namespace SOAFramework.Library.DAL
     {
 
         public OracleHelper(string connectionstring)
-            : base(new OraclePagingSQL())
+            : base(new OraclePagingSQL(), DBType.Oracle)
         {
             this.ConnectionString = connectionstring;
         }

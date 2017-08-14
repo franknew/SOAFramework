@@ -11,7 +11,7 @@ namespace SOAFramework.Library.DAL
     public class MSSQLHelper : BaseHelper<SqlConnection, SqlCommand, SqlDataAdapter, SqlParameter>
     {
         public MSSQLHelper(string connectionstring) :
-            base(new MSSQLPagingSQL())
+            base(new MSSQLPagingSQL(), DBType.MSSQL)
         {
             this.ConnectionString = connectionstring;
         }

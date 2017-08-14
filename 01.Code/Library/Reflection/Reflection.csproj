@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TypeConverter\ArraryOrListTypeConverter.cs" />
+    <Compile Include="TypeConverter\DataRowTypeConverter.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

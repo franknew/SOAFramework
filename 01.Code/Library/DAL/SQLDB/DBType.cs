@@ -12,6 +12,7 @@ namespace SOAFramework.Library.DAL
         MySQL = 3,
         MSSQL2005P = 0,
         SQLite = 5,
+        DB2=6
     }
 
     public enum OrderBy

@@ -11,6 +11,7 @@ namespace SOAFramework.Library
         Class,
         ArrayOrList,
         Dictionary,
-        DataTable
+        DataTable,
+        DataRow
     }
 }

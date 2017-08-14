@@ -23,7 +23,7 @@ namespace MicroService.Library
         private string _serviceEntry = null;
         private string _timingDirectory = null;
 
-        private NodeServer _server = null;
+        private NodeServer _selfServer = null;
 
 
         public string Host
@@ -88,20 +88,17 @@ namespace MicroService.Library
 
         public MasterServer()
         {
-            AppDomain.CurrentDomain.SetShadowCopyFiles();
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.Host])) _host = ConfigurationManager.AppSettings[Config.Host];
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.ApiDirectory])) _apiDirectory = ConfigurationManager.AppSettings[Config.ApiDirectory];
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.CommonDirectory])) _commonDirectory = ConfigurationManager.AppSettings[Config.CommonDirectory];
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.ServiceEntry])) _serviceEntry = ConfigurationManager.AppSettings[Config.ServiceEntry];
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.TimingDirectory])) _timingDirectory = ConfigurationManager.AppSettings[Config.TimingDirectory];
+            //if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[Config.TimingDirectory])) _timingDirectory = ConfigurationManager.AppSettings[Config.TimingDirectory];
 
             if (string.IsNullOrEmpty(_host)) throw new Exception("没有host");
             if (string.IsNullOrEmpty(_apiDirectory)) throw new Exception("没有ApiDirectory");
             if (string.IsNullOrEmpty(_commonDirectory)) throw new Exception("没有CommonDirectory");
             if (string.IsNullOrEmpty(_serviceEntry)) throw new Exception("没有ServiceEntry");
-            if (string.IsNullOrEmpty(_timingDirectory)) throw new Exception("没有TimingDirectory");
+            //if (string.IsNullOrEmpty(_timingDirectory)) throw new Exception("没有TimingDirectory");
         }
 
         public void Start()
@@ -109,9 +106,9 @@ namespace MicroService.Library
             StartAllNode();
 
             string serverurl = string.Format("{0}/{1}/", _host.TrimEnd('/'), Config.Server);
-            if (_server == null || _server.Status == ServerStatus.Close) _server = new NodeServer(url: serverurl);
-            if (_server.Status == ServerStatus.Start) _server.Stop();
-            _server.Start();
+            if (_selfServer == null || _selfServer.Status == ServerStatus.Closed) _selfServer = new NodeServer(url: serverurl);
+            if (_selfServer.Status == ServerStatus.Running) _selfServer.Stop();
+            _selfServer.Start();
         }
 
         public void StartNode(string packageName, ServerType serverType = ServerType.Server)
@@ -120,7 +117,9 @@ namespace MicroService.Library
             string processName = string.Format("{0}.{1}", Config.MicroService, packageName);
             string destPath = string.Format(@"{0}\{1}\", serverType == ServerType.Server ? _apiDirectory.TrimEnd('\\') : _timingDirectory.TrimEnd('\\'), packageName).TrimEnd('\\');
             string entrydestfile = string.Format(@"{0}\{1}.exe", destPath.TrimEnd('\\'), processName);
+            string entrydestConfig = string.Format(@"{0}.config", entrydestfile);
             string entry = string.Format(@"{0}\{1}", _commonDirectory, _serviceEntry);
+            string entryConfig = string.Format(@"{0}.config", entry);
             string url = string.Format("{0}/{1}/", _host.TrimEnd('/'), packageName);
             NodeServerDataModel node = null;
 
@@ -128,23 +127,24 @@ namespace MicroService.Library
             {
                 if (!Directory.Exists(destPath)) Directory.CreateDirectory(destPath);
                 if (!File.Exists(entrydestfile)) File.Copy(entry, entrydestfile);
+                if (!File.Exists(entrydestConfig)) File.Copy(entryConfig, entrydestConfig);
 
                 #region 复制dll
-                DirectoryInfo common = new DirectoryInfo(_commonDirectory);
-                if (!common.Exists) common.Create();
-                var commondllfiles = common.GetFiles("*.dll", SearchOption.AllDirectories);
-                DirectoryInfo apidirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+                //DirectoryInfo common = new DirectoryInfo(_commonDirectory);
+                //if (!common.Exists) common.Create();
+                //var commondllfiles = common.GetFiles("*.dll", SearchOption.AllDirectories);
+                //DirectoryInfo apidirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 
-                foreach (var f in commondllfiles)
-                {
-                    string destFile = string.Format("{0}\\{1}", destPath, f.Name);
-                    if (!File.Exists(destFile)) f.CopyTo(destFile);
-                    else
-                    {
-                        FileInfo destVersion = new FileInfo(destFile);
-                        if (f.LastWriteTime > destVersion.LastWriteTime) f.CopyTo(destFile, true);
-                    }
-                }
+                //foreach (var f in commondllfiles)
+                //{
+                //    string destFile = string.Format("{0}\\{1}", destPath, f.Name);
+                //    if (!File.Exists(destFile)) f.CopyTo(destFile);
+                //    else
+                //    {
+                //        FileInfo destVersion = new FileInfo(destFile);
+                //        if (f.LastWriteTime > destVersion.LastWriteTime) f.CopyTo(destFile, true);
+                //    }
+                //}
                 #endregion
 
                 #region 启动进程
@@ -153,14 +153,12 @@ namespace MicroService.Library
                 {
                     p = new Process();
                     ProcessStartInfo ps = new ProcessStartInfo();
-                    //ps.RedirectStandardError = true;
-                    //ps.RedirectStandardOutput = true;
                     ps.CreateNoWindow = !DisplayShell;
                     ps.FileName = entrydestfile;
                     ps.UseShellExecute = false;
                     if (DisplayShell) ps.WindowStyle = ProcessWindowStyle.Normal;
                     else ps.WindowStyle = ProcessWindowStyle.Hidden;
-                    string args = string.Format("-h {0} -c {1} -t {2}", url, _commonDirectory, Enum.GetName(typeof(ServerType), serverType));
+                    string args = string.Format("-h {0} -c {1} ", url, _commonDirectory);
                     ps.Arguments = args;
                     p.ErrorDataReceived += P_ErrorDataReceived;
                     p.Exited += P_Exited;
@@ -180,8 +178,6 @@ namespace MicroService.Library
             }
 
             _packages[packageName] = node;
-
-
         }
 
         public void StartAllNode()
@@ -232,7 +228,11 @@ namespace MicroService.Library
 
         public void CloseNode(string packageName)
         {
-            if (_processes.ContainsKey(packageName) && !_processes[packageName].HasExited) _processes[packageName].Kill();
+            if (_processes.ContainsKey(packageName) && !_processes[packageName].HasExited)
+            {
+                _processes[packageName].Kill();
+                _processes[packageName].WaitForExit();
+            }
             if (_packages.ContainsKey(packageName)) _packages[packageName].Status = ServerStatusType.Close;
         }
 
@@ -290,18 +290,6 @@ namespace MicroService.Library
             node.Error = error;
             node.ServerType = serverType;
             return node;
-        }
-
-        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            Assembly a = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.Equals(args.RequestingAssembly));
-            if (a != null) return a;
-            AssemblyName name = new AssemblyName(args.Name);
-            DirectoryInfo common = new DirectoryInfo(_commonDirectory);
-            var file = common.GetFiles("*.dll").FirstOrDefault(t => t.Name.Equals(name.Name));
-            if (file != null) a = Assembly.Load(file.FullName);
-            if (a != null) return a;
-            return null;
         }
 
         public void Dispose()

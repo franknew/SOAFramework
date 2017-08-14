@@ -290,7 +290,7 @@ namespace SOAFramework.Library.AOP
 
     //继承AOPClass即可实现AOP
     [Aspect()]
-    public class AOPClass : ContextBoundObject
+    public abstract class AOPClass : ContextBoundObject
     {
     }
 }

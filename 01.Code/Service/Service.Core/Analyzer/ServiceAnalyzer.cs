@@ -1,4 +1,5 @@
-﻿using SOAFramework.Service.Core.Model;
+﻿using SOAFramework.Library;
+using SOAFramework.Service.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -79,10 +80,7 @@ namespace SOAFramework.Service.Core
         private void GetServiceFromType(Type type, List<XElement> elementList, IDictionary<string, ServiceModel> serviceDic,
             List<IFilter> filterList)
         {
-            if (type.IsInterface)
-            {
-                return;
-            }
+            if (type.IsInterface) return; 
             ServiceLayer layer = type.GetCustomAttribute<ServiceLayer>(false);
             MethodInfo[] methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
             //筛选，去掉getter和setter还有构造函数
@@ -94,10 +92,7 @@ namespace SOAFramework.Service.Core
             if (layer != null)
             {
                 //如果类上设置不可用，该类中所有的方法不进入服务池
-                if (!layer.Enabled)
-                {
-                    return;
-                }
+                if (!layer.Enabled) return; 
                 hiddenService = layer.IsHiddenDiscovery;
                 module = layer.Module;
             }
@@ -106,10 +101,7 @@ namespace SOAFramework.Service.Core
                 string key = ServicePool.Instance.GetIntefaceName(type.FullName, method.Name);
 
                 ServiceInfo info = GetServiceInfoFromMethodInfo(method, elementList, hiddenService);
-                if (string.IsNullOrEmpty(info.Module))
-                {
-                    info.Module = module;
-                }
+                if (string.IsNullOrEmpty(info.Module)) info.Module = module; 
                 ServiceModel model = new ServiceModel { MethodInfo = method, ServiceInfo = info, FilterList = GetFilterFromMethod(filterList, method) };
                 serviceDic[key] = model;
             }

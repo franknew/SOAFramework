@@ -49,27 +49,34 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refile\AttibuteHandlerBase.cs" />
-    <Compile Include="Refile\AttibuteNameHandler.cs" />
-    <Compile Include="Refile\AttibuteValueHandler.cs" />
-    <Compile Include="Refile\CDataHandler.cs" />
-    <Compile Include="Refile\CommentHandler.cs" />
-    <Compile Include="Refile\HtmlAttributeNode.cs" />
-    <Compile Include="Refile\HtmlCommentNode.cs" />
-    <Compile Include="Refile\HtmlDocumentNode.cs" />
-    <Compile Include="Refile\HtmlElementFlag.cs" />
-    <Compile Include="Refile\HtmlElementNode.cs" />
-    <Compile Include="Refile\HtmlNode.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Body.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Div.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Element.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Head.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Html.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Img.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Span.cs" />
+    <Compile Include="Refile\Handler\AttibuteNameHandler.cs" />
+    <Compile Include="Refile\Handler\AttibuteValueHandler.cs" />
+    <Compile Include="Refile\Handler\CDataHandler.cs" />
+    <Compile Include="Refile\Handler\CommentHandler.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlAttributeNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlCommentNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlDocumentNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlTextNode.cs" />
+    <Compile Include="Refile\Handler\HtmlElementFlag.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlElementNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlNode.cs" />
     <Compile Include="Refile\HtmlNodeType.cs" />
     <Compile Include="Refile\HtmlParser.cs" />
-    <Compile Include="Refile\HtmlTextNode.cs" />
     <Compile Include="Refile\ParserState.cs" />
-    <Compile Include="Refile\TagHandler.cs" />
-    <Compile Include="Refile\TextHandler.cs" />
-    <Compile Include="Refile\Token.cs" />
+    <Compile Include="Refile\Handler\TagHandler.cs" />
+    <Compile Include="Refile\Handler\TextHandler.cs" />
+    <Compile Include="Refile\Entity\Node\Token.cs" />
     <Compile Include="Refile\TokenBuilder.cs" />
     <Compile Include="Refile\TokenParser.cs" />
     <Compile Include="Refile\TokenType.cs" />
-    <Compile Include="Refile\TreeBuilder.cs" />
+    <Compile Include="Refile\Handler\TreeBuilder.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -90,6 +97,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

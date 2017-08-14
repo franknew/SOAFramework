@@ -109,13 +109,14 @@
             }
         }
 
-        public static void BindService(string sessionID, AppDomain domain = null)
+        public static void BindService(string sessionID, AppDomain domain = null, List<Assembly> assList = null)
         {
             if (domain == null) domain = AppDomain.CurrentDomain;
             List<string> ingoreList = new List<string>();
+            if (assList == null) assList = domain.GetAssemblies().ToList();
             ingoreList.Add("System.");
             ingoreList.Add("Microsoft.");
-            var ass = domain.GetAssemblies().ToList().FindAll(t =>
+            var ass = assList.FindAll(t =>
             {
                 bool valid = true;
                 foreach (var ingore in ingoreList)

@@ -18,6 +18,8 @@ namespace SOAFramework.Library.DAL
         /// 数据库类型
         /// </summary>
         DBType DBType { get; }
+
+        bool AutoCloseConnection { get; set; }
         #endregion
 
         #region BeginTransaction
@@ -26,6 +28,8 @@ namespace SOAFramework.Library.DAL
         /// </summary>
         /// <param name="ConnectionString"></param>
         void BeginTransaction(string ConnectionString = null);
+
+        void CloseConnection();
         #endregion
 
         #region Commit

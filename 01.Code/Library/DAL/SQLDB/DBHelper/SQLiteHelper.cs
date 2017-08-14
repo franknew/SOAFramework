@@ -11,7 +11,7 @@ namespace SOAFramework.Library.DAL
     public class SQLiteHelper : BaseHelper<SQLiteConnection, SQLiteCommand, SQLiteDataAdapter, SQLiteParameter>
     {
         public SQLiteHelper(string connectionstring) :
-            base(new SQLitePagingSQL())
+            base(new SQLitePagingSQL(), DBType.SQLite)
         {
             this.ConnectionString = connectionstring;
             Assembly ass = Assembly.GetCallingAssembly();

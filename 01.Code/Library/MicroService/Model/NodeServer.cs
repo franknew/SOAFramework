@@ -20,6 +20,7 @@ namespace MicroService.Library
         private int executingCount = 0;
         private int finishedCount = 0;
         private AppDomain apiDomain = null;
+        private List<Assembly> _assList = new List<Assembly>();
 
 
         public ServerStatus Status
@@ -35,8 +36,6 @@ namespace MicroService.Library
                 return url;
             }
         }
-
-        public string CommonDllPath { get; set; }
 
         public int ExecutingCount
         {
@@ -67,23 +66,16 @@ namespace MicroService.Library
             }
         }
 
-        public NodeServer(string url, string commonDllPath = null)
+        public List<Assembly> AssList { get => _assList; set => _assList = value; }
+
+        public NodeServer(string url)
         {
             this.url = url;
-            CommonDllPath = commonDllPath;
             httpServer = new HttpServer(new string[] { this.url });
-            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-        }
-
-        public NodeServer(string commonDllPath = null)
-        {
-            CommonDllPath = commonDllPath;
-            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         public NodeServer()
         {
-            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         private string HttpServer_Executing(object sender, HttpExcutingEventArgs e)
@@ -140,7 +132,7 @@ namespace MicroService.Library
                     if (!args.ContainsKey(key)) args[key] = e.Request.QueryString[key];
                 }
                 httpContext.Args = args;
-                HttpServerContext.AddContext(Thread.CurrentContext.ContextID.ToString(), httpContext);
+                HttpServerContext.AddContext(Thread.CurrentThread.ManagedThreadId.ToString(), httpContext);
                 JsonResponse response = null;
                 var result = filterHandler.HandleOnActionExecuting(action, httpContext);
 
@@ -171,7 +163,14 @@ namespace MicroService.Library
             }
             catch (Exception ex)
             {
-                filterHandler.HandleOnException(action, httpContext, ex);
+                try
+                {
+                    filterHandler.HandleOnException(action, httpContext, ex);
+                }
+                catch (Exception exOut)
+                {
+                    ex = exOut;
+                }
                 JsonResponse response = new JsonResponse();
                 response.Success = false;
                 response.Error = new JsonRpcException(100, ex.Message, ex.InnerException);
@@ -179,7 +178,7 @@ namespace MicroService.Library
             }
             finally
             {
-                HttpServerContext.RemoveContext(Thread.CurrentContext.ContextID.ToString());
+                HttpServerContext.RemoveContext(Thread.CurrentThread.ManagedThreadId.ToString());
                 executingCount--;
                 finishedCount++;
             }
@@ -188,21 +187,21 @@ namespace MicroService.Library
 
         public void Start(string url)
         {
-            Start(url, ServerType.Server);
+            Start(url, null, null);
         }
 
         public void Start()
         {
-            Start(null, ServerType.Server);
+            Start(null, null, null);
         }
 
-        public void Start(string url, ServerType serverType, AppDomain domain)
+        public void Start(string url, AppDomain domain, List<Assembly> list)
         {
             try
             {
                 apiDomain = domain;
                 if (!string.IsNullOrEmpty(url)) this.url = url;
-                Bind(domain, serverType);
+                Bind(domain, ServerType.Server, list);
                 if (httpServer == null) httpServer = new HttpServer(new string[] { this.url });
                 httpServer.Executing += HttpServer_Executing;
                 httpServer.Start();
@@ -211,29 +210,6 @@ namespace MicroService.Library
             {
                 throw ex;
             }
-        }
-
-        public void Start(string url, ServerType serverType)
-        {
-            Start(url, serverType, null);
-        }
-
-        public void Start(string url, int serverType)
-        {
-            Start(url, serverType, null);
-        }
-
-        public void Start(string url, int serverType, AppDomain domain)
-        {
-            ServerType type = (ServerType)serverType;
-            Start(url, type, domain);
-        }
-
-        public void Start(string url, string serverType, AppDomain domain)
-        {
-            ServerType type = ServerType.Server;
-            Enum.TryParse<ServerType>(serverType, out type);
-            Start(url, type, domain);
         }
 
         public void Stop()
@@ -246,7 +222,7 @@ namespace MicroService.Library
             httpServer.Close();
         }
 
-        public void Update(AppDomain domain, int serverType)
+        public void Update(AppDomain domain, int serverType, List<Assembly> assList = null)
         {
             if (apiDomain == null) return;
             this.Status = ServerStatus.Updating;
@@ -258,11 +234,11 @@ namespace MicroService.Library
             FilterBinder.Clear(sessionName);
             AppDomain.Unload(apiDomain);
             apiDomain = domain;
-            Bind(domain, ServerType.Server);
-            Status = ServerStatus.Start;
+            Bind(domain, ServerType.Server, assList);
+            Status = ServerStatus.Running;
         }
 
-        private void Bind(AppDomain domain, ServerType serverType)
+        private void Bind(AppDomain domain, ServerType serverType, List<Assembly> assList = null)
         {
             var server = ServerTypeFactory.Create(serverType);
             server.Bind(sessionName, domain);

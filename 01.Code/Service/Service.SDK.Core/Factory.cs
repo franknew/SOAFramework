@@ -8,6 +8,6 @@ namespace SOAFramework.Service.SDK.Core
 {
     public class SDKFactory
     {
-        public static readonly Executer Client = new Executer();
+        public static readonly Client Client = new Client();
     }
 }
