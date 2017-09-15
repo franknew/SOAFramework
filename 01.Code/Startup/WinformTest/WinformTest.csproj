@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,6 +58,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -82,9 +85,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoginEntity.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestListener.cs" />
+    <Compile Include="TestAttibute.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -119,6 +123,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\Cache\Cache.csproj">
+      <Project>{3dd01adf-6859-4d75-aae0-473c7dfe944b}</Project>
+      <Name>Cache</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Evaluation\Evaluation.csproj">
       <Project>{82c67c11-88b3-4f02-8e29-57a7f27042f7}</Project>
       <Name>Evaluation</Name>
@@ -154,6 +162,10 @@
     <ProjectReference Include="..\..\Library\Newtonsoft.Json\Json.csproj">
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\ServiceDiscovery\ServiceResolver.csproj">
+      <Project>{5e74da72-d164-4f80-b9e2-ac2b65648b8a}</Project>
+      <Name>ServiceResolver</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\WebService\WebService.csproj">
       <Project>{09576270-b770-442d-9c90-9f82b2c8f8cf}</Project>

@@ -47,5 +47,27 @@ namespace SOAFramework.Library
             }
             return type;
         } 
+
+        public static string ToTypeString(ContentTypeEnum type)
+        {
+            string typeString = "application/x-www-form-urlencoded";
+            switch (type)
+            {
+                case ContentTypeEnum.Json:
+                    typeString = "application/json";
+                    break;
+                case ContentTypeEnum.Xml:
+                    typeString = "text/xml";
+                    break;
+                case ContentTypeEnum.UrlEncoded:
+                    typeString = "application/x-www-form-urlencoded";
+                    break;
+                case ContentTypeEnum.Soap:
+                    typeString = "application/soap+xml";
+                    break;
+            }
+            return typeString;
+        }
     }
+
 }

@@ -8,22 +8,20 @@ namespace SOAFramework.Library.Cache
 {
     public interface ICache
     {
-        bool AddItem(CacheItem item, int seconds);
+        bool AddItem(string key, object item, int seconds);
 
-        CacheItem GetItem(string key);
-
-        bool DelItem(CacheItem item);
+        T GetItem<T>(string key);
 
         bool DelItem(string key);
 
-        List<CacheItem> GetAllItems();
+        Dictionary<string, T> GetAllItems<T>();
 
-        bool UpdateItem(CacheItem item);
+        bool UpdateItem(string key, object item);
     }
 
     public class CacheFactory
     {
-        public static ICache Create(CacheType type = CacheType.CustomCache, string region = "default")
+        public static ICache Create(CacheType type = CacheType.CustomCache, string region = null)
         {
             ICache cache = null;
             switch (type)
@@ -34,8 +32,11 @@ namespace SOAFramework.Library.Cache
                 //case CacheType.Memcached:
                 //    cache = new Memcache();
                 //    break;
+                case CacheType.Redis:
+                    cache = new RedisCache();
+                    break;
                 default:
-                    cache = CustomCache.GetCache(region);
+                    cache = new DefaultCache(region);
                     break;
             }
             return cache;
@@ -47,5 +48,6 @@ namespace SOAFramework.Library.Cache
         CustomCache,
         DefaultMemoryCache,
         Memcached,
+        Redis,
     }
 }

@@ -16,7 +16,7 @@ namespace SOAFramework.Service.SDK.Core
     {
         private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"]?.ConnectionString;
 
-        public T Execute<T>(IRequest<T> request, string url = null, PostDataFomaterType type = PostDataFomaterType.Json) where T : BaseResponse
+        public T Execute<T>(IRequest<T> request, string url = null, ContentTypeEnum type = ContentTypeEnum.UrlEncoded) where T : BaseResponse
         {
             T t = default(T);
             if (string.IsNullOrEmpty(url))
@@ -31,7 +31,7 @@ namespace SOAFramework.Service.SDK.Core
             return t;
         }
 
-        public object Execute(object request, Type responseType, string url = null, PostDataFomaterType type = PostDataFomaterType.Json)
+        public object Execute(object request, Type responseType, string url = null, ContentTypeEnum type = ContentTypeEnum.UrlEncoded)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -62,13 +62,18 @@ namespace SOAFramework.Service.SDK.Core
             {
                 throw new Exception("没有设置服务url！");
             }
-            string typeName = api.Remove(api.LastIndexOf("."));
-            string actionName = api.Substring(api.LastIndexOf(".") + 1);
-            string fullUrl = serviceUrl.TrimEnd('/') + "/" + typeName + "/" + actionName;
+            string fullUrl = "";
+            if (api.LastIndexOf(".") < 0) fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
+            else
+            {
+                string typeName = api.Remove(api.LastIndexOf("."));
+                string actionName = api.Substring(api.LastIndexOf(".") + 1);
+                fullUrl = serviceUrl.TrimEnd('/') + "/" + typeName + "/" + actionName;
+            }
             return fullUrl;
         }
 
-        private string PostService<T>(IRequest<T> request, string fullUrl, PostDataFomaterType type) where T : BaseResponse
+        private string PostService<T>(IRequest<T> request, string fullUrl, ContentTypeEnum type) where T : BaseResponse
         {
             Type requestType = request.GetType();
             PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -76,20 +81,34 @@ namespace SOAFramework.Service.SDK.Core
             //反射获得请求属性
             foreach (PropertyInfo pro in properties)
             {
-                ArgMapping mapping = pro.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
-                string name = pro.Name;
-                if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping))
+                if (pro.GetCustomAttributes(typeof(PostDataAttribute), true).Length > 0)
                 {
-                    name = mapping.Mapping;
+                    object proValue = pro.GetValue(request, null);
+                    var proProperties = pro.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    foreach (PropertyInfo p in proProperties)
+                    {
+                        ArgMapping mapping = p.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
+                        string name = p.Name;
+                        if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
+                        object value = p.GetValue(proValue, null);
+                        argdic[name] = value;
+                    }
                 }
-                object value = pro.GetValue(request, null);
-                argdic[name] = value;
+                else
+                {
+                    ArgMapping mapping = pro.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
+                    string name = pro.Name;
+                    if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping; 
+                    object value = pro.GetValue(request, null);
+                    argdic[name] = value;
+                }
             }
             //格式化成post数据
             IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
             string json = fomatter.Format(argdic);
+            string typeString = ContentTypeConvert.ToTypeString(type);
             byte[] data = Encoding.UTF8.GetBytes(json);
-            string zippedResponse = HttpHelper.Post(fullUrl, data);
+            string zippedResponse = HttpHelper.Post(fullUrl, data, contentType: typeString);
             //string response = ZipHelper.UnZip(zippedResponse);
             string response = zippedResponse;
 
@@ -106,7 +125,7 @@ namespace SOAFramework.Service.SDK.Core
             return response;
         }
 
-        private string PostService(object request, string fullUrl, PostDataFomaterType type)
+        private string PostService(object request, string fullUrl, ContentTypeEnum type)
         {
             Type requestType = request.GetType();
             PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -127,7 +146,8 @@ namespace SOAFramework.Service.SDK.Core
             IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
             string json = fomatter.Format(argdic);
             byte[] data = Encoding.UTF8.GetBytes(json);
-            string zippedResponse = HttpHelper.Post(fullUrl, data);
+            string typeString = ContentTypeConvert.ToTypeString(type);
+            string zippedResponse = HttpHelper.Post(fullUrl, data, contentType: typeString);
             //string response = ZipHelper.UnZip(zippedResponse);
             string response = zippedResponse;
 

@@ -21,15 +21,19 @@ using System.Reflection;
 using com.alibaba.rocketmq.common.consumer;
 using com.alibaba.rocketmq.client.consumer.listener;
 using com.alibaba.rocketmq.remoting;
+using Chainway.SSO;
+using SOAFramework.Library.Cache;
+using System.Runtime.Caching;
 
 namespace WinformTest
 {
+    [TestAttibute]
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         private System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -117,18 +121,7 @@ namespace WinformTest
 
         private void btnmq_Click(object sender, EventArgs e)
         {
-            
-            DefaultMQProducer p = new DefaultMQProducer("test");
-            p.setNamesrvAddr("192.168.100.3:9876");
-            p.start();
 
-            var data = Encoding.UTF8.GetBytes(txbMessage.Text);
-
-            com.alibaba.rocketmq.common.message.Message m = new com.alibaba.rocketmq.common.message.Message("defaulttopic1", data);
-            p.send(m);
-
-
-            p.shutdown();
         }
 
         private void btnChoose_Click(object sender, EventArgs e)
@@ -156,7 +149,7 @@ namespace WinformTest
             var files = d.GetFiles("*.jar", SearchOption.AllDirectories);
             foreach (var f in files)
             {
-                string outfilePath = @"E:\jartodll\dll\" + f.Name.TrimEnd('.','j','a','r') + ".dll";
+                string outfilePath = @"E:\jartodll\dll\" + f.Name.TrimEnd('.', 'j', 'a', 'r') + ".dll";
                 Process p = new Process();
                 p.StartInfo = new ProcessStartInfo
                 {
@@ -166,25 +159,43 @@ namespace WinformTest
                 p.Start();
                 p.WaitForExit();
             }
-            
+
 
         }
 
         private void btnConsume_Click(object sender, EventArgs e)
         {
-            DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("test");
-            consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-            consumer.setNamesrvAddr("192.168.100.3:9876");
-            consumer.subscribe("defaulttopic", "*");
-            consumer.registerMessageListener(new TestListener());
-            consumer.start();
         }
 
         private void btnJVM_Click(object sender, EventArgs e)
         {
-            var connector = new JavaConnector("");
-            connector.InitializeJVM();
-            Java j = new Java();
+            //var connector = new JavaConnector("");
+            //connector.InitializeJVM();
+            //Java j = new Java();
+            var services = ResolverHelper.ResolveDomain(AppDomain.CurrentDomain, AttributeTargets.Class, (t =>
+            {
+                return t.GetCustomAttribute<TestAttibute>(true) != null;
+            }));
+            services = ResolverHelper.ResolveWebApi(services);
+        }
+
+        /// <summary>
+        /// 测试登录
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <param name="entities">nonono</param>
+        /// <returns>返回值</returns>
+        public LoginEntity login(string name, List<LoginEntity> entities)
+        {
+            return null;
+        }
+
+        private void btnRedisSet_Click(object sender, EventArgs e)
+        {
+            ICache cache = CacheFactory.Create(CacheType.Redis);
+            
+            //cache.AddItem("test2", item, -1);
+            var item1 = cache.GetItem<CacheItem>("test2");
         }
     }
 }

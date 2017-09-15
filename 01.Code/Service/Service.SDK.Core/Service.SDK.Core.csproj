@@ -42,6 +42,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,9 +55,11 @@
     <Compile Include="BaseResponse.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Factory.cs" />
+    <Compile Include="FormPostDataFormatter.cs" />
     <Compile Include="IPostDataFormatter.cs" />
     <Compile Include="IRequest.cs" />
     <Compile Include="JsonPostDataFormatter.cs" />
+    <Compile Include="PostDataAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLPostDataFomatter.cs" />
   </ItemGroup>

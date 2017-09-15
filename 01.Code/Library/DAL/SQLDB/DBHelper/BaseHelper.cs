@@ -27,6 +27,7 @@ namespace SOAFramework.Library.DAL
         private bool mBl_IsTransaction = false;
         private IPagingSQL paging = null;
         private DBType _type;
+        private bool lockable = false;
         #endregion
 
         #region properties
@@ -47,6 +48,8 @@ namespace SOAFramework.Library.DAL
             get { return autoCloseConnection; }
             set { autoCloseConnection = value; }
         }
+
+        public bool Lockable { get => lockable; set => lockable = value; }
 
         public DBSuit CreateDBSuit<Con, Com, Adp>(ref IDbConnection connection, IDbCommand command)
             where Con : IDbConnection
@@ -134,9 +137,16 @@ namespace SOAFramework.Library.DAL
             objAdp.SelectCommand = objCommand;
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open(); 
                 DataSet set = new DataSet();
-                objAdp.Fill(set);
+                if (lockable)
+                {
+                    lock (this)
+                    {
+                        objAdp.Fill(set);
+                    }
+                }
+                else objAdp.Fill(set);
                 if (set != null && set.Tables.Count > 0) dtData = set.Tables[0];
                 return dtData;
             }
@@ -242,9 +252,16 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open();
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
                 DataSet set = new DataSet();
-                objAdp.Fill(set);
+                if (lockable)
+                {
+                    lock(this)
+                    {
+                        objAdp.Fill(set);
+                    }
+                }
+                else objAdp.Fill(set);
                 if (set != null && set.Tables.Count > 0) dtData = set.Tables[0];
                 return dtData;
             }
@@ -309,14 +326,8 @@ namespace SOAFramework.Library.DAL
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty)
-            {
-                strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
-            }
-            else
-            {
-                strSQL.Append(strCommandString);
-            }
+            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex)); 
+            else strSQL.Append(strCommandString); 
             DataSet dsData = new DataSet();
             if (string.IsNullOrEmpty(strConnectionString))
             {
@@ -338,8 +349,15 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open();
-                objAdp.Fill(dsData);
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
+                if (lockable)
+                {
+                    lock (this)
+                    {
+                        objAdp.Fill(dsData);
+                    }
+                }
+                else objAdp.Fill(dsData);
                 return dsData;
             }
             catch (Exception ex)
@@ -445,8 +463,15 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open();
-                objAdp.Fill(dsData);
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
+                if (lockable)
+                {
+                    lock(this)
+                    {
+                        objAdp.Fill(dsData);
+                    }
+                }
+                else objAdp.Fill(dsData);
                 return dsData;
             }
             catch (Exception ex)
@@ -530,8 +555,15 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open();
-                objData = objCommand.ExecuteScalar();
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
+                if (lockable)
+                {
+                    lock (this)
+                    {
+                        objData = objCommand.ExecuteScalar();
+                    }
+                }
+                else objData = objCommand.ExecuteScalar();
                 return objData;
             }
             catch (Exception ex)
@@ -615,7 +647,7 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open(); 
                 objData = objCommand.ExecuteScalar();
                 return objData;
             }
@@ -688,8 +720,15 @@ namespace SOAFramework.Library.DAL
             }
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
-                return objCommand.ExecuteNonQuery();
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open(); 
+                if (lockable)
+                {
+                    lock(this)
+                    {
+                        return objCommand.ExecuteNonQuery();
+                    }
+                }
+                else return objCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -751,8 +790,15 @@ namespace SOAFramework.Library.DAL
 
             try
             {
-                if (objConnection.State != ConnectionState.Open) objConnection.Open(); 
-                return objCommand.ExecuteNonQuery();
+                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open(); 
+                if (lockable)
+                {
+                    lock(this)
+                    {
+                        return objCommand.ExecuteNonQuery();
+                    }
+                }
+                else return objCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
             {

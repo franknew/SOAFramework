@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SOAFramework.Service.SDK.Core
 {
     [DataContract]
-    public class PostArgItem 
+    public class PostArgItem
     {
         [DataMember]
         public string Key { get; set; }

@@ -31,24 +31,15 @@ namespace SOAFramework.Library.Cache
             policy.SlidingExpiration = new TimeSpan(seconds * 1000);
         }
 
-        public bool AddItem(CacheItem item, int seconds = -1)
+        public bool AddItem(string key, object item, int seconds = -1)
         {
-            if (seconds > 0)
-            {
-                policy.SlidingExpiration = new TimeSpan(seconds * 1000);
-            }
-            return _cache.Add(item.Key, item.Value, policy, region);
+            if (seconds > 0) policy.SlidingExpiration = new TimeSpan(seconds * 1000);
+            return _cache.Add(key, item, policy, region);
         }
 
-        public CacheItem GetItem(string key)
+        public T GetItem<T>(string key)
         {
-            return _cache.GetCacheItem(key, region);
-        }
-
-        public bool DelItem(CacheItem item)
-        {
-            _cache.Remove(item.Key, region);
-            return true;
+            return (T)_cache.GetCacheItem(key, region)?.Value;
         }
 
         public bool DelItem(string key)
@@ -57,20 +48,22 @@ namespace SOAFramework.Library.Cache
             return true;
         }
 
-        public List<CacheItem> GetAllItems()
+        public Dictionary<string, T> GetAllItems<T>()
         {
-            List<CacheItem> list = new List<CacheItem>();
+            Dictionary<string, T> dic = new Dictionary<string, T>();
             foreach (var item in _cache)
             {
                 CacheItem i = new CacheItem(item.Key, item.Value);
+                dic[item.Key] = (T)item.Value; 
             }
 
-            return list;
+            return dic;
         }
 
-        public bool UpdateItem(CacheItem item)
+        public bool UpdateItem(string key, object value)
         {
-            _cache.Set(item.Key, item.Value, policy, region);
+            if (_cache.Contains(key)) _cache.Set(key, value, policy, region);
+            else AddItem(key, value);
             return true;
         }
     }

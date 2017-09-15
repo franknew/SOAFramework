@@ -19,6 +19,8 @@ namespace SOAFramework.Library.DAL
         /// </summary>
         DBType DBType { get; }
 
+        bool Lockable { get; set; }
+
         bool AutoCloseConnection { get; set; }
         #endregion
 

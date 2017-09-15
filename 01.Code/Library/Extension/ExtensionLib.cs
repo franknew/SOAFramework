@@ -332,7 +332,17 @@ namespace SOAFramework.Library
 
                 throw new InvalidOperationException("Can't convert an Int64 (long) to Int32(int). If you're using SQLite - this is probably due to your PK being an INTEGER, which is 64bit. You'll need to set your key to long.");
             }
-
+            else if (value.GetType().Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString()) && !conversionType.Equals(typeof(string)))
+            {
+                value = Activator.CreateInstance(conversionType);
+            }
+            else if (value.GetType().Equals(typeof(string)) && conversionType.Equals(typeof(DateTime)) )
+            {
+                string time = value.ToString();
+                int last = time.LastIndexOf(":");
+                //change db2 datetime to common
+                if (time.Length == 23 && time.LastIndexOf(".") == -1) value = time.Remove(last, 1).Insert(last, ".");
+            }
             // Now that we've guaranteed conversionType is something Convert.ChangeType can handle (i.e. not a
             // nullable type), pass the call on to Convert.ChangeType
             return Convert.ChangeType(value, conversionType);

@@ -162,7 +162,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlSync", "Library\Cont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JVM", "Library\JVM\JVM.csproj", "{8FAAE8BF-5830-44F0-985C-7BE18798EF78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlCore", "Library\HtmlCore\HtmlCore.csproj", "{A8C823BD-582D-43B9-BCA0-0550E6B87E74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlCore", "Library\HtmlCore\HtmlCore.csproj", "{A8C823BD-582D-43B9-BCA0-0550E6B87E74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceResolver", "Library\ServiceDiscovery\ServiceResolver.csproj", "{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -808,6 +810,18 @@ Global
 		{A8C823BD-582D-43B9-BCA0-0550E6B87E74}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A8C823BD-582D-43B9-BCA0-0550E6B87E74}.Release|x86.ActiveCfg = Release|Any CPU
 		{A8C823BD-582D-43B9-BCA0-0550E6B87E74}.Release|x86.Build.0 = Release|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Debug|x86.Build.0 = Debug|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -873,6 +887,7 @@ Global
 		{18AC07DC-DB13-404D-AF23-C3A9AC5EF476} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{8FAAE8BF-5830-44F0-985C-7BE18798EF78} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 		{A8C823BD-582D-43B9-BCA0-0550E6B87E74} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
+		{5E74DA72-D164-4F80-B9E2-AC2B65648B8A} = {5C5527B8-D852-45F9-A892-7C81EE3B7975}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SOAFramework.vsmdi

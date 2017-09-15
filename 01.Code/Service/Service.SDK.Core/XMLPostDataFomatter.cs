@@ -9,7 +9,7 @@ namespace SOAFramework.Service.SDK.Core
 {
     public class XMLPostDataFomatter : IPostDataFormatter
     {
-        public string Format(object o)
+        public string Format(IDictionary<string, object> o)
         {
             string json = JsonHelper.Serialize(o);
             StringBuilder xml = new StringBuilder();

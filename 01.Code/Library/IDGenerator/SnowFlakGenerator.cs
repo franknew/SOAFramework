@@ -30,7 +30,8 @@ namespace SOAFramework.Library
         {
             if (workerId > MAX_WORKER_ID || workerId < 0)
             {
-                throw new ArgumentException(string.Format("worker id can't be greater than {0} or less than 0", MAX_WORKER_ID));
+                this.workerId = MAX_WORKER_ID;
+                //throw new ArgumentException(string.Format("worker id can't be greater than {0} or less than 0", MAX_WORKER_ID));
             }
             this.workerId = workerId;
         }

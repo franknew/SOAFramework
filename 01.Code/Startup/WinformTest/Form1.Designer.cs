@@ -47,6 +47,7 @@
             this.btnConsume = new System.Windows.Forms.Button();
             this.txbConsume = new System.Windows.Forms.TextBox();
             this.btnJVM = new System.Windows.Forms.Button();
+            this.btnRedisSet = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -218,11 +219,22 @@
             this.btnJVM.UseVisualStyleBackColor = true;
             this.btnJVM.Click += new System.EventHandler(this.btnJVM_Click);
             // 
+            // btnRedisSet
+            // 
+            this.btnRedisSet.Location = new System.Drawing.Point(830, 14);
+            this.btnRedisSet.Name = "btnRedisSet";
+            this.btnRedisSet.Size = new System.Drawing.Size(75, 23);
+            this.btnRedisSet.TabIndex = 19;
+            this.btnRedisSet.Text = "redis set";
+            this.btnRedisSet.UseVisualStyleBackColor = true;
+            this.btnRedisSet.Click += new System.EventHandler(this.btnRedisSet_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnRedisSet);
             this.Controls.Add(this.btnJVM);
             this.Controls.Add(this.txbConsume);
             this.Controls.Add(this.btnConsume);
@@ -270,6 +282,7 @@
         private System.Windows.Forms.Button btnConsume;
         private System.Windows.Forms.TextBox txbConsume;
         private System.Windows.Forms.Button btnJVM;
+        private System.Windows.Forms.Button btnRedisSet;
     }
 }
 

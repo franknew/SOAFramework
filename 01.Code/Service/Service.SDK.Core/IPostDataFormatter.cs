@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOAFramework.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,26 +9,22 @@ namespace SOAFramework.Service.SDK.Core
 {
     public interface IPostDataFormatter
     {
-        string Format(object o);
+        string Format(IDictionary<string, object> o);
     }
 
     public class PostDataFormatterFactory
     {
-        public static IPostDataFormatter Create(PostDataFomaterType type)
+        public static IPostDataFormatter Create(ContentTypeEnum type)
         {
             switch (type)
             {
-                case PostDataFomaterType.XML:
+                case ContentTypeEnum.Xml:
                     return new XMLPostDataFomatter();
+                case ContentTypeEnum.UrlEncoded:
+                    return new FormPostDataFormatter();
                 default:
                     return new JsonPostDataFormatter();
             }
         }
-    }
-
-    public enum PostDataFomaterType
-    {
-        Json,
-        XML,
     }
 }
