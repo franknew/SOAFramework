@@ -17,7 +17,7 @@
         {
             Assembly result = null;
             var ass = AppDomain.CurrentDomain.GetAssemblies();
-            result = ass.FirstOrDefault(t => t.Equals(args.RequestingAssembly));
+            result = ass.FirstOrDefault(t => t.FullName.Equals(args.Name));
             return result;
         }
 

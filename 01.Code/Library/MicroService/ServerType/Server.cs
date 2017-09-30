@@ -11,8 +11,15 @@ namespace MicroService.Library
     {
         public void Bind(string sessionName, AppDomain domain, List<Assembly> assList)
         {
-            ServiceBinder.BindService(sessionName, domain: domain, assList: assList);
-            FilterBinder.BindFilter(sessionName, domain: domain, assList: assList);
+            try
+            {
+                ServiceBinder.BindService(sessionName, domain: domain, assList: assList);
+                FilterBinder.BindFilter(sessionName, domain: domain, assList: assList);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

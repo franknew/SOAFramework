@@ -106,7 +106,7 @@ namespace MicroService.Library
             StartAllNode();
 
             string serverurl = string.Format("{0}/{1}/", _host.TrimEnd('/'), Config.Server);
-            if (_selfServer == null || _selfServer.Status == ServerStatus.Closed) _selfServer = new NodeServer(url: serverurl);
+            if (_selfServer == null || _selfServer.Status == ServerStatus.Closed) _selfServer = new NodeServer(url: serverurl, domain: AppDomain.CurrentDomain);
             if (_selfServer.Status == ServerStatus.Running) _selfServer.Stop();
             _selfServer.Start();
         }

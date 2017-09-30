@@ -11,6 +11,7 @@ using MicroService.Library;
 using SOAFramework.Library;
 using System.IO;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace MicroServiceTesting
 {
@@ -532,6 +533,17 @@ namespace MicroServiceTesting
         {
             _server.CloseAllTiming();
             QueryTasks();
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            string path = @"E:\git\SOAFramework\01.Code\Bin\Api\ServiceController\Chainway.SyncData.ServiceMonitorBLL.dll";
+            Assembly assembly = Assembly.LoadFile(path);
+            string host = @"http://127.0.0.1:9080/ServiceController/";
+            NodeServer node = new NodeServer();
+            List<Assembly> list = new List<Assembly>();
+            list.Add(assembly);
+            node.Start(host, AppDomain.CurrentDomain, list);
         }
     }
 }

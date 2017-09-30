@@ -68,14 +68,27 @@ namespace MicroService.Library
 
         public List<Assembly> AssList { get => _assList; set => _assList = value; }
 
-        public NodeServer(string url)
+        public NodeServer(string url, AppDomain domain = null)
         {
             this.url = url;
+            this.apiDomain = domain;
+            this.apiDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             httpServer = new HttpServer(new string[] { this.url });
         }
 
         public NodeServer()
         {
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            Assembly assembly = null;
+            var asses = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var ass in asses)
+            {
+                if (ass.FullName.Equals(args.Name)) return ass;
+            }
+            return assembly;
         }
 
         private string HttpServer_Executing(object sender, HttpExcutingEventArgs e)
@@ -208,6 +221,7 @@ namespace MicroService.Library
             }
             catch (Exception ex)
             {
+                logger.WriteException(ex);
                 throw ex;
             }
         }
@@ -232,7 +246,7 @@ namespace MicroService.Library
             }
             ServiceBinder.Clear(sessionName);
             FilterBinder.Clear(sessionName);
-            AppDomain.Unload(apiDomain);
+            //AppDomain.Unload(apiDomain);
             apiDomain = domain;
             Bind(domain, ServerType.Server, assList);
             Status = ServerStatus.Running;
@@ -241,7 +255,7 @@ namespace MicroService.Library
         private void Bind(AppDomain domain, ServerType serverType, List<Assembly> assList = null)
         {
             var server = ServerTypeFactory.Create(serverType);
-            server.Bind(sessionName, domain);
+            server.Bind(sessionName, domain, assList);
         }
     }
 }

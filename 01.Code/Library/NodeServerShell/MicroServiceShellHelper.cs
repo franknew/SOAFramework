@@ -56,10 +56,9 @@ namespace MicroService.Library.MicroService
         private static void StartService(string host, List<Assembly> list)
         {
             var serverAss = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.GetName().Name.Equals("MicroService.Library.Server"));
-            //var serverAss  = Assembly.LoadFrom(argDic["c"] + "\\MicroService.Library.Server.dll");
-            dynamic server = serverAss.CreateInstance("MicroService.Library.NodeServer"); 
-            //NodeServer servers = server as NodeServer;
-            //dynamic server = Activator.CreateInstance(serverType);
+            dynamic server = serverAss.CreateInstance("MicroService.Library.NodeServer");
+            //NodeServer server = new NodeServer();
+            //server.Start(host, AppDomain.CurrentDomain, list);
             server.Start(host, AppDomain.CurrentDomain, list);
         }
 

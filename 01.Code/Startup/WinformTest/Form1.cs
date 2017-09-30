@@ -197,5 +197,10 @@ namespace WinformTest
             //cache.AddItem("test2", item, -1);
             var item1 = cache.GetItem<CacheItem>("test2");
         }
+
+        private void btnDotNetty_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

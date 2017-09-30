@@ -90,6 +90,7 @@
             this.timerTick = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerTask = new System.Windows.Forms.Timer(this.components);
+            this.btnTest = new System.Windows.Forms.Button();
             this.tabPages.SuspendLayout();
             this.tabList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvlist)).BeginInit();
@@ -224,6 +225,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnTest);
             this.groupBox1.Controls.Add(this.btnServer);
             this.groupBox1.Controls.Add(this.btnStart);
             this.groupBox1.Controls.Add(this.btnRefresh);
@@ -707,6 +709,16 @@
             this.timerTask.Interval = 1000;
             this.timerTask.Tick += new System.EventHandler(this.timerTask_Tick);
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(286, 15);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(75, 23);
+            this.btnTest.TabIndex = 3;
+            this.btnTest.Text = "test";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // Host
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -797,6 +809,7 @@
         private System.Windows.Forms.Button btnPupTiming;
         private System.Windows.Forms.Button btnStopTiming;
         private System.Windows.Forms.Button btnStartTiming;
+        private System.Windows.Forms.Button btnTest;
     }
 }
 

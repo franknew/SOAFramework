@@ -48,6 +48,7 @@
             this.txbConsume = new System.Windows.Forms.TextBox();
             this.btnJVM = new System.Windows.Forms.Button();
             this.btnRedisSet = new System.Windows.Forms.Button();
+            this.btnDotNetty = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -229,11 +230,22 @@
             this.btnRedisSet.UseVisualStyleBackColor = true;
             this.btnRedisSet.Click += new System.EventHandler(this.btnRedisSet_Click);
             // 
+            // btnDotNetty
+            // 
+            this.btnDotNetty.Location = new System.Drawing.Point(830, 313);
+            this.btnDotNetty.Name = "btnDotNetty";
+            this.btnDotNetty.Size = new System.Drawing.Size(105, 23);
+            this.btnDotNetty.TabIndex = 20;
+            this.btnDotNetty.Text = "dotnetty http";
+            this.btnDotNetty.UseVisualStyleBackColor = true;
+            this.btnDotNetty.Click += new System.EventHandler(this.btnDotNetty_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnDotNetty);
             this.Controls.Add(this.btnRedisSet);
             this.Controls.Add(this.btnJVM);
             this.Controls.Add(this.txbConsume);
@@ -283,6 +295,7 @@
         private System.Windows.Forms.TextBox txbConsume;
         private System.Windows.Forms.Button btnJVM;
         private System.Windows.Forms.Button btnRedisSet;
+        private System.Windows.Forms.Button btnDotNetty;
     }
 }
 

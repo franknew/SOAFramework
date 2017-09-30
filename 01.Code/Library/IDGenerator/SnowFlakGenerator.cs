@@ -2,84 +2,134 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace SOAFramework.Library
 {
     public class SnowFlakGenerator : IIDGenerator
     {
-        //机器标识位数 
-        private const int WORKER_ID_BITS = 4;
-        //机器标识位的最大值 
-        private const long MAX_WORKER_ID = -1L ^ -1L << WORKER_ID_BITS;
-        //毫秒内自增位 
-        private const int SEQUENCE_BITS = 10;
-        //自增位最大值 
-        private const long SEQUENCE_Mask = -1L ^ -1L << SEQUENCE_BITS;
-        private const long twepoch = 1398049504651L;
-        //时间毫秒值向左偏移位 
-        private const int timestampLeftShift = SEQUENCE_BITS + WORKER_ID_BITS;
-        //机器标识位向左偏移位 
-        private const int WORKER_ID_SHIFT = SEQUENCE_BITS;
-        private static readonly DateTime START_TIME = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-        private static readonly object LOCK = new object();
-        private long sequence = 0L;
-        private long lastTimestamp = -1L;
-        private long workerId;
+        private static long machineId;//机器ID
+        private static long datacenterId = 0L;//数据ID
+        private static long sequence = 0L;//计数从零开始
 
-        public SnowFlakGenerator(long workerId)
+        private static long twepoch = 687888001020L; //唯一时间随机量
+
+        private static long machineIdBits = 5L; //机器码字节数
+        private static long datacenterIdBits = 5L;//数据字节数
+        public static long maxMachineId = -1L ^ -1L << (int)machineIdBits; //最大机器ID
+        private static long maxDatacenterId = -1L ^ (-1L << (int)datacenterIdBits);//最大数据ID
+
+        private static long sequenceBits = 12L; //计数器字节数，12个字节用来保存计数码        
+        private static long machineIdShift = sequenceBits; //机器码数据左移位数，就是后面计数器占用的位数
+        private static long datacenterIdShift = sequenceBits + machineIdBits;
+        private static long timestampLeftShift = sequenceBits + machineIdBits + datacenterIdBits; //时间戳左移动位数就是机器码+计数器总字节数+数据字节数
+        public static long sequenceMask = -1L ^ -1L << (int)sequenceBits; //一微秒内可以产生计数，如果达到该值则等到下一微妙在进行生成
+        private static long lastTimestamp = -1L;//最后时间戳
+
+        private static object syncRoot = new object();//加锁对象
+        static SnowFlakGenerator snowflake;
+
+        public static SnowFlakGenerator Instance()
         {
-            if (workerId > MAX_WORKER_ID || workerId < 0)
-            {
-                this.workerId = MAX_WORKER_ID;
-                //throw new ArgumentException(string.Format("worker id can't be greater than {0} or less than 0", MAX_WORKER_ID));
-            }
-            this.workerId = workerId;
+            if (snowflake == null)
+                snowflake = new SnowFlakGenerator();
+            return snowflake;
         }
-        /// <summary>  
-        /// /// 等待下一个毫秒  
-        /// /// </summary>  
-        /// /// <param></param>  
-        /// /// <returns></returns> 
-        private long tilNextMillis(long lastTimestamp)
+
+        public SnowFlakGenerator()
         {
-            long timestamp = TimeGen();
-            while (timestamp <= lastTimestamp)
+            Snowflakes(0L, -1);
+        }
+
+        public SnowFlakGenerator(long machineId)
+        {
+            Snowflakes(machineId, -1);
+        }
+
+        public SnowFlakGenerator(long machineId, long datacenterId)
+        {
+            Snowflakes(machineId, datacenterId);
+        }
+
+        private void Snowflakes(long machineId, long datacenterId)
+        {
+            if (machineId >= 0)
             {
-                timestamp = TimeGen();
+                if (machineId > maxMachineId)
+                {
+                    machineId = maxMachineId;
+                }
+                SnowFlakGenerator.machineId = machineId;
+            }
+            if (datacenterId >= 0)
+            {
+                if (datacenterId > maxDatacenterId)
+                {
+                    datacenterId = maxDatacenterId;
+                }
+                SnowFlakGenerator.datacenterId = datacenterId;
+            }
+        }
+
+        /// <summary>
+        /// 生成当前时间戳
+        /// </summary>
+        /// <returns>毫秒</returns>
+        private static long GetTimestamp()
+        {
+            //让他2000年开始
+            return (long)(DateTime.UtcNow - new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        }
+
+        /// <summary>
+        /// 获取下一微秒时间戳
+        /// </summary>
+        /// <param name="lastTimestamp"></param>
+        /// <returns></returns>
+        private static long GetNextTimestamp(long lastTimestamp)
+        {
+            long timestamp = GetTimestamp();
+            int count = 0;
+            while (timestamp <= lastTimestamp)//这里获取新的时间,可能会有错,这算法与comb一样对机器时间的要求很严格
+            {
+                count++;
+                if (count > 10)
+                    throw new Exception("机器的时间可能不对");
+                Thread.Sleep(1);
+                timestamp = GetTimestamp();
             }
             return timestamp;
-        }
-        /// <summary>  
-        /// /// 获取当前时间的Unix时间戳  
-        /// /// </summary>  
-        /// /// <returns></returns> 
-        private long TimeGen()
-        {
-            return (DateTime.UtcNow.Ticks - START_TIME.Ticks) / 10000;
         }
 
         public string Generate()
         {
-            lock (LOCK)
+            lock (syncRoot)
             {
-                long timestamp = TimeGen();
-                //当前时间小于上一次时间，，错误 
-                if (timestamp < this.lastTimestamp) { throw new Exception(string.Format("Clock moved backwards. Refusing to generate id for %d milliseconds", lastTimestamp - timestamp)); }
-                //当前毫秒内 
-                if (this.lastTimestamp == timestamp)
-                {
-                    //+1 求余 
-                    this.sequence = (this.sequence + 1) & SEQUENCE_Mask;
-                    //当前毫秒内计数满了，等待下一秒 
-                    if (this.sequence == 0) timestamp = tilNextMillis(lastTimestamp);
+                long timestamp = GetTimestamp();
+                if (SnowFlakGenerator.lastTimestamp == timestamp)
+                { //同一微妙中生成ID
+                    sequence = (sequence + 1) & sequenceMask; //用&运算计算该微秒内产生的计数是否已经到达上限
+                    if (sequence == 0)
+                    {
+                        //一微妙内产生的ID计数已达上限，等待下一微妙
+                        timestamp = GetNextTimestamp(SnowFlakGenerator.lastTimestamp);
+                    }
                 }
-                //不是当前毫秒内 
-                //重置当前毫秒计数
-                else this.sequence = 0;
-                this.lastTimestamp = timestamp;
-                //当前毫秒值 | 机器标识值 | 当前毫秒内自增值 
-                long nextId = ((timestamp - twepoch << timestampLeftShift)) | (this.workerId << WORKER_ID_SHIFT) | (this.sequence);
-                return nextId.ToString();
+                else
+                {
+                    //不同微秒生成ID
+                    sequence = 0L;
+                }
+                if (timestamp < lastTimestamp)
+                {
+                    throw new Exception("时间戳比上一次生成ID时时间戳还小，故异常");
+                }
+                SnowFlakGenerator.lastTimestamp = timestamp; //把当前时间戳保存为最后生成ID的时间戳
+                long Id = ((timestamp - twepoch) << (int)timestampLeftShift)
+                    | (datacenterId << (int)datacenterIdShift)
+                    | (machineId << (int)machineIdShift)
+                    | sequence;
+                return Id.ToString().TrimStart('-');
             }
         }
     }

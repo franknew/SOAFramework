@@ -34,6 +34,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetty.Buffers">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Codecs.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs.Mqtt">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Codecs.Mqtt.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs.Protobuf">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Codecs.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs.ProtocolBuffers">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Codecs.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs.Redis">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Codecs.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Common">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Handlers">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Handlers.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Transport">
+      <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Transport.dll</HintPath>
+    </Reference>
     <Reference Include="fastjson-1.2.3, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CommonDLL\rocketmq\fastjson-1.2.3.dll</HintPath>

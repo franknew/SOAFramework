@@ -21,6 +21,8 @@ namespace MicroService.Library.MicroService
         {
             try
             {
+                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+                AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
                 var enableReadLine = ConfigurationManager.AppSettings["EnableReadLine"];
                 var disabled = ConfigurationManager.AppSettings["Disabled"];
                 if (disabled == "1") return;
@@ -32,8 +34,6 @@ namespace MicroService.Library.MicroService
 
                 #region 分析参数
                 Dictionary<string, string> argDic = new Dictionary<string, string>();
-                //argDic["h"] = "http://10.1.50.195/api/";
-                //argDic["c"] = @"E:\AppLib\SOAFramework\01.Code\Bin\Data";
                 for (int i = 0; i < args.Length; i++)
                 {
                     if (!args[i].StartsWith("-")) continue;
@@ -79,6 +79,7 @@ namespace MicroService.Library.MicroService
                         }
                     }
                     sb.AppendLine();
+                    Console.WriteLine(sb.ToString());
                     ShellHelper.Log(sb.ToString());
                     //_logger.Write(sb.ToString());
                 }
@@ -95,6 +96,7 @@ namespace MicroService.Library.MicroService
                     exbuilder.AppendLine();
                     innerex = innerex.InnerException;
                 }
+                Console.WriteLine(innerex.ToString());
                 ShellHelper.Log(innerex.ToString());
                 //_logger.Write(exbuilder.ToString());
                 //Console.WriteLine(exbuilder.ToString());
@@ -105,6 +107,24 @@ namespace MicroService.Library.MicroService
             }
         }
 
+        private static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+            //Console.WriteLine(string.Format("load file:{0} name:{1}", args.LoadedAssembly.Location,  args.LoadedAssembly.FullName));
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            Assembly assembly = null;
+            var asses = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var ass in asses)
+            {
+                if (ass.FullName.Equals(args.Name)) return ass;
+            }
+            return assembly;
+        }
+
+
+        #region commented
         //private static AppDomain CreateShadowDomain(string commondllPath)
         //{
         //    _files.Clear();
@@ -141,6 +161,7 @@ namespace MicroService.Library.MicroService
         //    }
         //    return domain;
         //}
-      
+        #endregion
+
     }
 }

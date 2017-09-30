@@ -22,7 +22,7 @@ namespace SOAFramework.Library
                     generator = new GUIDGenerator();
                     break;
                 case GeneratorType.SnowFlak:
-                    generator = new SnowFlakGenerator(int.MaxValue);
+                    generator = new SnowFlakGenerator();
                     break;
             }
 

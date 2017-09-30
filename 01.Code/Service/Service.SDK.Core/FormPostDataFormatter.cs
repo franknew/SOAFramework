@@ -18,11 +18,12 @@ namespace SOAFramework.Service.SDK.Core
             foreach (var key in o.Keys)
             {
                 object value = o[key];
-                if (value.GetType().IsClass) builder.Append(value.ToString()).Append("&");
-                else builder.AppendFormat("{0}=", key).Append(value.ToString()).Append("&");
+                var valueType = value.GetType();
+                if (valueType.IsClass && !valueType.Equals(typeof(string))) builder.Append(value.ToString()).Append("&");
+                else builder.AppendFormat("{0}=", key).Append(HttpUtility.UrlEncode(value.ToString())).Append("&");
             }
             
-            string result = HttpUtility.UrlEncode(builder.ToString().TrimEnd('&'));
+            string result = builder.ToString().TrimEnd('&');
             return result;
         }
     }

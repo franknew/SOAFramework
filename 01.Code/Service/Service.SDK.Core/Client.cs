@@ -45,7 +45,7 @@ namespace SOAFramework.Service.SDK.Core
         }
 
         #region helper method
-        private string GetRealUrl<T>(IRequest<T> request, string serviceUrl) where T : BaseResponse
+        public string GetRealUrl<T>(IRequest<T> request, string serviceUrl) where T : BaseResponse
         {
             return GetRealUrlBase(request, serviceUrl);
         }
@@ -62,14 +62,14 @@ namespace SOAFramework.Service.SDK.Core
             {
                 throw new Exception("没有设置服务url！");
             }
-            string fullUrl = "";
-            if (api.LastIndexOf(".") < 0) fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
-            else
-            {
-                string typeName = api.Remove(api.LastIndexOf("."));
-                string actionName = api.Substring(api.LastIndexOf(".") + 1);
-                fullUrl = serviceUrl.TrimEnd('/') + "/" + typeName + "/" + actionName;
-            }
+            string fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
+            //if (api.LastIndexOf(".") < 0) fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
+            //else
+            //{
+            //    string typeName = api.Remove(api.LastIndexOf("."));
+            //    string actionName = api.Substring(api.LastIndexOf(".") + 1);
+            //    fullUrl = serviceUrl.TrimEnd('/') + "/" + typeName + "/" + actionName;
+            //}
             return fullUrl;
         }
 
@@ -198,7 +198,7 @@ namespace SOAFramework.Service.SDK.Core
                 return t;
             }
             //null意味着没有报错
-            if (shadow != null && !shadow.IsError)
+            if (shadow == null)
             {
                 //将返回的对象值设置到response的第一个属性上面
                 PropertyInfo[] responseProperties = responseType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
@@ -207,24 +207,8 @@ namespace SOAFramework.Service.SDK.Core
                     BaseResponseShadow o = null;
                     try
                     {
-                        o = JsonHelper.Deserialize<BaseResponseShadow>(response);
-                        object data = null;
-                        if (o.Data is JArray && responseProperties[0].PropertyType.Equals(typeof(DataTable)))
-                        {
-                            data = (o.Data as JArray).ToDataTable();
-                        }
-                        else if (o.Data is JObject)
-                        {
-                            data = (o.Data as JObject).ToObject(responseProperties[0].PropertyType);
-                        }
-                        else if (o.Data is JArray)
-                        {
-                            data = (o.Data as JArray).ToListObject(responseProperties[0].PropertyType);
-                        }
-                        else
-                        {
-                            data = o.Data;
-                        }
+                        o = new BaseResponseShadow();
+                        object data = JsonHelper.Deserialize(response, responseProperties[0].PropertyType);
                         if (data is object)
                         {
                             try

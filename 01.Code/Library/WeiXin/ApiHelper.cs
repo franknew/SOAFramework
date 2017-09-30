@@ -55,15 +55,13 @@ namespace SOAFramework.Library.WeiXin
 
         public static string GetTokenFromCache()
         {
-            var item = _cache.GetItem(UrlConfig.TokenCacheName);
-            if (item == null) return null;
-            return item.Value as string;
+            var item = _cache.GetItem<string>(UrlConfig.TokenCacheName);
+            return item;
         }
 
         public static void SetTokenIntoCache(string token)
         {
-            CacheItem item = new CacheItem(UrlConfig.TokenCacheName, token);
-            _cache.AddItem(item, 7200);
+            _cache.AddItem(UrlConfig.TokenCacheName, token, 7200);
         }
     }
 }
