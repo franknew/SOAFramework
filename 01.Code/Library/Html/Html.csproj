@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{541D259A-D204-4BFA-8095-DBDC24AA693B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SOAFramework.Library</RootNamespace>
+    <AssemblyName>SOAFramework.Library.Html</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Bin\Modules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Refile\AttibuteHandlerBase.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Body.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Div.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Element.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Head.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Html.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Img.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Span.cs" />
+    <Compile Include="Refile\Handler\AttibuteNameHandler.cs" />
+    <Compile Include="Refile\Handler\AttibuteValueHandler.cs" />
+    <Compile Include="Refile\Handler\CDataHandler.cs" />
+    <Compile Include="Refile\Handler\CommentHandler.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlAttributeNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlCommentNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlDocumentNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlTextNode.cs" />
+    <Compile Include="Refile\Handler\HtmlElementFlag.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlElementNode.cs" />
+    <Compile Include="Refile\Entity\Node\HtmlNode.cs" />
+    <Compile Include="Refile\HtmlNodeType.cs" />
+    <Compile Include="Refile\HtmlParser.cs" />
+    <Compile Include="Refile\ParserState.cs" />
+    <Compile Include="Refile\Handler\TagHandler.cs" />
+    <Compile Include="Refile\Handler\TextHandler.cs" />
+    <Compile Include="Refile\Entity\Node\Token.cs" />
+    <Compile Include="Refile\TokenBuilder.cs" />
+    <Compile Include="Refile\TokenParser.cs" />
+    <Compile Include="Refile\TokenType.cs" />
+    <Compile Include="Refile\Handler\TreeBuilder.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
