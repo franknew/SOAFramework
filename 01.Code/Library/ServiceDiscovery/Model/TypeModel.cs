@@ -65,7 +65,7 @@ namespace SOAFramework.Library
                     {
                         return t.Name.StartsWith("P:" + p.DeclaringType.FullName + "." + p.Name);
                     });
-                    model.Name = p.PropertyType.Namespace;
+                    model.Name = p.PropertyType.Name;
                     model.Description = desc?.Summary?.Trim();
                     model.MemberName = p.Name;
                     Properties.Add(model);

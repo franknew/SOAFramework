@@ -245,6 +245,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\IDGenerator\IDGenerator.csproj">
+      <Project>{d5eccf03-314b-4117-b9dd-b57f303c358a}</Project>
+      <Name>IDGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Json-Rpc\JsonRpc.csproj">
       <Project>{24fc1a2a-0bc3-43a7-9bfe-b628c2c4a307}</Project>
       <Name>JsonRpc</Name>

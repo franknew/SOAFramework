@@ -56,6 +56,16 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            #region id generator
+            IIDGenerator iDGenerator = IDGeneratorFactory.Create(GeneratorType.SnowFlak);
+            List<string> idlist = new List<string>();
+            for (int i = 0; i < 10000; i++)
+            {
+                idlist.Add(iDGenerator.Generate());
+            }
+
+            #endregion
+
             TestClass tc = new TestClass
             {
                 tc = new TestClass

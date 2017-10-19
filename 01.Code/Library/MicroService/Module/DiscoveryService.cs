@@ -36,5 +36,11 @@ namespace MicroService.Library
             server.StartAllNode();
             return true;
         }
+
+        [JsonRpcMethod]
+        public bool Ping()
+        {
+            return true;
+        }
     }
 }
