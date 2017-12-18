@@ -31,10 +31,10 @@ using System.Xml;
 #if !NET20
 using System.Xml.Linq;
 #endif
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Linq;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   #region XmlNodeWrappers
 #if !SILVERLIGHT

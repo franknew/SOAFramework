@@ -27,13 +27,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Converters;
+using SOAFramework.Json.Serialization;
+using SOAFramework.Json.Utilities;
 using System.Runtime.Serialization;
-using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
+using ErrorEventArgs = SOAFramework.Json.Serialization.ErrorEventArgs;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
     /// <summary>
     /// Serializes and deserializes objects into and from the JSON format.

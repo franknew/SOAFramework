@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json.Linq
+namespace SOAFramework.Json.Linq
 {
   /// <summary>
   /// Represents a raw JSON string.

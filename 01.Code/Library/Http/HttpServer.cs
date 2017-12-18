@@ -70,7 +70,7 @@ namespace SOAFramework.Library
                 //nsole.WriteLine(request.RequestTraceIdentifier.ToString());
 
                 // Get a response stream and write the response to it.
-                
+
             }
             catch (Exception ex)
             {

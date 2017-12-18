@@ -34,10 +34,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Linq;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
     internal class JsonSerializerInternalReader : JsonSerializerInternalBase
     {

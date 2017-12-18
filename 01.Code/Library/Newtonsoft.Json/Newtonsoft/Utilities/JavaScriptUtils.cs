@@ -31,7 +31,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal static class JavaScriptUtils
   {

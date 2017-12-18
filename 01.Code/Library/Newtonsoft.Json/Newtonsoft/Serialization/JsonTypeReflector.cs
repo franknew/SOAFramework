@@ -30,9 +30,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
 #if !SILVERLIGHT && !PocketPC && !NET20
   internal interface IMetadataTypeAttribute

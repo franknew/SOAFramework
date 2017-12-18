@@ -27,14 +27,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.ComponentModel;
 using System.Collections.Specialized;
 
-namespace Newtonsoft.Json.Linq
+namespace SOAFramework.Json.Linq
 {
   /// <summary>
   /// Represents a token that can contain other tokens.

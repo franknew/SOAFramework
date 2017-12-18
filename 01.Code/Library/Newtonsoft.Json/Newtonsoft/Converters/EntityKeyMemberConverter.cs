@@ -25,11 +25,11 @@
 
 #if !PocketPC && !SILVERLIGHT && !NET20
 using System;
-using Newtonsoft.Json.Serialization;
+using SOAFramework.Json.Serialization;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   internal interface IEntityKeyMember
   {

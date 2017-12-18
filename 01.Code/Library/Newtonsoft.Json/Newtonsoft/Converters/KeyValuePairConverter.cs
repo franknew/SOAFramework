@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   /// <summary>
   /// Converts a <see cref="KeyValuePair{TKey,TValue}"/> to and from JSON.

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
+using SOAFramework.Json;
+using SOAFramework.Json.Linq;
 
 namespace AustinHarris.JsonRpc
 {
@@ -34,9 +34,9 @@ namespace AustinHarris.JsonRpc
             TypeHashes = new List<string>();
 	    }
 
-        public void AddService(string method, Dictionary<string,Type> parameters, Dictionary<string, object> defaultValues)
+        public void AddService(string method, Dictionary<string,Type> parameters, Dictionary<string, object> defaultValues, MethodInfo methodInfo)
         {
-            var newService = new SMDService(transport,"JSON-RPC-2.0",parameters, defaultValues);
+            var newService = new SMDService(transport,"JSON-RPC-2.0",parameters, defaultValues, methodInfo);
             if (!Services.ContainsKey(method)) Services.Add(method, newService);
             else Services[method] = newService;
         }
@@ -80,13 +80,14 @@ namespace AustinHarris.JsonRpc
         /// <param name="envelope">URL, PATH, JSON, JSON-RPC-1.0, JSON-RPC-1.1, JSON-RPC-2.0</param>
         /// <param name="parameters"></param>
         /// <param name="defaultValues"></param>
-        public SMDService(string transport, string envelope, Dictionary<string, Type> parameters, Dictionary<string, object> defaultValues )
+        public SMDService(string transport, string envelope, Dictionary<string, Type> parameters, Dictionary<string, object> defaultValues, MethodInfo method)
         {
             // TODO: Complete member initialization
             this.transport = transport;
             this.envelope = envelope;
             this.parameters = new SMDAdditionalParameters[parameters.Count-1]; // last param is return type similar to Func<,>
             int ctr=0;
+            this.method = method;
             foreach (var item in parameters)
 	        {
                 if (ctr < parameters.Count -1)// never the last one. last one is the return type.
@@ -109,6 +110,7 @@ namespace AustinHarris.JsonRpc
         public string transport { get; private set; }
         public string envelope { get; private set; }
         public SMDResult returns { get; private set; }
+        public MethodInfo method { get; private set; }
 
         /// <summary>
         /// This indicates what parameters may be supplied for the service calls. 

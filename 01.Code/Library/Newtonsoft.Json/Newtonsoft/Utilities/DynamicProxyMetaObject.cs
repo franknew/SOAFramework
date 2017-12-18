@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal sealed class DynamicProxyMetaObject<T> : DynamicMetaObject
   {

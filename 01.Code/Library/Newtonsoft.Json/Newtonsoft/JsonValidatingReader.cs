@@ -27,14 +27,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Linq;
+using SOAFramework.Json.Schema;
+using SOAFramework.Json.Utilities;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.IO;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
   /// <summary>
   /// Represents a reader that provides <see cref="JsonSchema"/> validation.

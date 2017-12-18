@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal class DynamicWrapperBase
   {
@@ -41,11 +41,11 @@ namespace Newtonsoft.Json.Utilities
         {
           if (_moduleBuilder == null)
           {
-            AssemblyName assemblyName = new AssemblyName("Newtonsoft.Json.Dynamic");
+            AssemblyName assemblyName = new AssemblyName("SOAFramework.Json.Dynamic");
             assemblyName.KeyPair = new StrongNameKeyPair(GetStrongKey());
 
             AssemblyBuilder assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-            _moduleBuilder = assembly.DefineDynamicModule("Newtonsoft.Json.DynamicModule", false);
+            _moduleBuilder = assembly.DefineDynamicModule("SOAFramework.Json.DynamicModule", false);
           }
         }
       }
@@ -53,7 +53,7 @@ namespace Newtonsoft.Json.Utilities
 
     private static byte[] GetStrongKey()
     {
-      const string name = "Newtonsoft.Json.Dynamic.snk";
+      const string name = "SOAFramework.Json.Dynamic.snk";
 
       using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
       {

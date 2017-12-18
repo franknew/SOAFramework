@@ -28,11 +28,11 @@ using System.Linq;
 using System.Globalization;
 using System.ComponentModel;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Serialization;
+using SOAFramework.Json.Linq;
+using SOAFramework.Json.Utilities;
+using SOAFramework.Json.Serialization;
 
-namespace Newtonsoft.Json.Schema
+namespace SOAFramework.Json.Schema
 {
   /// <summary>
   /// Generates a <see cref="JsonSchema"/> from a specified <see cref="Type"/>.

@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
   /// <summary>
   /// Provides information surrounding an error.

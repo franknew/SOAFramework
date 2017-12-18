@@ -22,6 +22,8 @@ namespace SOAFramework.Library.DAL
         bool Lockable { get; set; }
 
         bool AutoCloseConnection { get; set; }
+
+        bool LogSql { get; set; }
         #endregion
 
         #region BeginTransaction

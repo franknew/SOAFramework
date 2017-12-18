@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal class EnumValue<T> where T : struct
   {

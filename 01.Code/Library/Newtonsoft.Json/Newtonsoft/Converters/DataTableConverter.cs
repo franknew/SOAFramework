@@ -26,9 +26,9 @@
 #if !SILVERLIGHT
 using System;
 using System.Data;
-using Newtonsoft.Json.Serialization;
+using SOAFramework.Json.Serialization;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   /// <summary>
   /// Converts a <see cref="DataTable"/> to and from JSON.

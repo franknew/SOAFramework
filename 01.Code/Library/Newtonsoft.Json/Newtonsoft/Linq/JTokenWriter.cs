@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Linq
+namespace SOAFramework.Json.Linq
 {
   /// <summary>
   /// Represents a writer that provides a fast, non-cached, forward-only way of generating Json data.

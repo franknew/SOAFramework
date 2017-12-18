@@ -31,7 +31,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal static class ILGeneratorExtensions
   {

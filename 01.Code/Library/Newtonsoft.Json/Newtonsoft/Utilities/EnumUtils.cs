@@ -29,7 +29,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal static class EnumUtils
   {

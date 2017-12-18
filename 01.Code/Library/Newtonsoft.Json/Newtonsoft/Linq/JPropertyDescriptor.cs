@@ -26,9 +26,9 @@
 #if !SILVERLIGHT
 using System;
 using System.ComponentModel;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Linq
+namespace SOAFramework.Json.Linq
 {
   /// <summary>
   /// Represents a view of a <see cref="JProperty"/>.

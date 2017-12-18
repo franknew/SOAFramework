@@ -27,9 +27,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Bson
+namespace SOAFramework.Json.Bson
 {
   /// <summary>
   /// Represents a BSON Oid (object id).

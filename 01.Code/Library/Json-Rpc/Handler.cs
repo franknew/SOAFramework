@@ -5,12 +5,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Newtonsoft.Json;
     using System.Threading.Tasks;
     using System.Collections.Concurrent;
-    using Newtonsoft.Json.Linq;
     using System.Threading;
     using SOAFramework.Library;
+    using SOAFramework.Json.Linq;
+    using SOAFramework.Json;
+
     public class Handler
     {
         #region Members
@@ -217,8 +218,8 @@
                 return PostProcess(callback, Rpc, response, RpcContext);
             }
 
-            bool isJObject = Rpc.Params is Newtonsoft.Json.Linq.JObject;
-            bool isJArray = Rpc.Params is Newtonsoft.Json.Linq.JArray;
+            bool isJObject = Rpc.Params is JObject;
+            bool isJArray = Rpc.Params is JArray;
             object[] parameters = null;
             bool expectsRefException = false;
             var metaDataParamCount = metadata.parameters.Count(x => x != null);
@@ -226,7 +227,7 @@
             var getCount = Rpc.Params as ICollection;
             var loopCt = 0;
 
-            if (getCount != null) loopCt = getCount.Count; 
+            if (getCount != null) loopCt = getCount.Count;
 
             var paramCount = loopCt;
             if (paramCount == metaDataParamCount - 1 && metadata.parameters[metaDataParamCount - 1].ObjectType.Name.Contains(typeof(JsonRpcException).Name))
@@ -238,7 +239,7 @@
 
             if (isJArray)
             {
-                var jarr = ((Newtonsoft.Json.Linq.JArray)Rpc.Params);
+                var jarr = ((JArray)Rpc.Params);
                 //var loopCt = jarr.Count;
                 //var pCount = loopCt;
                 //if (pCount == metaDataParamCount - 1 && metadata.parameters[metaDataParamCount].GetType() == typeof(JsonRpcException))
@@ -251,13 +252,13 @@
             }
             else if (isJObject)
             {
-                var jo = Rpc.Params as Newtonsoft.Json.Linq.JObject;
+                var jo = Rpc.Params as JObject;
                 //var loopCt = jo.Count;
                 //var pCount = loopCt;
                 //if (pCount == metaDataParamCount - 1 && metadata.parameters[metaDataParamCount].GetType() == typeof(JsonRpcException))
                 //    pCount++;
                 //parameters = new object[pCount];
-                var asDict = jo as IDictionary<string, Newtonsoft.Json.Linq.JToken>;
+                var asDict = jo as IDictionary<string, JToken>;
                 for (int i = 0; i < loopCt && i < metadata.parameters.Length; i++)
                 {
                     if (asDict.ContainsKey(metadata.parameters[i].Name) == false)
@@ -339,8 +340,8 @@
                 return PostProcess(callback, Rpc, response, RpcContext);
             }
 
-            try
-            {
+            //try
+            //{
                 //callback is stored to thread's local storage in order to get it directly from concrete JsonRpcService method implementation
                 //where callback is just returned from method
                 Thread.SetData(Thread.GetNamedDataSlot(THREAD_CALLBACK_SLOT_NAME), callback);
@@ -363,40 +364,40 @@
                 //return response, if callback is set (method is asynchronous) - result could be empty string and future result operations
                 //will be processed in the callback
                 return PostProcess(null, Rpc, new JsonResponse() { Result = results }, RpcContext);
-            }
-            catch (Exception ex)
-            {
-                JsonResponse response;
-                if (ex is TargetParameterCountException)
-                {
-                    response = new JsonResponse() { Error = ProcessException(Rpc, new JsonRpcException(-32602, "Invalid params", ex)) };
-                    return PostProcess(callback, Rpc, response, RpcContext);
-                }
+            //}
+            //catch (Exception ex)
+            //{
+            //    JsonResponse response;
+            //    if (ex is TargetParameterCountException)
+            //    {
+            //        response = new JsonResponse() { Error = ProcessException(Rpc, new JsonRpcException(-32602, "Invalid params", ex)) };
+            //        return PostProcess(callback, Rpc, response, RpcContext);
+            //    }
 
-                // We really dont care about the TargetInvocationException, just pass on the inner exception
-                if (ex is JsonRpcException)
-                {
-                    response = new JsonResponse() { Error = ProcessException(Rpc, ex as JsonRpcException) };
-                    return PostProcess(callback, Rpc, response, RpcContext);
-                }
-                if (ex.InnerException != null && ex.InnerException is JsonRpcException)
-                {
-                    response = new JsonResponse() { Error = ProcessException(Rpc, ex.InnerException as JsonRpcException) };
-                    return PostProcess(callback, Rpc, response, RpcContext);
-                }
-                else if (ex.InnerException != null)
-                {
-                    response = new JsonResponse() { Error = ProcessException(Rpc, new JsonRpcException(-32603, "Internal Error", ex.InnerException)) };
-                    return PostProcess(callback, Rpc, response, RpcContext);
-                }
+            //    // We really dont care about the TargetInvocationException, just pass on the inner exception
+            //    if (ex is JsonRpcException)
+            //    {
+            //        response = new JsonResponse() { Error = ProcessException(Rpc, ex as JsonRpcException) };
+            //        return PostProcess(callback, Rpc, response, RpcContext);
+            //    }
+            //    if (ex.InnerException != null && ex.InnerException is JsonRpcException)
+            //    {
+            //        response = new JsonResponse() { Error = ProcessException(Rpc, ex.InnerException as JsonRpcException) };
+            //        return PostProcess(callback, Rpc, response, RpcContext);
+            //    }
+            //    else if (ex.InnerException != null)
+            //    {
+            //        response = new JsonResponse() { Error = ProcessException(Rpc, new JsonRpcException(-32603, "Internal Error", ex.InnerException)) };
+            //        return PostProcess(callback, Rpc, response, RpcContext);
+            //    }
 
-                response = new JsonResponse() { Error = ProcessException(Rpc, new JsonRpcException(-32603, "Internal Error", ex)) };
-                return PostProcess(callback, Rpc, response, RpcContext);
-            }
-            finally
-            {
+            //    response = new JsonResponse() { Error = ProcessException(Rpc, new JsonRpcException(-32603, "Internal Error", ex)) };
+            //    return PostProcess(callback, Rpc, response, RpcContext);
+            //}
+            //finally
+            //{
                 RemoveRpcContext();
-            }
+            //}
         }
 
         /// <summary>
@@ -536,17 +537,10 @@
         {
             if (externalPostProcessingHandler != null)
             {
-                try
+                JsonRpcException exception = externalPostProcessingHandler(request, response, context);
+                if (exception != null)
                 {
-                    JsonRpcException exception = externalPostProcessingHandler(request, response, context);
-                    if (exception != null)
-                    {
-                        response = new JsonResponse() { Error = exception };
-                    }
-                }
-                catch (Exception ex)
-                {
-                    response = new JsonResponse() { Error = ProcessException(request, new JsonRpcException(-32603, "Internal Error", ex)) };
+                    response = new JsonResponse() { Error = exception };
                 }
             }
 
@@ -566,7 +560,7 @@
             externalPostProcessingHandler = handler;
         }
 
-       
+
     }
 
 }

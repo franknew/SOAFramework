@@ -15,15 +15,13 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using com.alibaba.rocketmq.client.consumer;
-using com.alibaba.rocketmq.client.producer;
 using System.Reflection;
-using com.alibaba.rocketmq.common.consumer;
-using com.alibaba.rocketmq.client.consumer.listener;
-using com.alibaba.rocketmq.remoting;
 using Chainway.SSO;
 using SOAFramework.Library.Cache;
 using System.Runtime.Caching;
+using IBatisNet.DataMapper;
+using SOAFramework.Service.SDK.Core;
+using WinformTest.SDK;
 
 namespace WinformTest
 {
@@ -108,7 +106,7 @@ namespace WinformTest
                 }
                 builder.AppendFormat("调用接口次数：{0} 总时间：{1} 平均时间：{2}  url:{3}", dataList.Count, watch.ElapsedMilliseconds, watch.ElapsedMilliseconds / dataList.Count, url).AppendLine();
             }
-            lblContent.Text = builder.ToString();
+            txbData.Text = builder.ToString();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -172,11 +170,11 @@ namespace WinformTest
             //var connector = new JavaConnector("");
             //connector.InitializeJVM();
             //Java j = new Java();
-            var services = ResolverHelper.ResolveDomain(AppDomain.CurrentDomain, AttributeTargets.Class, (t =>
-            {
-                return t.GetCustomAttribute<TestAttibute>(true) != null;
-            }));
-            services = ResolverHelper.ResolveWebApi(services);
+            //var services = ResolverHelper.ResolveDomain(AppDomain.CurrentDomain, AttributeTargets.Class, (t =>
+            //{
+            //    return t.GetCustomAttribute<TestAttibute>(true) != null;
+            //}));
+            //services = ResolverHelper.ResolveWebApi(services);
         }
 
         /// <summary>
@@ -200,7 +198,65 @@ namespace WinformTest
 
         private void btnDotNetty_Click(object sender, EventArgs e)
         {
+            TestClient client = new TestClient();
+            LoginRequest request = new LoginRequest();
+            request.userName = "admin";
+            request.passPwd = "admin";
 
+            var response = client.Execute(request);
+        }
+
+        private void btnDalQuery_Click(object sender, EventArgs e)
+        {
+            //List<Task> tasks = new List<Task>();
+            //SimpleLogger logger = new SimpleLogger();
+            //Stopwatch stop = new Stopwatch();
+            //stop.Start();
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    var task = Task.Factory.StartNew(() =>
+            //    {
+            //        try
+            //        {
+            //            var mapper = Mapper.Instance();
+            //            UserDao dao = new UserDao();
+            //            var list = dao.Query(new UserQueryForm { PageSize = 10, CurrentIndex = 1 });
+            //            var json = JsonHelper.Serialize(list);
+            //            logger.Write(json);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            logger.WriteException(ex);
+            //        }
+            //    });
+            //    tasks.Add(task);
+            //}
+            //Task.WaitAll(tasks.ToArray());
+            //stop.Stop();
+            //MessageBox.Show(stop.ElapsedMilliseconds.ToString());
+        }
+
+        private void btnFTS_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var file = File.ReadAllBytes(dialog.FileName);
+                txbData.Text = Convert.ToBase64String(file);
+            }
+        }
+
+        private void btnSTF_Click(object sender, EventArgs e)
+        {
+            var data = txbData.Text;
+            var bytes = Convert.FromBase64String(data);
+            File.WriteAllBytes("d:\\test.jpg", bytes);
+        }
+
+        private void btnSDKTesting_Click(object sender, EventArgs e)
+        {
+            LoginRequest request = new LoginRequest();
+            var response = SDKFactory.Client.Execute(request);
         }
     }
 }

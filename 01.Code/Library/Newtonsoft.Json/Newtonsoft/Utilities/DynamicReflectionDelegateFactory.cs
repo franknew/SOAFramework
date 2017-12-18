@@ -32,7 +32,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal class DynamicReflectionDelegateFactory : ReflectionDelegateFactory
   {

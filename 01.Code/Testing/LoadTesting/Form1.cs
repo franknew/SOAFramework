@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SOAFramework.Library;
 using System.IO;
+using System.Web;
 
 namespace LoadTesting
 {
@@ -75,7 +76,9 @@ namespace LoadTesting
             var data = arg.Data;
             string postData = arg.Data.PostData;
             string result = null;
-            if (data.Method.Equals("post")) result = HttpHelper.Post(data.Url, Encoding.UTF8.GetBytes(postData), -1, data.ContentType);
+            //var d = HttpUtility.UrlEncodeToBytes(postData, Encoding.UTF8);
+            var d = Encoding.UTF8.GetBytes(postData);
+            if (data.Method.Equals("post")) result = HttpHelper.Post(data.Url, d, -1, data.ContentType);
             else result = HttpHelper.Get(data.Url);
             this.result = result;
             i++;
@@ -156,6 +159,16 @@ namespace LoadTesting
         {
             var content = File.ReadAllBytes(txbFile.Text);
             txbPost.Text = Convert.ToBase64String(content);
+        }
+
+        private void btnFromFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var file = File.ReadAllText(dialog.FileName);
+                txbPost.Text = file;
+            }
         }
     }
 

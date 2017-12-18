@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
   /// <summary>
   /// Specifies the member serialization options for the <see cref="JsonSerializer"/>.

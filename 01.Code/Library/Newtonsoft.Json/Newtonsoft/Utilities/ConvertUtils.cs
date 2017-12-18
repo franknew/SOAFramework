@@ -29,14 +29,14 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using System.ComponentModel;
-using Newtonsoft.Json.Serialization;
+using SOAFramework.Json.Serialization;
 using System.Reflection;
 
 #if !SILVERLIGHT
 using System.Data.SqlTypes;
 #endif
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal static class ConvertUtils
   {

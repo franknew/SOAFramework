@@ -29,10 +29,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
   /// <summary>
   /// Get and set values for a <see cref="MemberInfo"/> using dynamic methods.

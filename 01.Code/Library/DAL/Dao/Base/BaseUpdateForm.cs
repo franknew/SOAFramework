@@ -5,8 +5,9 @@ using System.Text;
 
 namespace SOAFramework.Library.DAL
 {
-    public class SimpleUpdateForm <TEntity> where TEntity : SimpleEntity
+    public class BaseUpdateForm<TEntity, TQueryForm> : IUpdateForm where TEntity : BaseEntity where TQueryForm : BaseQueryForm
     {
         public TEntity Entity { get; set; }
+        public TQueryForm QueryForm { get; set; }
     }
 }

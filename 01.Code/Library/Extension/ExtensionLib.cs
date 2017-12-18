@@ -228,7 +228,7 @@ namespace SOAFramework.Library
             return enumType != null && enumType.IsEnum;
         }
 
-        public static T CopyTo<T>(this object From, T to) where T : class
+        public static T CopyTo<T>(this object From, T to) where T : class, new()
         {
             Type t = From.GetType();
 
@@ -339,7 +339,7 @@ namespace SOAFramework.Library
             }
             else if (value.GetType().Equals(typeof(string)) && conversionType.Equals(typeof(DateTime)))
             {
-                string time = value.ToString();
+                string time = value.ToString().Replace("`", "");
                 int last = time.LastIndexOf(":");
                 //change db2 datetime to common
                 if (time.Length == 23 && time.LastIndexOf(".") == -1)
@@ -347,6 +347,10 @@ namespace SOAFramework.Library
                     value = time.Remove(last, 1).Insert(last, ".");
                     return time;
                 }
+            }
+            else if (value.GetType().Equals(typeof(string)) && !conversionType.Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString()))
+            {
+                return null;
             }
             else if (conversionType.Equals(typeof(string)))
             {

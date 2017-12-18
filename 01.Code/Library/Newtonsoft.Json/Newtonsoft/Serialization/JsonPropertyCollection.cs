@@ -27,10 +27,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
   /// <summary>
   /// A collection of <see cref="JsonProperty"/> objects.

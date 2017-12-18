@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
   /// <summary>
   /// Maps a JSON property to a .NET member or constructor parameter.

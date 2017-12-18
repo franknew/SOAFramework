@@ -56,6 +56,7 @@ namespace SOAFramework.Library
             var item = _cacheHandler.GetItem<Dictionary<string, T>>(_cacheKey);
             var dicCache = item;
             List<T> list = new List<T>();
+            if (dicCache == null) return list;
             foreach (var key in dicCache.Keys)
             {
                 list.Add(dicCache[key]);

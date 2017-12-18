@@ -31,7 +31,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal static class StringUtils
   {

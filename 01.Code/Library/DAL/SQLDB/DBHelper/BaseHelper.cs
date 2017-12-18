@@ -21,16 +21,24 @@ namespace SOAFramework.Library.DAL
         }
 
         #region variables
+        private SimpleLogger logger = new SimpleLogger();
         private string mStr_ConnectionString = "";
         private IDbCommand mObj_Command = null;
         private IDbConnection mObj_Connection = null;
         private bool mBl_IsTransaction = false;
         private IPagingSQL paging = null;
         private DBType _type;
+        private bool logSql = false;
         private bool lockable = false;
         #endregion
 
         #region properties
+        public bool LogSql
+        {
+            get => logSql;
+            set => logSql = value;
+        }
+
         public string ConnectionString
         {
             set { mStr_ConnectionString = value; }
@@ -143,6 +151,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
+                        if (logSql) logger.Write(strCommandString);
                         objAdp.Fill(set);
                     }
                 }
@@ -152,6 +161,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
+                logger.Write(strCommandString);
                 throw ex;
             }
             finally
@@ -354,6 +364,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
+                        if (logSql) logger.Write(strCommandString);
                         objAdp.Fill(dsData);
                     }
                 }
@@ -362,6 +373,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
+                logger.Write(strCommandString);
                 throw ex;
             }
             finally
@@ -560,6 +572,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
+                        if (logSql) logger.Write(strCommandString);
                         objData = objCommand.ExecuteScalar();
                     }
                 }
@@ -568,6 +581,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
+                logger.Write(strCommandString);
                 throw ex;
             }
             finally
@@ -725,6 +739,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock(this)
                     {
+                        if (logSql) logger.Write(strCommandString);
                         return objCommand.ExecuteNonQuery();
                     }
                 }
@@ -732,6 +747,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
+                logger.Write(strCommandString);
                 if (objCommand.Transaction != null)
                 {
                     objCommand.Transaction.Rollback();

@@ -29,11 +29,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using SOAFramework.Json.Utilities;
+using SOAFramework.Json.Linq;
 using System.Globalization;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
     /// <summary>
     /// Specifies the state of the <see cref="JsonWriter"/>.

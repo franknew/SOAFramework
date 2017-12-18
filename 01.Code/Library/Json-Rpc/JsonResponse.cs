@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SOAFramework.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 
 namespace AustinHarris.JsonRpc
 {

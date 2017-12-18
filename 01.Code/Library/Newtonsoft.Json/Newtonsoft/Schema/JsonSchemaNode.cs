@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Newtonsoft.Json.Schema
+namespace SOAFramework.Json.Schema
 {
   internal class JsonSchemaNode
   {

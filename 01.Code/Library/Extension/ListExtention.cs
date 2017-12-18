@@ -14,12 +14,16 @@ namespace SOAFramework.Library
 {
     public static class ListExtention
     {
-        public static List<T> Copy<T>(this IList<T> list)
+        public static List<T> Copy<T>(this IList list) where T: class, new()
         {
             T[] array = new T[list.Count];
             List<T> copyList = new List<T>();
-            list.CopyTo(array, 0);
-            copyList.AddRange(array);
+            foreach (var l in list)
+            {
+                T t = new T();
+                l.CopyTo(t);
+                copyList.Add(t);
+            }
             return copyList;
         }
 

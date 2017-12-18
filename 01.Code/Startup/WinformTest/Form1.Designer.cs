@@ -35,7 +35,6 @@
             this.btnRemove = new System.Windows.Forms.Button();
             this.txbData = new System.Windows.Forms.TextBox();
             this.btnInvoke = new System.Windows.Forms.Button();
-            this.lblContent = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.btnmq = new System.Windows.Forms.Button();
@@ -49,6 +48,10 @@
             this.btnJVM = new System.Windows.Forms.Button();
             this.btnRedisSet = new System.Windows.Forms.Button();
             this.btnDotNetty = new System.Windows.Forms.Button();
+            this.btnDalQuery = new System.Windows.Forms.Button();
+            this.btnFTS = new System.Windows.Forms.Button();
+            this.btnSTF = new System.Windows.Forms.Button();
+            this.btnSDKTesting = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -100,25 +103,19 @@
             this.txbData.Location = new System.Drawing.Point(330, 14);
             this.txbData.Multiline = true;
             this.txbData.Name = "txbData";
-            this.txbData.Size = new System.Drawing.Size(470, 214);
+            this.txbData.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txbData.Size = new System.Drawing.Size(470, 728);
             this.txbData.TabIndex = 5;
             // 
             // btnInvoke
             // 
-            this.btnInvoke.Location = new System.Drawing.Point(330, 234);
+            this.btnInvoke.Location = new System.Drawing.Point(330, 750);
             this.btnInvoke.Name = "btnInvoke";
             this.btnInvoke.Size = new System.Drawing.Size(75, 23);
             this.btnInvoke.TabIndex = 6;
             this.btnInvoke.Text = "invoke";
             this.btnInvoke.UseVisualStyleBackColor = true;
             this.btnInvoke.Click += new System.EventHandler(this.btnInvoke_Click);
-            // 
-            // lblContent
-            // 
-            this.lblContent.Location = new System.Drawing.Point(330, 264);
-            this.lblContent.Name = "lblContent";
-            this.lblContent.Size = new System.Drawing.Size(470, 478);
-            this.lblContent.TabIndex = 7;
             // 
             // textBox1
             // 
@@ -240,11 +237,56 @@
             this.btnDotNetty.UseVisualStyleBackColor = true;
             this.btnDotNetty.Click += new System.EventHandler(this.btnDotNetty_Click);
             // 
+            // btnDalQuery
+            // 
+            this.btnDalQuery.Location = new System.Drawing.Point(830, 43);
+            this.btnDalQuery.Name = "btnDalQuery";
+            this.btnDalQuery.Size = new System.Drawing.Size(75, 23);
+            this.btnDalQuery.TabIndex = 21;
+            this.btnDalQuery.Text = "dal query";
+            this.btnDalQuery.UseVisualStyleBackColor = true;
+            this.btnDalQuery.Click += new System.EventHandler(this.btnDalQuery_Click);
+            // 
+            // btnFTS
+            // 
+            this.btnFTS.Location = new System.Drawing.Point(411, 750);
+            this.btnFTS.Name = "btnFTS";
+            this.btnFTS.Size = new System.Drawing.Size(120, 23);
+            this.btnFTS.TabIndex = 22;
+            this.btnFTS.Text = "File To String";
+            this.btnFTS.UseVisualStyleBackColor = true;
+            this.btnFTS.Click += new System.EventHandler(this.btnFTS_Click);
+            // 
+            // btnSTF
+            // 
+            this.btnSTF.Location = new System.Drawing.Point(537, 748);
+            this.btnSTF.Name = "btnSTF";
+            this.btnSTF.Size = new System.Drawing.Size(120, 23);
+            this.btnSTF.TabIndex = 23;
+            this.btnSTF.Text = "string to file";
+            this.btnSTF.UseVisualStyleBackColor = true;
+            this.btnSTF.Click += new System.EventHandler(this.btnSTF_Click);
+            // 
+            // btnSDKTesting
+            // 
+            this.btnSDKTesting.Location = new System.Drawing.Point(830, 72);
+            this.btnSDKTesting.Name = "btnSDKTesting";
+            this.btnSDKTesting.Size = new System.Drawing.Size(86, 25);
+            this.btnSDKTesting.TabIndex = 24;
+            this.btnSDKTesting.Text = "sdk testing";
+            this.btnSDKTesting.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnSDKTesting.UseVisualStyleBackColor = true;
+            this.btnSDKTesting.Click += new System.EventHandler(this.btnSDKTesting_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnSDKTesting);
+            this.Controls.Add(this.btnSTF);
+            this.Controls.Add(this.btnFTS);
+            this.Controls.Add(this.btnDalQuery);
             this.Controls.Add(this.btnDotNetty);
             this.Controls.Add(this.btnRedisSet);
             this.Controls.Add(this.btnJVM);
@@ -258,7 +300,6 @@
             this.Controls.Add(this.btnmq);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.lblContent);
             this.Controls.Add(this.btnInvoke);
             this.Controls.Add(this.txbData);
             this.Controls.Add(this.btnRemove);
@@ -282,7 +323,6 @@
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.TextBox txbData;
         private System.Windows.Forms.Button btnInvoke;
-        private System.Windows.Forms.Label lblContent;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button btnmq;
@@ -296,6 +336,10 @@
         private System.Windows.Forms.Button btnJVM;
         private System.Windows.Forms.Button btnRedisSet;
         private System.Windows.Forms.Button btnDotNetty;
+        private System.Windows.Forms.Button btnDalQuery;
+        private System.Windows.Forms.Button btnFTS;
+        private System.Windows.Forms.Button btnSTF;
+        private System.Windows.Forms.Button btnSDKTesting;
     }
 }
 

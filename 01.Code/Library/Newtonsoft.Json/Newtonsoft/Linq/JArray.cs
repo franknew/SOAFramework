@@ -28,13 +28,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.IO;
 using System.Globalization;
 using System.Reflection;
 using System.Data;
 
-namespace Newtonsoft.Json.Linq
+namespace SOAFramework.Json.Linq
 {
     /// <summary>
     /// Represents a JSON array.
@@ -217,7 +217,7 @@ namespace Newtonsoft.Json.Linq
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Newtonsoft.Json.Linq.JToken"/> at the specified index.
+        /// Gets or sets the <see cref="SOAFramework.Json.Linq.JToken"/> at the specified index.
         /// </summary>
         /// <value></value>
         public JToken this[int index]

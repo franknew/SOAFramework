@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   /// <summary>
   /// Provides a base class for converting a <see cref="DateTime"/> to and from JSON.

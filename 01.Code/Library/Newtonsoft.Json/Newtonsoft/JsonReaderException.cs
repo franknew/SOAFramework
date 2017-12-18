@@ -26,7 +26,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
   /// <summary>
   /// The exception thrown when an error occurs while reading Json text.

@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
   /// <summary>
   /// Specifies how constructors are used when initializing objects during deserialization by the <see cref="JsonSerializer"/>.

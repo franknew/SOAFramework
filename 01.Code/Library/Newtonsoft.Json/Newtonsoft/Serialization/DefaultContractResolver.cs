@@ -39,12 +39,12 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Xml.Serialization;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using SOAFramework.Json.Converters;
+using SOAFramework.Json.Utilities;
+using SOAFramework.Json.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
   internal struct ResolverContractKey : IEquatable<ResolverContractKey>
   {

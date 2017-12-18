@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using SOAFramework.Service.Core.Model;
+﻿using SOAFramework.Service.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SOAFramework.Library;
 using System.IO;
+using SOAFramework.Json.Linq;
 
 namespace SOAFramework.Service.Core.Model
 {

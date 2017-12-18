@@ -28,10 +28,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using SOAFramework.Json.Utilities;
+using SOAFramework.Json.Linq;
 
-namespace Newtonsoft.Json.Schema
+namespace SOAFramework.Json.Schema
 {
   internal class JsonSchemaBuilder
   {

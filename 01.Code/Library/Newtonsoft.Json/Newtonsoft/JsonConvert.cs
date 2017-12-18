@@ -26,15 +26,15 @@
 using System;
 using System.IO;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Xml;
-using Newtonsoft.Json.Converters;
+using SOAFramework.Json.Converters;
 using System.Text;
 #if !NET20 && (!SILVERLIGHT || WINDOWS_PHONE)
 using System.Xml.Linq;
 #endif
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
     /// <summary>
     /// Provides methods for converting between common language runtime types and JSON types.

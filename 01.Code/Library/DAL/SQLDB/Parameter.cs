@@ -81,7 +81,7 @@ namespace SOAFramework.Library.DAL
                 {
                     objSqlParams[i] = Activator.CreateInstance<T>();
                     objSqlParams[i].ParameterName = objParams[i].Name;
-                    objSqlParams[i].Value = Convert.ChangeType(objParams[i].Value, objParams[i].Type);
+                    objSqlParams[i].Value =objParams[i].Value.ChangeTypeTo(objParams[i].Type);
                 }
             }
             return objSqlParams;

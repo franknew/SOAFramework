@@ -20,5 +20,10 @@ namespace SOAFramework.Library.DAL
             builder.AppendFormat("SELECT COUNT(*) FROM ({0}) t ");
             return builder.ToString();
         }
+
+        public string BuildOrderBy(string sql, string orderByColumn, OrderBy orderby = OrderBy.ASC)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

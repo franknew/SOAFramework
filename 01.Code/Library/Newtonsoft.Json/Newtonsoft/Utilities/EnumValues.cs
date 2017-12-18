@@ -29,7 +29,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal class EnumValues<T> : KeyedCollection<string, EnumValue<T>> where T : struct
   {

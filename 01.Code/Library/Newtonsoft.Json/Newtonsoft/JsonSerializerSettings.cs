@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Serialization;
+using SOAFramework.Json.Utilities;
 using System.Runtime.Serialization;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
   /// <summary>
   /// Specifies the settings on a <see cref="JsonSerializer"/> object.

@@ -9,7 +9,7 @@ namespace SOAFramework.Library
     {
         public string Generate()
         {
-            return new Guid().ToString().Replace("-", "");
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using Newtonsoft.Json;
+using SOAFramework.Json;
 
 namespace SOAFramework.Library
 {

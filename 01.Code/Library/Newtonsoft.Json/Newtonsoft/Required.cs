@@ -1,4 +1,4 @@
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
   /// <summary>
   /// Indicating whether a property is required.

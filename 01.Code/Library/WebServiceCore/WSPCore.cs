@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Configuration;
 
 using SOAFramework.Library;
-using Newtonsoft.Json;
+using SOAFramework.Json;
 
 namespace SOAFramework.WebServiceCore
 {

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOAFramework.Library.DAL
+namespace SOAFramework.Service.SDK.Core
 {
-    public class BaseEntity
+    public class SDKResultAttribute : Attribute
     {
-        public string ID { get; set; }
     }
 }

@@ -34,7 +34,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal static class ReflectionUtils
   {

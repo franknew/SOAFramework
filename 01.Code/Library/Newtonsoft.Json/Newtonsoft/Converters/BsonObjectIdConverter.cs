@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Bson;
+using SOAFramework.Json.Bson;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   /// <summary>
   /// Converts a <see cref="BsonObjectId"/> to and from JSON and BSON.

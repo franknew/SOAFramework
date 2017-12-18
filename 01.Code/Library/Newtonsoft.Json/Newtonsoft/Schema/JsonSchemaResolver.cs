@@ -29,9 +29,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json.Schema
+namespace SOAFramework.Json.Schema
 {
   /// <summary>
   /// Resolves <see cref="JsonSchema"/> from an id.

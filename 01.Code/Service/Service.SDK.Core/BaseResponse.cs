@@ -8,26 +8,20 @@ namespace SOAFramework.Service.SDK.Core
 {
     public abstract class BaseResponse
     {
-        private bool isError = false;
-        public bool IsError { get { return isError; } }
+        public bool IsError { get; set; }
 
         private string responseBody;
-        public string ResponseBody { get { return responseBody; } }
+        public virtual string ResponseBody { get { return responseBody; } }
+        
+        public virtual Exception Exception { get; set; }
 
-        private string errorMessage;
-        public string ErrorMessage { get { return errorMessage; } }
+        public virtual int Code { get; set; }
 
-        private string stackTrace;
-        public string StackTrace { get { return stackTrace; } }
-
-        public int Code { get; set; }
-
-        internal void SetValues(bool isError,string errormsg, string stacktrace, int code)
+        internal void SetValues(bool isError, int code, Exception ex)
         {
-            this.isError = isError;
-            errorMessage = errormsg;
-            this.stackTrace = stacktrace;
+            this.IsError = isError;
             this.Code = code;
+            this.Exception = ex;
         }
 
         internal void SetBody(string body)
@@ -42,12 +36,10 @@ namespace SOAFramework.Service.SDK.Core
 
         public string ResponseBody { get; set; }
 
-        public string ErrorMessage { get; set; }
-
-        public string StackTrace { get; set; }
-
         public int Code { get; set; }
 
         public object Data { get; set; }
+
+        public Exception Exception { get; set; }
     }
 }

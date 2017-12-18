@@ -34,12 +34,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Linq;
+using SOAFramework.Json.Utilities;
 using System.Runtime.Serialization;
 using System.Security;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
     internal class JsonSerializerInternalWriter : JsonSerializerInternalBase
     {

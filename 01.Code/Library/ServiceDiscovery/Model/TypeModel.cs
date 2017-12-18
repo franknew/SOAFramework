@@ -27,20 +27,22 @@ namespace SOAFramework.Library
         public List<TypeModel> Properties { get; set; }
         public bool IsClass { get; set; }
 
-        public IResolver Resolve()
+        public void Resolve()
         {
+            SimpleLogger logger = new SimpleLogger();
+            logger.Write(_self.FullName);
             ID = _generator.Generate();
             Name = _self.Name;
             FullName = _self.FullName;
             GenericArguments = new List<TypeModel>();
             Properties = new List<TypeModel>();
             IsClass = _self.IsClass;
-            if (_self.IsValueType || _self.Equals(typeof(string)) || _self.Equals(typeof(Type)))
+
+            if (_self.IsValueType || _self.Equals(typeof(string)) || _self.Equals(typeof(Type)))//handle string and value type
             {
-                TypeModelCacheManager.Set(this.ID, this);
-                return this;
+                return;
             }
-            else if (_self.IsGenericType)
+            else if (_self.IsGenericType)//handle generic
             {
                 var arguments = _self.GetGenericArguments();
                 foreach (var arg in arguments)
@@ -49,13 +51,13 @@ namespace SOAFramework.Library
                     GenericArguments.Add(model);
                 }
             }
-            else if (_self.IsArray)
+            else if (_self.IsArray)//handle array
             {
                 var elementType = _self.GetElementType();
                 TypeModel model = ResolverHelper.GetTypeFromCache(elementType);
                 GenericArguments.Add(model);
             }
-            else
+            else//handle class type
             {
                 var properties = _self.GetProperties(BindingFlags.Instance | BindingFlags.Public);
                 foreach (var p in properties)
@@ -71,7 +73,6 @@ namespace SOAFramework.Library
                     Properties.Add(model);
                 }
             }
-            return this;
         }
 
 

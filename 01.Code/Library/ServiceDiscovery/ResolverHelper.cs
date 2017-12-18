@@ -37,24 +37,24 @@ namespace SOAFramework.Library
         public static DescriptionModel LoadDescription(Assembly ass)
         {
             DescriptionModel model = null;
-            try
+            var path = ass.Location;
+            var fullname = ass.FullName;
+            var dllname = fullname.Split(',')[0].Trim();
+            var descriptionFileName = string.Format("{0}.xml", path.Remove(path.Length - 4, 4));
+            if (!File.Exists(descriptionFileName))
             {
-                var path = ass.Location;
-                var fullname = ass.FullName;
-                var dllname = fullname.Split(',')[0].Trim();
-                var descriptionFileName = string.Format("{0}.xml", path.Remove(path.Length - 4, 4));
+                path = AppDomain.CurrentDomain.BaseDirectory;
+                descriptionFileName = string.Format("{0}\\{1}.xml", path.TrimEnd('\\'), dllname);
                 if (!File.Exists(descriptionFileName))
                 {
-                    path = AppDomain.CurrentDomain.BaseDirectory;
-                    descriptionFileName = string.Format("{0}{1}.xml", path, dllname);
-                    if (!File.Exists(descriptionFileName))
-                    {
-                        path += "bin";
-                        descriptionFileName = string.Format("{0}{1}.xml", path, dllname);
-                        if (!File.Exists(descriptionFileName)) return null;
-                    }
+                    path += "bin";
+                    descriptionFileName = string.Format("{0}\\{1}.xml", path.TrimEnd('\\'), dllname);
+                    if (!File.Exists(descriptionFileName)) return null;
                 }
-                string xml = File.ReadAllText(descriptionFileName);
+            }
+            string xml = File.ReadAllText(descriptionFileName);
+            try
+            {
                 model = XMLHelper.Deserialize<DescriptionModel>(xml);
                 DescriptionModelCacheManager.Set(fullname, model);
             }
@@ -71,9 +71,10 @@ namespace SOAFramework.Library
             if (item != null) return item.Copy();
             else
             {
+                item = new TypeModel();
+                TypeModelCacheManager.Set(t.FullName, item);
                 item = new TypeModel(t);
-                TypeModelCacheManager.Set(item.ID, item);
-                return item.Copy();
+                return item;
             }
         }
 
@@ -103,7 +104,7 @@ namespace SOAFramework.Library
 
         public static List<ServiceModel> ResolveWebApi(List<ServiceModel> services)
         {
-            foreach( var service in services)
+            foreach (var service in services)
             {
                 service.FullAction = service.Type.Substring(0, service.Type.LastIndexOf(".")) + "/" + service.Name;
             }

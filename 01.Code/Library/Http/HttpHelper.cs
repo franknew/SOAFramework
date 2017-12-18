@@ -13,7 +13,7 @@ namespace SOAFramework.Library
     public class HttpHelper
     {
         public static string Post(string url, byte[] data, int timeout = -1, string contentType = "application/json",
-            NetworkCredential credential = null, bool https = false)
+            NetworkCredential credential = null, bool https = false, IDictionary<string, string> header = null, IDictionary<string, string> cookieDic = null)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = contentType;
@@ -31,6 +31,22 @@ namespace SOAFramework.Library
                 request.Credentials = cache;
                 request.Headers.Add(HttpRequestHeader.Authorization, code);
             }
+            if (header != null)
+            {
+                if (request.CookieContainer == null) request.CookieContainer = new CookieContainer();
+                foreach (var key in header.Keys)
+                {
+                    request.Headers.Add(key, header[key]);
+                }
+            }
+            if (cookieDic != null)
+            {
+                foreach (var key in cookieDic.Keys)
+                {
+                    Cookie cookie = new Cookie(key, cookieDic[key]);
+                    request.CookieContainer.Add(cookie);
+                }
+            }
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(data, 0, data.Length);
             WebResponse response = request.GetResponse();
@@ -40,14 +56,31 @@ namespace SOAFramework.Library
             return responseReader.ReadToEnd();
         }
 
-        public static string Get(string url, IDictionary<string, object> args = null, int timeout = -1, bool https = false)
+        public static string Get(string url, IDictionary<string, object> args = null, int timeout = -1, bool https = false, 
+            IDictionary<string, string> header = null, IDictionary<string, string> cookieDic = null)
         {
             string fullurl = CombineUrl(url, args);
             if (https) ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-            WebRequest request = WebRequest.Create(fullurl);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(fullurl);
             request.Credentials = CredentialCache.DefaultCredentials;
             request.Timeout = timeout;
             request.ContentType = "application/x-www-form-urlencoded";
+            if (header != null)
+            {
+                foreach (var key in header.Keys)
+                {
+                    request.Headers.Add(key, header[key]);
+                }
+            }
+            if (cookieDic != null)
+            {
+                if (request.CookieContainer == null) request.CookieContainer = new CookieContainer();
+                foreach (var key in cookieDic.Keys)
+                {
+                    Cookie cookie = new Cookie(key, cookieDic[key]);
+                    request.CookieContainer.Add(cookie);
+                }
+            }
             WebResponse response = request.GetResponse();
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);

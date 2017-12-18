@@ -5,8 +5,13 @@ using System.Text;
 
 namespace SOAFramework.Library.DAL
 {
-    public class BaseQueryForm
+    public class BaseQueryForm : IQueryForm
     {
+        private string orderByColumn = "ID";
+        private OrderBy orderby = OrderBy.ASC;
+
+        public string OrderByColumn { get => orderByColumn; set => orderByColumn = value; }
+        public OrderBy OrderBy { get => orderby; set => orderby = value; }
         public string ID { get; set; }
 
         public int? PageSize { get; set; }

@@ -27,10 +27,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Linq;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
     /// <summary>
     /// Represents a reader that provides fast, non-cached, forward-only access to serialized Json data.

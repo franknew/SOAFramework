@@ -30,9 +30,9 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 
-namespace Newtonsoft.Json
+namespace SOAFramework.Json
 {
     /// <summary>
     /// Represents a reader that provides fast, non-cached, forward-only access to serialized Json data.

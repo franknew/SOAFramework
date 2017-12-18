@@ -27,11 +27,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Linq;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal interface IWrappedList : IList
   {

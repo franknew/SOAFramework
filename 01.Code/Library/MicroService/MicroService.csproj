@@ -46,7 +46,7 @@
     <Compile Include="Filter\FilterHandler.cs" />
     <Compile Include="Filter\INoneExecutableFilterAttribute.cs" />
     <Compile Include="Model\Config.cs" />
-    <Compile Include="Module\DiscoveryService.cs" />
+    <Compile Include="Module\DiscoveryService\DiscoveryService.cs" />
     <Compile Include="Filter\FilterBinder.cs" />
     <Compile Include="Filter\IFilterAttribute.cs" />
     <Compile Include="Model\MasterServer.cs" />
@@ -60,7 +60,7 @@
     <Compile Include="Serialize\ISerializable.cs" />
     <Compile Include="Serialize\JsonSerializor.cs" />
     <Compile Include="Model\NodeServer.cs" />
-    <Compile Include="Model\NodeServerDataModel.cs" />
+    <Compile Include="Module\DiscoveryService\NodeServerDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialize\UrlSerializor.cs" />
     <Compile Include="Serialize\XmlSerializor.cs" />

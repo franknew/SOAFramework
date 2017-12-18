@@ -27,7 +27,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Utilities
+namespace SOAFramework.Json.Utilities
 {
   internal class LateBoundReflectionDelegateFactory : ReflectionDelegateFactory
   {

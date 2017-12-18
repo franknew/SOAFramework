@@ -82,8 +82,9 @@ namespace MicroService.Library.MicroService
             FileInfo file = new FileInfo(filePath);
             Assembly ass = null;
             if (!file.Exists) throw new Exception(string.Format("文件:{0}不存在", filePath));
-            byte[] fileByte = File.ReadAllBytes(filePath);
-            ass = Assembly.Load(fileByte);
+            //byte[] fileByte = File.ReadAllBytes(filePath);
+            //ass = Assembly.Load(fileByte);
+            ass = Assembly.LoadFile(file.FullName);
             return ass;
         }
 

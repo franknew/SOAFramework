@@ -25,7 +25,7 @@ namespace SOAFramework.Library
         public string FullAction { get; set; }
         public string ID { get; set; }
 
-        public IResolver Resolve()
+        public void Resolve()
         {
             ID = _generator.Generate();
             FullName = _self.DeclaringType.FullName + "." + _self.Name;
@@ -52,7 +52,6 @@ namespace SOAFramework.Library
                 i++;
             }
             
-            return this;
         }
     }
 }

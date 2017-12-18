@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Newtonsoft.Json.Converters
+namespace SOAFramework.Json.Converters
 {
   /// <summary>
   /// Create a custom object

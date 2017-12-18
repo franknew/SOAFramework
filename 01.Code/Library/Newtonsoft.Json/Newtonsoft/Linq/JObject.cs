@@ -34,11 +34,11 @@ using System.Linq.Expressions;
 #endif
 using System.Linq;
 using System.IO;
-using Newtonsoft.Json.Utilities;
+using SOAFramework.Json.Utilities;
 using System.Globalization;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Linq
+namespace SOAFramework.Json.Linq
 {
     /// <summary>
     /// Represents a JSON object.
@@ -273,7 +273,7 @@ namespace Newtonsoft.Json.Linq
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Newtonsoft.Json.Linq.JToken"/> with the specified property name.
+        /// Gets or sets the <see cref="SOAFramework.Json.Linq.JToken"/> with the specified property name.
         /// </summary>
         /// <value></value>
         public JToken this[string propertyName]

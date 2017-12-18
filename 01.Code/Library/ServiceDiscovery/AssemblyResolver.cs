@@ -16,7 +16,7 @@ namespace SOAFramework.Library
             _ass = ass;
         }
 
-        public List<ServiceModel> Resolve(AttributeTargets target, Func<Type, bool> validate) 
+        public List<ServiceModel> Resolve(AttributeTargets target, Func<Type, bool> validate)
         {
             ResolverHelper.LoadDescription(_ass);
             List<ServiceModel> services = new List<ServiceModel>();

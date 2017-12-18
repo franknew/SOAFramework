@@ -71,17 +71,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DaoSqlMapBuilder.cs" />
+    <Compile Include="Dao\Attribute\PrimaryKey.cs" />
+    <Compile Include="Dao\DaoHelper.cs" />
     <Compile Include="Dao\Extension.cs" />
-    <Compile Include="Dao\BaseDao.cs" />
-    <Compile Include="Dao\BaseEntity.cs" />
-    <Compile Include="Dao\BaseQueryForm.cs" />
-    <Compile Include="Dao\BaseUpdateForm.cs" />
-    <Compile Include="Dao\SimpleDao.cs" />
-    <Compile Include="Dao\SimpleEntity.cs" />
-    <Compile Include="Dao\SimpleQueryForm.cs" />
-    <Compile Include="Dao\SimpleUpdateForm.cs" />
+    <Compile Include="Dao\Base\BaseDao.cs" />
+    <Compile Include="Dao\Base\BaseEntity.cs" />
+    <Compile Include="Dao\Base\BaseQueryForm.cs" />
+    <Compile Include="Dao\Base\BaseUpdateForm.cs" />
+    <Compile Include="Dao\Interface\IDao.cs" />
+    <Compile Include="Dao\Interface\IEntity.cs" />
+    <Compile Include="Dao\Interface\IQueryForm.cs" />
+    <Compile Include="Dao\Interface\IUpdateForm.cs" />
+    <Compile Include="Dao\PaginationEntity.cs" />
+    <Compile Include="Dao\Simple\SimpleDao.cs" />
+    <Compile Include="Dao\Simple\SimpleEntity.cs" />
+    <Compile Include="Dao\Simple\SimpleQueryForm.cs" />
+    <Compile Include="Dao\Simple\SimpleUpdateForm.cs" />
+    <Compile Include="Dao\SqlBuildResult.cs" />
     <Compile Include="LinqExtension.cs" />
-    <Compile Include="LogHelper.cs" />
     <Compile Include="NoSQLDB\BaseMongoEntity.cs" />
     <Compile Include="NoSQLDB\BaseNoSQLEntity.cs" />
     <Compile Include="NoSQLDB\IDataManager.cs" />
@@ -104,6 +111,25 @@
     <Compile Include="SQLDB\DBHelper\SQLiteHelper.cs" />
     <Compile Include="SQLDB\Paging\SQLitePagingSQL.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extension\Extension.csproj">
+      <Project>{94f414d4-4c82-46fe-96fc-b0f1c1faab5a}</Project>
+      <Name>Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDGenerator\IDGenerator.csproj">
+      <Project>{d5eccf03-314b-4117-b9dd-b57f303c358a}</Project>
+      <Name>IDGenerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reflection\Reflection.csproj">
+      <Project>{9d8d8ab0-f912-47d7-b8a6-37bdf83dbe86}</Project>
+      <Name>Reflection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleLogger\SimpleLogger.csproj">
+      <Project>{73c78c6a-31e2-4ec0-8f2e-384b431c224d}</Project>
+      <Name>SimpleLogger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

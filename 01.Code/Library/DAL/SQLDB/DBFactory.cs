@@ -10,6 +10,11 @@ namespace SOAFramework.Library.DAL
         public static IDBHelper CreateDBHelper()
         {
             string strDBType = DBType.MSSQL.ToString();
+            bool logsql = false;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableSqlLog"]))
+            {
+                logsql = ConfigurationManager.AppSettings["EnableSqlLog"] == "1";
+            }
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DBType"]))
             {
                 strDBType = ConfigurationManager.AppSettings["DBType"];
@@ -27,7 +32,9 @@ namespace SOAFramework.Library.DAL
             {
                 throw new Exception("没有在ConnectionString配置节点配置连接字符串！");
             }
-            return CreateDBHelper(strConn, strDBType);
+            var helper = CreateDBHelper(strConn, strDBType);
+            helper.LogSql = logsql;
+            return helper;
         }
 
         public static IDBHelper CreateDBHelper(string strConnectionString, string strDBType)
@@ -61,7 +68,7 @@ namespace SOAFramework.Library.DAL
 
         public static IDBHelper CreateDBHelper(string strConn)
         {
-            return CreateDBHelper(strConn, DBType.MSSQL);
+            return CreateDBHelper(strConn, DBType.MSSQL2005P);
         }
 
         public static IDBHelper CreateDBHelper(string strConnectionString, DBType objType)

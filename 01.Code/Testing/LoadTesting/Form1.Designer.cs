@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnLoad = new System.Windows.Forms.Button();
             this.btnZip = new System.Windows.Forms.Button();
             this.btnChoose = new System.Windows.Forms.Button();
             this.txbFile = new System.Windows.Forms.TextBox();
@@ -61,7 +62,7 @@
             this.progressbar = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnFromFile = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCount)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -84,6 +85,16 @@
             this.groupBox1.Size = new System.Drawing.Size(1491, 50);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Location = new System.Drawing.Point(553, 21);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnLoad.TabIndex = 5;
+            this.btnLoad.Text = "加载";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // btnZip
             // 
@@ -207,6 +218,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnFromFile);
             this.groupBox2.Controls.Add(this.groupBox4);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.label4);
@@ -389,15 +401,15 @@
             this.progressBar1.TabIndex = 11;
             this.progressBar1.Visible = false;
             // 
-            // btnLoad
+            // btnFromFile
             // 
-            this.btnLoad.Location = new System.Drawing.Point(553, 21);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnLoad.TabIndex = 5;
-            this.btnLoad.Text = "加载";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            this.btnFromFile.Location = new System.Drawing.Point(221, 99);
+            this.btnFromFile.Name = "btnFromFile";
+            this.btnFromFile.Size = new System.Drawing.Size(75, 23);
+            this.btnFromFile.TabIndex = 6;
+            this.btnFromFile.Text = "从文件";
+            this.btnFromFile.UseVisualStyleBackColor = true;
+            this.btnFromFile.Click += new System.EventHandler(this.btnFromFile_Click);
             // 
             // Form1
             // 
@@ -463,6 +475,7 @@
         private System.Windows.Forms.TextBox txbFile;
         private System.Windows.Forms.Button btnZip;
         private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.Button btnFromFile;
     }
 }
 

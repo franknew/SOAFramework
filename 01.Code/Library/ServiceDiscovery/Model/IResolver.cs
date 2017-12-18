@@ -7,6 +7,6 @@ namespace SOAFramework.Library
 {
     public interface IResolver
     {
-        IResolver Resolve();
+        void Resolve();
     }
 }

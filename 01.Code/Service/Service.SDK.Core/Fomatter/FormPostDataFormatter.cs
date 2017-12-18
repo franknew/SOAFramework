@@ -18,6 +18,7 @@ namespace SOAFramework.Service.SDK.Core
             foreach (var key in o.Keys)
             {
                 object value = o[key];
+                if (value == null) continue;
                 var valueType = value.GetType();
                 if (valueType.IsClass && !valueType.Equals(typeof(string))) builder.Append(value.ToString()).Append("&");
                 else builder.AppendFormat("{0}=", key).Append(HttpUtility.UrlEncode(value.ToString())).Append("&");

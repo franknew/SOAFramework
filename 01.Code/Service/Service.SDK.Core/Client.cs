@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using SOAFramework.Library;
+﻿using SOAFramework.Library;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,22 +15,13 @@ namespace SOAFramework.Service.SDK.Core
     {
         private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"]?.ConnectionString;
 
-        public T Execute<T>(IRequest<T> request, string url = null, ContentTypeEnum type = ContentTypeEnum.UrlEncoded) where T : BaseResponse
+        public virtual T Execute<T>(IRequest<T> request, string url = null, HttpMethodEnum method = HttpMethodEnum.Post, ContentTypeEnum type = ContentTypeEnum.UrlEncoded) where T : BaseResponse
         {
-            T t = default(T);
-            if (string.IsNullOrEmpty(url))
-            {
-                //生成完整的url
-                url = GetRealUrl(request, url);
-            }
-            //访问服务
-            string response = PostService(request, url, type);
-            //通过服务器返回的json生成response对象
-            t = GenerateResponse<T>(response);
+            var t = (T)Execute(request, typeof(T), url, method, type);
             return t;
         }
 
-        public object Execute(object request, Type responseType, string url = null, ContentTypeEnum type = ContentTypeEnum.UrlEncoded)
+        public virtual object Execute(object request, Type responseType, string url = null, HttpMethodEnum method = HttpMethodEnum.Post, ContentTypeEnum type = ContentTypeEnum.UrlEncoded, IServiceEncryptor encryptor = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -39,7 +29,7 @@ namespace SOAFramework.Service.SDK.Core
                 url = GetRealUrlBase(request, url);
             }
             //访问服务
-            string response = PostService(request, url, type);
+            string response = InvokeService(request, url, type, method);
             object t = GenerateResponse(response, responseType);
             return t;
         }
@@ -50,7 +40,7 @@ namespace SOAFramework.Service.SDK.Core
             return GetRealUrlBase(request, serviceUrl);
         }
 
-        private string GetRealUrlBase(object request, string serviceUrl)
+        protected string GetRealUrlBase(object request, string serviceUrl)
         {
             dynamic dyrequest = request;
             string api = dyrequest.GetApi();
@@ -73,15 +63,30 @@ namespace SOAFramework.Service.SDK.Core
             return fullUrl;
         }
 
-        private string PostService<T>(IRequest<T> request, string fullUrl, ContentTypeEnum type) where T : BaseResponse
+        protected string InvokeService<T>(IRequest<T> request, string fullUrl, ContentTypeEnum type, HttpMethodEnum method = HttpMethodEnum.Post, IServiceEncryptor encryptor = null) where T : BaseResponse
+        {
+            object req = request;
+            var response = InvokeService(req, fullUrl, type, method, encryptor);
+            return response;
+        }
+
+        protected string InvokeService(object request, string fullUrl, ContentTypeEnum type, HttpMethodEnum method = HttpMethodEnum.Post, IServiceEncryptor encryptor = null)
         {
             Type requestType = request.GetType();
             PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             Dictionary<string, object> argdic = new Dictionary<string, object>();
+            IDictionary<string, string> headers = new Dictionary<string, string>();
+            IDictionary<string, string> cookies = new Dictionary<string, string>();
             //反射获得请求属性
             foreach (PropertyInfo pro in properties)
             {
-                if (pro.GetCustomAttributes(typeof(PostDataAttribute), true).Length > 0)
+                bool isPostData = false;
+                bool isHeaderValue = false;
+                bool isCookieValue = false;
+                isPostData = pro.GetCustomAttributes(typeof(PostDataAttribute), true).Length > 0;
+                isHeaderValue = pro.GetCustomAttributes(typeof(HeaderValueAttribute), true).Length > 0;
+                isCookieValue = pro.GetCustomAttributes(typeof(CookieValueAttribute), true).Length > 0;
+                if (isPostData)
                 {
                     object proValue = pro.GetValue(request, null);
                     var proProperties = pro.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -94,62 +99,44 @@ namespace SOAFramework.Service.SDK.Core
                         argdic[name] = value;
                     }
                 }
+                else if (isHeaderValue)
+                {
+                    object proValue = pro.GetValue(request, null);
+                    headers[pro.Name] = proValue?.ToString();
+                }
+                else if (isCookieValue)
+                {
+                    object proValue = pro.GetValue(request, null);
+                    cookies[pro.Name] = proValue?.ToString();
+                }
                 else
                 {
                     ArgMapping mapping = pro.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
                     string name = pro.Name;
-                    if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping; 
+                    if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
                     object value = pro.GetValue(request, null);
                     argdic[name] = value;
                 }
             }
-            //格式化成post数据
-            IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
-            string json = fomatter.Format(argdic);
-            string typeString = ContentTypeConvert.ToTypeString(type);
-            byte[] data = Encoding.UTF8.GetBytes(json);
-            string zippedResponse = HttpHelper.Post(fullUrl, data, contentType: typeString);
-            //string response = ZipHelper.UnZip(zippedResponse);
-            string response = zippedResponse;
-
-            //设置请求信息
-            if (request is BaseRequest<T>)
+            string response = "";
+            var postdata = "";
+            switch (method)
             {
-                var req = request as BaseRequest<T>;
-                req.Body = new RequestBody
-                {
-                    PostData = json,
-                    URL = fullUrl,
-                };
+                default:
+                    //格式化成post数据
+                    IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
+                    postdata = fomatter.Format(argdic);
+                    if (encryptor != null) postdata = encryptor.Encrypt(postdata);
+                    string typeString = ContentTypeConvert.ToTypeString(type);
+                    byte[] data = Encoding.UTF8.GetBytes(postdata);
+                    response = HttpHelper.Post(fullUrl, data, contentType: typeString, header: headers, cookieDic: cookies);
+                    break;
+                case HttpMethodEnum.Get:
+                    type = ContentTypeEnum.UrlEncoded;
+                    postdata = fullUrl;
+                    response = HttpHelper.Get(fullUrl, argdic, header: headers, cookieDic: cookies);
+                    break;
             }
-            return response;
-        }
-
-        private string PostService(object request, string fullUrl, ContentTypeEnum type)
-        {
-            Type requestType = request.GetType();
-            PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            Dictionary<string, object> argdic = new Dictionary<string, object>();
-            //反射获得请求属性
-            foreach (PropertyInfo pro in properties)
-            {
-                ArgMapping mapping = pro.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
-                string name = pro.Name;
-                if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping))
-                {
-                    name = mapping.Mapping;
-                }
-                object value = pro.GetValue(request, null);
-                argdic[name] = value;
-            }
-            //格式化成post数据
-            IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
-            string json = fomatter.Format(argdic);
-            byte[] data = Encoding.UTF8.GetBytes(json);
-            string typeString = ContentTypeConvert.ToTypeString(type);
-            string zippedResponse = HttpHelper.Post(fullUrl, data, contentType: typeString);
-            //string response = ZipHelper.UnZip(zippedResponse);
-            string response = zippedResponse;
 
             //设置请求信息
             if (request.GetType().IsSubclassOf(typeof(BaseRequest<>)))
@@ -157,20 +144,20 @@ namespace SOAFramework.Service.SDK.Core
                 dynamic req = request;
                 req.Body = new RequestBody
                 {
-                    PostData = json,
+                    PostData = postdata,
                     URL = fullUrl,
                 };
             }
             return response;
         }
 
-        private T GenerateResponse<T>(string response) where T : BaseResponse
+        protected T GenerateResponse<T>(string response, bool toProperty = true) where T : BaseResponse
         {
-            T t = (T)GenerateResponse(response, typeof(T));
+            T t = (T)GenerateResponse(response, typeof(T), toProperty);
             return t;
         }
 
-        private object GenerateResponse(string response, Type responseType)
+        protected object GenerateResponse(string response, Type responseType, bool toProperty = true)
         {
             object t = Activator.CreateInstance(responseType);
             BaseResponse dyt = t as BaseResponse;
@@ -194,45 +181,63 @@ namespace SOAFramework.Service.SDK.Core
             catch (Exception ex)
             {
                 dyt.SetBody(response);
-                dyt.SetValues(true, ex.Message, ex.StackTrace, 0);
+                dyt.SetValues(true, 0, ex);
                 return t;
             }
-            //null意味着没有报错
-            if (shadow == null)
+            if (!toProperty)
             {
-                //将返回的对象值设置到response的第一个属性上面
-                PropertyInfo[] responseProperties = responseType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                if (responseProperties != null && responseProperties.Length > 0)
-                {
-                    BaseResponseShadow o = null;
-                    try
-                    {
-                        o = new BaseResponseShadow();
-                        object data = JsonHelper.Deserialize(response, responseProperties[0].PropertyType);
-                        if (data is object)
-                        {
-                            try
-                            {
-                                data = Convert.ChangeType(data, responseProperties[0].PropertyType);
-                            }
-                            catch
-                            {
-                                data = data.Clone(responseProperties[0].PropertyType);
-                            }
-                        }
-                        //t.TrySetValue(responseProperties[0].Name, data);
-                        responseProperties[0].SetValue(t, data, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(response, ex);
-                    }
-                }
+                t = JsonHelper.Deserialize(response, responseType);
             }
             else
             {
-                //否则设置错误信息
-                dyt.SetValues(shadow.IsError, shadow?.ErrorMessage, shadow?.StackTrace, shadow.Code);
+                //null意味着没有报错
+                if (shadow == null)
+                {
+                    PropertyInfo[] responseProperties = responseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    if (responseProperties != null && responseProperties.Length > 0)
+                    {
+                        PropertyInfo result = responseProperties[0];
+                        //先查找有没有sdk result attribute的属性
+                        foreach (var p in responseProperties)
+                        {
+                            var pro = p.GetCustomAttributes(typeof(SDKResultAttribute), true);
+                            if (pro != null && pro.Length > 0)
+                            {
+                                result = p;
+                                break;
+                            }
+                        }
+                        //将返回的对象值设置到response的第一个属性上面
+                        BaseResponseShadow o = null;
+                        try
+                        {
+                            o = new BaseResponseShadow();
+                            object data = JsonHelper.Deserialize(response, result.PropertyType);
+                            if (data is object)
+                            {
+                                try
+                                {
+                                    data = Convert.ChangeType(data, result.PropertyType);
+                                }
+                                catch
+                                {
+                                    data = data.Clone(result.PropertyType);
+                                }
+                            }
+                            //t.TrySetValue(responseProperties[0].Name, data);
+                            result.SetValue(t, data, null);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(response, ex);
+                        }
+                    }
+                }
+                else
+                {
+                    //否则设置错误信息
+                    dyt.SetValues(shadow.IsError, shadow.Code, shadow.Exception);
+                }
             }
             dyt.SetBody(response);
             return t;

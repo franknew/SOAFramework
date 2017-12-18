@@ -95,7 +95,7 @@
                 var newDel = Delegate.CreateDelegate(System.Linq.Expressions.Expression.GetDelegateType(paras.Values.ToArray()), instance /*Need to add support for other methods outside of this instance*/, method);
                 handlerSession.Register(methodName, newDel);
                 //regMethod.Invoke(handlerSession, new object[] { methodName, newDel });
-                handlerSession.MetaData.AddService(methodName, paras, defaultValues);
+                handlerSession.MetaData.AddService(methodName, paras, defaultValues, method);
             }
             return handlerSession;
         }

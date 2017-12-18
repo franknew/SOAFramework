@@ -30,10 +30,10 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using SOAFramework.Json.Utilities;
+using SOAFramework.Json.Linq;
 
-namespace Newtonsoft.Json.Serialization
+namespace SOAFramework.Json.Serialization
 {
   internal class JsonFormatterConverter : IFormatterConverter
   {

@@ -106,7 +106,7 @@ namespace MicroService.Library
                 while (true)
                 {
                     if (Status != ServerStatus.Updating) break;
-                    else Thread.Sleep(500);
+                    else Thread.Sleep(100);
                 }
                 string rawUrl = e.Request.RawUrl.TrimEnd('/');
                 int start = rawUrl.LastIndexOf("/");
@@ -134,7 +134,7 @@ namespace MicroService.Library
                 {
 
                     post = reader.ReadToEnd();
-                    logger.Write("Post数据:" + post);
+                    if (!string.IsNullOrEmpty(post)) logger.Write("Post数据:" + post);
                 }
 
                 Dictionary<string, object> args = new Dictionary<string, object>();
@@ -142,7 +142,7 @@ namespace MicroService.Library
                 if (args == null) args = new Dictionary<string, object>();
                 foreach (var key in e.Request.QueryString.AllKeys)
                 {
-                    if (!args.ContainsKey(key)) args[key] = e.Request.QueryString[key];
+                    if (!string.IsNullOrEmpty(key) &&  !args.ContainsKey(key)) args[key] = e.Request.QueryString[key];
                 }
                 httpContext.Args = args;
                 HttpServerContext.AddContext(Thread.CurrentThread.ManagedThreadId.ToString(), httpContext);
@@ -184,9 +184,11 @@ namespace MicroService.Library
                 {
                     ex = exOut;
                 }
+                SimpleLogger logger = new SimpleLogger();
+                logger.WriteException(ex);
                 JsonResponse response = new JsonResponse();
                 response.Success = false;
-                response.Error = new JsonRpcException(100, ex.Message, ex.InnerException);
+                response.Error = new JsonRpcException(100, ex.Message, ex);
                 responseString = serializor.Serialize(response);
             }
             finally
@@ -254,8 +256,16 @@ namespace MicroService.Library
 
         private void Bind(AppDomain domain, ServerType serverType, List<Assembly> assList = null)
         {
-            var server = ServerTypeFactory.Create(serverType);
+            SimpleLogger logger = new SimpleLogger();
+        var server = ServerTypeFactory.Create(serverType);
             server.Bind(sessionName, domain, assList);
+            var session = Handler.GetSessionHandler(sessionName);
+            if (session.MetaData.Services == null || session.MetaData.Services.Count == 0) logger.Write("没有解析出任何服务");
+            foreach (var key in session.MetaData.Services.Keys)
+            {
+                var service = session.MetaData.Services[key];
+                logger.Write("解析出服务：" + key);
+            }
         }
     }
 }
