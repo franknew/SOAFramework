@@ -6,6 +6,9 @@ using System.Threading;
 
 namespace SOAFramework.Library
 {
+    /// <summary>
+    /// 雪花ID，用于分布式系统产生唯一ID
+    /// </summary>
     public class SnowFlakGenerator : IIDGenerator
     {
         private static long machineId;//机器ID

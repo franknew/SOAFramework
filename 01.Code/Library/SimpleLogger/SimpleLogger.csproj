@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Release\Modules\SOAFramework.Library.SimpleLogger.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -48,9 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugFileNameGanerator.cs" />
+    <Compile Include="ErrorFileNameGenerator.cs" />
+    <Compile Include="IFileNameGenerator.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="LogCacheManager.cs" />
     <Compile Include="LogEntity.cs" />
+    <Compile Include="LogFileNameGenerator.cs" />
     <Compile Include="SimpleLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

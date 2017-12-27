@@ -8,6 +8,10 @@ namespace SOAFramework.Library
 {
     public interface IIDGenerator
     {
+        /// <summary>
+        /// 产生ID
+        /// </summary>
+        /// <returns></returns>
         string Generate();
     }
 
@@ -30,6 +34,9 @@ namespace SOAFramework.Library
         }
     }
 
+    /// <summary>
+    /// ID类型
+    /// </summary>
     public enum GeneratorType
     {
         GUID,

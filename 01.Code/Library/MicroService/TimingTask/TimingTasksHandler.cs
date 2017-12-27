@@ -210,7 +210,7 @@ namespace MicroService.Library
             {
                 try
                 {
-                    _logger.Write(msg);
+                    _logger.Write(msg, true);
                 }
                 catch (Exception ex)//写入日志如果报错,则在直接输出到控制台,防止导致程序崩溃
                 {

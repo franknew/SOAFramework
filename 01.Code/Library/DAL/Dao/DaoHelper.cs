@@ -10,6 +10,15 @@ namespace SOAFramework.Library.DAL
 {
     public class DaoHelper
     {
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <typeparam name="TEntity">实体类</typeparam>
+        /// <typeparam name="TQueryForm">查询类</typeparam>
+        /// <param name="mapper">mapper</param>
+        /// <param name="form">参数</param>
+        /// <param name="enableLog">是否写sql日志</param>
+        /// <returns></returns>
         public static List<TEntity> Query<TEntity, TQueryForm>(ISqlMapper mapper, TQueryForm form, bool enableLog = true) where TEntity : IEntity
             where TQueryForm : IQueryForm
         {
@@ -18,6 +27,16 @@ namespace SOAFramework.Library.DAL
             return QueryForList<TEntity, TQueryForm>(mapper, action, form, enableLog);
         }
 
+        /// <summary>
+        /// 查询出列表
+        /// </summary>
+        /// <typeparam name="TEntity">实体类</typeparam>
+        /// <typeparam name="TQueryForm">查询类</typeparam>
+        /// <param name="mapper">mapper</param>
+        /// <param name="statementName">sql名称</param>
+        /// <param name="form">参数</param>
+        /// <param name="enableLog">是否写sql日志</param>
+        /// <returns></returns>
         public static List<TEntity> QueryForList<TEntity, TQueryForm>(ISqlMapper mapper,
             string statementName,
             TQueryForm form,
@@ -57,6 +76,17 @@ namespace SOAFramework.Library.DAL
             return list;
         }
 
+        /// <summary>
+        /// 获取总数
+        /// </summary>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="session"></param>
+        /// <param name="command"></param>
+        /// <param name="statementName"></param>
+        /// <param name="form"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static int GetCount<TQueryForm>(ISqlMapper mapper, ISqlMapSession session, IDbCommand command, string statementName, TQueryForm form, bool enableLog = true)
             where TQueryForm : IQueryForm
         {
@@ -71,12 +101,22 @@ namespace SOAFramework.Library.DAL
             if (enableLog)
             {
                 SimpleLogger logger = new SimpleLogger();
-                logger.Write(sql);
-                logger.Write(paramString);
+                logger.Write(sql, true);
+                logger.Write(paramString, true);
             }
             return count;
         }
 
+        /// <summary>
+        /// 获取总数
+        /// </summary>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="form"></param>
+        /// <param name="statementName"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static int GetCount<TQueryForm, TEntity>(ISqlMapper mapper, TQueryForm form, string statementName = null, bool enableLog = true)
             where TQueryForm : IQueryForm
             where TEntity: IEntity
@@ -91,6 +131,18 @@ namespace SOAFramework.Library.DAL
             return GetCount<TQueryForm>(mapper, session, command, statementName, form, enableLog);
         }
 
+        /// <summary>
+        /// 获取分页数据
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="session"></param>
+        /// <param name="command"></param>
+        /// <param name="statementName"></param>
+        /// <param name="form"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static List<TEntity> QueryForPaging<TEntity, TQueryForm>(ISqlMapper mapper,
             ISqlMapSession session,
             IDbCommand command,
@@ -120,12 +172,20 @@ namespace SOAFramework.Library.DAL
             if (enableLog)
             {
                 SimpleLogger logger = new SimpleLogger();
-                logger.Write(sql);
-                logger.Write(paramString);
+                logger.Write(sql, true);
+                logger.Write(paramString, true);
             }
             return list;
         }
 
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="entity"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static TEntity Add<TEntity>(ISqlMapper mapper, TEntity entity, bool enableLog = true) where TEntity : IEntity
         {
             var type = typeof(TEntity);
@@ -156,6 +216,16 @@ namespace SOAFramework.Library.DAL
             return entity;
         }
 
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <typeparam name="TUpdateForm"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="form"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static bool UpdateSimpleEntity<TEntity, TQueryForm, TUpdateForm>(ISqlMapper mapper, TUpdateForm form, bool enableLog = true) where TEntity : SimpleEntity
             where TQueryForm : SimpleQueryForm
             where TUpdateForm : SimpleUpdateForm<TEntity, TQueryForm>
@@ -168,6 +238,16 @@ namespace SOAFramework.Library.DAL
             return true;
         }
 
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <typeparam name="TUpdateForm"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="form"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static bool UpdateBaseEntity<TEntity, TQueryForm, TUpdateForm>(ISqlMapper mapper, TUpdateForm form, bool enableLog = true) where TEntity : BaseEntity
             where TQueryForm : BaseQueryForm
             where TUpdateForm : BaseUpdateForm<TEntity, TQueryForm>
@@ -179,6 +259,15 @@ namespace SOAFramework.Library.DAL
             return true;
         }
 
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="tableName"></param>
+        /// <param name="form"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static bool Delete<TQueryForm>(ISqlMapper mapper, string tableName, TQueryForm form, bool enableLog = true) where TQueryForm : IQueryForm
         {
             string action = tableName + ".Delete";
@@ -187,12 +276,28 @@ namespace SOAFramework.Library.DAL
             return true;
         }
 
+        /// <summary>
+        /// 写日志
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="statementName"></param>
+        /// <param name="entity"></param>
+        /// <param name="session"></param>
         public static void WriteSqlLog(ISqlMapper mapper, string statementName, object entity, ISqlMapSession session)
         {
             string sql = mapper.GetRuntimeSql(statementName, entity, session);
-            new SimpleLogger().Write(sql);
+            new SimpleLogger().Write(sql, true);
         }
 
+        /// <summary>
+        /// 查询第一个
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TQueryForm"></typeparam>
+        /// <param name="mapper"></param>
+        /// <param name="form"></param>
+        /// <param name="enableLog"></param>
+        /// <returns></returns>
         public static TEntity QuerySingle<TEntity, TQueryForm>(ISqlMapper mapper, TQueryForm form, bool enableLog = true) where TEntity : IEntity
             where TQueryForm : IQueryForm
         {
@@ -201,6 +306,14 @@ namespace SOAFramework.Library.DAL
             return list[0];
         }
 
+        /// <summary>
+        /// 组装参数
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="statmentName"></param>
+        /// <param name="form"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         public static string BuildParams(ISqlMapper mapper, string statmentName, object form, IDbCommand command)
         {
             command.Parameters.Clear();

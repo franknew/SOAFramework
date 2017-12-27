@@ -17,11 +17,14 @@ namespace SOAFramework.Service.SDK.Core
 
         public virtual int Code { get; set; }
 
-        internal void SetValues(bool isError, int code, Exception ex)
+        public virtual string Message { get; set; }
+
+        internal void SetValues(bool isError, int code, string message, Exception ex)
         {
             this.IsError = isError;
             this.Code = code;
             this.Exception = ex;
+            this.Message = message;
         }
 
         internal void SetBody(string body)
@@ -39,6 +42,8 @@ namespace SOAFramework.Service.SDK.Core
         public int Code { get; set; }
 
         public object Data { get; set; }
+
+        public string Message { get; set; }
 
         public Exception Exception { get; set; }
     }

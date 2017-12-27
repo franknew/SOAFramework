@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SOAFramework.Library
 {
+    /// <summary>
+    /// guid，ms自带guid系统产生
+    /// </summary>
     public class GUIDGenerator : IIDGenerator
     {
         public string Generate()

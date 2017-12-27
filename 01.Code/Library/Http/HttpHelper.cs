@@ -33,18 +33,21 @@ namespace SOAFramework.Library
             }
             if (header != null)
             {
-                if (request.CookieContainer == null) request.CookieContainer = new CookieContainer();
                 foreach (var key in header.Keys)
                 {
-                    request.Headers.Add(key, header[key]);
+                    if (!string.IsNullOrEmpty(header[key])) request.Headers.Add(key, header[key]);
                 }
             }
             if (cookieDic != null)
             {
+                if (request.CookieContainer == null) request.CookieContainer = new CookieContainer();
                 foreach (var key in cookieDic.Keys)
                 {
-                    Cookie cookie = new Cookie(key, cookieDic[key]);
-                    request.CookieContainer.Add(cookie);
+                    if (!string.IsNullOrEmpty(cookieDic[key]))
+                    {
+                        Cookie cookie = new Cookie(key, cookieDic[key]);
+                        request.CookieContainer.Add(cookie);
+                    }
                 }
             }
             Stream requestStream = request.GetRequestStream();
@@ -69,7 +72,7 @@ namespace SOAFramework.Library
             {
                 foreach (var key in header.Keys)
                 {
-                    request.Headers.Add(key, header[key]);
+                    if (!string.IsNullOrEmpty(header[key])) request.Headers.Add(key, header[key]);
                 }
             }
             if (cookieDic != null)
@@ -77,8 +80,11 @@ namespace SOAFramework.Library
                 if (request.CookieContainer == null) request.CookieContainer = new CookieContainer();
                 foreach (var key in cookieDic.Keys)
                 {
-                    Cookie cookie = new Cookie(key, cookieDic[key]);
-                    request.CookieContainer.Add(cookie);
+                    if (!string.IsNullOrEmpty(cookieDic[key]))
+                    {
+                        Cookie cookie = new Cookie(key, cookieDic[key]);
+                        request.CookieContainer.Add(cookie);
+                    }
                 }
             }
             WebResponse response = request.GetResponse();

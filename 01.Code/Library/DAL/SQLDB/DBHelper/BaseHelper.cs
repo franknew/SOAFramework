@@ -151,7 +151,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
-                        if (logSql) logger.Write(strCommandString);
+                        if (logSql) logger.Write(strCommandString, true);
                         objAdp.Fill(set);
                     }
                 }
@@ -161,7 +161,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString);
+                logger.Write(strCommandString, true);
                 throw ex;
             }
             finally
@@ -364,7 +364,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
-                        if (logSql) logger.Write(strCommandString);
+                        if (logSql) logger.Write(strCommandString, true);
                         objAdp.Fill(dsData);
                     }
                 }
@@ -373,7 +373,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString);
+                logger.Write(strCommandString, true);
                 throw ex;
             }
             finally
@@ -572,7 +572,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
-                        if (logSql) logger.Write(strCommandString);
+                        if (logSql) logger.Write(strCommandString, true);
                         objData = objCommand.ExecuteScalar();
                     }
                 }
@@ -581,7 +581,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString);
+                logger.Write(strCommandString, true);
                 throw ex;
             }
             finally
@@ -739,7 +739,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock(this)
                     {
-                        if (logSql) logger.Write(strCommandString);
+                        if (logSql) logger.Write(strCommandString, true);
                         return objCommand.ExecuteNonQuery();
                     }
                 }
@@ -747,7 +747,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString);
+                logger.Write(strCommandString, true);
                 if (objCommand.Transaction != null)
                 {
                     objCommand.Transaction.Rollback();

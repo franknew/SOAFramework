@@ -60,7 +60,7 @@ namespace SOAFramework.Library.DAL
         {
             if (!enableLog) return;
             string sql = Mapper.GetRuntimeSql(statementName, entity, session);
-            new SimpleLogger().Write(sql);
+            new SimpleLogger().Write(sql, true);
         }
 
         public TEntity QuerySingle(TQueryForm form)

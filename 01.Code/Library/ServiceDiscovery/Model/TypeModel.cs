@@ -30,7 +30,7 @@ namespace SOAFramework.Library
         public void Resolve()
         {
             SimpleLogger logger = new SimpleLogger();
-            logger.Write(_self.FullName);
+            logger.Write(_self.FullName, true);
             ID = _generator.Generate();
             Name = _self.Name;
             FullName = _self.FullName;

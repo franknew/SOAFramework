@@ -9,6 +9,11 @@ namespace SOAFramework.Library
 {
     public class AssemblyHelper
     {
+        /// <summary>
+        /// 加载复制版本
+        /// </summary>
+        /// <param name="fullFileName"></param>
+        /// <returns></returns>
         public static Assembly LoadCopy(string fullFileName)
         {
             byte[] assbyte = null;

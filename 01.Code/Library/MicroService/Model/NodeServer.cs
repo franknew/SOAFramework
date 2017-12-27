@@ -134,7 +134,7 @@ namespace MicroService.Library
                 {
 
                     post = reader.ReadToEnd();
-                    if (!string.IsNullOrEmpty(post)) logger.Write("Post数据:" + post);
+                    if (!string.IsNullOrEmpty(post)) logger.Write("Post数据:" + post, true);
                 }
 
                 Dictionary<string, object> args = new Dictionary<string, object>();
@@ -260,11 +260,11 @@ namespace MicroService.Library
         var server = ServerTypeFactory.Create(serverType);
             server.Bind(sessionName, domain, assList);
             var session = Handler.GetSessionHandler(sessionName);
-            if (session.MetaData.Services == null || session.MetaData.Services.Count == 0) logger.Write("没有解析出任何服务");
+            if (session.MetaData.Services == null || session.MetaData.Services.Count == 0) logger.Write("没有解析出任何服务", true);
             foreach (var key in session.MetaData.Services.Keys)
             {
                 var service = session.MetaData.Services[key];
-                logger.Write("解析出服务：" + key);
+                logger.Write("解析出服务：" + key, true);
             }
         }
     }
