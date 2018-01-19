@@ -156,3 +156,4 @@ $RECYCLE.BIN/
 .DS_Store
 *.nuspec
 *.mdown
+/01.Code/packages

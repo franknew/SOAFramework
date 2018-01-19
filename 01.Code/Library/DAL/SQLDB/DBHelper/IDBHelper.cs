@@ -55,17 +55,25 @@ namespace SOAFramework.Library.DAL
 
         DataTable GetTableWithSQL(string strCommandString, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName);
 
+        DataTable GetTableWithSQL(string strCommandString, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderby);
+
         DataTable GetTableWithSQL(string strCommandString);
 
         DataTable GetTableWithSQL(string strCommandString, int intStartIndex, int intEndIndex, string strIDColumnName);
+
+        DataTable GetTableWithSQL(string strCommandString, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderby);
 
         DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams);
 
         DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, int intStartIndex, int intEndIndex, string strIDColumnName);
 
+        DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderby);
+
         DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString);
 
         DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName);
+
+        DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderby);
         #endregion
 
         #region GetTableWithSP

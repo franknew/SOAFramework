@@ -8,6 +8,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.IO;
+using System.Dynamic;
 
 namespace SOAFramework.Library
 {
@@ -31,6 +32,7 @@ namespace SOAFramework.Library
                     Type t = Nullable.GetUnderlyingType(property.PropertyType)
                     ?? property.PropertyType;
                     object safeValue = null;
+                    if (row[column.ColumnName] == null || row[column.ColumnName] == DBNull.Value || row[column.ColumnName].ToString().Equals("null")) continue;
                     if (t == typeof(byte[]))
                     {
                         if (column.DataType.Equals(typeof(byte[]))) safeValue = row[column.ColumnName];
@@ -46,8 +48,7 @@ namespace SOAFramework.Library
                         safeValue = v.ToCharArray();
                     }
                     else if (t.BaseType == typeof(Enum)) safeValue = row[column.ColumnName];
-                    else safeValue = (row[column.ColumnName] == null || row[column.ColumnName] == DBNull.Value || row[column.ColumnName].ToString().Equals("null")) ? null
-                                                          : Convert.ChangeType(row[column.ColumnName], t);
+                    else safeValue = Convert.ChangeType(row[column.ColumnName], t);
                     //object value = Convert.ChangeType(row[column], property.PropertyType);
                     if (property.CanWrite) property.SetValue(data, safeValue, null);
 
@@ -128,26 +129,30 @@ namespace SOAFramework.Library
             Type typeT = typeof(T);
             foreach (DataRow row in table.Rows)
             {
-                T t = Activator.CreateInstance<T>();
-                row.CopyToObject<T>(t);
-                //foreach (DataColumn column in table.Columns)
-                //{
-                //    try
-                //    {
-                //        PropertyInfo property = typeT.GetProperty(column.ColumnName);
-                //        if (property != null && row[column] != DBNull.Value && row[column] != null)
-                //        {
-                //            object value = row[column].ChangeTypeTo(property.PropertyType);
-                //            property.SetValue(t, value, null);
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //    }
-                //}
+
+                T t = default(T);
+                if (typeT.Equals(typeof(Object)))
+                {
+                    var data = row.ToDictionary();
+                    ExpandoObject expando = new ExpandoObject();
+                    var dic = expando as IDictionary<string, object>;
+                    foreach (var key in data.Keys)
+                    {
+                        dic[key] = data[key];   
+                    }
+                    dynamic r = expando;
+                    t = r;
+                }
+                else
+                {
+                    t = Activator.CreateInstance<T>();
+                    row.CopyToObject<T>(t);
+                }
                 listResult.Add(t);
             }
             return listResult;
+
+            //return JsonConvert.DeserializeObject<IList<T>>(JsonConvert.SerializeObject(table));
         }
 
         /// <summary>
@@ -286,79 +291,89 @@ namespace SOAFramework.Library
 
         public static object ChangeTypeTo(this object value, Type conversionType)
         {
-            // Note: This if block was taken from Convert.ChangeType as is, and is needed here since we're
-            // checking properties on conversionType below.
-            if (conversionType == null)
-                throw new ArgumentNullException("conversionType");
+            try
+            {
+                // Note: This if block was taken from Convert.ChangeType as is, and is needed here since we're
+                // checking properties on conversionType below.
+                if (conversionType == null)
+                    throw new ArgumentNullException("conversionType");
 
-            // If it's not a nullable type, just pass through the parameters to Convert.ChangeType
+                if (value == null || value == DBNull.Value) return null;
 
-            if (conversionType.IsGenericType && conversionType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-            {
-                // It's a nullable type, so instead of calling Convert.ChangeType directly which would throw a
-                // InvalidCastException (per http://weblogs.asp.net/pjohnson/archive/2006/02/07/437631.aspx),
-                // determine what the underlying type is
-                // If it's null, it won't convert to the underlying type, but that's fine since nulls don't really
-                // have a type--so just return null
-                // Note: We only do this check if we're converting to a nullable type, since doing it outside
-                // would diverge from Convert.ChangeType's behavior, which throws an InvalidCastException if
-                // value is null and conversionType is a value type.
-                if (value == null)
-                    return null;
+                // If it's not a nullable type, just pass through the parameters to Convert.ChangeType
 
-                // It's a nullable type, and not null, so that means it can be converted to its underlying type,
-                // so overwrite the passed-in conversion type with this underlying type
-                NullableConverter nullableConverter = new NullableConverter(conversionType);
-                conversionType = nullableConverter.UnderlyingType;
-            }
-            else if (conversionType == typeof(Guid))
-            {
-                return new Guid(value.ToString());
-
-            }
-            else if (conversionType == typeof(byte[]) && value.GetType() == typeof(string))
-            {
-                return Convert.FromBase64String(value.ToString());
-            }
-            else if (conversionType == typeof(string) && value.GetType() == typeof(byte[]))
-            {
-                return Convert.ToBase64String(value as byte[]);
-            }
-            else if (conversionType == typeof(Int64) && value.GetType() == typeof(int))
-            {
-                //there is an issue with SQLite where the PK is ALWAYS int64. If this conversion type is Int64
-                //we need to throw here - suggesting that they need to use LONG instead
-
-
-                throw new InvalidOperationException("Can't convert an Int64 (long) to Int32(int). If you're using SQLite - this is probably due to your PK being an INTEGER, which is 64bit. You'll need to set your key to long.");
-            }
-            else if (value.GetType().Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString()) && !conversionType.Equals(typeof(string)))
-            {
-                value = Activator.CreateInstance(conversionType);
-                return value;
-            }
-            else if (value.GetType().Equals(typeof(string)) && conversionType.Equals(typeof(DateTime)))
-            {
-                string time = value.ToString().Replace("`", "");
-                int last = time.LastIndexOf(":");
-                //change db2 datetime to common
-                if (time.Length == 23 && time.LastIndexOf(".") == -1)
+                if (conversionType.IsGenericType && conversionType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
                 {
-                    value = time.Remove(last, 1).Insert(last, ".");
-                    return time;
+                    // It's a nullable type, so instead of calling Convert.ChangeType directly which would throw a
+                    // InvalidCastException (per http://weblogs.asp.net/pjohnson/archive/2006/02/07/437631.aspx),
+                    // determine what the underlying type is
+                    // If it's null, it won't convert to the underlying type, but that's fine since nulls don't really
+                    // have a type--so just return null
+                    // Note: We only do this check if we're converting to a nullable type, since doing it outside
+                    // would diverge from Convert.ChangeType's behavior, which throws an InvalidCastException if
+                    // value is null and conversionType is a value type.
+
+                    // It's a nullable type, and not null, so that means it can be converted to its underlying type,
+                    // so overwrite the passed-in conversion type with this underlying type
+                    NullableConverter nullableConverter = new NullableConverter(conversionType);
+                    conversionType = nullableConverter.UnderlyingType;
                 }
+                else if (conversionType == typeof(Guid))
+                {
+                    return new Guid(value.ToString());
+
+                }
+                else if (conversionType == typeof(byte[]) && value.GetType() == typeof(string))
+                {
+                    if (value.ToString().Equals("0")) return null;
+                    return Convert.FromBase64String(value.ToString());
+                }
+                else if (conversionType == typeof(string) && value.GetType() == typeof(byte[]))
+                {
+                    return Convert.ToBase64String(value as byte[]);
+                }
+                else if (conversionType == typeof(Int64) && value.GetType() == typeof(int))
+                {
+                    //there is an issue with SQLite where the PK is ALWAYS int64. If this conversion type is Int64
+                    //we need to throw here - suggesting that they need to use LONG instead
+
+
+                    throw new InvalidOperationException("Can't convert an Int64 (long) to Int32(int). If you're using SQLite - this is probably due to your PK being an INTEGER, which is 64bit. You'll need to set your key to long.");
+                }
+                else if (value.GetType().Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString()) && !conversionType.Equals(typeof(string)))
+                {
+                    value = Activator.CreateInstance(conversionType);
+                    return value;
+                }
+                else if (value.GetType().Equals(typeof(string)) && conversionType.Equals(typeof(DateTime)))
+                {
+                    string time = value.ToString().Replace("`", "");
+                    int last = time.LastIndexOf(":");
+                    //change db2 datetime to common
+                    if (time.Length == 23 && time.LastIndexOf(".") == -1)
+                    {
+                        value = time.Remove(last, 1).Insert(last, ".");
+                        return time;
+                    }
+                }
+                else if (value.GetType().Equals(typeof(string)) && !conversionType.Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString()))
+                {
+                    return null;
+                }
+                else if (conversionType.Equals(typeof(string)))
+                {
+                    return value.ToString();
+                }
+                // Now that we've guaranteed conversionType is something Convert.ChangeType can handle (i.e. not a
+                // nullable type), pass the call on to Convert.ChangeType
+                return Convert.ChangeType(value, conversionType);
             }
-            else if (value.GetType().Equals(typeof(string)) && !conversionType.Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString()))
+            catch (Exception ex)
             {
-                return null;
+                SimpleLogger logger = new SimpleLogger();
+                logger.Error(value.ToString());
+                throw ex;
             }
-            else if (conversionType.Equals(typeof(string)))
-            {
-                return value.ToString();
-            }
-            // Now that we've guaranteed conversionType is something Convert.ChangeType can handle (i.e. not a
-            // nullable type), pass the call on to Convert.ChangeType
-            return Convert.ChangeType(value, conversionType);
         }
 
         public static void CopyLoad(this AppDomain domain, string fullFileName)

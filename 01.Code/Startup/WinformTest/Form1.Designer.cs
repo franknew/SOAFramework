@@ -52,6 +52,9 @@
             this.btnFTS = new System.Windows.Forms.Button();
             this.btnSTF = new System.Windows.Forms.Button();
             this.btnSDKTesting = new System.Windows.Forms.Button();
+            this.btnChangeType = new System.Windows.Forms.Button();
+            this.btnsql = new System.Windows.Forms.Button();
+            this.btnDynamic = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -278,11 +281,47 @@
             this.btnSDKTesting.UseVisualStyleBackColor = true;
             this.btnSDKTesting.Click += new System.EventHandler(this.btnSDKTesting_Click);
             // 
+            // btnChangeType
+            // 
+            this.btnChangeType.Location = new System.Drawing.Point(830, 282);
+            this.btnChangeType.Name = "btnChangeType";
+            this.btnChangeType.Size = new System.Drawing.Size(114, 25);
+            this.btnChangeType.TabIndex = 25;
+            this.btnChangeType.Text = "change type test";
+            this.btnChangeType.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnChangeType.UseVisualStyleBackColor = true;
+            this.btnChangeType.Click += new System.EventHandler(this.btnChangeType_Click);
+            // 
+            // btnsql
+            // 
+            this.btnsql.Location = new System.Drawing.Point(830, 251);
+            this.btnsql.Name = "btnsql";
+            this.btnsql.Size = new System.Drawing.Size(75, 25);
+            this.btnsql.TabIndex = 26;
+            this.btnsql.Text = "exec sql";
+            this.btnsql.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnsql.UseVisualStyleBackColor = true;
+            this.btnsql.Click += new System.EventHandler(this.btnsql_Click);
+            // 
+            // btnDynamic
+            // 
+            this.btnDynamic.Location = new System.Drawing.Point(830, 220);
+            this.btnDynamic.Name = "btnDynamic";
+            this.btnDynamic.Size = new System.Drawing.Size(75, 25);
+            this.btnDynamic.TabIndex = 27;
+            this.btnDynamic.Text = "dynamic";
+            this.btnDynamic.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnDynamic.UseVisualStyleBackColor = true;
+            this.btnDynamic.Click += new System.EventHandler(this.btnDynamic_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnDynamic);
+            this.Controls.Add(this.btnsql);
+            this.Controls.Add(this.btnChangeType);
             this.Controls.Add(this.btnSDKTesting);
             this.Controls.Add(this.btnSTF);
             this.Controls.Add(this.btnFTS);
@@ -340,6 +379,9 @@
         private System.Windows.Forms.Button btnFTS;
         private System.Windows.Forms.Button btnSTF;
         private System.Windows.Forms.Button btnSDKTesting;
+        private System.Windows.Forms.Button btnChangeType;
+        private System.Windows.Forms.Button btnsql;
+        private System.Windows.Forms.Button btnDynamic;
     }
 }
 

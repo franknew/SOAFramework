@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <object name="UserOperateDal" type="SpringNetDAL.UserOperateDAL,SpringNetDAL"/>
+
+  <!--环绕通知拦截  运用特性-->
+  <object id="aroundAdvisor" type="Spring.Aop.Support.AttributeMatchMethodPointcutAdvisor, Spring.Aop">
+    <property name="Advice">
+      <object type="SpringNetAop.Aspects.LoggingAroundAdvice, SpringNetAop" />
+    </property>
+    <property name="Attribute"
+              value="SpringNetAop.Attributes.LoggingAttributes, SpringNetAop" />
+  </object>
+
+
+  <!--后置通知拦截  运用名称-->
+  <object id="afterAdvisor" type="Spring.Aop.Support.NameMatchMethodPointcutAdvisor, Spring.Aop">
+    <property name="Advice">
+      <object type="SpringNetAop.Aspects.LoggingAfterAdvice, SpringNetAop" />
+    </property>
+    <property name="MappedNames">
+      <list>
+        <value>*UserLogin</value>
+      </list>
+    </property>
+  </object>
+
+  <!--异常通知拦截  程序所有都支持 不设置条件-->
+  <object id="throwsAdvice"  type="WinformTest.EventAdvise, WinformTest" />
+
+
+
+  <object id="myServiceCommand" type="Spring.Aop.Framework.ProxyFactoryObject">
+    <property name="Target">
+      <object type="SpringNetBLL.UserOperate, SpringNetBLL" />
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>aroundAdvisor</value>
+        <value>afterAdvisor</value>
+        <value>throwsAdvice</value>
+      </list>
+    </property>
+  </object>
+</objects>

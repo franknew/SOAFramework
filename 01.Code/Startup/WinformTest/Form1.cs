@@ -20,13 +20,13 @@ using Chainway.SSO;
 using SOAFramework.Library.Cache;
 using System.Runtime.Caching;
 using IBatisNet.DataMapper;
-using SOAFramework.Service.SDK.Core;
-using WinformTest.SDK;
+using SOAFramework.Library.DAL;
+using System.Dynamic;
 
 namespace WinformTest
 {
     [TestAttibute]
-    public partial class Form1 : Form
+    public partial class Form1 : Form, IFormAction
     {
         public Form1()
         {
@@ -198,12 +198,6 @@ namespace WinformTest
 
         private void btnDotNetty_Click(object sender, EventArgs e)
         {
-            TestClient client = new TestClient();
-            LoginRequest request = new LoginRequest();
-            request.userName = "admin";
-            request.passPwd = "admin";
-
-            var response = client.Execute(request);
         }
 
         private void btnDalQuery_Click(object sender, EventArgs e)
@@ -255,8 +249,38 @@ namespace WinformTest
 
         private void btnSDKTesting_Click(object sender, EventArgs e)
         {
-            LoginRequest request = new LoginRequest();
-            var response = SDKFactory.Client.Execute(request);
+        }
+
+        private void btnChangeType_Click(object sender, EventArgs e)
+        {
+            var b = "0".ChangeTypeTo<byte[]>();
+        }
+
+        private void btnsql_Click(object sender, EventArgs e)
+        {
+            IDBHelper helper = DBFactory.CreateDBHelper();
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            helper.GetTableWithSQL("select top 1000 * from T_Sys_User");
+            watch.Stop();
+            MessageBox.Show(watch.ElapsedMilliseconds.ToString());
+        }
+
+        private void btnDynamic_Click(object sender, EventArgs e)
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("column1");
+            DataRow row = table.NewRow();
+            row["column1"] = "hello, world";
+            table.Rows.Add(row);
+
+            var d = table.ToList<dynamic>().FirstOrDefault();
+            MessageBox.Show(d.column1);
+        }
+
+        void IFormAction.OnClick(EventArgs e)
+        {
+            base.OnClick(e);
         }
     }
 }

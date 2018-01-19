@@ -63,6 +63,12 @@
     <Compile Include="TypeExtension.cs" />
     <Compile Include="WindowsApi.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleLogger\SimpleLogger.csproj">
+      <Project>{73c78c6a-31e2-4ec0-8f2e-384b431c224d}</Project>
+      <Name>SimpleLogger</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -84,6 +84,12 @@ namespace SOAFramework.Library
             return String.Equals(source.Trim(), compare.Trim(), StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <summary>
+        /// 匹配regex表达式
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <param name="matchPattern"></param>
+        /// <returns></returns>
         public static bool MatchesRegex(this string inputString, string matchPattern)
         {
             return Regex.IsMatch(inputString, matchPattern,
@@ -748,6 +754,35 @@ namespace SOAFramework.Library
                     return key.Key;
             }
             return null;
+        }
+
+        /// <summary>
+        /// 获得文本中的变量名，例如{name}，获得name 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public static List<string> GetVairable(this string str, char start, char end)
+        {
+            List<string> list = new List<string>();
+            StringBuilder builder = new StringBuilder();
+            bool started = false;
+            foreach (var c in str)
+            {
+                if (c.Equals(start))
+                {
+                    builder.Clear();
+                    started = true;
+                }
+                else if (started) builder.Append(c);
+                else if (c.Equals(end) && !started)
+                {
+                    list.Add(builder.ToString());
+                    started = false;
+                }
+            }
+            return list;
         }
 
 

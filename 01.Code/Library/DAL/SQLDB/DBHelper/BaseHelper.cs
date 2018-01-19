@@ -118,7 +118,7 @@ namespace SOAFramework.Library.DAL
         /// <param name="objParams">parameters</param>
         /// <param name="strConnectionString">connection string</param>
         /// <returns>data</returns>
-        public DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName)
+        public DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderby)
         {
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
@@ -127,10 +127,10 @@ namespace SOAFramework.Library.DAL
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex));
+            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex, orderby));
             else strSQL.Append(strCommandString);
             if (string.IsNullOrEmpty(strConnectionString)) strConnectionString = mStr_ConnectionString;
-            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;
+            if (string.IsNullOrEmpty(objConnection.ConnectionString)) objConnection.ConnectionString = strConnectionString;   
             objCommand.CommandText = strSQL.ToString();
             objCommand.CommandType = CommandType.Text;
             objCommand.Connection = objConnection;
@@ -151,7 +151,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
-                        if (logSql) logger.Write(strCommandString, true);
+                        if (logSql) logger.Log(strCommandString, true);
                         objAdp.Fill(set);
                     }
                 }
@@ -161,7 +161,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString, true);
+                logger.Error(strCommandString, true);
                 throw ex;
             }
             finally
@@ -171,6 +171,12 @@ namespace SOAFramework.Library.DAL
                     objConnection.Close();
                 }
             }
+        }
+
+
+        public DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName)
+        {
+            return this.GetTableWithSQL(strCommandString, objParams, strConnectionString, intStartIndex, intEndIndex, strIDColumnName, OrderBy.DESC);
         }
 
         public DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
@@ -191,8 +197,14 @@ namespace SOAFramework.Library.DAL
 
         public DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, int intStartIndex, int intEndIndex, string strIDColumnName)
         {
-            return GetTableWithSQL(strCommandString, objParams, mStr_ConnectionString, intStartIndex, intEndIndex, strIDColumnName);
+            return GetTableWithSQL(strCommandString, objParams, mStr_ConnectionString, intStartIndex, intEndIndex, strIDColumnName, OrderBy.DESC);
         }
+
+        public DataTable GetTableWithSQL(string strCommandString, Parameter[] objParams, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderBy)
+        {
+            return GetTableWithSQL(strCommandString, objParams, mStr_ConnectionString, intStartIndex, intEndIndex, strIDColumnName, orderBy);
+        }
+
         /// <summary>
         /// get a datatable from database with sql string
         /// </summary>
@@ -203,9 +215,14 @@ namespace SOAFramework.Library.DAL
             return GetTableWithSQL(strCommandString, null, mStr_ConnectionString, 0, 0, "");
         }
 
+        public DataTable GetTableWithSQL(string strCommandString, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderBy)
+        {
+            return GetTableWithSQL(strCommandString, null, mStr_ConnectionString, intStartIndex, intEndIndex, strIDColumnName, orderBy);
+        }
+
         public DataTable GetTableWithSQL(string strCommandString, int intStartIndex, int intEndIndex, string strIDColumnName)
         {
-            return GetTableWithSQL(strCommandString, null, mStr_ConnectionString, intStartIndex, intEndIndex, strIDColumnName);
+            return GetTableWithSQL(strCommandString, null, mStr_ConnectionString, intStartIndex, intEndIndex, strIDColumnName, OrderBy.DESC);
         }
 
         /// <summary>
@@ -219,10 +236,16 @@ namespace SOAFramework.Library.DAL
             return GetTableWithSQL(strCommandString, null, strConnectionString, 0, 0, "");
         }
 
+        public DataTable GetTableWithSQL(string strCommandString, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName, OrderBy orderby)
+        {
+            return GetTableWithSQL(strCommandString, null, strConnectionString, intStartIndex, intEndIndex, strIDColumnName, orderby);
+        }
+
         public DataTable GetTableWithSQL(string strCommandString, string strConnectionString, int intStartIndex, int intEndIndex, string strIDColumnName)
         {
-            return GetTableWithSQL(strCommandString, null, strConnectionString, intStartIndex, intEndIndex, strIDColumnName);
+            return GetTableWithSQL(strCommandString, null, strConnectionString, intStartIndex, intEndIndex, strIDColumnName, OrderBy.DESC);
         }
+
         #endregion
 
         #region GetTableWithSP
@@ -339,10 +362,8 @@ namespace SOAFramework.Library.DAL
             if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex)); 
             else strSQL.Append(strCommandString); 
             DataSet dsData = new DataSet();
-            if (string.IsNullOrEmpty(strConnectionString))
-            {
-                if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
-            }
+            if (string.IsNullOrEmpty(strConnectionString)) strConnectionString = mStr_ConnectionString;
+            if (string.IsNullOrEmpty(objConnection.ConnectionString)) objConnection.ConnectionString = strConnectionString;
 
             objCommand.CommandText = strSQL.ToString();
             objCommand.CommandType = CommandType.Text;
@@ -364,7 +385,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
-                        if (logSql) logger.Write(strCommandString, true);
+                        if (logSql) logger.Log(strCommandString, true);
                         objAdp.Fill(dsData);
                     }
                 }
@@ -373,7 +394,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString, true);
+                logger.Error(strCommandString, true);
                 throw ex;
             }
             finally
@@ -551,7 +572,7 @@ namespace SOAFramework.Library.DAL
             {
                 strConnectionString = mStr_ConnectionString;
             }
-            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
+            if (string.IsNullOrEmpty(objConnection.ConnectionString)) objConnection.ConnectionString = mStr_ConnectionString;
 
             objCommand.CommandText = strCommandString;
             objCommand.CommandType = CommandType.Text;
@@ -572,7 +593,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock (this)
                     {
-                        if (logSql) logger.Write(strCommandString, true);
+                        if (logSql) logger.Log(strCommandString, true);
                         objData = objCommand.ExecuteScalar();
                     }
                 }
@@ -581,7 +602,8 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString, true);
+                logger.Error(strCommandString, true);
+                logger.WriteException(ex);
                 throw ex;
             }
             finally
@@ -718,8 +740,8 @@ namespace SOAFramework.Library.DAL
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            if (string.IsNullOrEmpty(strConnectionString))  strConnectionString = mStr_ConnectionString; 
-            if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.ConnectionString = strConnectionString;;
+            if (string.IsNullOrEmpty(strConnectionString))  strConnectionString = mStr_ConnectionString;
+            if (string.IsNullOrEmpty(objConnection.ConnectionString)) objConnection.ConnectionString = mStr_ConnectionString;
 
             objCommand.CommandText = strCommandString;
             objCommand.CommandType = CommandType.Text;
@@ -739,7 +761,7 @@ namespace SOAFramework.Library.DAL
                 {
                     lock(this)
                     {
-                        if (logSql) logger.Write(strCommandString, true);
+                        if (logSql) logger.Log(strCommandString, true);
                         return objCommand.ExecuteNonQuery();
                     }
                 }
@@ -747,7 +769,7 @@ namespace SOAFramework.Library.DAL
             }
             catch (Exception ex)
             {
-                logger.Write(strCommandString, true);
+                logger.Error(strCommandString, true);
                 if (objCommand.Transaction != null)
                 {
                     objCommand.Transaction.Rollback();
