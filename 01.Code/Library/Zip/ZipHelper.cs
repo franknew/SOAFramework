@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICSharpCode.SharpZipLib.Zip;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -196,5 +197,39 @@ namespace SOAFramework.Library
             return null;
         }
 
+        public static void PackageFiles(string fullFileName, IEnumerable<string> fileNames)
+        {
+            FileInfo file = new FileInfo(fullFileName);
+            Stream stream = null;
+            if (!file.Directory.Exists) file.Directory.Create();
+            if (!file.Exists) stream = file.Create();
+            else stream = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            ZipFile zip = new ZipFile(stream);
+            try
+            {
+                zip.BeginUpdate();
+                foreach (var key in fileNames)
+                {
+                    FileInfo f = new FileInfo(key);
+                    zip.Add(key, f.Name);
+                }
+                zip.CommitUpdate();
+            }
+            finally
+            {
+                stream?.Close();
+                zip?.Close();
+            }
+        }
+
+        public static void PackageDirectory(string fullFileName, string directory, string searchPattern = null)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+            FileInfo[] files = null;
+            if (!string.IsNullOrEmpty(searchPattern)) files = directoryInfo.GetFiles(searchPattern);
+            else files = directoryInfo.GetFiles();
+            var fileNames = (from f in files select f.FullName).ToList();
+            PackageFiles(fullFileName, fileNames);
+        }
     }
 }

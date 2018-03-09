@@ -3,55 +3,96 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Web.Http;
 
 namespace SOAFramework.Library
 {
     public class ServiceModel: IResolver
     {
         private MethodInfo _self;
+        private string idName;
         private IIDGenerator _generator = IDGeneratorFactory.Create(GeneratorType.SnowFlak);
+
         public ServiceModel(MethodInfo self)
         {
             _self = self;
+            ID = _generator.Generate();
             this.Resolve();
         }
-        
+
+        public ServiceModel()
+        {
+            ID = _generator.Generate();
+        }
+        /// <summary>
+        /// 方法名称
+        /// </summary>
         public string Name { get; set; }
-        public string FullName { get; set; }
+        /// <summary>
+        /// 返回值信息
+        /// </summary>
         public TypeModel Return { get; set; }
-        public List<ArgModel> Args { get; set; }
+        /// <summary>
+        /// 参数信息
+        /// </summary>
+        public List<TypeModel> Args { get; set; }
+        /// <summary>
+        /// 备注描述
+        /// </summary>
         public string Description { get; set; }
-        public string Type { get; set; }
-        public string FullAction { get; set; }
-        public string ID { get; set; }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public string TypeName { get; set; }
+        /// <summary>
+        /// 控制器
+        /// </summary>
+        public string Category { get; set; }
+        /// <summary>
+        /// 访问路由
+        /// </summary>
+        public string Route { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        public string ID { get; private set; }
+
+        /// <summary>
+        /// 用于标识的服务名称
+        /// </summary>
+        public string FriendlyID { get; set; }
+        /// <summary>
+        /// http method(GET,POST,PUT,DELETE)
+        /// </summary>
+        public string HttpMethod { get; set; }
 
         public void Resolve()
         {
-            ID = _generator.Generate();
-            FullName = _self.DeclaringType.FullName + "." + _self.Name;
+            if (_self == null) return;
+            idName = GetFullName(_self);
             var desc = ResolverHelper.GetMemberFromCache(_self.DeclaringType, t =>
             {
-                return t.Name.StartsWith("M:" + FullName);
+                return t.Name.StartsWith("M:" + idName);
             });
-            Description = desc?.Summary?.Trim();
-            Name = _self.Name;
-            Type = _self.DeclaringType.FullName;
-            Return = new TypeModel(_self.ReturnType);
-            Return.Description = desc?.Returns?.Trim();
-            Args = new List<ArgModel>();
 
             var args = _self.GetParameters();
-            int i = 0;
-            foreach (var arg in args)
+            Args = new List<TypeModel>();
+            for (int i = 0; i < args.Length; i++)
             {
-                var argmodel = new ArgModel(arg.ParameterType);
-                argmodel.MemberName = arg.Name;
-                argmodel.Description = desc?.Params?.FirstOrDefault(t => t.Name.Equals(arg.Name))?.Description?.Trim();
-                argmodel.Index = i;
+                var arg = args[i];
+                TypeModel argmodel = ModelFactory.CreateTypeModel(arg.ParameterType);
                 Args.Add(argmodel);
-                i++;
             }
-            
+            Description = desc?.Summary?.Trim();
+            Name = _self.Name;
+            TypeName = _self.DeclaringType.FullName;
+            Return = ModelFactory.CreateTypeModel(_self.ReturnType);
+            Return.Description = desc?.Returns?.Trim();
+        }
+
+        public static string GetFullName(MethodInfo method)
+        {
+            return method.DeclaringType.FullName + "." + method.Name;
         }
     }
 }

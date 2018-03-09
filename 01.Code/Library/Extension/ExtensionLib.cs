@@ -347,6 +347,7 @@ namespace SOAFramework.Library
                 }
                 else if (value.GetType().Equals(typeof(string)) && conversionType.Equals(typeof(DateTime)))
                 {
+                    if (string.IsNullOrEmpty(value.ToString())) return null;
                     string time = value.ToString().Replace("`", "");
                     int last = time.LastIndexOf(":");
                     //change db2 datetime to common

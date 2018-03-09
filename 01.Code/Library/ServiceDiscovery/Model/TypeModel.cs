@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,75 +7,60 @@ using System.Text;
 
 namespace SOAFramework.Library
 {
-    public class TypeModel : IResolver
+    public class TypeModel
     {
         private IIDGenerator _generator = IDGeneratorFactory.Create(GeneratorType.SnowFlak);
         private Type _self;
-        public TypeModel(Type self)
+
+        public TypeModel()
         {
-            _self = self;
-            this.Resolve();
+            ID = _generator.Generate();
         }
 
-        public TypeModel() { }
+        /// <summary>
+        /// ID
+        /// </summary>
         public string ID { get; set; }
+        /// <summary>
+        /// 成员名称
+        /// </summary>
         public string MemberName { get; set; }
+
+        /// <summary>
+        /// 是否数组
+        /// </summary>
+        public bool IsArray { get; set; }
+        /// <summary>
+        /// 类型名称
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 类型全名
+        /// </summary>
         public string FullName { get; set; }
+        /// <summary>
+        /// 备注描述
+        /// </summary>
         public string Description { get; set; }
+        /// <summary>
+        /// 命名空间
+        /// </summary>
         public string NameSpace { get; set; }
+        /// <summary>
+        /// 泛型
+        /// </summary>
         public List<TypeModel> GenericArguments { get; set; }
+        /// <summary>
+        /// 属性
+        /// </summary>
         public List<TypeModel> Properties { get; set; }
+        /// <summary>
+        /// 是否类
+        /// </summary>
         public bool IsClass { get; set; }
 
-        public void Resolve()
-        {
-            SimpleLogger logger = new SimpleLogger();
-            logger.Write(_self.FullName, true);
-            ID = _generator.Generate();
-            Name = _self.Name;
-            FullName = _self.FullName;
-            GenericArguments = new List<TypeModel>();
-            Properties = new List<TypeModel>();
-            IsClass = _self.IsClass;
-
-            if (_self.IsValueType || _self.Equals(typeof(string)) || _self.Equals(typeof(Type)))//handle string and value type
-            {
-                return;
-            }
-            else if (_self.IsGenericType)//handle generic
-            {
-                var arguments = _self.GetGenericArguments();
-                foreach (var arg in arguments)
-                {
-                    TypeModel model = ResolverHelper.GetTypeFromCache(arg);
-                    GenericArguments.Add(model);
-                }
-            }
-            else if (_self.IsArray)//handle array
-            {
-                var elementType = _self.GetElementType();
-                TypeModel model = ResolverHelper.GetTypeFromCache(elementType);
-                GenericArguments.Add(model);
-            }
-            else//handle class type
-            {
-                var properties = _self.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                foreach (var p in properties)
-                {
-                    TypeModel model = ResolverHelper.GetTypeFromCache(p.PropertyType);
-                    var desc = ResolverHelper.GetMemberFromCache(p.DeclaringType, t =>
-                    {
-                        return t.Name.StartsWith("P:" + p.DeclaringType.FullName + "." + p.Name);
-                    });
-                    model.Name = p.PropertyType.Name;
-                    model.Description = desc?.Summary?.Trim();
-                    model.MemberName = p.Name;
-                    Properties.Add(model);
-                }
-            }
-        }
-
+        [JsonIgnore]
+        public Type Type { get; internal set; }
 
         public TypeModel Copy()
         {

@@ -55,6 +55,7 @@
             this.btnChangeType = new System.Windows.Forms.Button();
             this.btnsql = new System.Windows.Forms.Button();
             this.btnDynamic = new System.Windows.Forms.Button();
+            this.btnZipPackage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -314,11 +315,22 @@
             this.btnDynamic.UseVisualStyleBackColor = true;
             this.btnDynamic.Click += new System.EventHandler(this.btnDynamic_Click);
             // 
+            // btnZipPackage
+            // 
+            this.btnZipPackage.Location = new System.Drawing.Point(12, 196);
+            this.btnZipPackage.Name = "btnZipPackage";
+            this.btnZipPackage.Size = new System.Drawing.Size(100, 23);
+            this.btnZipPackage.TabIndex = 28;
+            this.btnZipPackage.Text = "zip package";
+            this.btnZipPackage.UseVisualStyleBackColor = true;
+            this.btnZipPackage.Click += new System.EventHandler(this.btnZipPackage_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnZipPackage);
             this.Controls.Add(this.btnDynamic);
             this.Controls.Add(this.btnsql);
             this.Controls.Add(this.btnChangeType);
@@ -382,6 +394,7 @@
         private System.Windows.Forms.Button btnChangeType;
         private System.Windows.Forms.Button btnsql;
         private System.Windows.Forms.Button btnDynamic;
+        private System.Windows.Forms.Button btnZipPackage;
     }
 }
 

@@ -18,7 +18,7 @@ namespace SOAFramework.Library.DAL
         /// <summary>
         /// 当前页数
         /// </summary>
-        int? CurrentIndex { get; set; }
+        int? CurrentPageIndex { get; set; }
         /// <summary>
         /// 查询起始索引
         /// </summary>

@@ -157,3 +157,5 @@ $RECYCLE.BIN/
 *.nuspec
 *.mdown
 /01.Code/packages
+/01.Code/.vs/SOAFramework/v15/Server/sqlite3
+/01.Code/.vs/SOAFramework/v15/sqlite3/db.lock

@@ -55,10 +55,12 @@
     <Compile Include="ArgMapping.cs" />
     <Compile Include="Attribute\CookieValueAttribute.cs" />
     <Compile Include="Attribute\HeaderValueAttribute.cs" />
+    <Compile Include="Attribute\PostAttribute.cs" />
     <Compile Include="BaseResponse.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="Fomatter\FormPostDataFormatter.cs" />
+    <Compile Include="Attribute\GetAttribute.cs" />
     <Compile Include="HttpMethodEnum.cs" />
     <Compile Include="Fomatter\IPostDataFormatter.cs" />
     <Compile Include="IRequest.cs" />

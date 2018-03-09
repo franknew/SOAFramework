@@ -1,0 +1,17 @@
+<nz-layout class="layout">
+    <nz-header>
+        <div class="logo" style="color:white;font-size:25px;">
+            曙光服务发现
+        </div>
+        <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;">
+        </ul>
+    </nz-header>
+    <nz-layout style="padding:24px 0; background: #fff">
+        <nz-sider [nzWidth]="240" style="background:#fff">
+            <service-category #serviceCategory [CategoryList]="categoryList"></service-category>
+        </nz-sider>
+        <nz-content style="margin-left:10px; min-height: 280px;">
+            <service-list #serviceList [SelectedCategory]="serviceCategory.SelectedCategory" [ServiceList]="ServiceList" [Loading]="loading"></service-list>
+        </nz-content>
+    </nz-layout>
+</nz-layout>

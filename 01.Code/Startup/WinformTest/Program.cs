@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using System.Windows.Forms;
 
 namespace WinformTest
@@ -18,10 +19,10 @@ namespace WinformTest
             Application.SetCompatibleTextRenderingDefault(false);
             ProxyFactory proxy = new ProxyFactory(new Form1());
             proxy.AddAdvice(new EventAdvise());
-            //Application.Run(new Form1());
-            IFormAction i = (IFormAction)proxy.GetProxy();
-            var form = i as Form1;
-            Application.Run(form);
+            Application.Run(new Form1());
+            //IFormAction i = (IFormAction)proxy.GetProxy();
+            //var form = i as Form1;
+            //Application.Run(form);
         }
 
       

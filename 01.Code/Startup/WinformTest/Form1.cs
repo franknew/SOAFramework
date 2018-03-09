@@ -22,6 +22,8 @@ using System.Runtime.Caching;
 using IBatisNet.DataMapper;
 using SOAFramework.Library.DAL;
 using System.Dynamic;
+using System.Web.Mvc;
+using SOAFramework.Library.Lib;
 
 namespace WinformTest
 {
@@ -249,6 +251,9 @@ namespace WinformTest
 
         private void btnSDKTesting_Click(object sender, EventArgs e)
         {
+
+            ServiceDiscoveryController c = new ServiceDiscoveryController();
+            //c.Api("GET-api-ServiceDiscovery-Api");
         }
 
         private void btnChangeType_Click(object sender, EventArgs e)
@@ -268,19 +273,27 @@ namespace WinformTest
 
         private void btnDynamic_Click(object sender, EventArgs e)
         {
-            DataTable table = new DataTable();
-            table.Columns.Add("column1");
-            DataRow row = table.NewRow();
-            row["column1"] = "hello, world";
-            table.Rows.Add(row);
-
-            var d = table.ToList<dynamic>().FirstOrDefault();
-            MessageBox.Show(d.column1);
+            var model = typeof(Test).ToTypeModel();
         }
 
         void IFormAction.OnClick(EventArgs e)
         {
             base.OnClick(e);
         }
+
+        private void btnZipPackage_Click(object sender, EventArgs e)
+        {
+            List<string> files = new List<string>();
+            files.Add(@"e:\test.txt");
+            files.Add(@"e:\abc.txt");
+            files.Add(@"e:\CodeSmithTemplate.rar");
+            ZipHelper.PackageFiles(@"e:\test.zip", files);
+        }
+    }
+
+    public class Test
+    {
+        public int? a { get; set; }
+        public DateTime? b { get; set; }
     }
 }

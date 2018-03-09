@@ -17,7 +17,7 @@ namespace SOAFramework.Library.DAL
         public int? PageSize { get; set; }
 
         private int? currrentIndex = 1;
-        public int? CurrentIndex 
+        public int? CurrentPageIndex 
         { 
             get
             {
@@ -37,7 +37,7 @@ namespace SOAFramework.Library.DAL
         {
             get
             {
-                return PageSize * (CurrentIndex - 1);
+                return PageSize * (CurrentPageIndex - 1);
             }
         }
 
@@ -45,7 +45,7 @@ namespace SOAFramework.Library.DAL
         {
             get
             {
-                return PageSize * CurrentIndex - 1;
+                return PageSize * CurrentPageIndex - 1;
             }
         }
 

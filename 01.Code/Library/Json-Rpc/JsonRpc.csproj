@@ -56,6 +56,7 @@
     <OutputPath>..\..\Release\Modules\</OutputPath>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
+    <DocumentationFile>..\..\Release\Modules\SOAFramework.Library.JsonRpc.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Attributes.cs" />

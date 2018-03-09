@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SOAFramework.Service.SDK.Core
 {
@@ -15,13 +16,14 @@ namespace SOAFramework.Service.SDK.Core
     {
         private string _url = ConfigurationManager.ConnectionStrings["ServiceUrl"]?.ConnectionString;
 
-        public virtual T Execute<T>(IRequest<T> request, string url = null, HttpMethodEnum method = HttpMethodEnum.Post, ContentTypeEnum type = ContentTypeEnum.UrlEncoded) where T : BaseResponse
+
+        public virtual T Execute<T>(IRequest<T> request, string url = null, ContentTypeEnum type = ContentTypeEnum.UrlEncoded) where T : BaseResponse
         {
-            var t = (T)Execute(request, typeof(T), url, method, type);
+            var t = (T)Execute(request, typeof(T), url, type);
             return t;
         }
 
-        public virtual object Execute(object request, Type responseType, string url = null, HttpMethodEnum method = HttpMethodEnum.Post, ContentTypeEnum type = ContentTypeEnum.UrlEncoded, IServiceEncryptor encryptor = null)
+        public virtual object Execute(object request, Type responseType, string url = null, ContentTypeEnum type = ContentTypeEnum.UrlEncoded, IServiceEncryptor encryptor = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -29,7 +31,7 @@ namespace SOAFramework.Service.SDK.Core
                 url = GetRealUrlBase(request, url);
             }
             //访问服务
-            string response = InvokeService(request, url, type, method);
+            string response = InvokeService(request, url, type);
             object t = GenerateResponse(response, responseType);
             return t;
         }
@@ -63,14 +65,14 @@ namespace SOAFramework.Service.SDK.Core
             return fullUrl;
         }
 
-        protected string InvokeService<T>(IRequest<T> request, string fullUrl, ContentTypeEnum type, HttpMethodEnum method = HttpMethodEnum.Post, IServiceEncryptor encryptor = null) where T : BaseResponse
+        protected string InvokeService<T>(IRequest<T> request, string fullUrl, ContentTypeEnum type, IServiceEncryptor encryptor = null) where T : BaseResponse
         {
             object req = request;
-            var response = InvokeService(req, fullUrl, type, method, encryptor);
+            var response = InvokeService(req, fullUrl, type, encryptor);
             return response;
         }
 
-        protected string InvokeService(object request, string fullUrl, ContentTypeEnum type, HttpMethodEnum method = HttpMethodEnum.Post, IServiceEncryptor encryptor = null)
+        protected string InvokeService(object request, string fullUrl, ContentTypeEnum type, IServiceEncryptor encryptor = null)
         {
             Type requestType = request.GetType();
             PropertyInfo[] properties = requestType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -89,14 +91,17 @@ namespace SOAFramework.Service.SDK.Core
                 if (isPostData)
                 {
                     object proValue = pro.GetValue(request, null);
-                    var proProperties = pro.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                    foreach (PropertyInfo p in proProperties)
+                    if (proValue != null)
                     {
-                        ArgMapping mapping = p.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
-                        string name = p.Name;
-                        if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
-                        object value = p.GetValue(proValue, null);
-                        argdic[name] = value;
+                        var proProperties = pro.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                        foreach (PropertyInfo p in proProperties)
+                        {
+                            ArgMapping mapping = p.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
+                            string name = p.Name;
+                            if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
+                            object value = p.GetValue(proValue, null);
+                            argdic[name] = value;
+                        }
                     }
                 }
                 else if (isHeaderValue)
@@ -120,6 +125,9 @@ namespace SOAFramework.Service.SDK.Core
             }
             string response = "";
             var postdata = "";
+            HttpMethodEnum method = HttpMethodEnum.Post;
+            var getAttrs = requestType.GetCustomAttributes(typeof(GetAttribute), true);
+            if (getAttrs != null && getAttrs.Length > 0) method = HttpMethodEnum.Get;
             switch (method)
             {
                 default:
@@ -127,12 +135,17 @@ namespace SOAFramework.Service.SDK.Core
                     IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
                     postdata = fomatter.Format(argdic);
                     if (encryptor != null) postdata = encryptor.Encrypt(postdata);
-                    string typeString = ContentTypeConvert.ToTypeString(type); 
+                    string typeString = ContentTypeConvert.ToTypeString(type);
                     byte[] data = Encoding.UTF8.GetBytes(postdata);
                     response = HttpHelper.Post(fullUrl, data, contentType: typeString, header: headers, cookieDic: cookies);
                     break;
                 case HttpMethodEnum.Get:
                     type = ContentTypeEnum.UrlEncoded;
+                    //用于restful，替换例如/{id}等url变量
+                    foreach (var kv in argdic)
+                    {
+                        fullUrl = fullUrl.Replace("{" + kv.Key + "}", kv.Value.ToString());
+                    }
                     postdata = fullUrl;
                     response = HttpHelper.Get(fullUrl, argdic, header: headers, cookieDic: cookies);
                     break;

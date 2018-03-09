@@ -1,0 +1,7 @@
+<ul nz-menu [nzMode]="'inline'" style="width: 240px;">
+    <span *ngFor="let item of categoryList">
+    <li nz-menu-item  [nzSelected]="item == selectedCategory" >
+        <a (click)="selectCategory(item)">{{item}}</a>
+    </li>
+    </span>
+</ul>

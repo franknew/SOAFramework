@@ -4,11 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Web.Http;
 
 namespace SOAFramework.Library
 {
     public class ResolverHelper
     {
+        /// <summary>
+        /// 解析域
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <param name="target"></param>
+        /// <param name="validate"></param>
+        /// <returns></returns>
         public static List<ServiceModel> ResolveDomain(AppDomain domain, AttributeTargets target, Func<Type, bool> validate)
         {
             var asses = domain.GetAssemblies();
@@ -16,6 +24,13 @@ namespace SOAFramework.Library
             return ResolveAssemblyList(asses.ToList(), target, validate);
         }
 
+        /// <summary>
+        /// 解析程序集列表
+        /// </summary>
+        /// <param name="asses"></param>
+        /// <param name="target"></param>
+        /// <param name="validate"></param>
+        /// <returns></returns>
         public static List<ServiceModel> ResolveAssemblyList(List<Assembly> asses, AttributeTargets target, Func<Type, bool> validate)
         {
             List<ServiceModel> services = new List<ServiceModel>();
@@ -34,6 +49,11 @@ namespace SOAFramework.Library
 
         }
 
+        /// <summary>
+        /// 加载注释
+        /// </summary>
+        /// <param name="ass"></param>
+        /// <returns></returns>
         public static DescriptionModel LoadDescription(Assembly ass)
         {
             DescriptionModel model = null;
@@ -65,6 +85,21 @@ namespace SOAFramework.Library
             return model;
         }
 
+        /// <summary>
+        /// 获得类型信息
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static TypeModel GetTypeFromCache(string typeName)
+        {
+            return TypeModelCacheManager.Get(typeName);
+        }
+
+        /// <summary>
+        /// 获得类型信息
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static TypeModel GetTypeFromCache(Type t)
         {
             var item = TypeModelCacheManager.Get(t.FullName);
@@ -73,11 +108,16 @@ namespace SOAFramework.Library
             {
                 item = new TypeModel();
                 TypeModelCacheManager.Set(t.FullName, item);
-                item = new TypeModel(t);
+                item = ModelFactory.CreateTypeModel(t);
                 return item;
             }
         }
 
+        /// <summary>
+        /// 从缓存中获得描述信息
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static DescriptionModel GetDescriptionFromCache(Type t)
         {
             var description = DescriptionModelCacheManager.Get(t.Assembly.FullName);
@@ -86,29 +126,36 @@ namespace SOAFramework.Library
             return description;
         }
 
+        /// <summary>
+        /// 从缓存中获得成员信息
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
         public static MemberDescription GetMemberFromCache(Type t, Func<MemberDescription, bool> func)
         {
             var description = GetDescriptionFromCache(t);
             return description?.Members?.FirstOrDefault(func);
         }
 
+        /// <summary>
+        /// 获得接口服务信息
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
         public static ServiceModel GetServiceFromCache(string serviceId)
         {
             return ServiceCacheManager.Get(serviceId);
         }
 
+        /// <summary>
+        /// 获得已解析的所有接口
+        /// </summary>
+        /// <returns></returns>
         public static List<ServiceModel> GetServiceListFromCache()
         {
             return ServiceCacheManager.GetList();
         }
-
-        public static List<ServiceModel> ResolveWebApi(List<ServiceModel> services)
-        {
-            foreach (var service in services)
-            {
-                service.FullAction = service.Type.Substring(0, service.Type.LastIndexOf(".")) + "/" + service.Name;
-            }
-            return services;
-        }
+        
     }
 }

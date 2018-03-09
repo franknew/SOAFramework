@@ -7,10 +7,14 @@ namespace SOAFramework.Library
 {
     public class ArgModel : TypeModel
     {
-        public ArgModel(Type self) : base(self)
+        public ArgModel(): base()
         {
+
         }
 
+        /// <summary>
+        /// 参数索引
+        /// </summary>
         public int Index { get; set; }
     }
 }
