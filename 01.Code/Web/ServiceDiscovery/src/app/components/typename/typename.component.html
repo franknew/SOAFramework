@@ -1,0 +1,11 @@
+<span *ngIf="type">
+    <span *ngIf="!type.isClass&&!type.isArray">{{type.name}}</span>
+<a *ngIf="type.isClass||type.isArray" (click)="displayType(type)">{{type.name}}
+    </a>
+<span *ngIf="(type.isClass||type.isArray)&&type.genericArguments&&type.genericArguments.length>0">
+        &lt;<span *ngFor="let item of type.genericArguments;let i=index">
+            <typename (OnDisplayType)="displayType(item)" [Type]="item"></typename>
+            <span *ngIf="type.genericArguments.length-1<i">,</span>
+</span>&gt;
+</span>
+</span>

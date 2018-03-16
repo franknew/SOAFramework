@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServiceModel } from './entities/ServiceModel';
 import { TypeModel } from './entities/TypeModel';
 import { ArgModel } from './entities/ArgModel';
+import { TypenameComponent } from './components/typename/typename.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ArgModel } from './entities/ArgModel';
     TypeModel,
     ArgModel,
     DiscoveryService,
+    TypenameComponent,
       ],
   imports: [
     BrowserModule,

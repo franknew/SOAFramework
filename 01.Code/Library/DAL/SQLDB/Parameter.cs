@@ -86,6 +86,22 @@ namespace SOAFramework.Library.DAL
             }
             return objSqlParams;
         }
+
+        public static IDbDataParameter[] ChangeToParameters(Parameter[] parameters, Type type)
+        {
+            IDbDataParameter[] objSqlParams = null;
+            if (parameters != null)
+            {
+                objSqlParams = new IDbDataParameter[parameters.Length];
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    objSqlParams[i] = Activator.CreateInstance(type) as IDbDataParameter;
+                    objSqlParams[i].ParameterName = parameters[i].Name;
+                    objSqlParams[i].Value = parameters[i].Value.ChangeTypeTo(parameters[i].Type);
+                }
+            }
+            return objSqlParams;
+        }
         #endregion
     }
 }

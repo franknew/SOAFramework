@@ -51,6 +51,7 @@
     <Compile Include="AssemblyExtension.cs" />
     <Compile Include="DateExtension.cs" />
     <Compile Include="DirectoryExtension.cs" />
+    <Compile Include="DomainExtension.cs" />
     <Compile Include="EnumExtension.cs" />
     <Compile Include="ExtensionLib.cs" />
     <Compile Include="FileExtention.cs" />

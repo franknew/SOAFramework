@@ -4,5 +4,5 @@ import { TypeModel } from './TypeModel';
     template: ''
 })
 export class ArgModel extends TypeModel {
-    Index: number;
+    index: number;
 }

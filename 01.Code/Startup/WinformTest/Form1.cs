@@ -266,14 +266,23 @@ namespace WinformTest
             IDBHelper helper = DBFactory.CreateDBHelper();
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            helper.GetTableWithSQL("select top 1000 * from T_Sys_User");
+            helper.GetTableWithSQL("INSERT INTO Test ('100','unit test','1')");
             watch.Stop();
             MessageBox.Show(watch.ElapsedMilliseconds.ToString());
         }
 
         private void btnDynamic_Click(object sender, EventArgs e)
         {
-            var model = typeof(Test).ToTypeModel();
+            Dictionary<string, TypeModel> dic = new Dictionary<string, TypeModel>();
+            //MessageBox.Show(dic.GetType().FullName);
+            string mainType = dic.GetType().FullName.Split('`')[0];
+            string genericTypes = dic.GetType().FullName.Split('`')[1];
+            genericTypes = genericTypes.Trim('[', ']');
+            var types = genericTypes.GetVairable('[', ']');
+            PaginationResult<BaseEntity> result = new PaginationResult<BaseEntity>();
+            //MessageBox.Show(result.GetType().FullName);
+            //MessageBox.Show(typeof(PaginationResult<>).FullName);
+            var ass = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.FullName.StartsWith("SOAFramework.Library.DAL"));
         }
 
         void IFormAction.OnClick(EventArgs e)

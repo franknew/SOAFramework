@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using System.Transactions;
 
 namespace SOAFramework.Library.DAL
 {
@@ -19,10 +20,6 @@ namespace SOAFramework.Library.DAL
         /// </summary>
         DBType DBType { get; }
 
-        bool Lockable { get; set; }
-
-        bool AutoCloseConnection { get; set; }
-
         bool LogSql { get; set; }
         #endregion
 
@@ -32,7 +29,9 @@ namespace SOAFramework.Library.DAL
         /// </summary>
         /// <param name="ConnectionString"></param>
         void BeginTransaction(string ConnectionString = null);
+        #endregion
 
+        #region close connection
         void CloseConnection();
         #endregion
 
@@ -162,5 +161,28 @@ namespace SOAFramework.Library.DAL
         public IDbConnection Conection { get; set; }
 
         public IDbDataAdapter Adapter { get; set; }
+
+        public static DBSuit CreateSuit(Type connectionType, Type commandType, Type adapterType)
+        {
+            DBSuit suit = new DBSuit();
+            suit.Conection = Activator.CreateInstance(connectionType) as IDbConnection;
+            suit.Command = Activator.CreateInstance(commandType) as IDbCommand;
+            suit.Adapter = Activator.CreateInstance(adapterType) as IDbDataAdapter;
+            return suit;
+        }
+
+        public static DBSuit CreateSuit<Connection, Command, Adapter>(IDbConnection connction, IDbCommand command)
+            where Connection: IDbConnection
+            where Command: IDbCommand
+            where Adapter: IDbDataAdapter
+        {
+            DBSuit suit = new DBSuit();
+            if (connction == null) connction = Activator.CreateInstance<IDbConnection>();
+            if (command == null) command = Activator.CreateInstance<IDbCommand>();
+            suit.Conection = connction;
+            suit.Command = command;
+            suit.Adapter = Activator.CreateInstance<IDbDataAdapter>();
+            return suit;
+        }
     }
 }

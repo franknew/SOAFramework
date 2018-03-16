@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SOAFramework.Library;
 using SOAFramework.Library.Lib;
 
 namespace UnitTest.Library

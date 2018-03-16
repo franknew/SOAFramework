@@ -767,20 +767,31 @@ namespace SOAFramework.Library
         {
             List<string> list = new List<string>();
             StringBuilder builder = new StringBuilder();
+            int level = 0;
             bool started = false;
             foreach (var c in str)
             {
-                if (c.Equals(start))
+                if (c.Equals(start) && !started)
                 {
                     builder.Clear();
                     started = true;
                 }
-                else if (started) builder.Append(c);
-                else if (c.Equals(end) && !started)
+                else if (c.Equals(start) && started)
+                {
+                    builder.Append(c);
+                    level++;
+                }
+                else if (c.Equals(end) && started && level == 0)
                 {
                     list.Add(builder.ToString());
                     started = false;
                 }
+                else if (c.Equals(end) && started && level > 0)
+                {
+                    builder.Append(c);
+                    level--;
+                }
+                else if (started) builder.Append(c);
             }
             return list;
         }

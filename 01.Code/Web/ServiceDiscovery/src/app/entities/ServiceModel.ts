@@ -4,14 +4,15 @@ import { TypeModel } from './TypeModel';
     template: ''
 })
 export class ServiceModel {
-    Name: string;
-    Return: TypeModel;
-    Args: TypeModel[];
-    Description: string;
-    Type: string;
-    Category: string;
-    Route: string;
-    ID: string; 
-    HttpMethod: string;
-    FriendlyID: string;
+    name: string;
+    fullName: string;
+    description: string;
+    type: string;
+    route: string;
+    returnArg: TypeModel;
+    args: Array<TypeModel>;
+    id: string;
+    category: string;
+    friendlyID: string;
+    httpMethod: string;
 }

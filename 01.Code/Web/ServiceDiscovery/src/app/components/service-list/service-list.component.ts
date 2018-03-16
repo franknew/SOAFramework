@@ -52,7 +52,7 @@ export class ServiceListComponent implements OnInit {
         this.selectedCategory = category;
         this.displayServiceList = new Array<ServiceModel>();
         for (let service of this.allServiceList) {
-            if (service.Category == this.selectedCategory || this.selectedCategory == "All") {
+            if (service.category == this.selectedCategory || this.selectedCategory == "All") {
                 this.displayServiceList.push(service);
             }
         }
@@ -72,8 +72,8 @@ export class ServiceListComponent implements OnInit {
 
     diaplayDetail(service: ServiceModel) {
         this.selectedService = service;
-        this.titlestring = this.selectedService.Route;
-        let id = service.Route.replace("/", "-").replace("{","-").replace("}","");
+        this.titlestring = this.selectedService.route;
+        let id = service.route.replace("/", "-").replace("{","-").replace("}","");
 
         this.modal = this.modalService.open({
             title       : this.title,
@@ -103,7 +103,7 @@ export class ServiceListComponent implements OnInit {
 
     changeType(type: TypeModel) {
         this.typeLoading = true;
-        this.titlestring = type.Name;
+        this.titlestring = type.name;
         let success = new NotifyModel();
         success.callback = (data)=> {
             this.selectedType = data;
@@ -113,16 +113,16 @@ export class ServiceListComponent implements OnInit {
         failed.callback = (err)=> {
             this.typeLoading = false;
         }
-        this.service.getTypeInfo(type.FullName, [success], [failed]);
+        this.service.getTypeInfo(type.fullName, [success], [failed]);
     }
 
     displayTest(service: ServiceModel) {
-        this.titlestring = this.selectedService.Route;
+        this.titlestring = this.selectedService.route;
         this.testResponse = "还没有对接口进行测试";
         this.selectedService = service;
         this.paramObj = new Object();        
-        for (let property of this.selectedService.Args) {
-            this.paramObj[property.MemberName] = null;
+        for (let property of this.selectedService.args) {
+            this.paramObj[property.memberName] = null;
         }
 
         this.modal = this.modalService.open({

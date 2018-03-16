@@ -11,7 +11,7 @@
             <service-category #serviceCategory [CategoryList]="categoryList"></service-category>
         </nz-sider>
         <nz-content style="margin-left:10px; min-height: 280px;">
-            <service-list #serviceList [SelectedCategory]="serviceCategory.SelectedCategory" [ServiceList]="ServiceList" [Loading]="loading"></service-list>
+            <service-list #serviceListComponent [SelectedCategory]="serviceCategory.SelectedCategory" [ServiceList]="serviceList" [Loading]="loading"></service-list>
         </nz-content>
     </nz-layout>
 </nz-layout>

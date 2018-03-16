@@ -18,7 +18,7 @@ namespace SOAFramework.Library
             model.HttpMethod = api.HttpMethod.ToString();
             model.Route = api.RelativePath;
             model.Name = api.ActionDescriptor.ActionName;
-            model.Return = api.ResponseDescription.DeclaredType.ToTypeModel();
+            model.ReturnArg = api.ResponseDescription.DeclaredType.ToTypeModel();
             //if (model.Return != null && model.Return.IsArray)
             //{
             //    var properties = model.Return.Type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -59,7 +59,7 @@ namespace SOAFramework.Library
             ServiceModel model = api.ApiDescription.ToServiceModel();
             return model;
         }
-        
+
 
         /// <summary>
         /// Generates an URI-friendly ID for the <see cref="ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
@@ -89,7 +89,7 @@ namespace SOAFramework.Library
             }
             return friendlyPath.ToString();
         }
-       
+
         public static TypeModel ToTypeModel(this Type t)
         {
             if (t == null) return null;
@@ -122,7 +122,7 @@ namespace SOAFramework.Library
         {
             if (t == null) return null;
             var model = new TypeModel();
-            model.Name = t.Name.Contains("`") ? t.Name.Remove(t.Name.LastIndexOf("`")) : t.Name ;
+            model.Name = t.Name.Contains("`") ? t.Name.Remove(t.Name.LastIndexOf("`")) : t.Name;
             model.FullName = t.FullName;
             model.GenericArguments = new List<TypeModel>();
             model.Properties = new List<TypeModel>();
@@ -158,17 +158,18 @@ namespace SOAFramework.Library
             }
             else if (t.IsGenericType)//handle generic
             {
-                    var arguments = t.GetGenericArguments();
-                    if (arguments != null)
+                var arguments = t.GetGenericArguments();
+                if (arguments != null)
+                {
+                    for (int i = 0; i < arguments.Length; i++)
                     {
-                        for (int i = 0; i < arguments.Length; i++)
-                        {
-                            var type = arguments[i];
-                            var arg = type.ToTypeModelWithoutProperties();
-                            model.Type = type;
-                            model.GenericArguments.Add(arg);
-                        }
+                        var type = arguments[i];
+                        if (string.IsNullOrEmpty(type.FullName)) continue;
+                        var arg = type.ToTypeModelWithoutProperties();
+                        model.Type = type;
+                        model.GenericArguments.Add(arg);
                     }
+                }
             }
             else if (t.IsArray)//handle array
             {
@@ -186,11 +187,19 @@ namespace SOAFramework.Library
             var model = TypeModelCacheManager.Get(fullTypeName);
             if (model == null)
             {
-                var type = Type.GetType(fullTypeName);
-                if (type == null) type = TypePool.GetType(fullTypeName);
+                var type = fullTypeName.ToType();
                 if (type != null) model = type.ToTypeModel();
+                else model = TypeDefinition.FromString(fullTypeName).ToTypeModel();
+                TypeModelCacheManager.Set(fullTypeName, model);
             }
             return model;
+        }
+
+        public static Type ToType(this string fullTypeName)
+        {
+            var type = Type.GetType(fullTypeName);
+            if (type == null) type = TypePool.GetType(fullTypeName);
+            return type;
         }
     }
 }

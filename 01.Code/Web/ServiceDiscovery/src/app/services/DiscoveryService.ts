@@ -41,9 +41,9 @@ export class DiscoveryService {
     }
 
     test(param: object, service: ServiceModel, success: NotifyModel[], failed: NotifyModel[] = []) {
-        let url = service.Route;
+        let url = service.route;
         failed.push(this.getFailedNotify());
-        if (service.HttpMethod == "GET" || service.HttpMethod == "DELETE") {
+        if (service.httpMethod == "GET" || service.httpMethod == "DELETE") {
             var properties = Object.getOwnPropertyNames(param);
             for (let property of properties) {
                 let v = "{" + property + "}";

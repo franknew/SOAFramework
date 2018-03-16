@@ -26,12 +26,12 @@ export class AppComponent implements OnInit {
       for (let s of this.serviceList) {
         let hasController = false;
         for (let c of this.categoryList) {
-          if (c == s.Category) {
+          if (c == s.category) {
             hasController = true;
             break;
           }
         }
-        if (!hasController) this.categoryList.push(s.Category);
+        if (!hasController) this.categoryList.push(s.category);
       }
       this.loading = false;
     }

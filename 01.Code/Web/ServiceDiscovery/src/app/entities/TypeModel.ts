@@ -3,14 +3,15 @@ import { Component, Injectable } from '@angular/core';
     template: ''
 })
 export class TypeModel {
-    ID: string;
-    MemberName: string;
-    Name: string;
-    FullName: string;
-    Description: string;
-    NameSpace: string;
-    GenericArguments: TypeModel[];
-    Properties: TypeModel[];
-    IsClass: boolean;
-    IsArray: boolean;
+    memberName: string;
+    name: string;
+    fullName: string;
+    description: string;
+    nameSpace: string;
+    genericArguments: Array<TypeModel>;
+    properties: Array<TypeModel>;
+    index: number;
+    isClass: boolean;
+    isArray: boolean;
+    id: string;
 }

@@ -17,7 +17,7 @@ namespace SOAFramework.Library
         /// <param name="MethodName">要调用的方法名</param>
         /// <param name="Args">参数</param>
         /// <returns></returns>
-        public static object CallMethod(string MethodName=null, string DllFilePath = null, string AssemblyName = null, string ClassTypeName = null, object[] Args = null)
+        public static object CallMethod(string MethodName = null, string DllFilePath = null, string AssemblyName = null, string ClassTypeName = null, object[] Args = null)
         {
             Assembly asmTemp = null;
             Type typTemp = null;
@@ -37,7 +37,7 @@ namespace SOAFramework.Library
             {
                 try
                 {
-                    asmTemp = Assembly.LoadWithPartialName(AssemblyName);
+                    asmTemp = Assembly.Load(AssemblyName);
                 }
                 catch
                 {

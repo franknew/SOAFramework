@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,43 +28,53 @@ namespace SOAFramework.Library
         /// <summary>
         /// 方法名称
         /// </summary>
+        [JsonProperty("name")]
         public string Name { get; set; }
         /// <summary>
         /// 返回值信息
         /// </summary>
-        public TypeModel Return { get; set; }
+        [JsonProperty("returnArg")]
+        public TypeModel ReturnArg { get; set; }
         /// <summary>
         /// 参数信息
         /// </summary>
+        [JsonProperty("args")]
         public List<TypeModel> Args { get; set; }
         /// <summary>
         /// 备注描述
         /// </summary>
+        [JsonProperty("description")]
         public string Description { get; set; }
         /// <summary>
         /// 类型
         /// </summary>
+        [JsonProperty("typeName")]
         public string TypeName { get; set; }
         /// <summary>
         /// 控制器
         /// </summary>
+        [JsonProperty("category")]
         public string Category { get; set; }
         /// <summary>
         /// 访问路由
         /// </summary>
+        [JsonProperty("route")]
         public string Route { get; set; }
         /// <summary>
         /// ID
         /// </summary>
+        [JsonProperty("id")]
         public string ID { get; private set; }
 
         /// <summary>
         /// 用于标识的服务名称
         /// </summary>
+        [JsonProperty("friendlyID")]
         public string FriendlyID { get; set; }
         /// <summary>
         /// http method(GET,POST,PUT,DELETE)
         /// </summary>
+        [JsonProperty("httpMethod")]
         public string HttpMethod { get; set; }
 
         public void Resolve()
@@ -86,8 +97,8 @@ namespace SOAFramework.Library
             Description = desc?.Summary?.Trim();
             Name = _self.Name;
             TypeName = _self.DeclaringType.FullName;
-            Return = ModelFactory.CreateTypeModel(_self.ReturnType);
-            Return.Description = desc?.Returns?.Trim();
+            ReturnArg = ModelFactory.CreateTypeModel(_self.ReturnType);
+            ReturnArg.Description = desc?.Returns?.Trim();
         }
 
         public static string GetFullName(MethodInfo method)

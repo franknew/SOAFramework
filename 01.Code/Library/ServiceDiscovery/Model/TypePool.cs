@@ -13,7 +13,9 @@ namespace SOAFramework.Library
     {
         private static readonly ConcurrentDictionary<string, Type> pool = new ConcurrentDictionary<string, Type>();
         private static bool init = false;
-        
+
+        private static SimpleLogger logger = new SimpleLogger();
+
         public static void Init()
         {
             DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
@@ -30,12 +32,14 @@ namespace SOAFramework.Library
                     var types = ass.GetTypes();
                     foreach (var t in types)
                     {
+                        if (t.FullName.StartsWith("<")) continue;
                         pool[t.FullName] = t;
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    logger.Error(f.FullName);
+                    logger.WriteException(ex);
                 }
             }
         }

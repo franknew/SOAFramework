@@ -11,9 +11,9 @@
         </thead>
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let item of displayServiceList">
-                <td nz-td><a (click)="diaplayDetail(item)">{{item.Route}}</a></td>
-                <td nz-td><span>{{item.HttpMethod}}</span></td>
-                <td nz-td><span>{{item.Description}}</span></td>
+                <td nz-td><a (click)="diaplayDetail(item)">{{item.route}}</a></td>
+                <td nz-td><span>{{item.httpMethod}}</span></td>
+                <td nz-td><span>{{item.description}}</span></td>
                 <td nz-td><a (click)="displayTest(item)">测试</a></td>
             </tr>
         </tbody>
@@ -29,7 +29,7 @@
         <fieldset>
             <legend>参数</legend>
             <div class="card-body">
-                <nz-table [nzDataSource]="selectedService.Args" [nzIsPagination]="false">
+                <nz-table [nzDataSource]="selectedService.args" [nzIsPagination]="false">
                     <thead nz-thead>
                         <tr>
                             <th nz-th><span>名称</span></th>
@@ -38,11 +38,12 @@
                         </tr>
                     </thead>
                     <tbody nz-tbody>
-                        <tr nz-tbody-tr *ngFor="let item of selectedService.Args">
-                            <td nz-td><span>{{item.MemberName}}</span></td>
-                            <td nz-td *ngIf="!item.IsClass"><span>{{item.Name}}</span></td>
-                            <td nz-td *ngIf="item.IsClass"><a (click)="displayType(item)">{{item.Name}}</a></td>
-                            <td nz-td><span>{{item.Description}}</span></td>
+                        <tr nz-tbody-tr *ngFor="let item of selectedService.args">
+                            <td nz-td><span>{{item.memberName}}</span></td>
+                            <td nz-td>
+                                <typename (OnDisplayType)="displayType($event)" [Type]="item"></typename>
+                            </td>
+                            <td nz-td><span>{{item.description}}</span></td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -50,11 +51,11 @@
 
         </fieldset>
     </div>
-    <div nz-row *ngIf="selectedService.Return">
+    <div nz-row *ngIf="selectedService.returnArg">
         <fieldset>
-            <legend>返回值:{{selectedService.Return.Name}}</legend>
+            <legend>返回值:{{selectedService.returnArg.name}}</legend>
             <div class="card-body">
-                <nz-table [nzDataSource]="selectedService.Return.Properties" [nzIsPagination]="false">
+                <nz-table [nzDataSource]="selectedService.returnArg.properties" [nzIsPagination]="false">
                     <thead nz-thead>
                         <tr>
                             <th nz-th><span>名称</span></th>
@@ -63,11 +64,12 @@
                         </tr>
                     </thead>
                     <tbody nz-tbody>
-                        <tr nz-tbody-tr *ngFor="let item of selectedService.Return.Properties">
-                            <td nz-td><span>{{item.MemberName}}</span></td>
-                            <td nz-td *ngIf="!item.IsClass"><span>{{item.Name}}</span></td>
-                            <td nz-td *ngIf="item.IsClass"><a (click)="displayType(item)">{{item.Name}}</a></td>
-                            <td nz-td><span>{{item.Description}}</span></td>
+                        <tr nz-tbody-tr *ngFor="let item of selectedService.returnArg.properties">
+                            <td nz-td><span>{{item.memberName}}</span></td>
+                            <td nz-td>
+                                <typename (OnDisplayType)="displayType($event)" [Type]="item"></typename>
+                            </td>
+                            <td nz-td><span>{{item.description}}</span></td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -93,25 +95,8 @@
         <fieldset>
             <legend>参数</legend>
             <div class="card-body panel-body">
-                <div nz-row *ngFor="let item of selectedService.Args" style="margin-top:10px;">
-                    <div *ngIf="!item.IsClass">
-                        <div nz-col [nzSpan]="4" class="text-left">
-                            <span>{{item.MemberName}} ({{item.Name}}):</span>
-                        </div>
-                        <div nz-col [nzSpan]="20">
-                            <nz-input id="{{item.MemberName}}" class="testFormData" [nzPlaceHolder]="item.Description"></nz-input>
-                        </div>
-                    </div>
-                    <div *ngIf="item.IsClass">
-                        <div nz-row *ngFor="let property of item.Properties" style="margin-top:10px;">
-                            <div nz-col [nzSpan]="4" class="text-left">
-                                <span>{{property.MemberName}} ({{property.Name}}):</span>
-                            </div>
-                            <div nz-col [nzSpan]="20">
-                                <nz-input id="{{property.MemberName}}" class="testFormData" [nzPlaceHolder]="property.Description"></nz-input>
-                            </div>
-                        </div>
-                    </div>
+                <div nz-row *ngFor="let item of selectedService.args" style="margin-top:10px;">
+                    <typename (OnDisplayType)="displayType($event)" [Type]="item"></typename>
                     <br>
                 </div>
             </div>
@@ -139,10 +124,10 @@
     <div nz-row *ngIf="selectedType">
         <fieldset>
             <legend>
-                {{selectedType.FullName}}
+                {{selectedType.fullname}}
             </legend>
             <div class="card-body panel-body">
-                <nz-table [nzDataSource]="selectedType.Properties" [nzIsPagination]="false">
+                <nz-table [nzDataSource]="selectedType.properties" [nzIsPagination]="false">
                     <thead nz-thead>
                         <tr>
                             <th nz-th><span>名称</span></th>
@@ -151,11 +136,12 @@
                         </tr>
                     </thead>
                     <tbody nz-tbody>
-                        <tr nz-tbody-tr *ngFor="let item of selectedType.Properties">
-                            <td nz-td><span>{{item.MemberName}}</span></td>
-                            <td nz-td *ngIf="!item.IsClass"><span>{{item.Name}}</span></td>
-                            <td nz-td *ngIf="item.IsClass"><a (click)="changeType(item)">{{item.Name}}</a></td>
-                            <td nz-td><span>{{item.Description}}</span></td>
+                        <tr nz-tbody-tr *ngFor="let item of selectedType.properties">
+                            <td nz-td><span>{{item.memberName}}</span></td>
+                            <td nz-td>
+                                <typename (OnDisplayType)="displayType($event)" [Type]="item"></typename>
+                            </td>
+                            <td nz-td><span>{{item.description}}</span></td>
                         </tr>
                     </tbody>
                 </nz-table>

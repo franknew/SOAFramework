@@ -5,10 +5,11 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 
 namespace SOAFramework.Library.DAL
 {
-    public abstract class BaseHelper<Con, Com, Adp, Param> : IDBHelper
+    public class BaseHelper<Con, Com, Adp, Param> : IDBHelper
         where Con : IDbConnection
         where Com : IDbCommand
         where Adp : IDbDataAdapter
@@ -30,6 +31,7 @@ namespace SOAFramework.Library.DAL
         private DBType _type;
         private bool logSql = false;
         private bool lockable = false;
+        private TransactionScope _transaction;
         #endregion
 
         #region properties
@@ -58,20 +60,7 @@ namespace SOAFramework.Library.DAL
         }
 
         public bool Lockable { get => lockable; set => lockable = value; }
-
-        public DBSuit CreateDBSuit<Con, Com, Adp>(ref IDbConnection connection, IDbCommand command)
-            where Con : IDbConnection
-            where Com : IDbCommand
-            where Adp : IDbDataAdapter
-        {
-            DBSuit suit = new DBSuit();
-            suit.Adapter = Activator.CreateInstance<Adp>();
-            if (connection == null) suit.Conection = connection = Activator.CreateInstance<Con>();
-            else suit.Conection = connection;
-            if (command == null) suit.Command = command = Activator.CreateInstance<Com>();
-            else suit.Command = command;
-            return suit;
-        }
+        
         #endregion
 
         #region BeginTransaction
@@ -123,7 +112,7 @@ namespace SOAFramework.Library.DAL
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
             DataTable dtData = new DataTable();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -260,7 +249,7 @@ namespace SOAFramework.Library.DAL
         public DataTable GetTableWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             DataTable dtData = new DataTable();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -355,7 +344,7 @@ namespace SOAFramework.Library.DAL
         {
             StringBuilder strSQL = new StringBuilder();
             StringBuilder strSubSelect = new StringBuilder();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -471,7 +460,7 @@ namespace SOAFramework.Library.DAL
         public DataSet GetDataSetWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             DataSet dsData = new DataSet();
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -564,7 +553,7 @@ namespace SOAFramework.Library.DAL
         public object GetScalarWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
         {
             object objData = null;
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -659,7 +648,7 @@ namespace SOAFramework.Library.DAL
         public object GetScalarWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
             object objData = null;
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -736,7 +725,7 @@ namespace SOAFramework.Library.DAL
         #region ExecNoneQueryWithSQL
         public int ExecNoneQueryWithSQL(string strCommandString, Parameter[] objParams, string strConnectionString)
         {
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
@@ -804,7 +793,7 @@ namespace SOAFramework.Library.DAL
         #region ExecNoneQueryWithSP
         public int ExecNoneQueryWithSP(string strSPName, Parameter[] objParams, string strConnectionString)
         {
-            DBSuit suite = CreateDBSuit<Con, Com, Adp>(ref mObj_Connection, mObj_Command);
+            DBSuit suite = DBSuit.CreateSuit<Con, Com, Adp>(mObj_Connection, mObj_Command);
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;

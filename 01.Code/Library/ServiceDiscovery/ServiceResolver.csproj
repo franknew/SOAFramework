@@ -129,6 +129,7 @@
     <Compile Include="Model\Sample\TextSample.cs" />
     <Compile Include="Model\ServiceCacheManager.cs" />
     <Compile Include="Model\ServiceModel.cs" />
+    <Compile Include="Model\TypeDefinition.cs" />
     <Compile Include="Model\TypeModel.cs" />
     <Compile Include="Model\TypeModelCacheManager.cs" />
     <Compile Include="Model\TypePool.cs" />
@@ -160,6 +161,10 @@
     <ProjectReference Include="..\Cache\Cache.csproj">
       <Project>{3dd01adf-6859-4d75-aae0-473c7dfe944b}</Project>
       <Name>Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extension\Extension.csproj">
+      <Project>{94f414d4-4c82-46fe-96fc-b0f1c1faab5a}</Project>
+      <Name>Extension</Name>
     </ProjectReference>
     <ProjectReference Include="..\IDGenerator\IDGenerator.csproj">
       <Project>{d5eccf03-314b-4117-b9dd-b57f303c358a}</Project>

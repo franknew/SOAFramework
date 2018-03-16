@@ -169,6 +169,7 @@
     <Compile Include="Library\JsonTesting.cs" />
     <Compile Include="Library\DALTesting.cs" />
     <Compile Include="Library\MicroServiceTesting.cs" />
+    <Compile Include="Library\DALHeplerTesting.cs" />
     <Compile Include="Library\XmlTesting.cs" />
     <Compile Include="Library\ZipTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,6 +192,10 @@
     <ProjectReference Include="..\Library\XML\XML.csproj">
       <Project>{d596095f-f060-4496-96b6-2bd03b068e16}</Project>
       <Name>XML</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Library\Zip\Zip.csproj">
+      <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
+      <Name>Zip</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Model.csproj">
       <Project>{47026C03-6F4D-4155-BD42-78EC73044C73}</Project>

@@ -31,7 +31,7 @@ namespace SOAFramework.Library
         /// <param name="target"></param>
         /// <param name="validate"></param>
         /// <returns></returns>
-        public static List<ServiceModel> ResolveAssemblyList(List<Assembly> asses, AttributeTargets target, Func<Type, bool> validate)
+        public static List<ServiceModel> ResolveAssemblyList(IEnumerable<Assembly> asses, AttributeTargets target, Func<Type, bool> validate)
         {
             List<ServiceModel> services = new List<ServiceModel>();
             foreach (var ass in asses)
