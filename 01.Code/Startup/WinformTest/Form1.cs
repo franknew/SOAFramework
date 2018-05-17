@@ -24,6 +24,9 @@ using SOAFramework.Library.DAL;
 using System.Dynamic;
 using System.Web.Mvc;
 using SOAFramework.Library.Lib;
+using JWT.Algorithms;
+using JWT.Serializers;
+using JWT;
 
 namespace WinformTest
 {
@@ -297,6 +300,26 @@ namespace WinformTest
             files.Add(@"e:\abc.txt");
             files.Add(@"e:\CodeSmithTemplate.rar");
             ZipHelper.PackageFiles(@"e:\test.zip", files);
+        }
+
+        private void btnJWT_Click(object sender, EventArgs e)
+        {
+
+            string header = txbHeader.Text;
+            string payload = txbPayload.Text;
+            string secret = txbSecret.Text;
+
+            IDictionary<string, object> payloadDic = JsonHelper.Deserialize<IDictionary<string, object>>(payload);
+            var token = JWTHelper.Encode(secret, payloadDic);
+            txbData.Text = token;
+        }
+
+        private void btnJWTDecode_Click(object sender, EventArgs e)
+        {
+            string secret = txbSecret.Text;
+            string token = txbData.Text;
+            var json = JWTHelper.Decode(token, secret);
+            txbPayload.Text = json;
         }
     }
 

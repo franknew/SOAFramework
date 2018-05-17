@@ -9,14 +9,11 @@ namespace SOAFramework.Library.DAL
 {
     public class DBFactory
     {
+        private static bool logSql = false;
+
         public static IDBHelper CreateDBHelper()
         {
             string strDBType = DBType.MSSQL.ToString();
-            bool logsql = false;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableSqlLog"]))
-            {
-                logsql = ConfigurationManager.AppSettings["EnableSqlLog"] == "1";
-            }
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["DBType"]))
             {
                 strDBType = ConfigurationManager.AppSettings["DBType"];
@@ -35,7 +32,6 @@ namespace SOAFramework.Library.DAL
                 throw new Exception("没有在ConnectionString配置节点配置连接字符串！");
             }
             var helper = CreateDBHelper(strConn, strDBType);
-            helper.LogSql = logsql;
             return helper;
         }
 
@@ -63,7 +59,6 @@ namespace SOAFramework.Library.DAL
                 throw new Exception("没有在ConnectionString配置节点配置连接字符串！");
             }
             var helper = CreateDBHelper(strConn, strDBType);
-            helper.LogSql = logsql;
             return helper;
         }
 
@@ -98,6 +93,10 @@ namespace SOAFramework.Library.DAL
 
         public static IDBHelper CreateDBHelper(string strConnectionString, DBType objType = DBType.MSSQL2005P)
         {
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["EnableSqlLog"]))
+            {
+                logSql = ConfigurationManager.AppSettings["EnableSqlLog"] == "1";
+            }
             string helperType = "";
             IDBHelper helper = null;
             string nameSpace = "";
@@ -171,6 +170,8 @@ namespace SOAFramework.Library.DAL
             Type adapterType = ass.GetType(nameSpace + "." + adapterClassName);
             //helper = Activator.CreateInstance(type, strConnectionString) as IDBHelper;
             helper = new BaseHelperV2(connectionType, commandType, adapterType, parameterType, strConnectionString);
+            helper.DBType = objType;
+            helper.LogSql = logSql;
             return helper;
         }
 

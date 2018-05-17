@@ -56,6 +56,11 @@
             this.btnsql = new System.Windows.Forms.Button();
             this.btnDynamic = new System.Windows.Forms.Button();
             this.btnZipPackage = new System.Windows.Forms.Button();
+            this.btnJWTEncode = new System.Windows.Forms.Button();
+            this.txbHeader = new System.Windows.Forms.TextBox();
+            this.txbPayload = new System.Windows.Forms.TextBox();
+            this.txbSecret = new System.Windows.Forms.TextBox();
+            this.btnJWTDecode = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -325,11 +330,64 @@
             this.btnZipPackage.UseVisualStyleBackColor = true;
             this.btnZipPackage.Click += new System.EventHandler(this.btnZipPackage_Click);
             // 
+            // btnJWTEncode
+            // 
+            this.btnJWTEncode.Location = new System.Drawing.Point(963, 13);
+            this.btnJWTEncode.Name = "btnJWTEncode";
+            this.btnJWTEncode.Size = new System.Drawing.Size(86, 25);
+            this.btnJWTEncode.TabIndex = 29;
+            this.btnJWTEncode.Text = "jwt encode";
+            this.btnJWTEncode.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnJWTEncode.UseVisualStyleBackColor = true;
+            this.btnJWTEncode.Click += new System.EventHandler(this.btnJWT_Click);
+            // 
+            // txbHeader
+            // 
+            this.txbHeader.Location = new System.Drawing.Point(1085, 14);
+            this.txbHeader.Multiline = true;
+            this.txbHeader.Name = "txbHeader";
+            this.txbHeader.Size = new System.Drawing.Size(392, 69);
+            this.txbHeader.TabIndex = 30;
+            // 
+            // txbPayload
+            // 
+            this.txbPayload.Location = new System.Drawing.Point(1085, 92);
+            this.txbPayload.Multiline = true;
+            this.txbPayload.Name = "txbPayload";
+            this.txbPayload.Size = new System.Drawing.Size(392, 69);
+            this.txbPayload.TabIndex = 31;
+            this.txbPayload.Text = "{\'id\':\'1\',\'name\':\'frank\'}";
+            // 
+            // txbSecret
+            // 
+            this.txbSecret.Location = new System.Drawing.Point(1085, 169);
+            this.txbSecret.Multiline = true;
+            this.txbSecret.Name = "txbSecret";
+            this.txbSecret.Size = new System.Drawing.Size(392, 69);
+            this.txbSecret.TabIndex = 32;
+            this.txbSecret.Text = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
+            // 
+            // btnJWTDecode
+            // 
+            this.btnJWTDecode.Location = new System.Drawing.Point(963, 58);
+            this.btnJWTDecode.Name = "btnJWTDecode";
+            this.btnJWTDecode.Size = new System.Drawing.Size(86, 25);
+            this.btnJWTDecode.TabIndex = 33;
+            this.btnJWTDecode.Text = "jwt decode";
+            this.btnJWTDecode.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnJWTDecode.UseVisualStyleBackColor = true;
+            this.btnJWTDecode.Click += new System.EventHandler(this.btnJWTDecode_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnJWTDecode);
+            this.Controls.Add(this.txbSecret);
+            this.Controls.Add(this.txbPayload);
+            this.Controls.Add(this.txbHeader);
+            this.Controls.Add(this.btnJWTEncode);
             this.Controls.Add(this.btnZipPackage);
             this.Controls.Add(this.btnDynamic);
             this.Controls.Add(this.btnsql);
@@ -395,6 +453,11 @@
         private System.Windows.Forms.Button btnsql;
         private System.Windows.Forms.Button btnDynamic;
         private System.Windows.Forms.Button btnZipPackage;
+        private System.Windows.Forms.Button btnJWTEncode;
+        private System.Windows.Forms.TextBox txbHeader;
+        private System.Windows.Forms.TextBox txbPayload;
+        private System.Windows.Forms.TextBox txbSecret;
+        private System.Windows.Forms.Button btnJWTDecode;
     }
 }
 

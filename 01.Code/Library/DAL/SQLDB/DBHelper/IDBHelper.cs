@@ -18,9 +18,11 @@ namespace SOAFramework.Library.DAL
         /// <summary>
         /// 数据库类型
         /// </summary>
-        DBType DBType { get; }
+        DBType DBType { get; set; }
 
         bool LogSql { get; set; }
+
+        bool AutoCloseConnection { get; set; }
         #endregion
 
         #region BeginTransaction

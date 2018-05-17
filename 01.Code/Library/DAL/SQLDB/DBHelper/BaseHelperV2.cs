@@ -46,7 +46,10 @@ namespace SOAFramework.Library.DAL
         public DBType DBType
         {
             get { return _type; }
+            set { _type = value; }
         }
+
+        public bool AutoCloseConnection { get; set; }
 
         public DBSuit CreateDBSuit<Con, Com, Adp>(ref IDbConnection connection, IDbCommand command)
             where Con : IDbConnection
@@ -98,8 +101,10 @@ namespace SOAFramework.Library.DAL
             IDbConnection objConnection = suite.Conection;
             IDbCommand objCommand = suite.Command;
             IDbDataAdapter objAdp = suite.Adapter;
-            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex, orderby));
+            logger.Error(strConnectionString);
+            if (intStartIndex > -1 && intEndIndex > 0 && strIDColumnName != string.Empty) { strSQL.Append(paging.GetPagingSQL(strCommandString, strIDColumnName, intStartIndex, intEndIndex, orderby)); }
             else strSQL.Append(strCommandString);
+            logger.Error(strSQL.ToString());
             if (string.IsNullOrEmpty(strConnectionString)) strConnectionString = mStr_ConnectionString;
             if (string.IsNullOrEmpty(objConnection.ConnectionString)) objConnection.ConnectionString = strConnectionString;
             objCommand.CommandText = strSQL.ToString();
@@ -111,6 +116,7 @@ namespace SOAFramework.Library.DAL
                 foreach (var p in parameters)
                 {
                     objCommand.Parameters.Add(p);
+                    logger.Error(p.ParameterName + ":" + p.Value.ToString());
                 }
             }
             objAdp.SelectCommand = objCommand;
@@ -118,6 +124,7 @@ namespace SOAFramework.Library.DAL
             {
                 if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
                 DataSet set = new DataSet();
+                if (logSql) { logger.Log(strCommandString);  }
                 objAdp.Fill(set);
                 if (set != null && set.Tables.Count > 0) dtData = set.Tables[0];
                 return dtData;
@@ -322,6 +329,7 @@ namespace SOAFramework.Library.DAL
             try
             {
                 if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
+                if (logSql) { logger.Log(strCommandString); }
                 objAdp.Fill(dsData);
                 return dsData;
             }
@@ -500,6 +508,7 @@ namespace SOAFramework.Library.DAL
             try
             {
                 if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
+                if (logSql) { logger.Log(strCommandString); }
                 objData = objCommand.ExecuteScalar();
                 return objData;
             }
@@ -644,6 +653,7 @@ namespace SOAFramework.Library.DAL
             try
             {
                 if (objConnection.State != ConnectionState.Open && objConnection.State != ConnectionState.Connecting) objConnection.Open();
+                if (logSql) { logger.Log(strCommandString); }
                 return objCommand.ExecuteNonQuery();
             }
             finally

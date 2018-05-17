@@ -50,6 +50,7 @@ namespace SOAFramework.Library.DAL
         public DBType DBType
         {
             get { return _type; }
+            set { _type = value; }
         }
 
         private bool autoCloseConnection = true;
