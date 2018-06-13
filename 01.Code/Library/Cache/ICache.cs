@@ -16,7 +16,7 @@ namespace SOAFramework.Library.Cache
 
         Dictionary<string, T> GetAllItems<T>();
 
-        bool UpdateItem(string key, object item);
+        bool UpdateItem(string key, object item, int seconds);
     }
 
     public class CacheFactory

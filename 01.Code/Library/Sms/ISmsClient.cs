@@ -34,8 +34,8 @@ namespace SOAFramework.Library
             switch (type)
             {
                 case SmsTypeEnum.Aliyun:
-                    if (string.IsNullOrEmpty(appKey) && string.IsNullOrEmpty(appSecret)) { client = new AliSmsClient(appKey, appSecret); }
-                    else { client = new AliSmsClient(); }
+                    if (string.IsNullOrEmpty(appKey) && string.IsNullOrEmpty(appSecret)) { client = new AliSmsClient(); }
+                    else { client = new AliSmsClient(appKey, appSecret); }
                     break;
             }
             return client;

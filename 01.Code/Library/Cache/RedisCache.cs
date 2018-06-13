@@ -24,13 +24,20 @@ namespace SOAFramework.Library.Cache
             //Connect();
         }
 
-        public bool AddItem(string key, object value, int seconds)
+        public bool AddItem(string key, object value, int seconds = -1)
         {
             string json = JsonHelper.Serialize(value);
 
             using (var client = CreateClient())
             {
-                client.SetAsync(key, json).Wait();
+                if (seconds > 0)
+                {
+                    client.SetExAsync(key, seconds, json).Wait();
+                }
+                else
+                {
+                    client.SetAsync(key, json).Wait();
+                }
             }
             return true;
         }
@@ -62,13 +69,20 @@ namespace SOAFramework.Library.Cache
             return t;
         }
 
-        public bool UpdateItem(string key, object value)
+        public bool UpdateItem(string key, object value, int seconds = -1)
         {
             string json = JsonHelper.Serialize(value);
 
             using (var client = CreateClient())
             {
-                client.SetAsync(key, json).Wait();
+                if (seconds > 0)
+                {
+                    client.SetExAsync(key, seconds, json).Wait();
+                }
+                else
+                {
+                    client.SetAsync(key, json).Wait();
+                }
             }
             return true;
         }

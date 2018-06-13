@@ -41,7 +41,7 @@ namespace SOAFramework.Library
             {
                 dicCache = item;
                 dicCache[key] = t;
-                _cacheHandler.UpdateItem(_cacheKey, dicCache);
+                _cacheHandler.UpdateItem(_cacheKey, dicCache, -1);
             }
         }
 

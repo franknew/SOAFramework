@@ -78,41 +78,41 @@ namespace UnitTest.Library
         [TestMethod]
         public void TestAddCache()
         {
-            //cache.AddItem(new CacheItem("UnitTest2", "hello"), 10);
-            //var item = cache.GetItem("UnitTest2");
-            //Assert.AreEqual("UnitTest2", item.Key);
-            //cache.DelItem("UnitTest2");
+                cache.AddItem("UnitTest2", "hello", 10);
+                var item = cache.GetItem<string>("UnitTest2");
+                Assert.AreEqual("hello", item);
+                cache.DelItem("UnitTest2");
 
-            //cache.AddItem(new CacheItem("UnitTest3", "hello"), 1);
-            //Thread.Sleep(2000);
-            //item = cache.GetItem("UnitTest3");
-            //Assert.IsNull(item);
+                cache.AddItem("UnitTest3", "hello", 1);
+                Thread.Sleep(2000);
+                item = cache.GetItem<string>("UnitTest3");
+                Assert.IsNull(item);
         }
 
         [TestMethod]
         public void TestRemoveCache()
         {
-            //cache.AddItem(new CacheItem("UnitTest2", "hello"), 10);
-            //cache.DelItem("UnitTest2");
-            //var item = cache.GetItem("UnitTest2");
-            //Assert.IsNull(item);
+            cache.AddItem("UnitTest2", "hello", 10);
+            cache.DelItem("UnitTest2");
+            var item = cache.GetItem<string>("UnitTest2");
+            Assert.IsNull(item);
         }
 
         [TestMethod]
         public void TestGetCache()
         {
-            //var item = cache.GetItem("UnitTest1");
-            //Assert.AreEqual("UnitTest1", item.Key);
+            var item = cache.GetItem<string>("UnitTest1");
+            Assert.AreEqual("UnitTest1", item);
         }
 
         [TestMethod]
         public void TestUpdateCache()
         {
-            //var item = cache.GetItem("UnitTest1");
-            //item.Value = "hello world";
-            //cache.UpdateItem(item); 
-            //item = cache.GetItem("UnitTest1");
-            //Assert.AreEqual("hello world", item.Value.ToString());
+            var item = cache.GetItem<string>("UnitTest1");
+            item = "hello world";
+            cache.UpdateItem("UnitTest1", item, -1);
+            item = cache.GetItem<string>("UnitTest1");
+            Assert.AreEqual("hello world", item);
         }
     }
 }
