@@ -10,6 +10,8 @@ namespace SOAFramework.Library.DAL
     public class DBFactory
     {
         private static bool logSql = false;
+        //»º´æ³ÌÐò¼¯
+        private static Dictionary<string, Assembly> assDic = new Dictionary<string, Assembly>();
 
         public static IDBHelper CreateDBHelper()
         {
@@ -162,8 +164,14 @@ namespace SOAFramework.Library.DAL
                 default:
                     break;
             }
-            Type type = Type.GetType("SOAFramework.Library.DAL." + helperType);
-            var ass = AppDomain.CurrentDomain.GetAssembly(assemblyName);
+            //Type type = Type.GetType("SOAFramework.Library.DAL." + helperType);
+            Assembly ass = null;
+            if (assDic.ContainsKey(assemblyName)) { ass = assDic[assemblyName]; }
+            else
+            {
+                ass = AppDomain.CurrentDomain.GetAssembly(assemblyName);
+                assDic[assemblyName] = ass;
+            }
             Type connectionType = ass.GetType(nameSpace + "." + connectionClassName);
             Type commandType = ass.GetType(nameSpace + "." + commandClassName);
             Type parameterType = ass.GetType(nameSpace + "." + parameterClassName);

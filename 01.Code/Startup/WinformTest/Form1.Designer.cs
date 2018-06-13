@@ -61,6 +61,15 @@
             this.txbPayload = new System.Windows.Forms.TextBox();
             this.txbSecret = new System.Windows.Forms.TextBox();
             this.btnJWTDecode = new System.Windows.Forms.Button();
+            this.btnLogAsync = new System.Windows.Forms.Button();
+            this.btnLogSync = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblCpu = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblTotalMem = new System.Windows.Forms.Label();
+            this.lblUsedMem = new System.Windows.Forms.Label();
+            this.btnSms = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -378,11 +387,103 @@
             this.btnJWTDecode.UseVisualStyleBackColor = true;
             this.btnJWTDecode.Click += new System.EventHandler(this.btnJWTDecode_Click);
             // 
+            // btnLogAsync
+            // 
+            this.btnLogAsync.Location = new System.Drawing.Point(830, 189);
+            this.btnLogAsync.Name = "btnLogAsync";
+            this.btnLogAsync.Size = new System.Drawing.Size(75, 25);
+            this.btnLogAsync.TabIndex = 34;
+            this.btnLogAsync.Text = "log async test";
+            this.btnLogAsync.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnLogAsync.UseVisualStyleBackColor = true;
+            this.btnLogAsync.Click += new System.EventHandler(this.btnLogAsync_Click);
+            // 
+            // btnLogSync
+            // 
+            this.btnLogSync.Location = new System.Drawing.Point(830, 158);
+            this.btnLogSync.Name = "btnLogSync";
+            this.btnLogSync.Size = new System.Drawing.Size(75, 25);
+            this.btnLogSync.TabIndex = 35;
+            this.btnLogSync.Text = "log sync";
+            this.btnLogSync.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnLogSync.UseVisualStyleBackColor = true;
+            this.btnLogSync.Click += new System.EventHandler(this.btnLogSync_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(31, 590);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 36;
+            this.label1.Text = "cpu：";
+            // 
+            // lblCpu
+            // 
+            this.lblCpu.AutoSize = true;
+            this.lblCpu.Location = new System.Drawing.Point(88, 590);
+            this.lblCpu.Name = "lblCpu";
+            this.lblCpu.Size = new System.Drawing.Size(0, 12);
+            this.lblCpu.TabIndex = 37;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 621);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 38;
+            this.label2.Text = "总内存：";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1, 657);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.TabIndex = 39;
+            this.label3.Text = "已用内存：";
+            // 
+            // lblTotalMem
+            // 
+            this.lblTotalMem.AutoSize = true;
+            this.lblTotalMem.Location = new System.Drawing.Point(88, 621);
+            this.lblTotalMem.Name = "lblTotalMem";
+            this.lblTotalMem.Size = new System.Drawing.Size(0, 12);
+            this.lblTotalMem.TabIndex = 40;
+            // 
+            // lblUsedMem
+            // 
+            this.lblUsedMem.AutoSize = true;
+            this.lblUsedMem.Location = new System.Drawing.Point(88, 657);
+            this.lblUsedMem.Name = "lblUsedMem";
+            this.lblUsedMem.Size = new System.Drawing.Size(0, 12);
+            this.lblUsedMem.TabIndex = 41;
+            // 
+            // btnSms
+            // 
+            this.btnSms.Location = new System.Drawing.Point(830, 590);
+            this.btnSms.Name = "btnSms";
+            this.btnSms.Size = new System.Drawing.Size(141, 23);
+            this.btnSms.TabIndex = 42;
+            this.btnSms.Text = "send sms";
+            this.btnSms.UseVisualStyleBackColor = true;
+            this.btnSms.Click += new System.EventHandler(this.btnSms_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.Controls.Add(this.btnSms);
+            this.Controls.Add(this.lblUsedMem);
+            this.Controls.Add(this.lblTotalMem);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblCpu);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnLogSync);
+            this.Controls.Add(this.btnLogAsync);
             this.Controls.Add(this.btnJWTDecode);
             this.Controls.Add(this.txbSecret);
             this.Controls.Add(this.txbPayload);
@@ -418,6 +519,7 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -458,6 +560,15 @@
         private System.Windows.Forms.TextBox txbPayload;
         private System.Windows.Forms.TextBox txbSecret;
         private System.Windows.Forms.Button btnJWTDecode;
+        private System.Windows.Forms.Button btnLogAsync;
+        private System.Windows.Forms.Button btnLogSync;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblCpu;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblTotalMem;
+        private System.Windows.Forms.Label lblUsedMem;
+        private System.Windows.Forms.Button btnSms;
     }
 }
 

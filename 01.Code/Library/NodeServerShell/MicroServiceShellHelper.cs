@@ -11,6 +11,7 @@ namespace MicroService.Library.MicroService
     public class ShellHelper
     {
         private static SimpleLogger _logger = new SimpleLogger();
+        private static Dictionary<string, Assembly> assDic = new Dictionary<string, Assembly>();
         static ShellHelper()
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -42,24 +43,62 @@ namespace MicroService.Library.MicroService
 
         public static void StartInstance(string host, string commondllPath, string apidllPath)
         {
+            List<Assembly> assemblies = new List<Assembly>();
             Log("loading common dll");
-            LoadDlls(commondllPath);
+            assemblies.AddRange(LoadDlls(commondllPath));
             Log("common dll loaded");
             Log("loading api dll");
             var list = LoadDlls(apidllPath);
+            assemblies.AddRange(list);
+            InitAsseblyDic(assemblies);
             Log("api dll loaded");
             Log("starting node");
             StartService(host, list);
             Log("node started");
         }
 
+        private static void InitAsseblyDic(List<Assembly> list)
+        {
+            foreach (var ass in list)
+            {
+                assDic[ass.FullName] = ass;
+            }
+        }
+
         private static void StartService(string host, List<Assembly> list)
         {
             var serverAss = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.GetName().Name.Equals("MicroService.Library.Server"));
+            if (serverAss == null)
+            {
+                serverAss = Assembly.Load("MicroService.Library.Server");
+            }
+            if (serverAss == null)
+            {
+                if (assDic.ContainsKey("MicroService.Library.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"))
+                {
+                    serverAss = assDic["MicroService.Library.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"];
+                }
+            }
+            if (serverAss == null)
+            {
+                throw new Exception("can not load assembly MicroService.Library.Server");
+            }
             dynamic server = serverAss.CreateInstance("MicroService.Library.NodeServer");
+            if (server == null)
+            {
+                throw new Exception("can not load type MicroService.Library.NodeServer");
+            }
             //NodeServer server = new NodeServer();
             //server.Start(host, AppDomain.CurrentDomain, list);
-            server.Start(host, AppDomain.CurrentDomain, list);
+            try
+            {
+                server.Start(host, AppDomain.CurrentDomain, list);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw ex;
+            }
         }
 
         private static List<Assembly> LoadDlls(string dllPath)

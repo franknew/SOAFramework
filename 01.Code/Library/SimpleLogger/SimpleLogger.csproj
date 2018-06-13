@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseFileNameGenerator.cs" />
     <Compile Include="DebugFileNameGanerator.cs" />
     <Compile Include="ErrorFileNameGenerator.cs" />
     <Compile Include="IFileNameGenerator.cs" />

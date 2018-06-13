@@ -22,11 +22,10 @@ using System.Runtime.Caching;
 using IBatisNet.DataMapper;
 using SOAFramework.Library.DAL;
 using System.Dynamic;
-using System.Web.Mvc;
 using SOAFramework.Library.Lib;
-using JWT.Algorithms;
-using JWT.Serializers;
-using JWT;
+//using JWT.Algorithms;
+//using JWT.Serializers;
+//using JWT;
 
 namespace WinformTest
 {
@@ -196,7 +195,7 @@ namespace WinformTest
         private void btnRedisSet_Click(object sender, EventArgs e)
         {
             ICache cache = CacheFactory.Create(CacheType.Redis);
-            
+
             //cache.AddItem("test2", item, -1);
             var item1 = cache.GetItem<CacheItem>("test2");
         }
@@ -255,7 +254,7 @@ namespace WinformTest
         private void btnSDKTesting_Click(object sender, EventArgs e)
         {
 
-            ServiceDiscoveryController c = new ServiceDiscoveryController();
+            //ServiceDiscoveryController c = new ServiceDiscoveryController();
             //c.Api("GET-api-ServiceDiscovery-Api");
         }
 
@@ -267,25 +266,22 @@ namespace WinformTest
         private void btnsql_Click(object sender, EventArgs e)
         {
             IDBHelper helper = DBFactory.CreateDBHelper();
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            helper.GetTableWithSQL("INSERT INTO Test ('100','unit test','1')");
-            watch.Stop();
-            MessageBox.Show(watch.ElapsedMilliseconds.ToString());
+            helper.ExecNoneQueryWithSQL(txbData.Text);
+            MessageBox.Show("ok");
         }
 
         private void btnDynamic_Click(object sender, EventArgs e)
         {
-            Dictionary<string, TypeModel> dic = new Dictionary<string, TypeModel>();
-            //MessageBox.Show(dic.GetType().FullName);
-            string mainType = dic.GetType().FullName.Split('`')[0];
-            string genericTypes = dic.GetType().FullName.Split('`')[1];
-            genericTypes = genericTypes.Trim('[', ']');
-            var types = genericTypes.GetVairable('[', ']');
-            PaginationResult<BaseEntity> result = new PaginationResult<BaseEntity>();
-            //MessageBox.Show(result.GetType().FullName);
-            //MessageBox.Show(typeof(PaginationResult<>).FullName);
-            var ass = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.FullName.StartsWith("SOAFramework.Library.DAL"));
+            //Dictionary<string, TypeModel> dic = new Dictionary<string, TypeModel>();
+            ////MessageBox.Show(dic.GetType().FullName);
+            //string mainType = dic.GetType().FullName.Split('`')[0];
+            //string genericTypes = dic.GetType().FullName.Split('`')[1];
+            //genericTypes = genericTypes.Trim('[', ']');
+            //var types = genericTypes.GetVairable('[', ']');
+            //PaginationResult<BaseEntity> result = new PaginationResult<BaseEntity>();
+            ////MessageBox.Show(result.GetType().FullName);
+            ////MessageBox.Show(typeof(PaginationResult<>).FullName);
+            //var ass = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(t => t.FullName.StartsWith("SOAFramework.Library.DAL"));
         }
 
         void IFormAction.OnClick(EventArgs e)
@@ -305,21 +301,83 @@ namespace WinformTest
         private void btnJWT_Click(object sender, EventArgs e)
         {
 
-            string header = txbHeader.Text;
-            string payload = txbPayload.Text;
-            string secret = txbSecret.Text;
+            //string header = txbHeader.Text;
+            //string payload = txbPayload.Text;
+            //string secret = txbSecret.Text;
 
-            IDictionary<string, object> payloadDic = JsonHelper.Deserialize<IDictionary<string, object>>(payload);
-            var token = JWTHelper.Encode(secret, payloadDic);
-            txbData.Text = token;
+            //IDictionary<string, object> payloadDic = JsonHelper.Deserialize<IDictionary<string, object>>(payload);
+            //var token = JWTHelper.Encode(secret, payloadDic);
+            //txbData.Text = token;
         }
 
         private void btnJWTDecode_Click(object sender, EventArgs e)
         {
-            string secret = txbSecret.Text;
-            string token = txbData.Text;
-            var json = JWTHelper.Decode(token, secret);
-            txbPayload.Text = json;
+            //string secret = txbSecret.Text;
+            //string token = txbData.Text;
+            //var json = JWTHelper.Decode(token, secret);
+            //txbPayload.Text = json;
+        }
+
+        private void btnLogAsync_Click(object sender, EventArgs e)
+        {
+            List<Task> tasks = new List<Task>();
+            SimpleLogger logger = new SimpleLogger();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < 100000; i++)
+            {
+                logger.LogAsync("hello world, i=" + i.ToString());
+            }
+            Task.WaitAll(tasks.ToArray());
+            stopwatch.Stop();
+            MessageBox.Show("async over:" + stopwatch.ElapsedMilliseconds);
+        }
+
+        private void btnLogSync_Click(object sender, EventArgs e)
+        {
+            SimpleLogger logger = new SimpleLogger();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < 100000; i++)
+            {
+                logger.Log("hello world, i=" + i.ToString());
+            }
+            stopwatch.Stop();
+            MessageBox.Show("sync over:" + stopwatch.ElapsedMilliseconds);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Timer timer = new Timer();
+            timer.Interval = 1000;
+            timer.Tick += Timer_Tick;
+            timer.Start();
+
+            //Performance performance = new Performance();
+            //performance.GetCounterNameValueList("Proccess", ".");
+        }
+
+        Performance performance = new Performance();
+        float cpu, mem, totalmem;
+
+        private void btnSms_Click(object sender, EventArgs e)
+        {
+            ISmsClient client = new AliSmsClient("LTAIGzdiAzBlQWpr", "36c0GTBkVIs232yWfxpJ3pg5tjETI6");
+            var response = client.Send("成为信息科技有限公司", "SMS_137425942", new { code = "334283" }, new string[] { "13823117810" });
+            MessageBox.Show(response.Message);
+        }
+
+        string cpuString;
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            cpu = performance.GetCurrentCpuUsage();
+            //cpu = performance.CpuCounter.NextValue();
+            mem = performance.GetAvailableRamSize();
+            totalmem = performance.GetTotalMem();
+            lblCpu.Text = cpu.ToString();
+            lblTotalMem.Text = (totalmem / 1000000).ToString() + "MB";
+            lblUsedMem.Text = (mem/1000000).ToString() + "MB";
         }
     }
 

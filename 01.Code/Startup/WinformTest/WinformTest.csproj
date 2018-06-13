@@ -37,6 +37,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="aliyun-net-sdk-core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SOAFramework.Library.AliSmsSDK.1.0.0\lib\net40\aliyun-net-sdk-core.dll</HintPath>
+    </Reference>
+    <Reference Include="aliyun-net-sdk-dysmsapi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SOAFramework.Library.AliSmsSDK.1.0.0\lib\net40\aliyun-net-sdk-dysmsapi.dll</HintPath>
+    </Reference>
     <Reference Include="CC.DataProvider, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\CC.DataProvider.1.0.0\lib\net40\CC.DataProvider.dll</HintPath>
     </Reference>
@@ -256,13 +262,13 @@
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Json</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\ServiceDiscovery\ServiceResolver.csproj">
-      <Project>{5e74da72-d164-4f80-b9e2-ac2b65648b8a}</Project>
-      <Name>ServiceResolver</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\SimpleLogger\SimpleLogger.csproj">
       <Project>{73c78c6a-31e2-4ec0-8f2e-384b431c224d}</Project>
       <Name>SimpleLogger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Sms\Sms.csproj">
+      <Project>{c1a79c67-5c19-4e78-b889-ae708af8421e}</Project>
+      <Name>Sms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\WebService\WebService.csproj">
       <Project>{09576270-b770-442d-9c90-9f82b2c8f8cf}</Project>

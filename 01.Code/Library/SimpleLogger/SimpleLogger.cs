@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SOAFramework.Library
 {
@@ -12,11 +13,12 @@ namespace SOAFramework.Library
         private string _logpath = AppDomain.CurrentDomain.BaseDirectory + "Logs";
         private string _fileNameFormat = "yyyyMMdd";
         private static object locker = new object();
+
+        static ReaderWriterLockSlim writeLock = new ReaderWriterLockSlim();
         public static long fileSize = 5 * 1024 * 1024;
 
         private static int _errIndex = 0;
         private static int _degIndex = 0;
-        private Mutex m = new Mutex();
 
         public SimpleLogger(string logpath = "", string fileNameFormat = "")
         {
@@ -28,29 +30,29 @@ namespace SOAFramework.Library
         {
             try
             {
-                lock (locker)
-                {
-                    IFileNameGenerator generator = FileNameGeneratorFactory.Create(fileType);
-                    string fullfilename = generator.GetFileName(_fileNameFormat, fileSize);
-                    FileInfo file = new FileInfo(fullfilename);
-                    if (!file.Directory.Exists) file.Directory.Create();
-                    StringBuilder log = new StringBuilder();
-                    if (hasTimeStamp) log.AppendFormat("{0} -- {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), content);
-                    else log.Append(content);
-                    //using (FileStream logFile = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
-                    //{
-                    //    var logContentBytes = Encoding.UTF8.GetBytes(log.ToString());
-                    //    logFile.Seek(0, SeekOrigin.End);
-                    //    logFile.Write(logContentBytes, 0, logContentBytes.Length);
-                    //}
-                    m.WaitOne();
-                    File.AppendAllLines(file.FullName, new string[] { log.ToString() });
-                    m.ReleaseMutex();
-                }
+                IFileNameGenerator generator = FileNameGeneratorFactory.Create(fileType);
+                string fullfilename = generator.GetFileName(_fileNameFormat, fileSize);
+                FileInfo file = new FileInfo(fullfilename);
+                StringBuilder log = new StringBuilder();
+                if (hasTimeStamp) log.AppendFormat("{0} -- {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), content);
+                else log.Append(content);
+                //lock (locker)
+                //{
+                    if (!writeLock.IsWriteLockHeld) writeLock.EnterWriteLock();
+                    try
+                    {
+                        if (!file.Exists) file.Create().Close();
+                        File.AppendAllLines(file.FullName, new string[] { log.ToString() });
+                    }
+                    finally
+                    {
+                        if (writeLock.IsWriteLockHeld) writeLock.ExitWriteLock();
+                    }
+                //}
             }
             catch (Exception ex)
             {
-
+                string a = "";
             }
         }
 
@@ -114,6 +116,66 @@ namespace SOAFramework.Library
         public void Debug(string content, bool hasTimeStamp = true)
         {
             Write(content, hasTimeStamp, FileTypeEnum.Debug);
+        }
+
+        /// <summary>
+        /// 异步写日志
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="hasTimeStamp"></param>
+        /// <param name="fileType"></param>
+        public void WriteAsync(string content, bool hasTimeStamp, FileTypeEnum fileType)
+        {
+            Task task = new Task(() =>
+            {
+                Write(content, hasTimeStamp, fileType);
+            });
+            task.Start();
+        }
+
+        /// <summary>
+        /// 异步写日志
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="hasTimeStamp"></param>
+        public void LogAsync(string content, bool hasTimeStamp = true)
+        {
+            WriteAsync(content, hasTimeStamp, FileTypeEnum.Log);
+        }
+
+        /// <summary>
+        /// 异步写错误信息
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="hasTimeStamp"></param>
+        public void ErrorAsync(string content, bool hasTimeStamp = true)
+        {
+            WriteAsync(content, hasTimeStamp, FileTypeEnum.Error);
+        }
+
+        /// <summary>
+        /// 异步写调试信息
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="hasTimeStamp"></param>
+        public void DebugAsync(string content, bool hasTimeStamp = true)
+        {
+            WriteAsync(content, hasTimeStamp, FileTypeEnum.Debug);
+        }
+
+        /// <summary>
+        /// 异步写异常信息
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="hasTimeStamp"></param>
+        public void WriteExceptionAsync(Exception ex, bool hasTimeStamp = true)
+        {
+
+            Task task = new Task(() =>
+            {
+                WriteException(ex, hasTimeStamp);
+            });
+            task.Start();
         }
     }
 }

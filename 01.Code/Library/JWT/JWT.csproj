@@ -7,8 +7,8 @@
     <ProjectGuid>{835CCB1D-5C2A-435B-94A6-7198217CC08F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SOAFramework.Library.JWT</RootNamespace>
-    <AssemblyName>SOAFramework.Library</AssemblyName>
+    <RootNamespace>SOAFramework.Library</RootNamespace>
+    <AssemblyName>SOAFramework.Library.JWT</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Release\Modules\SOAFramework.Library.JWT.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

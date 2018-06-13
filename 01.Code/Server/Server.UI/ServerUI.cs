@@ -177,7 +177,7 @@ namespace SOAFramework.Server.UI
         private void DisplayMachineStatus()
         {
             tssCpu.Text = "CPU使用率：" + performance.GetCurrentCpuUsage().ToString("N0") + "%";
-            tssRam.Text = "可用内存：" + performance.GetCurrentRamUsage() + "MB";
+            tssRam.Text = "可用内存：" + performance.GetAvailableRamSize() + "MB";
         }
 
         private void ServerUI_Load(object sender, EventArgs e)
