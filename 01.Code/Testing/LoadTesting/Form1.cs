@@ -94,8 +94,13 @@ namespace LoadTesting
             string postdata = txbPost.Text;
             string contentType = rabJson.Text;
             if (rabJson.Checked) contentType = rabJson.Text;
-            if (rabXml.Checked) contentType = rabXml.Text;
-            if (rdoUrlencoded.Checked) contentType = rdoUrlencoded.Text;
+            else if (rabXml.Checked) contentType = rabXml.Text;
+            else if (rdoUrlencoded.Checked) contentType = rdoUrlencoded.Text;
+            else if (rabUpload.Checked)
+            {
+                contentType = rabUpload.Text;
+                //contentType += ";boundary=---------123456789";
+            }
             progressbar.Maximum = progressBar1.Maximum = taskcount;
             progressbar.Value = progressBar1.Value = 0;
             i = 0;

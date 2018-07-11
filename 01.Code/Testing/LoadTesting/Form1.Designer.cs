@@ -44,7 +44,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.numCount = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnFromFile = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.rabUpload = new System.Windows.Forms.RadioButton();
             this.rdoUrlencoded = new System.Windows.Forms.RadioButton();
             this.rabXml = new System.Windows.Forms.RadioButton();
             this.rabJson = new System.Windows.Forms.RadioButton();
@@ -62,7 +64,6 @@
             this.progressbar = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.btnFromFile = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCount)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -235,16 +236,38 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             // 
+            // btnFromFile
+            // 
+            this.btnFromFile.Location = new System.Drawing.Point(221, 99);
+            this.btnFromFile.Name = "btnFromFile";
+            this.btnFromFile.Size = new System.Drawing.Size(75, 23);
+            this.btnFromFile.TabIndex = 6;
+            this.btnFromFile.Text = "从文件";
+            this.btnFromFile.UseVisualStyleBackColor = true;
+            this.btnFromFile.Click += new System.EventHandler(this.btnFromFile_Click);
+            // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.rabUpload);
             this.groupBox4.Controls.Add(this.rdoUrlencoded);
             this.groupBox4.Controls.Add(this.rabXml);
             this.groupBox4.Controls.Add(this.rabJson);
             this.groupBox4.Location = new System.Drawing.Point(415, 51);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(513, 38);
+            this.groupBox4.Size = new System.Drawing.Size(1045, 38);
             this.groupBox4.TabIndex = 12;
             this.groupBox4.TabStop = false;
+            // 
+            // rabUpload
+            // 
+            this.rabUpload.AutoSize = true;
+            this.rabUpload.Location = new System.Drawing.Point(484, 13);
+            this.rabUpload.Name = "rabUpload";
+            this.rabUpload.Size = new System.Drawing.Size(137, 16);
+            this.rabUpload.TabIndex = 13;
+            this.rabUpload.TabStop = true;
+            this.rabUpload.Text = "multipart/form-data";
+            this.rabUpload.UseVisualStyleBackColor = true;
             // 
             // rdoUrlencoded
             // 
@@ -401,16 +424,6 @@
             this.progressBar1.TabIndex = 11;
             this.progressBar1.Visible = false;
             // 
-            // btnFromFile
-            // 
-            this.btnFromFile.Location = new System.Drawing.Point(221, 99);
-            this.btnFromFile.Name = "btnFromFile";
-            this.btnFromFile.Size = new System.Drawing.Size(75, 23);
-            this.btnFromFile.TabIndex = 6;
-            this.btnFromFile.Text = "从文件";
-            this.btnFromFile.UseVisualStyleBackColor = true;
-            this.btnFromFile.Click += new System.EventHandler(this.btnFromFile_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -476,6 +489,7 @@
         private System.Windows.Forms.Button btnZip;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnFromFile;
+        private System.Windows.Forms.RadioButton rabUpload;
     }
 }
 

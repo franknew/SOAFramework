@@ -43,12 +43,6 @@
     <Reference Include="aliyun-net-sdk-dysmsapi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SOAFramework.Library.AliSmsSDK.1.0.0\lib\net40\aliyun-net-sdk-dysmsapi.dll</HintPath>
     </Reference>
-    <Reference Include="CC.DataProvider, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CC.DataProvider.1.0.0\lib\net40\CC.DataProvider.dll</HintPath>
-    </Reference>
-    <Reference Include="CC.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CC.DataProvider.1.0.0\lib\net40\CC.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
