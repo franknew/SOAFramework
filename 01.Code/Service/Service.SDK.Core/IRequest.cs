@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOAFramework.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace SOAFramework.Service.SDK.Core
     public abstract class BaseRequest<T> : IRequest<T> where T : BaseResponse
     {
         public abstract string GetApi();
-
+        
         public RequestBody Body { get; set; }
     }
 

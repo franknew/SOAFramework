@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDKResultAttribute.cs" />
     <Compile Include="Fomatter\XMLPostDataFomatter.cs" />
+    <Compile Include="TypeExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Http\Http.csproj">

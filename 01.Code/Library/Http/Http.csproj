@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="FileUploader.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="HttpServer.cs" />
     <Compile Include="LogHelper.cs" />

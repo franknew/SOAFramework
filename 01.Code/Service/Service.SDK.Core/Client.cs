@@ -54,7 +54,7 @@ namespace SOAFramework.Service.SDK.Core
             {
                 throw new Exception("没有设置服务url！");
             }
-            string fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
+            string fullUrl = string.Format("{0}/{1}", serviceUrl.TrimEnd('/'), api.TrimStart('/'));
             //if (api.LastIndexOf(".") < 0) fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
             //else
             //{
@@ -120,7 +120,7 @@ namespace SOAFramework.Service.SDK.Core
                     string name = pro.Name;
                     if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
                     object value = pro.GetValue(request, null);
-                    argdic[name] = value;
+                    if (value != null) { argdic[name] = value; }
                 }
             }
             string response = "";
@@ -152,7 +152,7 @@ namespace SOAFramework.Service.SDK.Core
             }
 
             //设置请求信息
-            if (request.GetType().IsSubclassOf(typeof(BaseRequest<>)))
+            if (request.GetType().IsInheritFrom(typeof(BaseRequest<>)))
             {
                 dynamic req = request;
                 req.Body = new RequestBody
