@@ -29,7 +29,7 @@ namespace LoadTesting
         {
             progressbar.Visible = progressBar1.Visible = false;
             TestingData data = e.Result as TestingData;
-            data.Result = this.result;
+            data.Result = data.Result;
             _list.Add(data);
             btnRun.Enabled = true;
             timer1.Stop();
@@ -113,7 +113,7 @@ namespace LoadTesting
                 BackgroundWorker _worker = new BackgroundWorker();
                 _worker.DoWork += _worker_DoWork;
                 _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
-                TestingData data = new TestingData { Url = url, Method = post ? "post" : "get", Count = taskcount, PostData = postdata,ContentType = contentType };
+                TestingData data = new TestingData { Url = url, Method = post ? "post" : "get", Count = taskcount, PostData = postdata, ContentType = contentType };
                 _worker.RunWorkerAsync(data);
                 //while (_status != Status.Finished)
                 //{
@@ -143,7 +143,7 @@ namespace LoadTesting
         private void txbChoose_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) txbFile.Text = dialog.FileName; 
+            if (dialog.ShowDialog() == DialogResult.OK) txbFile.Text = dialog.FileName;
         }
 
         private void btnZip_Click(object sender, EventArgs e)

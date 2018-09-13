@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOAFramework.Service.SDK.Core
+namespace SOAFramework.Library
 {
     public static class TypeExtension
     {

@@ -54,6 +54,7 @@
     <Compile Include="TypeConverter\ClassTypeConverter.cs" />
     <Compile Include="TypeConverter\DictionaryValueConverter.cs" />
     <Compile Include="TypeConverter\ITypeConverter.cs" />
+    <Compile Include="TypeConverter\TypeExtension.cs" />
     <Compile Include="TypeConverter\ValueTypeConverter.cs" />
     <Compile Include="TypeUtility.cs" />
   </ItemGroup>
