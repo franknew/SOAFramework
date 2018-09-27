@@ -25,6 +25,7 @@ namespace SOAFramework.Library.Html
 
 		public IEnumerable<Token> Parse(string html)
 		{
+            html = html.Replace("<!doctype html>", "").Replace("\r\n", "").Replace("\t", "");
 			var tokens = new List<Token>();
 			
 			foreach (char ch in html)

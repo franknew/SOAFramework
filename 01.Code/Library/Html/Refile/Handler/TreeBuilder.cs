@@ -52,7 +52,10 @@ namespace SOAFramework.Library.Html
                         currentNode = node;
                         break;
                     case TokenType.CloseTag:
-                        currentNode = stack.Pop();
+                        if (stack.Count > 0)
+                        {
+                            currentNode = stack.Pop();
+                        }
                         break;
                     case TokenType.AttributeName:
                         currentAttribute = new HtmlAttributeNode(token.Value);

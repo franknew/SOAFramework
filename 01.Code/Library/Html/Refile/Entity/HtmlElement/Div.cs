@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SOAFramework.Library.Refile
 {
-    public class Div
+    public class Div: Element
     {
     }
 }

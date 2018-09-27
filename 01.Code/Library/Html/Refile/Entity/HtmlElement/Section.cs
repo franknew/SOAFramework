@@ -5,9 +5,7 @@ using System.Text;
 
 namespace SOAFramework.Library.Refile
 {
-    public class Body: Element
+    public class Section: Element
     {
-        public List<Element> Elements { get; set; }
-        public List<Img> Imgs { get; set; }
     }
 }
