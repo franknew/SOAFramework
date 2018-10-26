@@ -1,10 +1,9 @@
-﻿using com.alibaba.rocketmq.client.consumer.listener;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using java.util;
-using com.alibaba.rocketmq.common.message;
+using org.apache.rocketmq.client.consumer.listener;
 
 namespace SOAFramework.Library
 {

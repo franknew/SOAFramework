@@ -16,7 +16,7 @@ namespace SOAFramework.Library
         /// <returns></returns>
         public static string Serialize(object obj, bool useDefaultFormat = true)
         {
-            return JsonConvert.SerializeObject(obj, useDefaultFormat);
+            return JsonConvert.SerializeObject(obj);
         }
 
         /// <summary>

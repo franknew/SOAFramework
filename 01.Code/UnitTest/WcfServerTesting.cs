@@ -83,7 +83,7 @@ namespace UnitTest
         }
     }
 
-    public class TestResponse : BaseResponse
+    public class TestResponse : DefaultResponse
     {
         public List<Dictionary<string, object>> Data { get; set; }
     }

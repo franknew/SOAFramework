@@ -30,7 +30,8 @@
     <OutputPath>..\..\Release\Modules\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SOAFramework.Key.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Configuration\FactoryElement.cs" />
@@ -294,7 +295,6 @@
     <None Include="Config.transform" />
     <None Include="Demo.config" />
     <None Include="Enyim.Caching.nuspec" />
-    <None Include="SOAFramework.Key.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System">

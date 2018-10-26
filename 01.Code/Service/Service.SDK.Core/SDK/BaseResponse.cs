@@ -8,10 +8,20 @@ namespace SOAFramework.Service.SDK.Core
 {
     public abstract class BaseResponse
     {
+        private string responseBody;
+
+        internal void SetBody(string body)
+        {
+            this.responseBody = body;
+        }
+
+        public virtual string ResponseBody { get { return responseBody; } }
+    }
+
+    public abstract class DefaultResponse: BaseResponse
+    {
         public bool IsError { get; set; }
 
-        private string responseBody;
-        public virtual string ResponseBody { get { return responseBody; } }
         
         public virtual Exception Exception { get; set; }
 
@@ -25,11 +35,6 @@ namespace SOAFramework.Service.SDK.Core
             this.Code = code;
             this.Exception = ex;
             this.Message = message;
-        }
-
-        internal void SetBody(string body)
-        {
-            this.responseBody = body;
         }
     }
 

@@ -70,13 +70,15 @@
             this.lblTotalMem = new System.Windows.Forms.Label();
             this.lblUsedMem = new System.Windows.Forms.Label();
             this.btnSms = new System.Windows.Forms.Button();
+            this.btnProxy = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(13, 13);
+            this.button1.Location = new System.Drawing.Point(17, 16);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(100, 29);
             this.button1.TabIndex = 0;
             this.button1.Text = "memcached";
             this.button1.UseVisualStyleBackColor = true;
@@ -84,9 +86,10 @@
             // 
             // btnAddToFirewall
             // 
-            this.btnAddToFirewall.Location = new System.Drawing.Point(12, 467);
+            this.btnAddToFirewall.Location = new System.Drawing.Point(16, 584);
+            this.btnAddToFirewall.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnAddToFirewall.Name = "btnAddToFirewall";
-            this.btnAddToFirewall.Size = new System.Drawing.Size(100, 23);
+            this.btnAddToFirewall.Size = new System.Drawing.Size(133, 29);
             this.btnAddToFirewall.TabIndex = 1;
             this.btnAddToFirewall.Text = "addToFirewall";
             this.btnAddToFirewall.UseVisualStyleBackColor = true;
@@ -94,23 +97,26 @@
             // 
             // txbPort
             // 
-            this.txbPort.Location = new System.Drawing.Point(118, 427);
+            this.txbPort.Location = new System.Drawing.Point(157, 534);
+            this.txbPort.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbPort.Name = "txbPort";
-            this.txbPort.Size = new System.Drawing.Size(100, 21);
+            this.txbPort.Size = new System.Drawing.Size(132, 25);
             this.txbPort.TabIndex = 2;
             // 
             // txbName
             // 
-            this.txbName.Location = new System.Drawing.Point(12, 427);
+            this.txbName.Location = new System.Drawing.Point(16, 534);
+            this.txbName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbName.Name = "txbName";
-            this.txbName.Size = new System.Drawing.Size(100, 21);
+            this.txbName.Size = new System.Drawing.Size(132, 25);
             this.txbName.TabIndex = 3;
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(118, 467);
+            this.btnRemove.Location = new System.Drawing.Point(157, 584);
+            this.btnRemove.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(100, 23);
+            this.btnRemove.Size = new System.Drawing.Size(133, 29);
             this.btnRemove.TabIndex = 4;
             this.btnRemove.Text = "remove";
             this.btnRemove.UseVisualStyleBackColor = true;
@@ -118,18 +124,20 @@
             // 
             // txbData
             // 
-            this.txbData.Location = new System.Drawing.Point(330, 14);
+            this.txbData.Location = new System.Drawing.Point(440, 18);
+            this.txbData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbData.Multiline = true;
             this.txbData.Name = "txbData";
             this.txbData.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbData.Size = new System.Drawing.Size(470, 728);
+            this.txbData.Size = new System.Drawing.Size(625, 909);
             this.txbData.TabIndex = 5;
             // 
             // btnInvoke
             // 
-            this.btnInvoke.Location = new System.Drawing.Point(330, 750);
+            this.btnInvoke.Location = new System.Drawing.Point(440, 938);
+            this.btnInvoke.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnInvoke.Name = "btnInvoke";
-            this.btnInvoke.Size = new System.Drawing.Size(75, 23);
+            this.btnInvoke.Size = new System.Drawing.Size(100, 29);
             this.btnInvoke.TabIndex = 6;
             this.btnInvoke.Text = "invoke";
             this.btnInvoke.UseVisualStyleBackColor = true;
@@ -137,16 +145,18 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 523);
+            this.textBox1.Location = new System.Drawing.Point(16, 654);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(206, 21);
+            this.textBox1.Size = new System.Drawing.Size(273, 25);
             this.textBox1.TabIndex = 8;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 550);
+            this.button2.Location = new System.Drawing.Point(16, 688);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 23);
+            this.button2.Size = new System.Drawing.Size(133, 29);
             this.button2.TabIndex = 9;
             this.button2.Text = "all service";
             this.button2.UseVisualStyleBackColor = true;
@@ -154,9 +164,10 @@
             // 
             // btnmq
             // 
-            this.btnmq.Location = new System.Drawing.Point(830, 719);
+            this.btnmq.Location = new System.Drawing.Point(1107, 899);
+            this.btnmq.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnmq.Name = "btnmq";
-            this.btnmq.Size = new System.Drawing.Size(141, 23);
+            this.btnmq.Size = new System.Drawing.Size(188, 29);
             this.btnmq.TabIndex = 10;
             this.btnmq.Text = "produce message";
             this.btnmq.UseVisualStyleBackColor = true;
@@ -164,9 +175,10 @@
             // 
             // btnChoose
             // 
-            this.btnChoose.Location = new System.Drawing.Point(224, 521);
+            this.btnChoose.Location = new System.Drawing.Point(299, 651);
+            this.btnChoose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnChoose.Name = "btnChoose";
-            this.btnChoose.Size = new System.Drawing.Size(100, 23);
+            this.btnChoose.Size = new System.Drawing.Size(133, 29);
             this.btnChoose.TabIndex = 11;
             this.btnChoose.Text = "choose";
             this.btnChoose.UseVisualStyleBackColor = true;
@@ -174,9 +186,10 @@
             // 
             // btnCopy
             // 
-            this.btnCopy.Location = new System.Drawing.Point(224, 550);
+            this.btnCopy.Location = new System.Drawing.Point(299, 688);
+            this.btnCopy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(100, 23);
+            this.btnCopy.Size = new System.Drawing.Size(133, 29);
             this.btnCopy.TabIndex = 12;
             this.btnCopy.Text = "copy";
             this.btnCopy.UseVisualStyleBackColor = true;
@@ -184,9 +197,10 @@
             // 
             // btnConvert
             // 
-            this.btnConvert.Location = new System.Drawing.Point(12, 138);
+            this.btnConvert.Location = new System.Drawing.Point(16, 172);
+            this.btnConvert.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnConvert.Name = "btnConvert";
-            this.btnConvert.Size = new System.Drawing.Size(75, 23);
+            this.btnConvert.Size = new System.Drawing.Size(100, 29);
             this.btnConvert.TabIndex = 13;
             this.btnConvert.Text = "jar to dll";
             this.btnConvert.UseVisualStyleBackColor = true;
@@ -194,24 +208,27 @@
             // 
             // txbJarPath
             // 
-            this.txbJarPath.Location = new System.Drawing.Point(13, 111);
+            this.txbJarPath.Location = new System.Drawing.Point(17, 139);
+            this.txbJarPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbJarPath.Name = "txbJarPath";
-            this.txbJarPath.Size = new System.Drawing.Size(311, 21);
+            this.txbJarPath.Size = new System.Drawing.Size(413, 25);
             this.txbJarPath.TabIndex = 14;
             this.txbJarPath.Text = "E:\\jartodll\\jar";
             // 
             // txbMessage
             // 
-            this.txbMessage.Location = new System.Drawing.Point(830, 692);
+            this.txbMessage.Location = new System.Drawing.Point(1107, 865);
+            this.txbMessage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbMessage.Name = "txbMessage";
-            this.txbMessage.Size = new System.Drawing.Size(522, 21);
+            this.txbMessage.Size = new System.Drawing.Size(695, 25);
             this.txbMessage.TabIndex = 15;
             // 
             // btnConsume
             // 
-            this.btnConsume.Location = new System.Drawing.Point(830, 559);
+            this.btnConsume.Location = new System.Drawing.Point(1107, 699);
+            this.btnConsume.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnConsume.Name = "btnConsume";
-            this.btnConsume.Size = new System.Drawing.Size(141, 23);
+            this.btnConsume.Size = new System.Drawing.Size(188, 29);
             this.btnConsume.TabIndex = 16;
             this.btnConsume.Text = "consume message";
             this.btnConsume.UseVisualStyleBackColor = true;
@@ -219,17 +236,19 @@
             // 
             // txbConsume
             // 
-            this.txbConsume.Location = new System.Drawing.Point(830, 342);
+            this.txbConsume.Location = new System.Drawing.Point(1107, 428);
+            this.txbConsume.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbConsume.Multiline = true;
             this.txbConsume.Name = "txbConsume";
-            this.txbConsume.Size = new System.Drawing.Size(638, 211);
+            this.txbConsume.Size = new System.Drawing.Size(849, 263);
             this.txbConsume.TabIndex = 17;
             // 
             // btnJVM
             // 
-            this.btnJVM.Location = new System.Drawing.Point(13, 167);
+            this.btnJVM.Location = new System.Drawing.Point(17, 209);
+            this.btnJVM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnJVM.Name = "btnJVM";
-            this.btnJVM.Size = new System.Drawing.Size(75, 23);
+            this.btnJVM.Size = new System.Drawing.Size(100, 29);
             this.btnJVM.TabIndex = 18;
             this.btnJVM.Text = "jvm";
             this.btnJVM.UseVisualStyleBackColor = true;
@@ -237,9 +256,10 @@
             // 
             // btnRedisSet
             // 
-            this.btnRedisSet.Location = new System.Drawing.Point(830, 14);
+            this.btnRedisSet.Location = new System.Drawing.Point(1107, 18);
+            this.btnRedisSet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnRedisSet.Name = "btnRedisSet";
-            this.btnRedisSet.Size = new System.Drawing.Size(75, 23);
+            this.btnRedisSet.Size = new System.Drawing.Size(100, 29);
             this.btnRedisSet.TabIndex = 19;
             this.btnRedisSet.Text = "redis set";
             this.btnRedisSet.UseVisualStyleBackColor = true;
@@ -247,9 +267,10 @@
             // 
             // btnDotNetty
             // 
-            this.btnDotNetty.Location = new System.Drawing.Point(830, 313);
+            this.btnDotNetty.Location = new System.Drawing.Point(1107, 391);
+            this.btnDotNetty.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDotNetty.Name = "btnDotNetty";
-            this.btnDotNetty.Size = new System.Drawing.Size(105, 23);
+            this.btnDotNetty.Size = new System.Drawing.Size(140, 29);
             this.btnDotNetty.TabIndex = 20;
             this.btnDotNetty.Text = "dotnetty http";
             this.btnDotNetty.UseVisualStyleBackColor = true;
@@ -257,9 +278,10 @@
             // 
             // btnDalQuery
             // 
-            this.btnDalQuery.Location = new System.Drawing.Point(830, 43);
+            this.btnDalQuery.Location = new System.Drawing.Point(1107, 54);
+            this.btnDalQuery.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDalQuery.Name = "btnDalQuery";
-            this.btnDalQuery.Size = new System.Drawing.Size(75, 23);
+            this.btnDalQuery.Size = new System.Drawing.Size(100, 29);
             this.btnDalQuery.TabIndex = 21;
             this.btnDalQuery.Text = "dal query";
             this.btnDalQuery.UseVisualStyleBackColor = true;
@@ -267,9 +289,10 @@
             // 
             // btnFTS
             // 
-            this.btnFTS.Location = new System.Drawing.Point(411, 750);
+            this.btnFTS.Location = new System.Drawing.Point(548, 938);
+            this.btnFTS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnFTS.Name = "btnFTS";
-            this.btnFTS.Size = new System.Drawing.Size(120, 23);
+            this.btnFTS.Size = new System.Drawing.Size(160, 29);
             this.btnFTS.TabIndex = 22;
             this.btnFTS.Text = "File To String";
             this.btnFTS.UseVisualStyleBackColor = true;
@@ -277,9 +300,10 @@
             // 
             // btnSTF
             // 
-            this.btnSTF.Location = new System.Drawing.Point(537, 748);
+            this.btnSTF.Location = new System.Drawing.Point(716, 935);
+            this.btnSTF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSTF.Name = "btnSTF";
-            this.btnSTF.Size = new System.Drawing.Size(120, 23);
+            this.btnSTF.Size = new System.Drawing.Size(160, 29);
             this.btnSTF.TabIndex = 23;
             this.btnSTF.Text = "string to file";
             this.btnSTF.UseVisualStyleBackColor = true;
@@ -287,9 +311,10 @@
             // 
             // btnSDKTesting
             // 
-            this.btnSDKTesting.Location = new System.Drawing.Point(830, 72);
+            this.btnSDKTesting.Location = new System.Drawing.Point(1107, 90);
+            this.btnSDKTesting.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSDKTesting.Name = "btnSDKTesting";
-            this.btnSDKTesting.Size = new System.Drawing.Size(86, 25);
+            this.btnSDKTesting.Size = new System.Drawing.Size(115, 31);
             this.btnSDKTesting.TabIndex = 24;
             this.btnSDKTesting.Text = "sdk testing";
             this.btnSDKTesting.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -298,9 +323,10 @@
             // 
             // btnChangeType
             // 
-            this.btnChangeType.Location = new System.Drawing.Point(830, 282);
+            this.btnChangeType.Location = new System.Drawing.Point(1107, 352);
+            this.btnChangeType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnChangeType.Name = "btnChangeType";
-            this.btnChangeType.Size = new System.Drawing.Size(114, 25);
+            this.btnChangeType.Size = new System.Drawing.Size(152, 31);
             this.btnChangeType.TabIndex = 25;
             this.btnChangeType.Text = "change type test";
             this.btnChangeType.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -309,9 +335,10 @@
             // 
             // btnsql
             // 
-            this.btnsql.Location = new System.Drawing.Point(830, 251);
+            this.btnsql.Location = new System.Drawing.Point(1107, 314);
+            this.btnsql.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnsql.Name = "btnsql";
-            this.btnsql.Size = new System.Drawing.Size(75, 25);
+            this.btnsql.Size = new System.Drawing.Size(100, 31);
             this.btnsql.TabIndex = 26;
             this.btnsql.Text = "exec sql";
             this.btnsql.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -320,9 +347,10 @@
             // 
             // btnDynamic
             // 
-            this.btnDynamic.Location = new System.Drawing.Point(830, 220);
+            this.btnDynamic.Location = new System.Drawing.Point(1107, 275);
+            this.btnDynamic.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDynamic.Name = "btnDynamic";
-            this.btnDynamic.Size = new System.Drawing.Size(75, 25);
+            this.btnDynamic.Size = new System.Drawing.Size(100, 31);
             this.btnDynamic.TabIndex = 27;
             this.btnDynamic.Text = "dynamic";
             this.btnDynamic.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -331,9 +359,10 @@
             // 
             // btnZipPackage
             // 
-            this.btnZipPackage.Location = new System.Drawing.Point(12, 196);
+            this.btnZipPackage.Location = new System.Drawing.Point(16, 245);
+            this.btnZipPackage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnZipPackage.Name = "btnZipPackage";
-            this.btnZipPackage.Size = new System.Drawing.Size(100, 23);
+            this.btnZipPackage.Size = new System.Drawing.Size(133, 29);
             this.btnZipPackage.TabIndex = 28;
             this.btnZipPackage.Text = "zip package";
             this.btnZipPackage.UseVisualStyleBackColor = true;
@@ -341,9 +370,10 @@
             // 
             // btnJWTEncode
             // 
-            this.btnJWTEncode.Location = new System.Drawing.Point(963, 13);
+            this.btnJWTEncode.Location = new System.Drawing.Point(1284, 16);
+            this.btnJWTEncode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnJWTEncode.Name = "btnJWTEncode";
-            this.btnJWTEncode.Size = new System.Drawing.Size(86, 25);
+            this.btnJWTEncode.Size = new System.Drawing.Size(115, 31);
             this.btnJWTEncode.TabIndex = 29;
             this.btnJWTEncode.Text = "jwt encode";
             this.btnJWTEncode.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -352,35 +382,39 @@
             // 
             // txbHeader
             // 
-            this.txbHeader.Location = new System.Drawing.Point(1085, 14);
+            this.txbHeader.Location = new System.Drawing.Point(1447, 18);
+            this.txbHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbHeader.Multiline = true;
             this.txbHeader.Name = "txbHeader";
-            this.txbHeader.Size = new System.Drawing.Size(392, 69);
+            this.txbHeader.Size = new System.Drawing.Size(521, 85);
             this.txbHeader.TabIndex = 30;
             // 
             // txbPayload
             // 
-            this.txbPayload.Location = new System.Drawing.Point(1085, 92);
+            this.txbPayload.Location = new System.Drawing.Point(1447, 115);
+            this.txbPayload.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbPayload.Multiline = true;
             this.txbPayload.Name = "txbPayload";
-            this.txbPayload.Size = new System.Drawing.Size(392, 69);
+            this.txbPayload.Size = new System.Drawing.Size(521, 85);
             this.txbPayload.TabIndex = 31;
             this.txbPayload.Text = "{\'id\':\'1\',\'name\':\'frank\'}";
             // 
             // txbSecret
             // 
-            this.txbSecret.Location = new System.Drawing.Point(1085, 169);
+            this.txbSecret.Location = new System.Drawing.Point(1447, 211);
+            this.txbSecret.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbSecret.Multiline = true;
             this.txbSecret.Name = "txbSecret";
-            this.txbSecret.Size = new System.Drawing.Size(392, 69);
+            this.txbSecret.Size = new System.Drawing.Size(521, 85);
             this.txbSecret.TabIndex = 32;
             this.txbSecret.Text = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
             // 
             // btnJWTDecode
             // 
-            this.btnJWTDecode.Location = new System.Drawing.Point(963, 58);
+            this.btnJWTDecode.Location = new System.Drawing.Point(1284, 72);
+            this.btnJWTDecode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnJWTDecode.Name = "btnJWTDecode";
-            this.btnJWTDecode.Size = new System.Drawing.Size(86, 25);
+            this.btnJWTDecode.Size = new System.Drawing.Size(115, 31);
             this.btnJWTDecode.TabIndex = 33;
             this.btnJWTDecode.Text = "jwt decode";
             this.btnJWTDecode.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -389,9 +423,10 @@
             // 
             // btnLogAsync
             // 
-            this.btnLogAsync.Location = new System.Drawing.Point(830, 189);
+            this.btnLogAsync.Location = new System.Drawing.Point(1107, 236);
+            this.btnLogAsync.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLogAsync.Name = "btnLogAsync";
-            this.btnLogAsync.Size = new System.Drawing.Size(75, 25);
+            this.btnLogAsync.Size = new System.Drawing.Size(100, 31);
             this.btnLogAsync.TabIndex = 34;
             this.btnLogAsync.Text = "log async test";
             this.btnLogAsync.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -400,9 +435,10 @@
             // 
             // btnLogSync
             // 
-            this.btnLogSync.Location = new System.Drawing.Point(830, 158);
+            this.btnLogSync.Location = new System.Drawing.Point(1107, 198);
+            this.btnLogSync.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLogSync.Name = "btnLogSync";
-            this.btnLogSync.Size = new System.Drawing.Size(75, 25);
+            this.btnLogSync.Size = new System.Drawing.Size(100, 31);
             this.btnLogSync.TabIndex = 35;
             this.btnLogSync.Text = "log sync";
             this.btnLogSync.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -412,69 +448,87 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 590);
+            this.label1.Location = new System.Drawing.Point(41, 738);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.Size = new System.Drawing.Size(46, 15);
             this.label1.TabIndex = 36;
             this.label1.Text = "cpu：";
             // 
             // lblCpu
             // 
             this.lblCpu.AutoSize = true;
-            this.lblCpu.Location = new System.Drawing.Point(88, 590);
+            this.lblCpu.Location = new System.Drawing.Point(117, 738);
+            this.lblCpu.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCpu.Name = "lblCpu";
-            this.lblCpu.Size = new System.Drawing.Size(0, 12);
+            this.lblCpu.Size = new System.Drawing.Size(0, 15);
             this.lblCpu.TabIndex = 37;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 621);
+            this.label2.Location = new System.Drawing.Point(17, 776);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.Size = new System.Drawing.Size(67, 15);
             this.label2.TabIndex = 38;
             this.label2.Text = "总内存：";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1, 657);
+            this.label3.Location = new System.Drawing.Point(1, 821);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 39;
             this.label3.Text = "已用内存：";
             // 
             // lblTotalMem
             // 
             this.lblTotalMem.AutoSize = true;
-            this.lblTotalMem.Location = new System.Drawing.Point(88, 621);
+            this.lblTotalMem.Location = new System.Drawing.Point(117, 776);
+            this.lblTotalMem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTotalMem.Name = "lblTotalMem";
-            this.lblTotalMem.Size = new System.Drawing.Size(0, 12);
+            this.lblTotalMem.Size = new System.Drawing.Size(0, 15);
             this.lblTotalMem.TabIndex = 40;
             // 
             // lblUsedMem
             // 
             this.lblUsedMem.AutoSize = true;
-            this.lblUsedMem.Location = new System.Drawing.Point(88, 657);
+            this.lblUsedMem.Location = new System.Drawing.Point(117, 821);
+            this.lblUsedMem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblUsedMem.Name = "lblUsedMem";
-            this.lblUsedMem.Size = new System.Drawing.Size(0, 12);
+            this.lblUsedMem.Size = new System.Drawing.Size(0, 15);
             this.lblUsedMem.TabIndex = 41;
             // 
             // btnSms
             // 
-            this.btnSms.Location = new System.Drawing.Point(830, 590);
+            this.btnSms.Location = new System.Drawing.Point(1107, 738);
+            this.btnSms.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSms.Name = "btnSms";
-            this.btnSms.Size = new System.Drawing.Size(141, 23);
+            this.btnSms.Size = new System.Drawing.Size(188, 29);
             this.btnSms.TabIndex = 42;
             this.btnSms.Text = "send sms";
             this.btnSms.UseVisualStyleBackColor = true;
             this.btnSms.Click += new System.EventHandler(this.btnSms_Click);
             // 
+            // btnProxy
+            // 
+            this.btnProxy.Location = new System.Drawing.Point(16, 504);
+            this.btnProxy.Name = "btnProxy";
+            this.btnProxy.Size = new System.Drawing.Size(133, 23);
+            this.btnProxy.TabIndex = 43;
+            this.btnProxy.Text = "proxy test";
+            this.btnProxy.UseVisualStyleBackColor = true;
+            this.btnProxy.Click += new System.EventHandler(this.btnProxy_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1617, 785);
+            this.ClientSize = new System.Drawing.Size(1914, 981);
+            this.Controls.Add(this.btnProxy);
             this.Controls.Add(this.btnSms);
             this.Controls.Add(this.lblUsedMem);
             this.Controls.Add(this.lblTotalMem);
@@ -517,6 +571,7 @@
             this.Controls.Add(this.txbPort);
             this.Controls.Add(this.btnAddToFirewall);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -569,6 +624,7 @@
         private System.Windows.Forms.Label lblTotalMem;
         private System.Windows.Forms.Label lblUsedMem;
         private System.Windows.Forms.Button btnSms;
+        private System.Windows.Forms.Button btnProxy;
     }
 }
 

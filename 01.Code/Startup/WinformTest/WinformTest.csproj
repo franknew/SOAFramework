@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WinformTest</RootNamespace>
     <AssemblyName>WinformTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -37,12 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="aliyun-net-sdk-core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SOAFramework.Library.AliSmsSDK.1.0.0\lib\net40\aliyun-net-sdk-core.dll</HintPath>
-    </Reference>
-    <Reference Include="aliyun-net-sdk-dysmsapi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SOAFramework.Library.AliSmsSDK.1.0.0\lib\net40\aliyun-net-sdk-dysmsapi.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
@@ -75,10 +69,6 @@
     </Reference>
     <Reference Include="DotNetty.Transport">
       <HintPath>..\..\CommonDLL\dotnetty\net45\DotNetty.Transport.dll</HintPath>
-    </Reference>
-    <Reference Include="fastjson-1.2.3, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonDLL\rocketmq\fastjson-1.2.3.dll</HintPath>
     </Reference>
     <Reference Include="IBatisNet.Common">
       <HintPath>..\..\CommonDLL\ibatis\IBatisNet.Common.dll</HintPath>
@@ -271,6 +261,10 @@
     <ProjectReference Include="..\..\Library\Zip\Zip.csproj">
       <Project>{e7cd91fa-58b6-44c8-ae15-830212597dbd}</Project>
       <Name>Zip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Service.SDK.Core\Service.SDK.Core.csproj">
+      <Project>{c389f2f0-20ab-4b4d-84ec-0b794b222cea}</Project>
+      <Name>Service.SDK.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

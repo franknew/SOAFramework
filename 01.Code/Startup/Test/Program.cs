@@ -235,11 +235,11 @@ namespace Test
             DoAction<TestClass>(t => t.a = "b");
             string strData = "";
             byte[] data = null;
-            string testresult = "";
+            //string testresult = "";
             List<SOAFramework.Service.SDK.Core.PostArgItem> argslist = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
 
-            List<string> listT = new List<string>();
-            Type[] ts = listT.GetType().GetGenericArguments();
+            //List<string> listT = new List<string>();
+            //Type[] ts = listT.GetType().GetGenericArguments();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Stopwatch watch = new Stopwatch();
 
@@ -558,23 +558,23 @@ namespace Test
 
             watch.Restart();
             int count = 10000;
-            for (int i = 0; i < count; i++)
-            {
-                List<SOAFramework.Service.SDK.Core.PostArgItem> list = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
-                list.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "a", Value = JsonHelper.Serialize("hello world") });
-                list.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "b", Value = JsonHelper.Serialize(new TestClass { a = "a", b = "b" }) });
-                //list.Add(new PostArgItem { Key = "a", Value = "hello world" });
-                //list.Add(new PostArgItem { Key = "b", Value = new TestClass { a = "a", b = "b" } });
-                strData = JsonHelper.Serialize(list);
-                data = System.Text.Encoding.UTF8.GetBytes(strData);
-                //testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.SOAService/Test", data);
-                testresult = ZipHelper.UnZip(testresult);
+            //for (int i = 0; i < count; i++)
+            //{
+            //    List<SOAFramework.Service.SDK.Core.PostArgItem> list = new List<SOAFramework.Service.SDK.Core.PostArgItem>();
+            //    list.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "a", Value = JsonHelper.Serialize("hello world") });
+            //    list.Add(new SOAFramework.Service.SDK.Core.PostArgItem { Key = "b", Value = JsonHelper.Serialize(new TestClass { a = "a", b = "b" }) });
+            //    //list.Add(new PostArgItem { Key = "a", Value = "hello world" });
+            //    //list.Add(new PostArgItem { Key = "b", Value = new TestClass { a = "a", b = "b" } });
+            //    strData = JsonHelper.Serialize(list);
+            //    data = System.Text.Encoding.UTF8.GetBytes(strData);
+            //    //testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.SOAService/Test", data);
+            //    testresult = ZipHelper.UnZip(testresult);
 
-                PerformanceRequest prequest = new PerformanceRequest();
-                prequest.a = "hello world";
-                prequest.b = new TestClass { a = "a", b = "b" };
-                PerformanceResponse presponse = SDKFactory.Client.Execute(prequest);
-            }
+            //    PerformanceRequest prequest = new PerformanceRequest();
+            //    prequest.a = "hello world";
+            //    prequest.b = new TestClass { a = "a", b = "b" };
+            //    PerformanceResponse presponse = SDKFactory.Client.Execute(prequest);
+            //}
             watch.Stop();
             Console.WriteLine("{1}次测试耗时{0}", watch.ElapsedMilliseconds, count);
             #endregion
@@ -807,7 +807,7 @@ namespace Test
         public string token { get; set; }
     }
 
-    public class LogonRequest : BaseRequest<BaseResponse>
+    public class LogonRequest : BaseRequest<LogonResponse>
     {
         public override string GetApi()
         {

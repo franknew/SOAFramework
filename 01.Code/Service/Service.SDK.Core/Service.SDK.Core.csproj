@@ -51,24 +51,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgDictionary.cs" />
-    <Compile Include="ArgMapping.cs" />
+    <Compile Include="Attribute\ActionAttribute.cs" />
+    <Compile Include="Attribute\RouteAttribute.cs" />
+    <Compile Include="RPC\HttpHandler.cs" />
+    <Compile Include="RPC\InterfaceProxy.cs" />
+    <Compile Include="RPC\InvocationHandler.cs" />
+    <Compile Include="SDK\ArgDictionary.cs" />
+    <Compile Include="SDK\ArgMapping.cs" />
+    <Compile Include="Attribute\DeleteAttribute.cs" />
+    <Compile Include="Attribute\PutAttribute.cs" />
     <Compile Include="Attribute\CookieValueAttribute.cs" />
     <Compile Include="Attribute\HeaderValueAttribute.cs" />
     <Compile Include="Attribute\PostAttribute.cs" />
-    <Compile Include="BaseResponse.cs" />
-    <Compile Include="Client.cs" />
-    <Compile Include="Factory.cs" />
+    <Compile Include="SDK\BaseResponse.cs" />
+    <Compile Include="SDK\Client.cs" />
+    <Compile Include="SDK\Factory.cs" />
     <Compile Include="Fomatter\FormPostDataFormatter.cs" />
     <Compile Include="Attribute\GetAttribute.cs" />
     <Compile Include="HttpMethodEnum.cs" />
     <Compile Include="Fomatter\IPostDataFormatter.cs" />
-    <Compile Include="IRequest.cs" />
-    <Compile Include="IServiceEncryptor.cs" />
+    <Compile Include="SDK\IRequest.cs" />
+    <Compile Include="SDK\IServiceEncryptor.cs" />
     <Compile Include="Fomatter\JsonPostDataFormatter.cs" />
     <Compile Include="Attribute\PostDataAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SDKResultAttribute.cs" />
+    <Compile Include="SDK\SDKResultAttribute.cs" />
     <Compile Include="Fomatter\XMLPostDataFomatter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +103,7 @@
   <ItemGroup>
     <None Include="SOAFramework.Key.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

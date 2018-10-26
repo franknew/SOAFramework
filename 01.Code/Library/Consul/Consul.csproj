@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DB4AD150-0A23-4A20-9874-54A2D935F634}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SOAFramework.Library.SDK</RootNamespace>
+    <AssemblyName>SOAFramework.Library.SDK</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Bin\SOAFramework.Library.SDK.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\ACLInfo.cs" />
+    <Compile Include="Domain\Check.cs" />
+    <Compile Include="Domain\CheckDefinition.cs" />
+    <Compile Include="Domain\Replication.cs" />
+    <Compile Include="Domain\TargetAddress.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Domain\Meta.cs" />
+    <Compile Include="V1\ACL\ACLResponse.cs" />
+    <Compile Include="V1\ACL\Bootstrap\BootstrapRequest.cs" />
+    <Compile Include="V1\ACL\Clone\CloneRequest.cs" />
+    <Compile Include="V1\ACL\Create\CreateRequest.cs" />
+    <Compile Include="V1\ACL\Delete\DeleteRequest.cs" />
+    <Compile Include="V1\ACL\Info\InfoRequest.cs" />
+    <Compile Include="V1\ACL\Info\InfoResponse.cs" />
+    <Compile Include="V1\ACL\List\ListRequest.cs" />
+    <Compile Include="V1\ACL\Replication\ReplicationRequest.cs" />
+    <Compile Include="V1\ACL\Replication\ReplicationResponse.cs" />
+    <Compile Include="V1\ACL\Update\UpdateRequest.cs" />
+    <Compile Include="V1\Agent\Services\Deregister\DeregisterRequest.cs" />
+    <Compile Include="V1\Agent\Services\Maintenance\MaintenanceRequest.cs" />
+    <Compile Include="V1\Agent\Services\Register\RegisterPayload.cs" />
+    <Compile Include="V1\Agent\Services\Register\RegisterRequest.cs" />
+    <Compile Include="V1\Agent\Services\Register\RegisterResponse.cs" />
+    <Compile Include="V1\Agent\Services\Services\ServiceDomain.cs" />
+    <Compile Include="V1\Agent\Services\Services\ServicesRequest.cs" />
+    <Compile Include="V1\Agent\Services\Services\ServicesResponse.cs" />
+    <Compile Include="V1\Catalog\Deregister\DeregisterPayload.cs" />
+    <Compile Include="V1\Catalog\Deregister\DeregisterRequest.cs" />
+    <Compile Include="V1\Catalog\Register\RegisterPayload.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Service\Service.SDK.Core\Service.SDK.Core.csproj">
+      <Project>{c389f2f0-20ab-4b4d-84ec-0b794b222cea}</Project>
+      <Name>Service.SDK.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="V1\Agent\Checks\" />
+    <Folder Include="V1\Agent\Connect\" />
+    <Folder Include="V1\Catalog\Datacenters\" />
+    <Folder Include="V1\Health\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

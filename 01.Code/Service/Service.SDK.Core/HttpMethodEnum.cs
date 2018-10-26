@@ -9,5 +9,7 @@ namespace SOAFramework.Service.SDK.Core
     {
         Get,
         Post,
+        Put,
+        Delete
     }
 }

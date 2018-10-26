@@ -23,6 +23,7 @@ using IBatisNet.DataMapper;
 using SOAFramework.Library.DAL;
 using System.Dynamic;
 using SOAFramework.Library.Lib;
+using SOAFramework.Service.SDK.Core;
 //using JWT.Algorithms;
 //using JWT.Serializers;
 //using JWT;
@@ -362,9 +363,16 @@ namespace WinformTest
 
         private void btnSms_Click(object sender, EventArgs e)
         {
-            ISmsClient client = new AliSmsClient("LTAIGzdiAzBlQWpr", "36c0GTBkVIs232yWfxpJ3pg5tjETI6");
-            var response = client.Send("成为信息科技有限公司", "SMS_137425942", new { code = "334283" }, new string[] { "13823117810" });
-            MessageBox.Show(response.Message);
+            //ISmsClient client = new AliSmsClient("LTAIGzdiAzBlQWpr", "36c0GTBkVIs232yWfxpJ3pg5tjETI6");
+            //var response = client.Send("成为信息科技有限公司", "SMS_137425942", new { code = "334283" }, new string[] { "13823117810" });
+            //MessageBox.Show(response.Message);
+        }
+
+        private void btnProxy_Click(object sender, EventArgs e)
+        {
+            //var t = InterfaceProxy.Create<ITest>(new HttpHandler());
+            //var r = t.Go("aaa");
+
         }
 
         string cpuString;
@@ -386,4 +394,10 @@ namespace WinformTest
         public int? a { get; set; }
         public DateTime? b { get; set; }
     }
+
+    public interface ITest
+    {
+        string Go(string a);
+    }
+
 }

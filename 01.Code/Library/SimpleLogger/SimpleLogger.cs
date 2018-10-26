@@ -16,9 +16,7 @@ namespace SOAFramework.Library
 
         static ReaderWriterLockSlim writeLock = new ReaderWriterLockSlim();
         public static long fileSize = 5 * 1024 * 1024;
-
-        private static int _errIndex = 0;
-        private static int _degIndex = 0;
+        
 
         public SimpleLogger(string logpath = "", string fileNameFormat = "")
         {
@@ -50,9 +48,8 @@ namespace SOAFramework.Library
                     }
                 //}
             }
-            catch (Exception ex)
+            catch 
             {
-                string a = "";
             }
         }
 

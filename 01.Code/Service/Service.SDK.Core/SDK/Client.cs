@@ -55,13 +55,6 @@ namespace SOAFramework.Service.SDK.Core
                 throw new Exception("没有设置服务url！");
             }
             string fullUrl = string.Format("{0}/{1}", serviceUrl.TrimEnd('/'), api.TrimStart('/'));
-            //if (api.LastIndexOf(".") < 0) fullUrl = serviceUrl.TrimEnd('/') + "/" + api.TrimStart('/');
-            //else
-            //{
-            //    string typeName = api.Remove(api.LastIndexOf("."));
-            //    string actionName = api.Substring(api.LastIndexOf(".") + 1);
-            //    fullUrl = serviceUrl.TrimEnd('/') + "/" + typeName + "/" + actionName;
-            //}
             return fullUrl;
         }
 
@@ -72,6 +65,14 @@ namespace SOAFramework.Service.SDK.Core
             return response;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="fullUrl"></param>
+        /// <param name="type"></param>
+        /// <param name="encryptor"></param>
+        /// <returns></returns>
         protected string InvokeService(object request, string fullUrl, ContentTypeEnum type, IServiceEncryptor encryptor = null)
         {
             Type requestType = request.GetType();
@@ -128,24 +129,33 @@ namespace SOAFramework.Service.SDK.Core
             HttpMethodEnum method = HttpMethodEnum.Post;
             var getAttrs = requestType.GetCustomAttributes(typeof(GetAttribute), true);
             if (getAttrs != null && getAttrs.Length > 0) method = HttpMethodEnum.Get;
+            //用于restful，替换例如/{id}等url变量
+            foreach (var kv in argdic)
+            {
+                fullUrl = fullUrl.Replace("{" + kv.Key + "}", kv.Value.ToString());
+            }
             switch (method)
             {
-                default:
+                case HttpMethodEnum.Post:
+                case HttpMethodEnum.Put:
                     //格式化成post数据
                     IPostDataFormatter fomatter = PostDataFormatterFactory.Create(type);
                     postdata = fomatter.Format(argdic);
                     if (encryptor != null) postdata = encryptor.Encrypt(postdata);
                     string typeString = ContentTypeConvert.ToTypeString(type);
                     byte[] data = Encoding.UTF8.GetBytes(postdata);
-                    response = HttpHelper.Post(fullUrl, data, contentType: typeString, header: headers, cookieDic: cookies);
+                    switch (method)
+                    {
+                        case HttpMethodEnum.Post:
+                            response = HttpHelper.Post(fullUrl, data, contentType: typeString, header: headers, cookieDic: cookies);
+                            break;
+                        case HttpMethodEnum.Put:
+                            response = HttpHelper.Put(fullUrl, data, contentType: typeString, header: headers, cookieDic: cookies);
+                            break;
+                    }
                     break;
                 case HttpMethodEnum.Get:
                     type = ContentTypeEnum.UrlEncoded;
-                    //用于restful，替换例如/{id}等url变量
-                    foreach (var kv in argdic)
-                    {
-                        fullUrl = fullUrl.Replace("{" + kv.Key + "}", kv.Value.ToString());
-                    }
                     postdata = fullUrl;
                     response = HttpHelper.Get(fullUrl, argdic, header: headers, cookieDic: cookies);
                     break;
@@ -164,16 +174,31 @@ namespace SOAFramework.Service.SDK.Core
             return response;
         }
 
-        protected T GenerateResponse<T>(string response, bool toProperty = true) where T : BaseResponse
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response"></param>
+        /// <param name="toProperty"></param>
+        /// <returns></returns>
+        protected T GenerateResponse<T>(string response) where T : BaseResponse
         {
-            T t = (T)GenerateResponse(response, typeof(T), toProperty);
+            T t = (T)GenerateResponse(response, typeof(T));
             return t;
         }
 
-        protected object GenerateResponse(string response, Type responseType, bool toProperty = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="responseType"></param>
+        /// <param name="toProperty"></param>
+        /// <returns></returns>
+        protected object GenerateResponse(string response, Type responseType)
         {
             object t = Activator.CreateInstance(responseType);
-            BaseResponse dyt = t as BaseResponse;
+            DefaultResponse dyt = t as DefaultResponse;
+            BaseResponse baseResponse = t as BaseResponse;
             BaseResponseShadow shadow = null;
             //如果报错生成一个Response
             if (response.Contains("\"IsError\""))
@@ -183,7 +208,7 @@ namespace SOAFramework.Service.SDK.Core
                     //t = JsonHelper.Deserialize(response, responseType);
                     shadow = JsonHelper.Deserialize<BaseResponseShadow>(response);
                     //否则设置错误信息
-                    dyt.SetValues(shadow.IsError, shadow.Code, shadow.Message, shadow.Exception);
+                    if (dyt != null) { dyt.SetValues(shadow.IsError, shadow.Code, shadow.Message, shadow.Exception); }
                 }
                 catch (Exception ex)
                 {
@@ -192,63 +217,51 @@ namespace SOAFramework.Service.SDK.Core
             }
             else
             {
-                if (!toProperty)
+                PropertyInfo[] responseProperties = responseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                if (responseProperties != null && responseProperties.Length > 0)
                 {
-                    t = JsonHelper.Deserialize(response, responseType);
+                    PropertyInfo result = responseProperties[0];
+                    //先查找有没有sdk result attribute的属性
+                    foreach (var p in responseProperties)
+                    {
+                        var pro = p.GetCustomAttributes(typeof(SDKResultAttribute), true);
+                        if (pro != null && pro.Length > 0)
+                        {
+                            result = p;
+                            break;
+                        }
+                    }
+                    //将返回的对象值设置到response的第一个属性上面
+                    BaseResponseShadow o = null;
+                    try
+                    {
+                        o = new BaseResponseShadow();
+                        object data = JsonHelper.Deserialize(response, result.PropertyType);
+                        if (data is object)
+                        {
+                            try
+                            {
+                                data = Convert.ChangeType(data, result.PropertyType);
+                            }
+                            catch
+                            {
+                                data = data.Clone(result.PropertyType);
+                            }
+                        }
+                        //t.TrySetValue(responseProperties[0].Name, data);
+                        result.SetValue(t, data, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(response, ex);
+                    }
                 }
                 else
                 {
-                    //null意味着没有报错
-                    if (shadow == null)
-                    {
-                        PropertyInfo[] responseProperties = responseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                        if (responseProperties != null && responseProperties.Length > 0)
-                        {
-                            PropertyInfo result = responseProperties[0];
-                            //先查找有没有sdk result attribute的属性
-                            foreach (var p in responseProperties)
-                            {
-                                var pro = p.GetCustomAttributes(typeof(SDKResultAttribute), true);
-                                if (pro != null && pro.Length > 0)
-                                {
-                                    result = p;
-                                    break;
-                                }
-                            }
-                            //将返回的对象值设置到response的第一个属性上面
-                            BaseResponseShadow o = null;
-                            try
-                            {
-                                o = new BaseResponseShadow();
-                                object data = JsonHelper.Deserialize(response, result.PropertyType);
-                                if (data is object)
-                                {
-                                    try
-                                    {
-                                        data = Convert.ChangeType(data, result.PropertyType);
-                                    }
-                                    catch
-                                    {
-                                        data = data.Clone(result.PropertyType);
-                                    }
-                                }
-                                //t.TrySetValue(responseProperties[0].Name, data);
-                                result.SetValue(t, data, null);
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception(response, ex);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //否则设置错误信息
-                        dyt.SetValues(shadow.IsError, shadow.Code, shadow.Message, shadow.Exception);
-                    }
+                    t = JsonHelper.Deserialize(response, responseType);
                 }
             }
-            dyt.SetBody(response);
+            baseResponse.SetBody(response);
             return t;
         }
         #endregion
