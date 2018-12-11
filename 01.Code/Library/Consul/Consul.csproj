@@ -70,6 +70,8 @@
     <Compile Include="V1\Catalog\Deregister\DeregisterPayload.cs" />
     <Compile Include="V1\Catalog\Deregister\DeregisterRequest.cs" />
     <Compile Include="V1\Catalog\Register\RegisterPayload.cs" />
+    <Compile Include="V1\Health\ListNode\ListNodeRequest.cs" />
+    <Compile Include="V1\Health\ListNode\ListNodeResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Service\Service.SDK.Core\Service.SDK.Core.csproj">
@@ -81,7 +83,7 @@
     <Folder Include="V1\Agent\Checks\" />
     <Folder Include="V1\Agent\Connect\" />
     <Folder Include="V1\Catalog\Datacenters\" />
-    <Folder Include="V1\Health\" />
+    <Folder Include="V1\Health\ListService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

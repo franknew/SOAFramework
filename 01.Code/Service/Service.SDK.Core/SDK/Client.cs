@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Collections;
 
 namespace SOAFramework.Service.SDK.Core
 {
@@ -94,14 +95,25 @@ namespace SOAFramework.Service.SDK.Core
                     object proValue = pro.GetValue(request, null);
                     if (proValue != null)
                     {
-                        var proProperties = pro.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                        foreach (PropertyInfo p in proProperties)
+                        if (proValue is IEnumerable)
                         {
-                            ArgMapping mapping = p.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
-                            string name = p.Name;
-                            if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
-                            object value = p.GetValue(proValue, null);
-                            argdic[name] = value;
+                            argdic[pro.Name] = proValue;
+                        }
+                        else if (proValue.GetType().IsValueType)
+                        {
+                            argdic[pro.Name] = proValue;
+                        }
+                        else
+                        {
+                            var proProperties = pro.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                            foreach (PropertyInfo p in proProperties)
+                            {
+                                ArgMapping mapping = p.GetCustomAttributes(typeof(ArgMapping), true).FirstOrDefault() as ArgMapping;
+                                string name = p.Name;
+                                if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
+                                object value = p.GetValue(proValue, null);
+                                argdic[name] = value;
+                            }
                         }
                     }
                 }
@@ -122,6 +134,7 @@ namespace SOAFramework.Service.SDK.Core
                     if (mapping != null && !string.IsNullOrEmpty(mapping.Mapping)) name = mapping.Mapping;
                     object value = pro.GetValue(request, null);
                     if (value != null) { argdic[name] = value; }
+
                 }
             }
             string response = "";

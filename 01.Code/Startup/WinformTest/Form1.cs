@@ -372,7 +372,7 @@ namespace WinformTest
         {
             //var t = InterfaceProxy.Create<ITest>(new HttpHandler());
             //var r = t.Go("aaa");
-
+            
         }
 
         string cpuString;

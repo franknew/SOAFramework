@@ -56,6 +56,8 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            var h = DBFactory.CreateDBHelper(@"Data Source=E:\git\memberManager\db\membermanager.db;Version=3;", DBType.SQLite);
+            var tb = h.GetTableWithSQL("SELECT NAME FROM sqlite_master WHERE type='table'");
             #region id generator
             IIDGenerator iDGenerator = IDGeneratorFactory.Create(GeneratorType.SnowFlak);
             List<string> idlist = new List<string>();
@@ -348,7 +350,7 @@ namespace Test
             #endregion
 
             #region codesmith testing
-
+            var testresult = "";
             strData = JsonHelper.Serialize(argslist);
             data = System.Text.Encoding.UTF8.GetBytes(strData);
             testresult = HttpHelper.Post(@"http://localhost/Service/Execute/SOAFramework.Service.Server.DefaultService/DiscoverService", data);

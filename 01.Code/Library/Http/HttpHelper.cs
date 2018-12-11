@@ -26,8 +26,8 @@ namespace SOAFramework.Library
                 request.Credentials = cache;
                 request.Headers.Add(HttpRequestHeader.Authorization, code);
             }
-            Stream requestStream = request.GetRequestStream();
             request.ContentLength = data.Length;
+            Stream requestStream = request.GetRequestStream();
             requestStream.Write(data, 0, data.Length);
             WebResponse response = request.GetResponse();
             Stream responseStream = response.GetResponseStream();
