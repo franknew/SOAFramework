@@ -87,6 +87,9 @@ namespace SOAFramework.Service.SDK.Core
                 bool isPostData = false;
                 bool isHeaderValue = false;
                 bool isCookieValue = false;
+                bool ignore = false;
+                ignore = pro.GetCustomAttributes(typeof(IgnoreAttribute), true).Length > 0;
+                if (ignore) { continue; }
                 isPostData = pro.GetCustomAttributes(typeof(PostDataAttribute), true).Length > 0;
                 isHeaderValue = pro.GetCustomAttributes(typeof(HeaderValueAttribute), true).Length > 0;
                 isCookieValue = pro.GetCustomAttributes(typeof(CookieValueAttribute), true).Length > 0;
@@ -141,11 +144,16 @@ namespace SOAFramework.Service.SDK.Core
             var postdata = "";
             HttpMethodEnum method = HttpMethodEnum.Post;
             var getAttrs = requestType.GetCustomAttributes(typeof(GetAttribute), true);
+            var putAttrs = requestType.GetCustomAttributes(typeof(PutAttribute), true);
             if (getAttrs != null && getAttrs.Length > 0) method = HttpMethodEnum.Get;
+            if (putAttrs != null && putAttrs.Length > 0) method = HttpMethodEnum.Put;
             //用于restful，替换例如/{id}等url变量
             foreach (var kv in argdic)
             {
-                fullUrl = fullUrl.Replace("{" + kv.Key + "}", kv.Value.ToString());
+                if (kv.Value.GetType().IsValueType || kv.Value.GetType().Equals(typeof(string)))
+                {
+                    fullUrl = fullUrl.Replace("{" + kv.Key + "}", kv.Value.ToString());
+                }
             }
             switch (method)
             {

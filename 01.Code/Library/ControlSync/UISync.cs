@@ -35,7 +35,7 @@ namespace SOAFramework.Library
 
         #region 跨线程访问属性
 
-        public static object GetUIValue( Control control, string property = "Text")
+        public static object GetUIValue(Control control, string property = "Text")
         {
             if (control.InvokeRequired)
             {

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attribute\ActionAttribute.cs" />
+    <Compile Include="Attribute\IgnoreAttribute.cs" />
     <Compile Include="Attribute\RouteAttribute.cs" />
     <Compile Include="RPC\HttpHandler.cs" />
     <Compile Include="RPC\InterfaceProxy.cs" />

@@ -18,10 +18,9 @@ namespace SOAFramework.Service.SDK.Core
         public virtual string ResponseBody { get { return responseBody; } }
     }
 
-    public abstract class DefaultResponse: BaseResponse
+    public class DefaultResponse: BaseResponse
     {
         public bool IsError { get; set; }
-
         
         public virtual Exception Exception { get; set; }
 
