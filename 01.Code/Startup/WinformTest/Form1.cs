@@ -24,6 +24,7 @@ using SOAFramework.Library.DAL;
 using System.Dynamic;
 using SOAFramework.Library.Lib;
 using SOAFramework.Service.SDK.Core;
+using SOAFramework.Library.DAL.Generic;
 //using JWT.Algorithms;
 //using JWT.Serializers;
 //using JWT;
@@ -373,6 +374,23 @@ namespace WinformTest
             //var t = InterfaceProxy.Create<ITest>(new HttpHandler());
             //var r = t.Go("aaa");
             
+        }
+
+        private void btnDalTest_Click(object sender, EventArgs e)
+        {
+            GenericOperation operation = new GenericOperation();
+            DataTable table = operation.Query(new QueryEntity
+            {
+                TableName = "member",
+                Columns = new List<string> { "id", "name" },
+                Condition = new Condition
+                {
+                    Columns = new List<QueryColumn>
+                    {
+                        new QueryColumn("id", OperationTypeEnum.Equals, "1"),
+                    },
+                }
+            });
         }
 
         string cpuString;

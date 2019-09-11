@@ -86,6 +86,15 @@
     <Compile Include="Dao\Base\BaseEntity.cs" />
     <Compile Include="Dao\Base\BaseQueryForm.cs" />
     <Compile Include="Dao\Base\BaseUpdateForm.cs" />
+    <Compile Include="Dao\Generic\Entity\MappingColumn.cs" />
+    <Compile Include="Dao\Generic\Entity\MappingEntity.cs" />
+    <Compile Include="Dao\Generic\Operation\GenericOperation.cs" />
+    <Compile Include="Dao\Generic\Operation\IGenericOperationInner.cs" />
+    <Compile Include="Dao\Generic\OperationTypeEnum.cs" />
+    <Compile Include="Dao\Generic\Entity\QueryColumn.cs" />
+    <Compile Include="Dao\Generic\Entity\Condition.cs" />
+    <Compile Include="Dao\Generic\Entity\QueryEntity.cs" />
+    <Compile Include="Dao\Generic\Entity\UpdateEntity.cs" />
     <Compile Include="Dao\Interface\IDao.cs" />
     <Compile Include="Dao\Interface\IEntity.cs" />
     <Compile Include="Dao\Interface\IQueryForm.cs" />
@@ -136,6 +145,13 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mapping\genericOperation_sqlserver.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\System.Data.SQLite.Core.1.0.109.2\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\..\packages\System.Data.SQLite.Core.1.0.109.2\build\net40\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

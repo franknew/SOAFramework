@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="SOAFramework.Library.DAL.Generic" xmlns="http://ibatis.apache.org/mapping" xmlns:xls="http://www.w3.org/2001/XMLSchema-instance">
+  <alias>
+    <typeAlias type="SOAFramework.Library.DAL.Generic.UpdateEntity" alias="UpdateEntity"/>
+    <typeAlias type="SOAFramework.Library.DAL.Generic.MappingEntity" alias="MappingEntity"/>
+    <typeAlias type="SOAFramework.Library.DAL.Generic.QueryEntity" alias="QueryEntity"/>
+  </alias>
+  <statements>
+    <!--智能语音查询-->
+    <select id="Query" parameterClass="QueryEntity" resultClass="List">
+      select
+      <isNull property="Columns">
+        *
+      </isNull>
+      <isNotNull property="Columns">
+        <iterate property="Columns" open="" close="" conjunction=",">
+          #Columns[]#
+        </iterate>
+      </isNotNull>
+      from #TableName#
+      
+    </select>
+
+  </statements>
+</sqlMap>

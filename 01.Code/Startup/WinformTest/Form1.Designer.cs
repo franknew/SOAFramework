@@ -71,12 +71,13 @@
             this.lblUsedMem = new System.Windows.Forms.Label();
             this.btnSms = new System.Windows.Forms.Button();
             this.btnProxy = new System.Windows.Forms.Button();
+            this.btnDalTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(17, 16);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 29);
             this.button1.TabIndex = 0;
@@ -87,7 +88,7 @@
             // btnAddToFirewall
             // 
             this.btnAddToFirewall.Location = new System.Drawing.Point(16, 584);
-            this.btnAddToFirewall.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAddToFirewall.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddToFirewall.Name = "btnAddToFirewall";
             this.btnAddToFirewall.Size = new System.Drawing.Size(133, 29);
             this.btnAddToFirewall.TabIndex = 1;
@@ -98,7 +99,7 @@
             // txbPort
             // 
             this.txbPort.Location = new System.Drawing.Point(157, 534);
-            this.txbPort.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbPort.Margin = new System.Windows.Forms.Padding(4);
             this.txbPort.Name = "txbPort";
             this.txbPort.Size = new System.Drawing.Size(132, 25);
             this.txbPort.TabIndex = 2;
@@ -106,7 +107,7 @@
             // txbName
             // 
             this.txbName.Location = new System.Drawing.Point(16, 534);
-            this.txbName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbName.Margin = new System.Windows.Forms.Padding(4);
             this.txbName.Name = "txbName";
             this.txbName.Size = new System.Drawing.Size(132, 25);
             this.txbName.TabIndex = 3;
@@ -114,7 +115,7 @@
             // btnRemove
             // 
             this.btnRemove.Location = new System.Drawing.Point(157, 584);
-            this.btnRemove.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnRemove.Margin = new System.Windows.Forms.Padding(4);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(133, 29);
             this.btnRemove.TabIndex = 4;
@@ -125,7 +126,7 @@
             // txbData
             // 
             this.txbData.Location = new System.Drawing.Point(440, 18);
-            this.txbData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbData.Margin = new System.Windows.Forms.Padding(4);
             this.txbData.Multiline = true;
             this.txbData.Name = "txbData";
             this.txbData.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -135,7 +136,7 @@
             // btnInvoke
             // 
             this.btnInvoke.Location = new System.Drawing.Point(440, 938);
-            this.btnInvoke.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnInvoke.Margin = new System.Windows.Forms.Padding(4);
             this.btnInvoke.Name = "btnInvoke";
             this.btnInvoke.Size = new System.Drawing.Size(100, 29);
             this.btnInvoke.TabIndex = 6;
@@ -146,7 +147,7 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(16, 654);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(273, 25);
             this.textBox1.TabIndex = 8;
@@ -154,7 +155,7 @@
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(16, 688);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(133, 29);
             this.button2.TabIndex = 9;
@@ -165,7 +166,7 @@
             // btnmq
             // 
             this.btnmq.Location = new System.Drawing.Point(1107, 899);
-            this.btnmq.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnmq.Margin = new System.Windows.Forms.Padding(4);
             this.btnmq.Name = "btnmq";
             this.btnmq.Size = new System.Drawing.Size(188, 29);
             this.btnmq.TabIndex = 10;
@@ -176,7 +177,7 @@
             // btnChoose
             // 
             this.btnChoose.Location = new System.Drawing.Point(299, 651);
-            this.btnChoose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnChoose.Margin = new System.Windows.Forms.Padding(4);
             this.btnChoose.Name = "btnChoose";
             this.btnChoose.Size = new System.Drawing.Size(133, 29);
             this.btnChoose.TabIndex = 11;
@@ -187,7 +188,7 @@
             // btnCopy
             // 
             this.btnCopy.Location = new System.Drawing.Point(299, 688);
-            this.btnCopy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCopy.Margin = new System.Windows.Forms.Padding(4);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(133, 29);
             this.btnCopy.TabIndex = 12;
@@ -198,7 +199,7 @@
             // btnConvert
             // 
             this.btnConvert.Location = new System.Drawing.Point(16, 172);
-            this.btnConvert.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnConvert.Margin = new System.Windows.Forms.Padding(4);
             this.btnConvert.Name = "btnConvert";
             this.btnConvert.Size = new System.Drawing.Size(100, 29);
             this.btnConvert.TabIndex = 13;
@@ -209,7 +210,7 @@
             // txbJarPath
             // 
             this.txbJarPath.Location = new System.Drawing.Point(17, 139);
-            this.txbJarPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbJarPath.Margin = new System.Windows.Forms.Padding(4);
             this.txbJarPath.Name = "txbJarPath";
             this.txbJarPath.Size = new System.Drawing.Size(413, 25);
             this.txbJarPath.TabIndex = 14;
@@ -218,7 +219,7 @@
             // txbMessage
             // 
             this.txbMessage.Location = new System.Drawing.Point(1107, 865);
-            this.txbMessage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbMessage.Margin = new System.Windows.Forms.Padding(4);
             this.txbMessage.Name = "txbMessage";
             this.txbMessage.Size = new System.Drawing.Size(695, 25);
             this.txbMessage.TabIndex = 15;
@@ -226,7 +227,7 @@
             // btnConsume
             // 
             this.btnConsume.Location = new System.Drawing.Point(1107, 699);
-            this.btnConsume.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnConsume.Margin = new System.Windows.Forms.Padding(4);
             this.btnConsume.Name = "btnConsume";
             this.btnConsume.Size = new System.Drawing.Size(188, 29);
             this.btnConsume.TabIndex = 16;
@@ -237,7 +238,7 @@
             // txbConsume
             // 
             this.txbConsume.Location = new System.Drawing.Point(1107, 428);
-            this.txbConsume.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbConsume.Margin = new System.Windows.Forms.Padding(4);
             this.txbConsume.Multiline = true;
             this.txbConsume.Name = "txbConsume";
             this.txbConsume.Size = new System.Drawing.Size(849, 263);
@@ -246,7 +247,7 @@
             // btnJVM
             // 
             this.btnJVM.Location = new System.Drawing.Point(17, 209);
-            this.btnJVM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnJVM.Margin = new System.Windows.Forms.Padding(4);
             this.btnJVM.Name = "btnJVM";
             this.btnJVM.Size = new System.Drawing.Size(100, 29);
             this.btnJVM.TabIndex = 18;
@@ -257,7 +258,7 @@
             // btnRedisSet
             // 
             this.btnRedisSet.Location = new System.Drawing.Point(1107, 18);
-            this.btnRedisSet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnRedisSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnRedisSet.Name = "btnRedisSet";
             this.btnRedisSet.Size = new System.Drawing.Size(100, 29);
             this.btnRedisSet.TabIndex = 19;
@@ -268,7 +269,7 @@
             // btnDotNetty
             // 
             this.btnDotNetty.Location = new System.Drawing.Point(1107, 391);
-            this.btnDotNetty.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDotNetty.Margin = new System.Windows.Forms.Padding(4);
             this.btnDotNetty.Name = "btnDotNetty";
             this.btnDotNetty.Size = new System.Drawing.Size(140, 29);
             this.btnDotNetty.TabIndex = 20;
@@ -279,7 +280,7 @@
             // btnDalQuery
             // 
             this.btnDalQuery.Location = new System.Drawing.Point(1107, 54);
-            this.btnDalQuery.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDalQuery.Margin = new System.Windows.Forms.Padding(4);
             this.btnDalQuery.Name = "btnDalQuery";
             this.btnDalQuery.Size = new System.Drawing.Size(100, 29);
             this.btnDalQuery.TabIndex = 21;
@@ -290,7 +291,7 @@
             // btnFTS
             // 
             this.btnFTS.Location = new System.Drawing.Point(548, 938);
-            this.btnFTS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnFTS.Margin = new System.Windows.Forms.Padding(4);
             this.btnFTS.Name = "btnFTS";
             this.btnFTS.Size = new System.Drawing.Size(160, 29);
             this.btnFTS.TabIndex = 22;
@@ -301,7 +302,7 @@
             // btnSTF
             // 
             this.btnSTF.Location = new System.Drawing.Point(716, 935);
-            this.btnSTF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSTF.Margin = new System.Windows.Forms.Padding(4);
             this.btnSTF.Name = "btnSTF";
             this.btnSTF.Size = new System.Drawing.Size(160, 29);
             this.btnSTF.TabIndex = 23;
@@ -312,7 +313,7 @@
             // btnSDKTesting
             // 
             this.btnSDKTesting.Location = new System.Drawing.Point(1107, 90);
-            this.btnSDKTesting.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSDKTesting.Margin = new System.Windows.Forms.Padding(4);
             this.btnSDKTesting.Name = "btnSDKTesting";
             this.btnSDKTesting.Size = new System.Drawing.Size(115, 31);
             this.btnSDKTesting.TabIndex = 24;
@@ -324,7 +325,7 @@
             // btnChangeType
             // 
             this.btnChangeType.Location = new System.Drawing.Point(1107, 352);
-            this.btnChangeType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnChangeType.Margin = new System.Windows.Forms.Padding(4);
             this.btnChangeType.Name = "btnChangeType";
             this.btnChangeType.Size = new System.Drawing.Size(152, 31);
             this.btnChangeType.TabIndex = 25;
@@ -336,7 +337,7 @@
             // btnsql
             // 
             this.btnsql.Location = new System.Drawing.Point(1107, 314);
-            this.btnsql.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnsql.Margin = new System.Windows.Forms.Padding(4);
             this.btnsql.Name = "btnsql";
             this.btnsql.Size = new System.Drawing.Size(100, 31);
             this.btnsql.TabIndex = 26;
@@ -348,7 +349,7 @@
             // btnDynamic
             // 
             this.btnDynamic.Location = new System.Drawing.Point(1107, 275);
-            this.btnDynamic.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDynamic.Margin = new System.Windows.Forms.Padding(4);
             this.btnDynamic.Name = "btnDynamic";
             this.btnDynamic.Size = new System.Drawing.Size(100, 31);
             this.btnDynamic.TabIndex = 27;
@@ -360,7 +361,7 @@
             // btnZipPackage
             // 
             this.btnZipPackage.Location = new System.Drawing.Point(16, 245);
-            this.btnZipPackage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnZipPackage.Margin = new System.Windows.Forms.Padding(4);
             this.btnZipPackage.Name = "btnZipPackage";
             this.btnZipPackage.Size = new System.Drawing.Size(133, 29);
             this.btnZipPackage.TabIndex = 28;
@@ -371,7 +372,7 @@
             // btnJWTEncode
             // 
             this.btnJWTEncode.Location = new System.Drawing.Point(1284, 16);
-            this.btnJWTEncode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnJWTEncode.Margin = new System.Windows.Forms.Padding(4);
             this.btnJWTEncode.Name = "btnJWTEncode";
             this.btnJWTEncode.Size = new System.Drawing.Size(115, 31);
             this.btnJWTEncode.TabIndex = 29;
@@ -383,7 +384,7 @@
             // txbHeader
             // 
             this.txbHeader.Location = new System.Drawing.Point(1447, 18);
-            this.txbHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbHeader.Margin = new System.Windows.Forms.Padding(4);
             this.txbHeader.Multiline = true;
             this.txbHeader.Name = "txbHeader";
             this.txbHeader.Size = new System.Drawing.Size(521, 85);
@@ -392,7 +393,7 @@
             // txbPayload
             // 
             this.txbPayload.Location = new System.Drawing.Point(1447, 115);
-            this.txbPayload.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbPayload.Margin = new System.Windows.Forms.Padding(4);
             this.txbPayload.Multiline = true;
             this.txbPayload.Name = "txbPayload";
             this.txbPayload.Size = new System.Drawing.Size(521, 85);
@@ -402,7 +403,7 @@
             // txbSecret
             // 
             this.txbSecret.Location = new System.Drawing.Point(1447, 211);
-            this.txbSecret.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txbSecret.Margin = new System.Windows.Forms.Padding(4);
             this.txbSecret.Multiline = true;
             this.txbSecret.Name = "txbSecret";
             this.txbSecret.Size = new System.Drawing.Size(521, 85);
@@ -412,7 +413,7 @@
             // btnJWTDecode
             // 
             this.btnJWTDecode.Location = new System.Drawing.Point(1284, 72);
-            this.btnJWTDecode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnJWTDecode.Margin = new System.Windows.Forms.Padding(4);
             this.btnJWTDecode.Name = "btnJWTDecode";
             this.btnJWTDecode.Size = new System.Drawing.Size(115, 31);
             this.btnJWTDecode.TabIndex = 33;
@@ -424,7 +425,7 @@
             // btnLogAsync
             // 
             this.btnLogAsync.Location = new System.Drawing.Point(1107, 236);
-            this.btnLogAsync.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLogAsync.Margin = new System.Windows.Forms.Padding(4);
             this.btnLogAsync.Name = "btnLogAsync";
             this.btnLogAsync.Size = new System.Drawing.Size(100, 31);
             this.btnLogAsync.TabIndex = 34;
@@ -436,7 +437,7 @@
             // btnLogSync
             // 
             this.btnLogSync.Location = new System.Drawing.Point(1107, 198);
-            this.btnLogSync.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLogSync.Margin = new System.Windows.Forms.Padding(4);
             this.btnLogSync.Name = "btnLogSync";
             this.btnLogSync.Size = new System.Drawing.Size(100, 31);
             this.btnLogSync.TabIndex = 35;
@@ -505,7 +506,7 @@
             // btnSms
             // 
             this.btnSms.Location = new System.Drawing.Point(1107, 738);
-            this.btnSms.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSms.Margin = new System.Windows.Forms.Padding(4);
             this.btnSms.Name = "btnSms";
             this.btnSms.Size = new System.Drawing.Size(188, 29);
             this.btnSms.TabIndex = 42;
@@ -523,11 +524,23 @@
             this.btnProxy.UseVisualStyleBackColor = true;
             this.btnProxy.Click += new System.EventHandler(this.btnProxy_Click);
             // 
+            // btnDalTest
+            // 
+            this.btnDalTest.Location = new System.Drawing.Point(17, 468);
+            this.btnDalTest.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDalTest.Name = "btnDalTest";
+            this.btnDalTest.Size = new System.Drawing.Size(100, 29);
+            this.btnDalTest.TabIndex = 44;
+            this.btnDalTest.Text = "dal test";
+            this.btnDalTest.UseVisualStyleBackColor = true;
+            this.btnDalTest.Click += new System.EventHandler(this.btnDalTest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1914, 981);
+            this.Controls.Add(this.btnDalTest);
             this.Controls.Add(this.btnProxy);
             this.Controls.Add(this.btnSms);
             this.Controls.Add(this.lblUsedMem);
@@ -571,7 +584,7 @@
             this.Controls.Add(this.txbPort);
             this.Controls.Add(this.btnAddToFirewall);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -625,6 +638,7 @@
         private System.Windows.Forms.Label lblUsedMem;
         private System.Windows.Forms.Button btnSms;
         private System.Windows.Forms.Button btnProxy;
+        private System.Windows.Forms.Button btnDalTest;
     }
 }
 
