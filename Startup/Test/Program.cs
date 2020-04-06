@@ -28,6 +28,7 @@ using System.Data.Linq;
 using SOAFramework.Library.DAL;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using System.Threading;
 
 namespace Test
 {
@@ -36,6 +37,11 @@ namespace Test
         public delegate void dl();
         static void Main(string[] args)
         {
+            Thread t = new Thread(new ThreadStart(go));
+            t.Start();
+            Thread.Sleep(10000);
+
+
             #region mapreduce
             Stopwatch sw = new Stopwatch();
             MemberInfo[] mem = sw.GetType().GetProperties();
@@ -418,6 +424,11 @@ namespace Test
             #endregion
 
             Console.ReadLine();
+        }
+
+        private static void go()
+        {
+            Monitor.Wait();
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
