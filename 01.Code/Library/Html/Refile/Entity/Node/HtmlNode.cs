@@ -107,6 +107,15 @@ namespace SOAFramework.Library.Html
                         (tag as Script).Code = node.childNodes.Count > 0 ? node.childNodes[0].Value : null;
                         (tag as Script).Src = node.Attributes.FirstOrDefault(t => t.Name.Equals("Src"))?.Value;
                         break;
+                    case "table":
+                        tag = new Table();
+                        break;
+                    case "tr":
+                        tag = new Tr();
+                        break;
+                    case "td":
+                        tag = new Td();
+                        break;
                 }
             }
             if (tag != null)

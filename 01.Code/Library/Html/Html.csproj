@@ -60,6 +60,10 @@
     <Compile Include="Refile\Entity\HtmlElement\Section.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Span.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Strong.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Table.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\TBody.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Td.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\Tr.cs" />
     <Compile Include="Refile\Handler\AttibuteNameHandler.cs" />
     <Compile Include="Refile\Handler\AttibuteValueHandler.cs" />
     <Compile Include="Refile\Handler\CDataHandler.cs" />
