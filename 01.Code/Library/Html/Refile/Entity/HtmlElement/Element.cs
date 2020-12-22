@@ -14,6 +14,8 @@ namespace SOAFramework.Library.Refile
         public string name { get; set; }
         public string Class { get => _class; set => _class = value; }
         public string style { get; set; }
+
+        public string text { get; set; }
         public List<Element> Children { get; set; }
         public HtmlNode Node { get; set; }
     }

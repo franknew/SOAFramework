@@ -50,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refile\AttibuteHandlerBase.cs" />
     <Compile Include="Refile\Entity\HtmlElement\A.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\B.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Body.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Div.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Element.cs" />

@@ -116,6 +116,9 @@ namespace SOAFramework.Library.Html
                     case "td":
                         tag = new Td();
                         break;
+                    case "b":
+                        tag = new B();
+                        break;
                 }
             }
             if (tag != null)
@@ -124,6 +127,7 @@ namespace SOAFramework.Library.Html
                 tag.Class = node.attributes.FirstOrDefault(p => p.Name.Equals("class")) == null ? "": node.attributes.FirstOrDefault(p => p.Name.Equals("class")).Value;
                 tag.ID = node.attributes.FirstOrDefault(p => p.Name.Equals("id")) == null ? "" : node.attributes.FirstOrDefault(p => p.Name.Equals("id")).Value;
                 tag.Node = node;
+                tag.text = node.FirstChild?.Value;
                 var t = (T)tag;
                 list.Add(t);
             }
