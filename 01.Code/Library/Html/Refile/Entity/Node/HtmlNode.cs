@@ -66,6 +66,12 @@ namespace SOAFramework.Library.Html
             attributes.Add(attribute);
         }
 
+        public List<T> GetTagsByClass<T>() where T: Element
+        {
+            List<T> list = new List<T>();
+            return list;
+        }
+
         public List<T> GetTags<T>() where T: Element
         {
             List<T> list = new List<T>();
@@ -103,9 +109,9 @@ namespace SOAFramework.Library.Html
                         break;
                     case "script":
                         tag = new Script();
-                        (tag as Script).Type = node.Attributes.FirstOrDefault(t => t.Name.Equals("type"))?.Value;
+                        (tag as Script).Type = node.Attributes.FirstOrDefault(t => t.Name.ToLower().Equals("type"))?.Value;
                         (tag as Script).Code = node.childNodes.Count > 0 ? node.childNodes[0].Value : null;
-                        (tag as Script).Src = node.Attributes.FirstOrDefault(t => t.Name.Equals("Src"))?.Value;
+                        (tag as Script).Src = node.Attributes.FirstOrDefault(t => t.Name.ToLower().Equals("src"))?.Value;
                         break;
                     case "table":
                         tag = new Table();
