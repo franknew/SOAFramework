@@ -1,9 +1,11 @@
 namespace SOAFramework.Library.Html
 {
     using SOAFramework.Library.Refile;
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Text;
 
     [DebuggerDisplay("name:{Name}, value:{Value}")]
     public abstract class HtmlNode
@@ -128,6 +130,12 @@ namespace SOAFramework.Library.Html
                     case "h2":
                         tag = new H2();
                         break;
+                    case "p":
+                        tag = new P();
+                        break;
+                    case "br":
+                        tag = new Br();
+                        break;
                 }
             }
             if (tag != null)
@@ -136,7 +144,18 @@ namespace SOAFramework.Library.Html
                 tag.Class = node.attributes.FirstOrDefault(p => p.Name.Equals("class")) == null ? "": node.attributes.FirstOrDefault(p => p.Name.Equals("class")).Value;
                 tag.ID = node.attributes.FirstOrDefault(p => p.Name.Equals("id")) == null ? "" : node.attributes.FirstOrDefault(p => p.Name.Equals("id")).Value;
                 tag.Node = node;
-                tag.text = node.FirstChild?.Value;
+                StringBuilder textBuilder = new StringBuilder();
+                if (node.childNodes != null)
+                {
+                    foreach (HtmlNode child in node.childNodes)
+                    {
+                        if (child.Name.Equals("#text"))
+                        {
+                            textBuilder.Append(child.Value).Append(Environment.NewLine);
+                        }
+                    }
+                }
+                tag.text = textBuilder.ToString().TrimEnd('\r', '\n');
                 var t = (T)tag;
                 list.Add(t);
             }
