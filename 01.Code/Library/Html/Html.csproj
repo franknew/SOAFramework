@@ -54,6 +54,7 @@
     <Compile Include="Refile\Entity\HtmlElement\Body.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Div.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Element.cs" />
+    <Compile Include="Refile\Entity\HtmlElement\H2.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Head.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Html.cs" />
     <Compile Include="Refile\Entity\HtmlElement\Img.cs" />

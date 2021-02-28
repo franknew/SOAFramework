@@ -125,6 +125,9 @@ namespace SOAFramework.Library.Html
                     case "b":
                         tag = new B();
                         break;
+                    case "h2":
+                        tag = new H2();
+                        break;
                 }
             }
             if (tag != null)
